@@ -16,7 +16,7 @@ gen/
 local.properties
 
 # Package Files #
-*.jar
+
 *.war
 *.ear
 
@@ -55,4 +55,4 @@ temp/
 *.nocache.js
 client_secrets.json
 
-
+R.java
