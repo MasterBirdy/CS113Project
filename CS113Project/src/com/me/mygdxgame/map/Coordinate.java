@@ -11,12 +11,12 @@ public class Coordinate {
 		this.y = y;
 	}
 	
-	public int returnX()
+	public int x()
 	{
 		return x;
 	}
 
-	public int returnY()
+	public int y()
 	{
 		return y;
 	}

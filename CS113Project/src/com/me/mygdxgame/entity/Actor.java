@@ -1,115 +1,82 @@
 package com.me.mygdxgame.entity;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.me.mygdxgame.map.Coordinate;
 
-public abstract class Actor extends Entity{
+public abstract class Actor extends Entity
+{
+	int currentHealth, maxHealth, damage;
+	float attackSpeed, attackCooldown, attackRange;
+	boolean alive, attacking;
+	Actor target;
+	static LinkedList<Actor> team1;
+	static LinkedList<Actor> team2;
 
-	double movementX;
-	double movementY;
-	int oldX;
-	int oldY;
-	int differenceXPath;
-	int differenceYPath;
-
-	LinkedList<Coordinate> path;
-
-	public Actor(int x, int y, LinkedList<Coordinate> p, Sprite s)
+	public Actor(int x, int y, int team) //int currentHealth, int maxHealth, int damage, float attackSpeed, float attackCooldown, float attackRange, int team)
 	{
-		positionX = x;
-		positionY = y;
-		oldX = positionX;
-		oldY = positionY;
-		path = p;
-		sprite = s;
-		calculatePath();
-
+		super(x, y, team);
+		/*this.currentHealth = currentHealth;
+		this.maxHealth = maxHealth;
+		this.damage = damage;
+		this.attackSpeed = attackSpeed;
+		this.attackCooldown = attackCooldown;
+		this.attackRange = attackRange;*/
+		alive = true;
 	}
-	public void move()
+	
+	protected abstract void attack();
+
+	public void takeDamage(int damage)
 	{
-		positionX += movementX;
-		positionY += movementY;
+		currentHealth -= damage;
 	}
-
-	public boolean timeToChangePath()
+	
+	public boolean isAlive()
 	{
-		// || differenceXPath == 0)
-		if ((Math.abs(differenceXPath) <= Math.abs(positionX - oldX)) && (Math.abs(differenceYPath) <= Math.abs(positionY - oldY)))
-		{
-			path.pop();
-			oldX = positionX;
-			oldY = positionY;
-			calculatePath();
-			return true;
-		}
-		else
-		{
-		//	System.out.println((positionX - oldX) + " DIFFERENCE: " + differenceXPath + " // " + (positionY - oldY ) + "DIFFERNECE: " + differenceYPath);
-			return false;
-		}
+		return alive;
 	}
-
-	public abstract double giveSpeed();
-
-	private void calculatePath()
+	
+	public void checkAlive()
 	{
-		if (path.peek() == null)
+		if (currentHealth <= 0)
+			alive = false;
+	}
+	
+	public static void linkActors(LinkedList<Actor> t1, LinkedList<Actor> t2)
+	{
+		team1 = t1;
+		team2 = t2;
+	}
+	
+	public void targetSelector()
+	{
+		if (target != null && target.isAlive())
+			return;		
+		
+		LinkedList<Actor> enemy = (team == 1 ? team2 : team1);
+		Iterator<Actor> actorIter = enemy.iterator();
+		Actor newTarget = null;
+		float newDistance = 10000;
+		float currentDistance = 0;
+		while(actorIter.hasNext())
 		{
-			movementX = 0;
-			movementY = 0;
-		}
-		else {
-		//	System.out.println("HOOO");
-			differenceYPath = path.peek().returnY() - positionY;
-		//	System.out.println("DIFFERENCEYPATH : "  + differenceYPath);
-			differenceXPath = path.peek().returnX() - positionX;
-		//	System.out.println("DIFFERENCEXPATH : "  + differenceXPath);
-			if (differenceXPath == 0)
+			Actor e = actorIter.next();
+			
+			currentDistance = this.getDistanceSquared(e);
+			
+			if (currentDistance < newDistance && currentDistance < attackRange * attackRange)
 			{
-				movementX = 0;
-				if (differenceYPath == 0)
-					throw new IllegalArgumentException("No path is detected!");
-				else if (differenceYPath > 0)
-					movementY = 1;
-				else
-					movementY = -1;
-			}
-			else
-			{
-				double slope = differenceYPath / differenceXPath;
-				if (differenceYPath == 0)
-				{
-					movementY = 0;
-					if (differenceXPath == 0)
-						throw new IllegalArgumentException("No path is detected!");
-					else if (differenceXPath > 0)
-						movementX = 1;
-					else
-						movementX = -1;
-				}
-//				else
-//				{
-//					if (slope > 1)
-//					{
-//						movementX = 1;
-//						movementY = slope;
-//					}
-//					else if (slope < 1)
-//					{
-//						movementY = 1;
-//						movementX = 1 / slope;
-//					}
-//					else
-//					{
-//						movementY = 1;
-//						movementX = 1;
-//					}
-//				}
+				newDistance = currentDistance;
+				newTarget = e;
 			}
 		}
+		
+		target = newTarget;
+		
+		attacking = (target == null) ? false : true; 
 	}
-
 }
