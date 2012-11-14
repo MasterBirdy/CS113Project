@@ -1,9 +1,6 @@
 package com.me.mygdxgame.entity;
 
-import java.util.LinkedList;
-
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Entity 

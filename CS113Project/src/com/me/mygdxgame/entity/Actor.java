@@ -2,10 +2,9 @@ package com.me.mygdxgame.entity;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.me.mygdxgame.map.Coordinate;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Actor extends Entity
 {
@@ -15,20 +14,30 @@ public abstract class Actor extends Entity
 	Actor target;
 	static LinkedList<Actor> team1;
 	static LinkedList<Actor> team2;
+	
+	static Texture[] rangeIndicator;
 
-	public Actor(int x, int y, int team) //int currentHealth, int maxHealth, int damage, float attackSpeed, float attackCooldown, float attackRange, int team)
+	public Actor(int x, int y, int team)
 	{
 		super(x, y, team);
-		/*this.currentHealth = currentHealth;
-		this.maxHealth = maxHealth;
-		this.damage = damage;
-		this.attackSpeed = attackSpeed;
-		this.attackCooldown = attackCooldown;
-		this.attackRange = attackRange;*/
 		alive = true;
 	}
 	
+	static public void loadRange()
+	{
+		rangeIndicator = new Texture[2];
+		rangeIndicator[0] = new Texture(Gdx.files.internal("images/walkingrange.png"));
+		rangeIndicator[1] = new Texture(Gdx.files.internal("images/attackrange.png"));
+	}
+	
 	protected abstract void attack();
+	
+	public void rangeIndicator(SpriteBatch batch)
+	{
+		batch.setColor(1, 1, 1, .35f);
+		batch.draw(rangeIndicator[attacking ? 1 : 0], -attackRange + 16 + xCoord, -attackRange + 20 + yCoord, 2 * attackRange, 2 * attackRange);
+		batch.setColor(1, 1, 1, 1);
+	}
 
 	public void takeDamage(int damage)
 	{

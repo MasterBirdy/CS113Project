@@ -1,20 +1,12 @@
 package com.me.mygdxgame.entity;
-
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.ListIterator;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.me.mygdxgame.map.Coordinate;
 
 public abstract class Minion extends Unit 
 {
-	//static ArrayList<ArrayList<Animation>> animations = new ArrayList<ArrayList<Animation>>();
 	
 	public Minion(int x, int y, int team, Iterator<Coordinate> p) 
 	{
@@ -31,7 +23,7 @@ public abstract class Minion extends Unit
 
 	@Override
 	public void draw(SpriteBatch batch)
-	{
+	{		
 		stateTime += Gdx.graphics.getDeltaTime();
 		TextureRegion current;
 		int unitType;
@@ -50,12 +42,14 @@ public abstract class Minion extends Unit
 			current = animations.get(unitType).get(0).getKeyFrame(stateTime, true);
 		else
 			current = animations.get(unitType).get(3).getKeyFrame(stateTime, true);
+		
 		batch.draw(current, xCoord, yCoord);
 	}
 
 	@Override
 	public void update() 
 	{
+		
 		if (attacking && attackCooldown <= 0)
 		{
 			attack();

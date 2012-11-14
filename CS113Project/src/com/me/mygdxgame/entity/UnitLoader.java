@@ -10,7 +10,7 @@ public class UnitLoader
 	
 	public UnitLoader()
 	{
-		
+		spriteLocations = new ArrayList<int[]>();
 	}
 	
 	

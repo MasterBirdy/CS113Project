@@ -2,11 +2,6 @@ package com.me.mygdxgame.entity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.ListIterator;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.me.mygdxgame.map.Coordinate;
@@ -15,7 +10,6 @@ public abstract class Unit extends Actor
 {
 	float speed;
 	float xSpeed, ySpeed;
-	//LinkedList<Coordinate> path;
 	Coordinate destination;
 	Iterator<Coordinate> pathIter;
 	static ArrayList<ArrayList<Animation>> animations;
@@ -39,8 +33,8 @@ public abstract class Unit extends Actor
 		ArrayList<Animation> unitAnimation = new ArrayList<Animation>();
 		
 		unitAnimation.add(loadAnimation(0, 0, 29, 47, 5, false, false));
-		unitAnimation.add(loadAnimation(0, 47, 33, 43, 5, false, false));
-		unitAnimation.add(loadAnimation(0, 47, 33, 43, 5, true, false));
+		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, false, false));
+		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, true, false));
 		unitAnimation.add(loadAnimation(0, 90, 31, 43, 5, false, false));
 		animations.add(unitAnimation);
 		
@@ -48,8 +42,8 @@ public abstract class Unit extends Actor
 		unitAnimation = new ArrayList<Animation>();
 		
 		unitAnimation.add(loadAnimation(0, 0, 29, 47, 5, false, true));
-		unitAnimation.add(loadAnimation(0, 47, 33, 43, 5, false, true));
-		unitAnimation.add(loadAnimation(0, 47, 33, 43, 5, true, true));
+		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, false, true));
+		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, true, true));
 		unitAnimation.add(loadAnimation(0, 90, 31, 43, 5, false, true));
 		animations.add(unitAnimation);
 	}
@@ -61,10 +55,11 @@ public abstract class Unit extends Actor
 		TextureRegion temp = new TextureRegion(spriteSheet, x, y, w * count, h);
 		TextureRegion[][] tmp = temp.split(w, h);
 		
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < count; i++)
 		{
 			frames[i] = tmp[0][i];
-			frames[i].flip(flipX, flipY);
+			if (flipX || flipY)
+				frames[i].flip(flipX, flipY);
 		}
 		
 		Animation tempAnimation = new Animation(.05f, frames);
@@ -76,13 +71,13 @@ public abstract class Unit extends Actor
 	{
 		targetSelector();
 		
-		if (target == null)
+		if (target == null && attackCooldown <= 0)
 		{
 			float distance = getDistanceSquared(destination.x(), destination.y());
 			if (distance  < speed * speed)
 			{
-				//this.xCoord(destination.x());
-				//this.yCoord(destination.y());
+				this.xCoord(destination.x());
+				this.yCoord(destination.y());
 				if (pathIter.hasNext())
 					destination = pathIter.next();
 				else
@@ -92,7 +87,6 @@ public abstract class Unit extends Actor
 				}
 				distance = getDistanceSquared(destination.x(), destination.y());
 				setSpeed(distance);
-				changedDirection = true;
 			}
 			else
 			{

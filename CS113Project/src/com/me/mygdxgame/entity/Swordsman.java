@@ -6,9 +6,6 @@ import com.me.mygdxgame.map.Coordinate;
 
 public class Swordsman extends Minion
 {
-	//static int maxHealth, damage;
-	//static float speed;//, attackSpeed, attackRange, attackCooldown;
-	
 	public Swordsman(int x, int y, int team, Iterator<Coordinate> p)
 	{
 		super(x, y, team, p);
