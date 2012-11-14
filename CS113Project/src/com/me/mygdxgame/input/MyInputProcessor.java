@@ -1,9 +1,10 @@
 package com.me.mygdxgame.input;
 
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.me.mygdxgame.MyGdxGame;
+import com.me.mygdxgame.EverythingHolder;
 
 public class MyInputProcessor implements InputProcessor
 {
@@ -13,7 +14,7 @@ public class MyInputProcessor implements InputProcessor
 	public boolean keyDown(int keycode) 
 	{
 		if (keycode == Keys.TAB)
-			MyGdxGame.toggleShowRange();
+			EverythingHolder.toggleShowRange();
 		return false;
 	}
 
