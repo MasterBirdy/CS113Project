@@ -1,17 +1,20 @@
 package com.me.mygdxgame.input;
 
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.me.mygdxgame.MyGdxGame;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.me.mygdxgame.EverythingHolder;
 
 public class MyInputProcessor implements InputProcessor
 {
+	static OrthographicCamera camera;
 
 	@Override
 	public boolean keyDown(int keycode) 
 	{
 		if (keycode == Keys.TAB)
-			MyGdxGame.toggleShowRange();
+			EverythingHolder.toggleShowRange();
 		return false;
 	}
 
@@ -57,4 +60,8 @@ public class MyInputProcessor implements InputProcessor
 		return false;
 	}
 	
+	public static void loadCamera(OrthographicCamera cameraIn)
+	{
+		camera = cameraIn;
+	}
 }

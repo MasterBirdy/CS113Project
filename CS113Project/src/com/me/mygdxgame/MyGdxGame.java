@@ -1,9 +1,8 @@
 package com.me.mygdxgame;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,56 +16,64 @@ import com.me.mygdxgame.map.Coordinate;
 import com.me.mygdxgame.map.Map;
 
 public class MyGdxGame implements ApplicationListener {
-	private OrthographicCamera camera;
+	private OrthographicCamera camera, uiCamera;
 	private SpriteBatch batch;
 	private Texture texture;
 	private Sprite sprite;
-	private Map map1;
-	LinkedList<Actor> team1 = new LinkedList<Actor>();
-	LinkedList<Actor> team2 = new LinkedList<Actor>();
+	private Map maps;
 	int counter1, counter2;
 	BitmapFont font;
 	static boolean showRange;
 	MyInputProcessor inputProcessor;
+	EverythingHolder everything = new EverythingHolder();
+	GameUI gameUI;
 	
 	@Override
-	public void create() {
+	public void create() 
+	{
 		Texture.setEnforcePotImages(false);
 		
+		Gdx.graphics.setDisplayMode(800, 480, false);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
+		
 		
 		counter1 = 0;
 		counter2 = 0;
 		
 		camera = new OrthographicCamera(w, h);
+		uiCamera = new OrthographicCamera(w, h);
+		camera.translate(400, 300);
 		batch = new SpriteBatch();
 		
-		texture = new Texture(Gdx.files.internal("data/mockupmap.png"));
 		
+		texture = new Texture(Gdx.files.internal("data/mockupmap.png"));
 		TextureRegion region = new TextureRegion(texture, 0, 0, 800, 600);
 
 		sprite = new Sprite(region);
 		
-		map1 = new Map(new Coordinate(-251, 200), sprite);
-		map1.add(new Coordinate(251, 200));
-		map1.add(new Coordinate(251, 0));
-		map1.add(new Coordinate(-270, 0));
-		map1.add(new Coordinate(-270, -230));
-		map1.add(new Coordinate(300, -230));
+		maps = new Map(new Coordinate(100, 1030), sprite, 1600, 1200, 100, 1030, 1300, 170);
+		maps.add(new Coordinate(1300, 1030));
+		maps.add(new Coordinate(1300, 600));
+		maps.add(new Coordinate(300, 600));
+		maps.add(new Coordinate(300, 170));
+		maps.add(new Coordinate(1300, 170));
 		
-		Actor.linkActors(team1, team2);
+		EverythingHolder.load(batch, maps);
+		
+		Actor.linkActors(everything.team(1), everything.team(2));
 		Actor.loadRange();
 		Entity.loadSheet(new Texture(Gdx.files.internal("images/sprite_sheet.png")));
 		Unit.loadAnimations();
 		Projectile.loadProjectiles();
-		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
-		
+		sprite.setSize(1600, 1200);
 		font = new BitmapFont();
 		showRange = true;
 		inputProcessor = new MyInputProcessor();
+		MyInputProcessor.loadCamera(camera);
 		Gdx.input.setInputProcessor(inputProcessor);
+		gameUI = new GameUI();
+		GameUI.load(batch, everything);
 	}
 	
 	static public void toggleShowRange()
@@ -75,91 +82,104 @@ public class MyGdxGame implements ApplicationListener {
 	}
 
 	@Override
-	public void dispose() {
+	public void dispose() 
+	{
 		batch.dispose();
 		texture.dispose();
 	}
 
 	@Override
-	public void render() {		
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+	public void render() 
+	{
+		GL10 gl = Gdx.graphics.getGL10();
+		gl.glClearColor(1, 1, 1, 1);
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		camera.update();
+		camera.apply(gl);
+		
+		uiCamera.update();
+		uiCamera.apply(gl);
 		
 		update();
+		handleInput();
 		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		map1.background().draw(batch);
+		everything.map().background().draw(batch);
+		everything.render();
+
 		
-		if (showRange)
-		{
-			for (Actor a : team1)
-				a.rangeIndicator(batch);
-			for (Actor a : team2)
-				a.rangeIndicator(batch);
-		}
+		font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
 		
-		Iterator<Actor> actorIter = team1.iterator();
-		Actor a;
-		while (actorIter.hasNext())
-		{
-			a = actorIter.next();
-			if (a.isAlive())
-				a.draw(batch);
-			else
-			{
-				a.destroy();
-				actorIter.remove();
-			}
-		}
-		actorIter = team2.iterator();
-		while (actorIter.hasNext())
-		{
-			a = actorIter.next();
-			if (a.isAlive())
-				a.draw(batch);
-			else
-			{
-				a.destroy();
-				actorIter.remove();
-			}
-		}
-		
-		font.draw(batch, "Total Units: " + (team1.size() + team2.size()), 0, -20);
-		
+		batch.end();
+		batch.setProjectionMatrix(uiCamera.combined);
+		batch.begin();
+		gameUI.render();
 		batch.end();
 	}
 	
 	public void update()
 	{
-		for (Actor a : team1)
-			a.checkAlive();
-		for (Actor a : team2)
-			a.checkAlive();
+		everything.update();		
+		randomSpawner();
+	}
+	
+	public void randomSpawner()
+	{
+		Coordinate start1 = everything.map().start1();
+		Coordinate start2 = everything.map().start2();
+		
 		if (--counter1 < 0)
 		{
 			// decides to add either a swordsman or an archer
 			boolean sword = Math.random() < 0.6;
 			if (sword)
-				team1.add(0, new Swordsman(-321, 200, 1, map1.getPath().iterator()));
+				everything.add(new Swordsman(start1.x(), start1.y(), 1, everything.map().getPath().iterator()), true, 1);
 			else
-				team1.add(0, new Archer(-321, 200, 1, map1.getPath().iterator()));
+				everything.add(new Archer(start1.x(), start1.y(), 1, everything.map().getPath().iterator()), true, 1);
 			counter1 = (int)(Math.random() * 60) + 40;
 		}
 		if (--counter2 < 0)
 		{
-			boolean sword = Math.random() < 0.7;
+			boolean sword = Math.random() < 0.6;
 			if (sword)
-				team2.add(new Swordsman(301, -230, 2, map1.getPath().descendingIterator()));
+				everything.add(new Swordsman(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
 			else
-				team2.add(new Archer(301, -230, 2, map1.getPath().descendingIterator()));
+				everything.add(new Archer(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
 			counter2 = (int)(Math.random() * 60) + 40;
 		}
-
-		for (Actor a : team2)
-			a.update();
-		for (Actor a : team1)
-			a.update();
+	}
+	
+	private void handleInput()
+	{
+		int w = Gdx.graphics.getWidth() / 2;
+		int h = Gdx.graphics.getHeight() / 2;
+		
+		if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W))
+		{
+			camera.translate(0, 10);
+			if (camera.position.y > everything.map().height() - h)
+				camera.position.y = everything.map().height() - h;
+		}
+		else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))
+		{
+			camera.translate(0, -10);
+			if (camera.position.y < h)
+				camera.position.y = h;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D))
+		{
+			camera.translate(10, 0);
+			if (camera.position.x > everything.map().width() - w + gameUI.width())
+				camera.position.x = everything.map().width() - w + gameUI.width();
+		}
+		else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))
+		{
+			camera.translate(-10, 0);
+			if (camera.position.x < w)
+				camera.position.x = w;
+		}
 	}
 
 	@Override
