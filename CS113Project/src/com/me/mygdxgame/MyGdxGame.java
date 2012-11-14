@@ -59,6 +59,7 @@ public class MyGdxGame implements ApplicationListener {
 		Actor.loadRange();
 		Entity.loadSheet(new Texture(Gdx.files.internal("images/sprite_sheet.png")));
 		Unit.loadAnimations();
+		Projectile.loadProjectiles();
 		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
 		
@@ -106,7 +107,10 @@ public class MyGdxGame implements ApplicationListener {
 			if (a.isAlive())
 				a.draw(batch);
 			else
+			{
+				a.destroy();
 				actorIter.remove();
+			}
 		}
 		actorIter = team2.iterator();
 		while (actorIter.hasNext())
@@ -115,7 +119,10 @@ public class MyGdxGame implements ApplicationListener {
 			if (a.isAlive())
 				a.draw(batch);
 			else
+			{
+				a.destroy();
 				actorIter.remove();
+			}
 		}
 		
 		font.draw(batch, "Total Units: " + (team1.size() + team2.size()), 0, -20);
@@ -131,6 +138,7 @@ public class MyGdxGame implements ApplicationListener {
 			a.checkAlive();
 		if (--counter1 < 0)
 		{
+			// decides to add either a swordsman or an archer
 			boolean sword = Math.random() < 0.6;
 			if (sword)
 				team1.add(0, new Swordsman(-321, 200, 1, map1.getPath().iterator()));
