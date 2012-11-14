@@ -2,10 +2,12 @@ package com.me.mygdxgame.input;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.me.mygdxgame.MyGdxGame;
 
 public class MyInputProcessor implements InputProcessor
 {
+	static OrthographicCamera camera;
 
 	@Override
 	public boolean keyDown(int keycode) 
@@ -57,4 +59,8 @@ public class MyInputProcessor implements InputProcessor
 		return false;
 	}
 	
+	public static void loadCamera(OrthographicCamera cameraIn)
+	{
+		camera = cameraIn;
+	}
 }
