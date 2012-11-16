@@ -14,7 +14,7 @@ public class GameUI
 	
 	public GameUI()
 	{
-		sideUI = new Texture(Gdx.files.internal("images/sideUI.png"));
+		sideUI = new Texture(Gdx.files.internal("images/sideui.png"));
 		font = new BitmapFont();
 	}
 	

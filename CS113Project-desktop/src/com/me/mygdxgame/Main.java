@@ -9,7 +9,7 @@ public class Main {
 		cfg.title = "CS113Project";
 		cfg.useGL20 = false;
 		cfg.width = 800;
-		cfg.height = 600;
+		cfg.height = 480;
 		
 		new LwjglApplication(new MyGdxGame(), cfg);
 	}

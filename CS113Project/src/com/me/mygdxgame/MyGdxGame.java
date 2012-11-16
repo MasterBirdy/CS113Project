@@ -27,13 +27,14 @@ public class MyGdxGame implements ApplicationListener {
 	MyInputProcessor inputProcessor;
 	EverythingHolder everything = new EverythingHolder();
 	GameUI gameUI;
+	Hero hero;
 	
 	@Override
 	public void create() 
 	{
 		Texture.setEnforcePotImages(false);
 		
-		Gdx.graphics.setDisplayMode(800, 480, false);
+		//Gdx.graphics.setDisplayMode(800, 480, false);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 		
@@ -61,6 +62,8 @@ public class MyGdxGame implements ApplicationListener {
 		
 		EverythingHolder.load(batch, maps);
 		
+		hero = new SwordFace(100, 1030, 1, everything.map().getPath().iterator());
+		
 		Actor.linkActors(everything.team(1), everything.team(2));
 		Actor.loadRange();
 		Entity.loadSheet(new Texture(Gdx.files.internal("images/sprite_sheet.png")));
@@ -69,7 +72,11 @@ public class MyGdxGame implements ApplicationListener {
 		font = new BitmapFont();
 		showRange = true;
 		inputProcessor = new MyInputProcessor();
+		
 		MyInputProcessor.loadCamera(camera);
+		MyInputProcessor.loadHero(hero);
+		everything.addHero(hero, 1);
+		
 		Gdx.input.setInputProcessor(inputProcessor);
 		gameUI = new GameUI();
 		GameUI.load(batch, everything);
@@ -94,6 +101,8 @@ public class MyGdxGame implements ApplicationListener {
 		gl.glClearColor(1, 1, 1, 1);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		boundCamera();
+		
 		camera.update();
 		camera.apply(gl);
 		
@@ -108,7 +117,6 @@ public class MyGdxGame implements ApplicationListener {
 		everything.map().background().draw(batch);
 		
 		everything.render();
-		
 		font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
 		
 		batch.end();
@@ -120,7 +128,7 @@ public class MyGdxGame implements ApplicationListener {
 	
 	public void update()
 	{
-		everything.update();		
+		everything.update();
 		randomSpawner();
 	}
 	
@@ -147,37 +155,36 @@ public class MyGdxGame implements ApplicationListener {
 				everything.add(new Archer(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
 			counter2 = (int)(Math.random() * 60) + 40;
 		}
-	}
+	}	
 	
 	private void handleInput()
+	{
+		if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W))
+			camera.translate(0, 10);
+		if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))
+			camera.translate(0, -10);
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D))
+			camera.translate(10, 0);
+		if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))
+			camera.translate(-10, 0);
+	}
+	
+	public void boundCamera()
 	{
 		int w = Gdx.graphics.getWidth() / 2;
 		int h = Gdx.graphics.getHeight() / 2;
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W))
-		{
-			camera.translate(0, 10);
-			if (camera.position.y > everything.map().height() - h)
-				camera.position.y = everything.map().height() - h;
-		}
-		else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))
-		{
-			camera.translate(0, -10);
-			if (camera.position.y < h)
-				camera.position.y = h;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D))
-		{
-			camera.translate(10, 0);
-			if (camera.position.x > everything.map().width() - w + gameUI.width())
-				camera.position.x = everything.map().width() - w + gameUI.width();
-		}
-		else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))
-		{
-			camera.translate(-10, 0);
-			if (camera.position.x < w)
-				camera.position.x = w;
-		}
+		if (camera.position.y > everything.map().height() - h)
+			camera.position.y = everything.map().height() - h;
+		
+		if (camera.position.y < h)
+			camera.position.y = h;
+		
+		if (camera.position.x > everything.map().width() - w + gameUI.width())
+			camera.position.x = everything.map().width() - w + gameUI.width();
+		
+		if (camera.position.x < w)
+			camera.position.x = w;
 	}
 
 	@Override

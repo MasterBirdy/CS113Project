@@ -41,7 +41,7 @@ public abstract class Unit extends Actor
 		else if (this.getClass() == Archer.class)
 			unitType = 1;
 		else
-			unitType = 2;
+			unitType = 0;
 			
 		if (this.xSpeed > 0.6)
 			current = animations.get(unitType).get(2).getKeyFrame(stateTime, true);
