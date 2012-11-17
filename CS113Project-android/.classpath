@@ -7,6 +7,5 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CS113Project"/>
 	<classpathentry exported="true" kind="lib" path="/CS113Project/libs/gdx.jar" sourcepath="/CS113Project/libs/gdx-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gdx-backend-android.jar" sourcepath="libs/gdx-backend-android-sources.jar"/>
-	<classpathentry kind="lib" path="D:/Programming/Android/android-sdk/platforms/android-8/android.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

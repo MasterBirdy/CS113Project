@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class Actor extends Entity
 {
@@ -15,7 +16,7 @@ public abstract class Actor extends Entity
 	static LinkedList<Actor> team1;
 	static LinkedList<Actor> team2;
 	
-	static Texture[] rangeIndicator;
+	static TextureRegion[] rangeIndicator;
 
 	public Actor(int x, int y, int team)
 	{
@@ -23,11 +24,11 @@ public abstract class Actor extends Entity
 		alive = true;
 	}
 	
-	static public void loadRange()
+	static public void loadRange(Texture sheet)
 	{
-		rangeIndicator = new Texture[2];
-		rangeIndicator[0] = new Texture(Gdx.files.internal("images/walkingrange.png"));
-		rangeIndicator[1] = new Texture(Gdx.files.internal("images/attackrange.png"));
+		rangeIndicator = new TextureRegion[2];
+		rangeIndicator[0] = new TextureRegion(sheet, 472, 40, 40, 40);//new Texture(Gdx.files.internal("images/walkingrange.png"));
+		rangeIndicator[1] = new TextureRegion(sheet, 472, 0, 40, 40);//new Texture(Gdx.files.internal("images/attackrange.png"));
 	}
 	
 	protected abstract void attack();
@@ -69,7 +70,7 @@ public abstract class Actor extends Entity
 		LinkedList<Actor> enemy = (team == 1 ? team2 : team1);
 		Iterator<Actor> actorIter = enemy.iterator();
 		Actor newTarget = null;
-		float newDistance = 10000;
+		float newDistance = 1000000;
 		float currentDistance = 0;
 		while(actorIter.hasNext())
 		{

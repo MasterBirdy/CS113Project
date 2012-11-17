@@ -38,6 +38,12 @@ public class MyInputProcessor implements InputProcessor
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) 
 	{
+		if (pointer == 1)
+		{
+			EverythingHolder.toggleShowRange();
+			return false;
+		}
+		
 		if (!down)
 		{
 			deltaX = 0;

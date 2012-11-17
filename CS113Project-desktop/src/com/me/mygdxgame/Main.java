@@ -6,7 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "CS113Project";
+		cfg.title = "Unknown Defense";
 		cfg.useGL20 = false;
 		cfg.width = 800;
 		cfg.height = 480;

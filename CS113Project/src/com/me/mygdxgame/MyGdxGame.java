@@ -34,6 +34,8 @@ public class MyGdxGame implements ApplicationListener {
 	{
 		Texture.setEnforcePotImages(false);
 		
+		
+		
 		//Gdx.graphics.setDisplayMode(800, 480, false);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
@@ -64,10 +66,13 @@ public class MyGdxGame implements ApplicationListener {
 		
 		hero = new SwordFace(100, 1030, 1, everything.map().getPath().iterator());
 		
+		Texture sheet = new Texture(Gdx.files.internal("images/sprite_sheet.png"));
+		
 		Actor.linkActors(everything.team(1), everything.team(2));
-		Actor.loadRange();
-		Entity.loadSheet(new Texture(Gdx.files.internal("images/sprite_sheet.png")));
+		Actor.loadRange(sheet);
+		Entity.loadSheet(sheet);
 		Unit.loadAnimations();
+		Building.loadSprites();
 		sprite.setSize(1600, 1200);
 		font = new BitmapFont();
 		showRange = true;
@@ -76,6 +81,11 @@ public class MyGdxGame implements ApplicationListener {
 		MyInputProcessor.loadCamera(camera);
 		MyInputProcessor.loadHero(hero);
 		everything.addHero(hero, 1);
+		Building tower = new ArrowTower(500, 750, 1);
+		tower.upgrade();
+		tower.upgrade();
+		everything.add(tower, true, 1);
+		
 		
 		Gdx.input.setInputProcessor(inputProcessor);
 		gameUI = new GameUI();
