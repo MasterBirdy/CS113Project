@@ -17,4 +17,10 @@ public class Swordsman extends Minion
 		attackRange = 20;
 		speed = 1.5f;
 	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
 }

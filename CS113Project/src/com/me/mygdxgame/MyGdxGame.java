@@ -69,11 +69,20 @@ public class MyGdxGame implements ApplicationListener {
 		Texture sheet = new Texture(Gdx.files.internal("images/sprite_sheet.png"));
 		
 		Actor.linkActors(everything.team(1), everything.team(2));
+//<<<<<<< HEAD
 		Actor.loadRange(sheet);
 		Entity.loadSheet(sheet);
 		Unit.loadAnimations();
+		Projectile.loadProjectiles();
 		Building.loadSprites();
 		sprite.setSize(1600, 1200);
+//=======
+//		Actor.loadRange();
+//		Entity.loadSheet(new Texture(Gdx.files.internal("images/sprite_sheet.png")));
+//		Unit.loadAnimations();
+//		Projectile.loadProjectiles();
+//		sprite.setSize(1600, 1200);
+//>>>>>>> Jason-Split-Branch
 		font = new BitmapFont();
 		EverythingHolder.showRange = true;
 		inputProcessor = new MyInputProcessor();
@@ -125,8 +134,12 @@ public class MyGdxGame implements ApplicationListener {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		everything.map().background().draw(batch);
-		
 		everything.render();
+//<<<<<<< HEAD
+//=======
+//
+//		
+//>>>>>>> Jason-Split-Branch
 		font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
 		
 		batch.end();
@@ -149,6 +162,7 @@ public class MyGdxGame implements ApplicationListener {
 		
 		if (--counter1 < 0)
 		{
+			// decides to add either a swordsman or an archer
 			boolean sword = Math.random() < 0.6;
 			if (sword)
 				everything.add(new Swordsman(start1.x(), start1.y(), 1, everything.map().getPath().iterator()), true, 1);

@@ -89,4 +89,6 @@ public abstract class Actor extends Entity
 		
 		attacking = (target == null) ? false : true; 
 	}
+
+	public abstract void destroy();
 }

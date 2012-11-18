@@ -68,7 +68,10 @@ public class EverythingHolder
 			if (a.isAlive())
 				a.draw(batch);
 			else
+			{
+				a.destroy();
 				actorIter.remove();
+			}
 		}
 		if (hero1 != null && hero1.isAlive())
 			hero1.draw(batch);
@@ -80,7 +83,10 @@ public class EverythingHolder
 			if (a.isAlive())
 				a.draw(batch);
 			else
+			{
+				a.destroy();
 				actorIter.remove();
+			}
 		}
 		if (hero2 != null && hero2.isAlive())
 			hero2.draw(batch);

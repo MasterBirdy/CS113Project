@@ -39,4 +39,10 @@ public class ArrowTower extends Building
 			targetSelector();
 		}
 	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
 }

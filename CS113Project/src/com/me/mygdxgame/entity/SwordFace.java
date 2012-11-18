@@ -17,4 +17,10 @@ public class SwordFace extends Hero
 		attackRange = 35;
 		speed = 2f;
 	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
 }
