@@ -75,7 +75,7 @@ public class MyGdxGame implements ApplicationListener {
 		Building.loadSprites();
 		sprite.setSize(1600, 1200);
 		font = new BitmapFont();
-		showRange = true;
+		EverythingHolder.showRange = true;
 		inputProcessor = new MyInputProcessor();
 		
 		MyInputProcessor.loadCamera(camera);
