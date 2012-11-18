@@ -12,13 +12,13 @@ public class Projectile extends Entity {
 	
 	static TextureRegion[] projectileIndicator;
 	float speed;
-	int xSpeed, ySpeed;
+	int xSpeed, ySpeed, disappearCounter;
+	boolean counterOn;
 	Actor target;
 	
 	public Projectile(float x, float y, int team) 
 	{
 		super(x, y, team);
-		speed = 2.5f;
 	}
 	
 	public Projectile(float x, float y, int team, int xSpeed, int ySpeed, Actor target) 
@@ -27,6 +27,8 @@ public class Projectile extends Entity {
 		this.xSpeed = xSpeed;
 		this.ySpeed = ySpeed;
 		this.target = target;
+		disappearCounter = 40;
+		counterOn = false;
 		speed = 3f;
 	}
 	
@@ -40,20 +42,39 @@ public class Projectile extends Entity {
 		return ySpeed;
 	}
 	
+	public void setCounterOn()
+	{
+		xSpeed = 0;
+		ySpeed = 0;
+		counterOn = true;
+	}
+	
+	public boolean getCounterOn()
+	{
+		return counterOn;
+	}
+	
+	public int getDisappearCounter()
+	{
+		return disappearCounter;
+	}
 	public static void loadProjectiles()
 	{
-		projectileIndicator = new TextureRegion[4];
+		projectileIndicator = new TextureRegion[5];
 		projectileIndicator[0] = new TextureRegion(new Texture(Gdx.files.internal("images/arrowprojectile.png")), 0, 0, 16, 16);
 		projectileIndicator[1] = new TextureRegion(new Texture(Gdx.files.internal("images/arrowprojectile.png")), 16, 0, 16, 16);
 		projectileIndicator[2] = new TextureRegion(new Texture(Gdx.files.internal("images/arrowprojectile.png")), 0, 0, 16, 16);
 		projectileIndicator[2].flip(true, false);
 		projectileIndicator[3] = new TextureRegion(new Texture(Gdx.files.internal("images/arrowprojectile.png")), 16, 0, 16, 16);
 		projectileIndicator[3].flip(false, true);
+		projectileIndicator[4] = new TextureRegion(new Texture(Gdx.files.internal("images/arrowprojectile.png")), 32, 0, 16, 16);
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		if (this.xSpeed < 0)
+		if (counterOn)
+			batch.draw(projectileIndicator[4], xCoord, yCoord);
+		else if (this.xSpeed < 0)
 			batch.draw(projectileIndicator[0], xCoord, yCoord);
 		else if (this.xSpeed > 0)
 			batch.draw(projectileIndicator[2], xCoord, yCoord);
@@ -67,6 +88,8 @@ public class Projectile extends Entity {
 	public void update() {
 		this.xCoord(xCoord + this.xSpeed * speed);
 		this.yCoord(yCoord + this.ySpeed * speed);
+		if (counterOn)
+			disappearCounter--;
 	}
 
 }

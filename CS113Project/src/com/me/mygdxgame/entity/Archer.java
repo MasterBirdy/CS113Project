@@ -62,6 +62,10 @@ public class Archer extends Minion
 					removeList.add(p);
 				else if (p.getySpeed() < 0 && p.yCoord < p.target.yCoord)
 					removeList.add(p);
+				else if (!p.target.isAlive() && !p.getCounterOn())
+					p.setCounterOn();
+				else if (p.getDisappearCounter() <= 0)
+					removeList.add(p);
 			}
 			projectiles.removeAll(removeList);
 	}
