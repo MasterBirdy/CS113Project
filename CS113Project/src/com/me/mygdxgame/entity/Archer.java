@@ -32,13 +32,13 @@ public class Archer extends Minion
 		{
 			if (this.attackCooldown <= 0)
 				if (this.xSpeed > 0)
-					projectiles.add(new Projectile(this.xCoord, this.yCoord, this.team, 1, 0, target));
+					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 1, 0, target));
 				else if (this.xSpeed < 0)
-					projectiles.add(new Projectile(this.xCoord, this.yCoord, this.team, -1, 0, target));
+					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, -1, 0, target));
 				else if (this.ySpeed > 0)
-					projectiles.add(new Projectile(this.xCoord, this.yCoord, this.team, 0, 1, target));
+					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 0, 1, target));
 				else
-					projectiles.add(new Projectile(this.xCoord, this.yCoord, this.team, 0, -1, target));
+					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 0, -1, target));
 		}
 		else
 			if (projectiles.size() != 0)

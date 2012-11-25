@@ -11,7 +11,7 @@ public class SwordFace extends Hero
 		super(x, y, team, p);
 		maxHealth = 20;
 		currentHealth = maxHealth;
-		damage = 20;
+		damage = 0;
 		attackSpeed = 25;
 		attackCooldown = 0;
 		attackRange = 35;

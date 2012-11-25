@@ -105,10 +105,14 @@ public class GameScreen implements Screen {
 		MyInputProcessor.loadCamera(camera);
 		MyInputProcessor.loadHero(hero);
 		everything.addHero(hero, 1);
-		Building tower = new ArrowTower(500, 750, 1);
-		tower.upgrade();
-		tower.upgrade();
+		Building tower = new ArrowTower(300, 1030, 1);
 		everything.add(tower, true, 1);
+		////
+		tower = new ArrowTower(300, 300, 1);
+		everything.add(tower, true, 1);
+		///
+		tower = new ArrowTower(1240, 170, 2);
+		everything.add(tower, true, 2);
 
 		pauseRectangle = new Rectangle(-68, -32, 133, 33);
 
@@ -169,6 +173,10 @@ public class GameScreen implements Screen {
 	{
 		everything.update();
 		randomSpawner();
+		if (!everything.team(1).get(0).isAlive())
+			game.setScreen(new MainMenuScreen(game));
+		else if (!everything.team(2).get(0).isAlive())
+			game.setScreen(new MainMenuScreen(game));
 	}
 
 	public void randomSpawner()

@@ -12,7 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen implements Screen 
+{
 
 	Rectangle highscoresBounds;
 	Game game;
@@ -28,13 +29,13 @@ public class MainMenuScreen implements Screen {
 	{
 		this.game = game;
 		highscoresBounds = new Rectangle(160 - 150, 200 - 18, 300, 36);
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
+		float w = 800; //Gdx.graphics.getWidth();
+		float h = 480; //Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(w, h);
 		Texture texture = new Texture(Gdx.files.internal("images/mainmenubackground.png"));
 		Texture textTexture = new Texture(Gdx.files.internal("images/textmenuscreen.png"));
-		TextureRegion region = new TextureRegion(texture, 0, 0, 800, 600);
+		TextureRegion region = new TextureRegion(texture, 0, 0, 800, 480);
 		TextureRegion textRegion = new TextureRegion(textTexture, 0, 0, 451, 49);
 		TextureRegion textRegionPlay = new TextureRegion(textTexture, 0, 50, 126, 47);
 		sprite = new Sprite(region);
@@ -42,7 +43,7 @@ public class MainMenuScreen implements Screen {
 		playSprite = new Sprite(textRegionPlay);
 		titleSprite.setOrigin(0,0);
 		playSprite.setOrigin(0,0);
-		titleSprite.setPosition(w / 2 - titleSprite.getWidth() / 2, 370);
+		titleSprite.setPosition((w - titleSprite.getWidth()) / 2, 370);
 		System.out.println(w);
 		System.out.println(h);
 		System.out.println(w / 2 - titleSprite.getWidth());
@@ -52,7 +53,8 @@ public class MainMenuScreen implements Screen {
 	}
 
 	@Override
-	public void render(float delta) {
+	public void render(float delta) 
+	{
 		update(delta);
 		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClearColor(1, 1, 1, 1);
@@ -65,7 +67,8 @@ public class MainMenuScreen implements Screen {
 		batch.end();
 	}
 
-	public void update (float deltaTime) {
+	public void update (float deltaTime) 
+	{
 		if (Gdx.input.justTouched()) {
 			camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 			//System.out.println(touchPoint.x + " " + touchPoint.y);
