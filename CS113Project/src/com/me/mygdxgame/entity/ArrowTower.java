@@ -9,12 +9,12 @@ public class ArrowTower extends Building
 	public ArrowTower(int x, int y, int team)
 	{
 		super(x, y, team);
-		maxHealth = 20;
+		maxHealth = 40;
 		currentHealth = maxHealth;
-		damage = 10;
+		damage = 2;
 		attackSpeed = 25;
 		attackCooldown = 0;
-		attackRange = 200;
+		attackRange = 150;
 	}
 	
 	@Override

@@ -24,7 +24,7 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch;
 	private Texture texture;
 	private Sprite sprite;
-	private Map maps;
+	private Map[] maps = new Map[2];
 	int counter1, counter2;
 	private boolean isPaused;
 	BitmapFont font;
@@ -38,6 +38,7 @@ public class GameScreen implements Screen {
 	Game game;
 	Rectangle pauseRectangle;
 	Vector3 touchPoint;
+	int level = 1;
 
 
 	public GameScreen(Game game)
@@ -62,24 +63,40 @@ public class GameScreen implements Screen {
 		camera.translate(400, 300);
 		batch = new SpriteBatch();
 
-
-		texture = new Texture(Gdx.files.internal("data/mockupmap.png"));
-		TextureRegion region = new TextureRegion(texture, 0, 0, 800, 600);
-		sprite = new Sprite(region);
-
 		Texture pauseTexture = new Texture(Gdx.files.internal("images/pausemenu.png"));
 		pauseRegion = new TextureRegion(pauseTexture, 0, 0, 270, 190);
+		TextureRegion region;
+		
+		if (level == 0)
+		{
+			texture = new Texture(Gdx.files.internal("data/mockupmap.png"));
+			region = new TextureRegion(texture, 0, 0, 800, 600);
+			sprite = new Sprite(region);
+	
+			maps[0] = new Map(new Coordinate(100, 1030), sprite, 1600, 1200, 100, 1030, 1300, 170);
+			maps[0].add(new Coordinate(1300, 1030));
+			maps[0].add(new Coordinate(1300, 600));
+			maps[0].add(new Coordinate(300, 600));
+			maps[0].add(new Coordinate(300, 170));
+			maps[0].add(new Coordinate(1300, 170));
+		}
+		else
+		{
+			texture = new Texture(Gdx.files.internal("images/map1.png"));
+			region = new TextureRegion(texture, 0, 0, 1200, 960);
+			sprite = new Sprite(region);
+			
+			maps[1] = new Map(new Coordinate(280, 870), sprite, 1200, 960, 270, 870, 1210, 480);
+			maps[1].add(new Coordinate(1190, 870));
+			maps[1].add(new Coordinate(1190, 665));
+			maps[1].add(new Coordinate(360, 665));
+			maps[1].add(new Coordinate(360, 480));
+			maps[1].add(new Coordinate(1200, 480));
+		}
 
-		maps = new Map(new Coordinate(100, 1030), sprite, 1600, 1200, 100, 1030, 1300, 170);
-		maps.add(new Coordinate(1300, 1030));
-		maps.add(new Coordinate(1300, 600));
-		maps.add(new Coordinate(300, 600));
-		maps.add(new Coordinate(300, 170));
-		maps.add(new Coordinate(1300, 170));
+		EverythingHolder.load(batch, maps[level]);
 
-		EverythingHolder.load(batch, maps);
-
-		hero = new SwordFace(100, 1030, 1, everything.map().getPath().iterator());
+		hero = new SwordFace(maps[level].start1().x(), maps[level].start1().y(), 1, everything.map().getPath().iterator());
 
 		Texture sheet = new Texture(Gdx.files.internal("images/sprite_sheet.png"));
 
@@ -104,11 +121,12 @@ public class GameScreen implements Screen {
 
 		MyInputProcessor.loadCamera(camera);
 		MyInputProcessor.loadHero(hero);
-		everything.addHero(hero, 1);
-		Building tower = new ArrowTower(300, 1030, 1);
+		Building tower = new ArrowTower(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
 		everything.add(tower, true, 1);
-		tower = new ArrowTower(1240, 170, 2);
+		tower = new ArrowTower(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
 		everything.add(tower, true, 2);
+		
+		everything.add(hero, true, 1);
 
 		pauseRectangle = new Rectangle(-68, -32, 133, 33);
 
@@ -169,9 +187,9 @@ public class GameScreen implements Screen {
 	{
 		everything.update();
 		randomSpawner();
-		if (!everything.team(1).get(0).isAlive())
+		if (!everything.team(1).getLast().isAlive())
 			game.setScreen(new MainMenuScreen(game));
-		else if (!everything.team(2).get(0).isAlive())
+		else if (!everything.team(2).getLast().isAlive())
 			game.setScreen(new MainMenuScreen(game));
 	}
 
@@ -185,18 +203,22 @@ public class GameScreen implements Screen {
 			// decides to add either a swordsman or an archer
 			boolean sword = Math.random() < 0.6;
 			if (sword)
-				everything.add(new Swordsman(start1.x(), start1.y(), 1, everything.map().getPath().iterator()), true, 1);
+				//everything.add(new Swordsman(start1.x(), start1.y(), 1, everything.map().getPath().iterator()), true, 1);
+				everything.add(1, 1);
 			else
-				everything.add(new Archer(start1.x(), start1.y(), 1, everything.map().getPath().iterator()), true, 1);
+				//everything.add(new Archer(start1.x(), start1.y(), 1, everything.map().getPath().iterator()), true, 1);
+				everything.add(2, 1);
 			counter1 = (int)(Math.random() * 60) + 40;
 		}
 		if (--counter2 < 0)
 		{
 			boolean sword = Math.random() < 0.6;
 			if (sword)
-				everything.add(new Swordsman(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
+				//everything.add(new Swordsman(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
+				everything.add(1, 2);
 			else
-				everything.add(new Archer(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
+				//everything.add(new Archer(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
+				everything.add(2, 2);
 			counter2 = (int)(Math.random() * 60) + 40;
 		}
 	}	
@@ -234,14 +256,14 @@ public class GameScreen implements Screen {
 		int w = Gdx.graphics.getWidth() / 2;
 		int h = Gdx.graphics.getHeight() / 2;
 
-		if (camera.position.y > everything.map().height() - h)
-			camera.position.y = everything.map().height() - h;
+		if (camera.position.y > everything.map().height())
+			camera.position.y = everything.map().height();
 
 		if (camera.position.y < h)
 			camera.position.y = h;
 
-		if (camera.position.x > everything.map().width() - w + gameUI.width())
-			camera.position.x = everything.map().width() - w + gameUI.width();
+		if (camera.position.x > everything.map().width() + gameUI.width())
+			camera.position.x = everything.map().width() + gameUI.width();
 
 		if (camera.position.x < w)
 			camera.position.x = w;

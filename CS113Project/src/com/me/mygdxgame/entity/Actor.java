@@ -76,12 +76,15 @@ public abstract class Actor extends Entity
 		{
 			Actor e = actorIter.next();
 			
-			currentDistance = this.getDistanceSquared(e);
-			
-			if (currentDistance < newDistance && currentDistance < attackRange * attackRange)
+			if (e.isAlive())
 			{
-				newDistance = currentDistance;
-				newTarget = e;
+				currentDistance = this.getDistanceSquared(e);
+				
+				if (currentDistance < newDistance && currentDistance < attackRange * attackRange)
+				{
+					newDistance = currentDistance;
+					newTarget = e;
+				}
 			}
 		}
 		

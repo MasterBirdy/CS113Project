@@ -99,7 +99,7 @@ public abstract class Unit extends Actor
 	{
 		targetSelector();
 		
-		if (target == null && attackCooldown <= 0)
+		if ((target == null || !target.isAlive()) && attackCooldown <= 0)
 		{
 			float distance = getDistanceSquared(destination.x(), destination.y());
 			if (distance  < speed * speed)
