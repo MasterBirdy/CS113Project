@@ -58,5 +58,18 @@ public abstract class Hero extends Unit
 			advance();
 		}
 	}
+	
+	public void respawn(int x, int y, Iterator<Coordinate> p)
+	{
+		xCoord(x);
+		yCoord(y);
+		alive = true;
+		currentHealth = maxHealth;
+		pathIter = p;
+		destination = pathIter.next();
+		target = null;
+		xSpeed = 0;
+		ySpeed = 0;
+	}
 
 }
