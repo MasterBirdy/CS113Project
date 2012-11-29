@@ -16,6 +16,7 @@ public abstract class Building extends Actor
 	static ArrayList<Sprite> sprites;
 	Sprite currentSprite;
 	int level = 1;
+	ArrayList<Projectile> projectiles;
 	
 	public Building(int x, int y, int team)
 	{

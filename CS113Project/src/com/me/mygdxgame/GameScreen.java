@@ -37,6 +37,12 @@ public class GameScreen implements Screen {
 	Hero hero;
 	Game game;
 	Rectangle pauseRectangle;
+	Rectangle swordRectangle;
+	Rectangle bowRectangle;
+	Rectangle serfRectangle;
+	Rectangle magicRectangle;
+	Rectangle petRectangle;
+	Rectangle spiralRectangle;
 	Vector3 touchPoint;
 	int level = 1;
 
@@ -121,14 +127,26 @@ public class GameScreen implements Screen {
 
 		MyInputProcessor.loadCamera(camera);
 		MyInputProcessor.loadHero(hero);
+
 		Building tower = new ArrowTower(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
 		everything.add(tower, true, 1);
 		tower = new ArrowTower(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
 		everything.add(tower, true, 2);
 		
 		everything.add(hero, true, 1);
+		
+		tower = new ArrowTower(300, 400, 1);
+		everything.add(tower, true, 1);
+		tower= new ArrowTower(1000, 1000, 2);
+		everything.add(tower, true, 2);
 
 		pauseRectangle = new Rectangle(-68, -32, 133, 33);
+		swordRectangle = new Rectangle(225, 8, 40, 40);
+		bowRectangle = new Rectangle(280, 8, 40, 40);
+		serfRectangle = new Rectangle(335, 8, 40, 40);
+		magicRectangle= new Rectangle(225, -41, 40, 40);
+		petRectangle= new Rectangle(280, -41, 40, 40);
+		spiralRectangle= new Rectangle(335, -41, 40, 40);
 
 		Gdx.input.setInputProcessor(inputProcessor);
 		gameUI = new GameUI();
@@ -238,9 +256,46 @@ public class GameScreen implements Screen {
 			isPaused = !isPaused;
 			pauseCooldown = 0;
 		}
-		if (isPaused){
-			if (Gdx.input.justTouched()) {
-				uiCamera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+		if (Gdx.input.justTouched()) {
+			uiCamera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+			System.out.println("X: " + touchPoint.x + " Y: " + touchPoint.y);
+			if (OverlapTester.pointInRectangle(swordRectangle, touchPoint.x, touchPoint.y))
+			{
+				/*
+				 * INSERT CODE HERE
+				 */
+			}
+			if (OverlapTester.pointInRectangle(bowRectangle, touchPoint.x, touchPoint.y))
+			{
+				/*
+				 * INSERT CODE HERE
+				 */
+			}
+			if (OverlapTester.pointInRectangle(serfRectangle, touchPoint.x, touchPoint.y))
+			{
+				/*
+				 * INSERT CODE HERE
+				 */
+			}
+			if (OverlapTester.pointInRectangle(magicRectangle, touchPoint.x, touchPoint.y))
+			{
+				/*
+				 * INSERT CODE HERE
+				 */
+			}
+			if (OverlapTester.pointInRectangle(petRectangle, touchPoint.x, touchPoint.y))
+			{
+				/*
+				 * INSERT CODE HERE
+				 */
+			}
+			if (OverlapTester.pointInRectangle(spiralRectangle, touchPoint.x, touchPoint.y))
+			{
+				/*
+				 * INSERT CODE HERE
+				 */
+			}
+			if (isPaused){
 				//System.out.println(touchPoint.x + " " + touchPoint.y);
 				if (OverlapTester.pointInRectangle(pauseRectangle, touchPoint.x, touchPoint.y)) {
 					//System.out.println(true);
