@@ -8,7 +8,7 @@ public abstract class Hero extends Unit
 	
 	public Hero(int x, int y, int team, Iterator<Coordinate> p) 
 	{
-		super(x, y, team, p);
+		super(x, y, team, p, 0, 0);
 		stance = 1;
 	}
 	

@@ -18,15 +18,26 @@ public class ArrowTower extends Building
 		attackCooldown = 0;
 		attackRange = 150;
 		projectiles = new ArrayList<Projectile>();
+		alive = false;
 	}
 
 	@Override
 	protected void attack() 
 	{
-		if (target == null || !target.isAlive())
+		if (target == null || !target.isAlive() || level == 0)
 			return;
 		target.takeDamage(damage);
 		projectiles.add(new CannonProjectile(this.xCoord, this.yCoord, this.team, 1, 1, target));
+	}
+	
+	@Override
+	public void checkAlive()
+	{
+		if (currentHealth <= 0)
+		{
+			level = 0;
+			alive = false;
+		}
 	}
 
 	@Override

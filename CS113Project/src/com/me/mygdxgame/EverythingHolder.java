@@ -8,6 +8,7 @@ import com.me.mygdxgame.entity.Actor;
 import com.me.mygdxgame.entity.Archer;
 import com.me.mygdxgame.entity.Hero;
 import com.me.mygdxgame.entity.Swordsman;
+import com.me.mygdxgame.entity.ArrowTower;
 import com.me.mygdxgame.map.Coordinate;
 import com.me.mygdxgame.map.Map;
 
@@ -127,7 +128,7 @@ public class EverythingHolder
 		while (actorIter.hasNext())
 		{
 			a = actorIter.next();
-			if (a.isAlive())
+			if (a.isAlive() || (a instanceof ArrowTower))
 				a.draw(batch);
 			else if (!(a instanceof Hero))
 			{
@@ -142,7 +143,7 @@ public class EverythingHolder
 		while (actorIter.hasNext())
 		{
 			a = actorIter.next();
-			if (a.isAlive())
+			if (a.isAlive() || (a instanceof ArrowTower))
 				a.draw(batch);
 			else
 			{

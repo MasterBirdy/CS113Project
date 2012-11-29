@@ -7,7 +7,7 @@ public abstract class Minion extends Unit
 	
 	public Minion(int x, int y, int team, Iterator<Coordinate> p) 
 	{
-		super(x, y, team, p);
+		super(x, y, team, p, (int)(Math.random() * 10 - 5), (int)(Math.random() * 5 - 2));
 	}
 
 	@Override

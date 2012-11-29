@@ -79,7 +79,8 @@ public abstract class Actor extends Entity
 			if (e.isAlive())
 			{
 				currentDistance = this.getDistanceSquared(e);
-				
+				if (e instanceof ArrowTower)
+					currentDistance -= 3600;
 				if (currentDistance < newDistance && currentDistance < attackRange * attackRange)
 				{
 					newDistance = currentDistance;

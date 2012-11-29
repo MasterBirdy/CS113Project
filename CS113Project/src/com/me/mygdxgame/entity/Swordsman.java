@@ -14,7 +14,7 @@ public class Swordsman extends Minion
 		damage = 10;
 		attackSpeed = 25;
 		attackCooldown = 0;
-		attackRange = 20;
+		attackRange = 25;
 		speed = 1.5f;
 	}
 

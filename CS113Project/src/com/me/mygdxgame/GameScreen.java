@@ -100,6 +100,18 @@ public class GameScreen implements Screen {
 			maps[1].add(new Coordinate(360, 665));
 			maps[1].add(new Coordinate(360, 480));
 			maps[1].add(new Coordinate(1200, 480));
+			
+			Coordinate[] sites = new Coordinate[3];
+			sites[0] = new Coordinate(1230, 750);
+			sites[1] = new Coordinate(600, 910);
+			sites[2] = new Coordinate(900, 910);
+			maps[1].buildSites(sites, 1);
+			
+			sites = new Coordinate[3];
+			sites[0] = new Coordinate(300, 550);
+			sites[1] = new Coordinate(600, 430);
+			sites[2] = new Coordinate(900, 430);
+			maps[1].buildSites(sites, 2);
 		}
 
 		EverythingHolder.load(batch, maps[level]);
@@ -129,11 +141,29 @@ public class GameScreen implements Screen {
 
 		MyInputProcessor.loadCamera(camera);
 		MyInputProcessor.loadHero(hero);
+		
+		Building.loadAnimations();
 
 		Building tower = new ArrowTower(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
+		tower.upgrade();
 		everything.add(tower, true, 1);
 		tower = new ArrowTower(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
+		tower.upgrade();
 		everything.add(tower, true, 2);
+		
+		for (Coordinate c : everything.map().buildSites(1))
+		{
+			tower = new ArrowTower(c.x(), c.y(), 1);
+			everything.add(tower, true, 1);
+		}
+		
+		for (Coordinate c : everything.map().buildSites(2))
+		{
+			tower = new ArrowTower(c.x(), c.y(), 2);
+			tower.upgrade();
+			everything.add(tower, true, 2);
+		}
+		
 		hero.takeDamage(1000);
 		everything.add(hero, true, 1);
 		
@@ -215,9 +245,6 @@ public class GameScreen implements Screen {
 
 	public void randomSpawner()
 	{
-		Coordinate start1 = everything.map().start1();
-		Coordinate start2 = everything.map().start2();
-
 		/*if (--counter1 < 0)
 		{
 			// decides to add either a swordsman or an archer
@@ -262,7 +289,15 @@ public class GameScreen implements Screen {
 		{
 			isPaused = !isPaused;
 			pauseCooldown = 0;
-			Gdx.input.vibrate(1000);
+		}
+		if ((Gdx.input.isKeyPressed(Input.Keys.Q)) && pauseCooldown > 100)
+		{
+			for (Actor a : everything.team(1))
+			{
+				if (a instanceof ArrowTower)
+					((ArrowTower) a).upgrade();
+			}
+			pauseCooldown = 0;
 		}
 		if (Gdx.input.justTouched()) {
 			uiCamera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));

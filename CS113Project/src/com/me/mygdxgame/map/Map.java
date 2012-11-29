@@ -12,6 +12,8 @@ public class Map
 	private Sprite background;
 	private int width, height;
 	private Coordinate start1, start2;
+	private Coordinate[] buildSites1, buildSites2;
+	
 	
 	public Map (Coordinate c, Sprite background, int width, int height, int x1, int y1, int x2, int y2)
 	{
@@ -29,6 +31,22 @@ public class Map
 		path = new LinkedList<Coordinate>();
 		path.addAll(c);
 		this.background = background;
+	}
+	
+	public void buildSites(Coordinate[] sites, int team)
+	{
+		if (team == 1)
+			buildSites1 = sites;
+		else
+			buildSites2 = sites;
+	}
+	
+	public Coordinate[] buildSites(int team)
+	{
+		Coordinate[] temp = (team == 1 ? buildSites1 : buildSites2);
+		if (temp == null)
+			return new Coordinate[0];
+		return temp;
 	}
 	
 	public Coordinate start1()

@@ -13,6 +13,7 @@ public abstract class Unit extends Actor
 {
 	float speed;
 	float xSpeed, ySpeed;
+	int randX, randY;
 	Coordinate destination;
 	Iterator<Coordinate> pathIter;
 	static ArrayList<ArrayList<Animation>> animations;
@@ -20,14 +21,16 @@ public abstract class Unit extends Actor
 	boolean walking, changedDirection;
 	float stateTime;
 	
-	public Unit(int x, int y, int team, Iterator<Coordinate> pathIter)
+	public Unit(int x, int y, int team, Iterator<Coordinate> pathIter, int rX, int rY)
 	{
-		super(x, y, team);
+		super(x + rX, y + rY, team);
 		//this.speed = speed;
 		this.pathIter = pathIter;
 		destination = pathIter.next();
 		stateTime = 0f;
 		changedDirection = true;
+		randX = rX;
+		randY = rY;
 	}
 
 	@Override
@@ -93,7 +96,7 @@ public abstract class Unit extends Actor
 		unitAnimation.add(loadAnimation(0, 134, 40, 46, 3, false, true));
 		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, false, true));
 		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, true, true));
-		unitAnimation.add(loadAnimation(0, 225, 46, 43, 5, false, true));
+		unitAnimation.add(loadAnimation(0, 225, 46, 43, 3, false, true));
 		animations.add(unitAnimation);
 	}
 	
