@@ -95,7 +95,7 @@ public class EverythingHolder
 		
 		if (m == 1)
 			add(new Swordsman(start.x() + randX, start.y() + randY, team, iter), true, team);
-		else
+		else if (m == 2)
 			add(new Archer(start.x() + randX, start.y() + randY, team, iter), true, team);
 	}
 	

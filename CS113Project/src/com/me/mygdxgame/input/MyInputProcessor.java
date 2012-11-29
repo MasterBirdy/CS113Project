@@ -20,6 +20,12 @@ public class MyInputProcessor implements InputProcessor
 	{
 		if (keycode == Keys.TAB)
 			EverythingHolder.toggleShowRange();
+		if (keycode == 84)
+		{
+			int temp = 5;
+			temp += 6;
+		}
+			//Gdx.input.vibrate(20000);
 		return false;
 	}
 
@@ -43,6 +49,9 @@ public class MyInputProcessor implements InputProcessor
 			EverythingHolder.toggleShowRange();
 			return false;
 		}
+		
+		if (x >= 600)
+			return false;
 		
 		if (!down)
 		{
@@ -70,6 +79,9 @@ public class MyInputProcessor implements InputProcessor
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) 
 	{
+		if (pointer == 1 || !down)
+			return false;
+		
 		deltaX = this.x - x;
 		deltaY = y - this.y;
 		this.x = x;

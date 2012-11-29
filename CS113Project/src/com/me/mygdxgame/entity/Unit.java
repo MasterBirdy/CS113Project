@@ -42,17 +42,30 @@ public abstract class Unit extends Actor
 			unitType = 1;
 		else
 			unitType = 0;
-			
-		if (this.xSpeed > 0.6)
-			current = animations.get(unitType).get(2).getKeyFrame(stateTime, true);
-		else if (this.xSpeed < -0.6)
-			current = animations.get(unitType).get(1).getKeyFrame(stateTime, true);
-		else if (this.ySpeed > 0.6)
-			current = animations.get(unitType).get(3).getKeyFrame(stateTime, true);
-		else
-			current = animations.get(unitType).get(0).getKeyFrame(stateTime, true);
 		
-		batch.draw(current, xCoord, yCoord);
+		int animationDir = 0;
+		
+		if (this.xSpeed > 0.6)
+			animationDir = (attacking ? 6 : 2);
+			//current = animations.get(unitType).get(2).getKeyFrame(stateTime, true);
+		else if (this.xSpeed < -0.6)
+			animationDir = (attacking ? 5 : 1);
+			//current = animations.get(unitType).get(1).getKeyFrame(stateTime, true);
+		else if (this.ySpeed > 0.6)
+			animationDir = (attacking ? 7 : 3);
+			//current = animations.get(unitType).get(3).getKeyFrame(stateTime, true);
+		else
+			animationDir = (attacking ? 4 : 0);
+			//current = animations.get(unitType).get(0).getKeyFrame(stateTime, true);
+		current = animations.get(unitType).get(animationDir).getKeyFrame(stateTime, true);
+		
+		float wi = current.getRegionWidth() * 1.5f;
+		float he = current.getRegionHeight() * 1.5f;
+		
+		if (this instanceof Hero)
+			batch.draw(current, xCoord - 8, yCoord, 50, 60);
+		else
+			batch.draw(current, xCoord, yCoord);
 	}
 	
 	public static void loadAnimations()
@@ -64,6 +77,10 @@ public abstract class Unit extends Actor
 		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, false, false));
 		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, true, false));
 		unitAnimation.add(loadAnimation(0, 90, 31, 43, 5, false, false));
+		unitAnimation.add(loadAnimation(0, 134, 40, 46, 3, false, false));
+		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, false, false));
+		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, true, false));
+		unitAnimation.add(loadAnimation(0, 225, 46, 43, 5, false, false));
 		animations.add(unitAnimation);
 		
 		
@@ -73,6 +90,10 @@ public abstract class Unit extends Actor
 		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, false, true));
 		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, true, true));
 		unitAnimation.add(loadAnimation(0, 90, 31, 43, 5, false, true));
+		unitAnimation.add(loadAnimation(0, 134, 40, 46, 3, false, true));
+		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, false, true));
+		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, true, true));
+		unitAnimation.add(loadAnimation(0, 225, 46, 43, 5, false, true));
 		animations.add(unitAnimation);
 	}
 	

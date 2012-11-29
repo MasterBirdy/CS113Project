@@ -9,13 +9,13 @@ public class SwordFace extends Hero
 	public SwordFace(int x, int y, int team, Iterator<Coordinate> p)
 	{
 		super(x, y, team, p);
-		maxHealth = 20;
+		maxHealth = 60;
 		currentHealth = maxHealth;
-		damage = 0;
+		damage = 15;
 		attackSpeed = 25;
 		attackCooldown = 0;
-		attackRange = 35;
-		speed = 2f;
+		attackRange = 40;
+		speed = 1.5f;
 	}
 
 	@Override

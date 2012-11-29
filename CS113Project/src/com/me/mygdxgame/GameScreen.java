@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -45,6 +46,7 @@ public class GameScreen implements Screen {
 	Rectangle spiralRectangle;
 	Vector3 touchPoint;
 	int level = 1;
+	int income, resources;
 
 
 	public GameScreen(Game game)
@@ -132,7 +134,7 @@ public class GameScreen implements Screen {
 		everything.add(tower, true, 1);
 		tower = new ArrowTower(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
 		everything.add(tower, true, 2);
-		
+		hero.takeDamage(1000);
 		everything.add(hero, true, 1);
 		
 //		tower = new ArrowTower(300, 400, 1);
@@ -216,7 +218,7 @@ public class GameScreen implements Screen {
 		Coordinate start1 = everything.map().start1();
 		Coordinate start2 = everything.map().start2();
 
-		if (--counter1 < 0)
+		/*if (--counter1 < 0)
 		{
 			// decides to add either a swordsman or an archer
 			boolean sword = Math.random() < 0.6;
@@ -227,7 +229,7 @@ public class GameScreen implements Screen {
 				//everything.add(new Archer(start1.x(), start1.y(), 1, everything.map().getPath().iterator()), true, 1);
 				everything.add(2, 1);
 			counter1 = (int)(Math.random() * 60) + 40;
-		}
+		}*/
 		if (--counter2 < 0)
 		{
 			boolean sword = Math.random() < 0.6;
@@ -239,7 +241,12 @@ public class GameScreen implements Screen {
 				everything.add(2, 2);
 			counter2 = (int)(Math.random() * 60) + 40;
 		}
-	}	
+	}
+	
+	public void buyUnit(int unit)
+	{
+		everything.add(unit, 1);
+	}
 
 	private void handleInput()
 	{
@@ -251,25 +258,22 @@ public class GameScreen implements Screen {
 			camera.translate(10, 0);
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))
 			camera.translate(-10, 0);
-		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) && pauseCooldown > 10)
+		if ((Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Keys.MENU)) && pauseCooldown > 10)
 		{
 			isPaused = !isPaused;
 			pauseCooldown = 0;
+			Gdx.input.vibrate(1000);
 		}
 		if (Gdx.input.justTouched()) {
 			uiCamera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 			System.out.println("X: " + touchPoint.x + " Y: " + touchPoint.y);
 			if (OverlapTester.pointInRectangle(swordRectangle, touchPoint.x, touchPoint.y))
 			{
-				/*
-				 * INSERT CODE HERE
-				 */
+				buyUnit(1);
 			}
 			if (OverlapTester.pointInRectangle(bowRectangle, touchPoint.x, touchPoint.y))
 			{
-				/*
-				 * INSERT CODE HERE
-				 */
+				buyUnit(2);
 			}
 			if (OverlapTester.pointInRectangle(serfRectangle, touchPoint.x, touchPoint.y))
 			{
