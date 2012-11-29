@@ -135,10 +135,10 @@ public class GameScreen implements Screen {
 		
 		everything.add(hero, true, 1);
 		
-		tower = new ArrowTower(300, 400, 1);
-		everything.add(tower, true, 1);
-		tower= new ArrowTower(1000, 1000, 2);
-		everything.add(tower, true, 2);
+//		tower = new ArrowTower(300, 400, 1);
+//		everything.add(tower, true, 1);
+//		tower= new ArrowTower(1000, 1000, 2);
+//		everything.add(tower, true, 2);
 
 		pauseRectangle = new Rectangle(-68, -32, 133, 33);
 		swordRectangle = new Rectangle(225, 8, 40, 40);
