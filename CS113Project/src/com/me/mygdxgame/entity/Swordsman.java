@@ -1,12 +1,13 @@
 package com.me.mygdxgame.entity;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 
 import com.me.mygdxgame.map.Coordinate;
 
 public class Swordsman extends Minion
 {
-	public Swordsman(int x, int y, int team, Iterator<Coordinate> p)
+	public Swordsman(int x, int y, int team, ListIterator<Coordinate> p)
 	{
 		super(x, y, team, p);
 		maxHealth = 20;

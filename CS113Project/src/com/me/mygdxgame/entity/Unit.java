@@ -2,6 +2,7 @@ package com.me.mygdxgame.entity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -15,18 +16,20 @@ public abstract class Unit extends Actor
 	float xSpeed, ySpeed;
 	int randX, randY;
 	Coordinate destination;
-	Iterator<Coordinate> pathIter;
+	ListIterator<Coordinate> pathIter;
 	static ArrayList<ArrayList<Animation>> animations;
 	TextureRegion currentFrame;
 	boolean walking, changedDirection;
 	float stateTime;
+	int stance = 1, previousStance = 1;
+	int animationDir = 0;
 	
-	public Unit(int x, int y, int team, Iterator<Coordinate> pathIter, int rX, int rY)
+	public Unit(int x, int y, int team, ListIterator<Coordinate> pathIter, int rX, int rY)
 	{
 		super(x + rX, y + rY, team);
 		//this.speed = speed;
 		this.pathIter = pathIter;
-		destination = pathIter.next();
+		destination = (team == 1 ? pathIter.next() : pathIter.previous());
 		stateTime = 0f;
 		changedDirection = true;
 		randX = rX;
@@ -46,27 +49,26 @@ public abstract class Unit extends Actor
 		else
 			unitType = 0;
 		
-		int animationDir = 0;
-		
-		if (this.xSpeed > 0.6)
+		if (xSpeed > 0.6)
 			animationDir = (attacking ? 6 : 2);
-			//current = animations.get(unitType).get(2).getKeyFrame(stateTime, true);
-		else if (this.xSpeed < -0.6)
+		else if (xSpeed < -0.6)
 			animationDir = (attacking ? 5 : 1);
-			//current = animations.get(unitType).get(1).getKeyFrame(stateTime, true);
-		else if (this.ySpeed > 0.6)
+		else if (ySpeed > 0.6)
 			animationDir = (attacking ? 7 : 3);
-			//current = animations.get(unitType).get(3).getKeyFrame(stateTime, true);
-		else
+		else if (ySpeed < -0.6)
 			animationDir = (attacking ? 4 : 0);
-			//current = animations.get(unitType).get(0).getKeyFrame(stateTime, true);
+		else if (attacking && animationDir < 4)
+			animationDir += 4;
+		else if (!attacking && animationDir > 3)
+			animationDir -= 4;
 		current = animations.get(unitType).get(animationDir).getKeyFrame(stateTime, true);
 		
-		float wi = current.getRegionWidth() * 1.5f;
-		float he = current.getRegionHeight() * 1.5f;
+		//float wi = Math.abs(current.getRegionWidth() * 1.5f);
+		//float he = Math.abs(current.getRegionHeight() * 1.5f);
 		
 		if (this instanceof Hero)
-			batch.draw(current, xCoord - 8, yCoord, 50, 60);
+			batch.draw(current, xCoord - 8, yCoord, Math.abs(current.getRegionWidth() / 2), Math.abs(current.getRegionHeight() / 2f), Math.abs(current.getRegionWidth()), Math.abs(current.getRegionHeight()), 1.5f, 1.5f, 180f);
+			//batch.draw(current, xCoord - 8, yCoord, wi, he);
 		else
 			batch.draw(current, xCoord, yCoord);
 	}
@@ -76,20 +78,20 @@ public abstract class Unit extends Actor
 		animations = new ArrayList<ArrayList<Animation>>();
 		ArrayList<Animation> unitAnimation = new ArrayList<Animation>();
 		
-		unitAnimation.add(loadAnimation(0, 0, 29, 47, 5, false, false));
+		unitAnimation.add(loadAnimation(0, 0, 29, 46, 5, false, false));
 		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, false, false));
 		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, true, false));
 		unitAnimation.add(loadAnimation(0, 90, 31, 43, 5, false, false));
 		unitAnimation.add(loadAnimation(0, 134, 40, 46, 3, false, false));
 		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, false, false));
 		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, true, false));
-		unitAnimation.add(loadAnimation(0, 225, 46, 43, 5, false, false));
+		unitAnimation.add(loadAnimation(0, 225, 46, 43, 3, false, false));
 		animations.add(unitAnimation);
 		
 		
 		unitAnimation = new ArrayList<Animation>();
 		
-		unitAnimation.add(loadAnimation(0, 0, 29, 47, 5, false, true));
+		unitAnimation.add(loadAnimation(0, 0, 29, 46, 5, false, true));
 		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, false, true));
 		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, true, true));
 		unitAnimation.add(loadAnimation(0, 90, 31, 43, 5, false, true));
@@ -121,17 +123,29 @@ public abstract class Unit extends Actor
 	
 	public void advance()
 	{
+		float distance;
+		
+		if (previousStance == -1)
+		{
+			if ((team == 1 ? pathIter.hasNext() : pathIter.hasPrevious()))
+				destination = (team == 1 ? pathIter.next() : pathIter.previous());
+			distance = getDistanceSquared(destination.x(), destination.y());
+			//setSpeed(distance);
+			xSpeed = 0;
+			ySpeed = 0;
+		}
+		
 		targetSelector();
 		
 		if ((target == null || !target.isAlive()) && attackCooldown <= 0)
 		{
-			float distance = getDistanceSquared(destination.x(), destination.y());
+			distance = getDistanceSquared(destination.x(), destination.y());
 			if (distance  < speed * speed)
 			{
 				this.xCoord(destination.x());
 				this.yCoord(destination.y());
-				if (pathIter.hasNext())
-					destination = pathIter.next();
+				if ((team == 1 ? pathIter.hasNext() : pathIter.hasPrevious()))
+					destination = (team == 1 ? pathIter.next() : pathIter.previous());
 				else
 				{
 					alive = false;
@@ -150,12 +164,72 @@ public abstract class Unit extends Actor
 		}
 	}
 	
-	private void setSpeed(float distance)
+	protected void retreat()
+	{
+
+		float distance;
+		target = null;
+		attacking = false;
+		
+		if (previousStance != -1)
+		{
+			if ((team == 1 ? pathIter.hasPrevious() : pathIter.hasNext()))
+				destination = (team == 1 ? pathIter.previous() : pathIter.next());
+			if ((team == 1 ? pathIter.hasPrevious() : pathIter.hasNext()))
+				destination = (team == 1 ? pathIter.previous() : pathIter.next());
+			distance = getDistanceSquared(destination.x(), destination.y());
+			setSpeed(distance);
+		}
+		else
+			distance = getDistanceSquared(destination.x(), destination.y());
+		
+		
+		/*if (previousStance != -1)
+			setSpeed(distance);*/
+		if (distance  < speed * speed)
+		{
+			this.xCoord(destination.x());
+			this.yCoord(destination.y());
+			if ((team == 1 ? pathIter.hasPrevious() : pathIter.hasNext()))
+				destination = (team == 1 ? pathIter.previous() : pathIter.next());
+			else
+			{
+				return;
+			}
+			distance = getDistanceSquared(destination.x(), destination.y());
+			setSpeed(distance);
+		}
+		else
+		{
+			this.xCoord(this.xCoord + xSpeed);
+			this.yCoord(this.yCoord + ySpeed);
+		}
+		if (xSpeed + ySpeed == 0)
+			setSpeed(distance);
+		
+	}
+	
+	protected void setSpeed(float distance)
 	{
 		distance = (float)Math.sqrt(distance);
 		xSpeed = speed * ((destination.x() - xCoord) / distance);
 		ySpeed = speed * ((destination.y() - yCoord) / distance);
 	}
 	
-	protected abstract void attack();
+	protected void attack() 
+	{
+		if (target == null || !target.isAlive())
+			return;
+		target.takeDamage(damage);
+	}
+	
+	protected void sendAura()
+	{
+		
+	}
+	
+	protected void takeAura(int aura)
+	{
+		
+	}
 }

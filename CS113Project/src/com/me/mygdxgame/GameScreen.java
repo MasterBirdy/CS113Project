@@ -44,6 +44,9 @@ public class GameScreen implements Screen {
 	Rectangle magicRectangle;
 	Rectangle petRectangle;
 	Rectangle spiralRectangle;
+	Rectangle attackRectangle;
+	Rectangle defendRectangle;
+	Rectangle retreatRectangle;
 	Vector3 touchPoint;
 	int level = 1;
 	int income, resources;
@@ -116,7 +119,7 @@ public class GameScreen implements Screen {
 
 		EverythingHolder.load(batch, maps[level]);
 
-		hero = new SwordFace(maps[level].start1().x(), maps[level].start1().y(), 1, everything.map().getPath().iterator());
+		hero = new SwordFace(maps[level].start1().x(), maps[level].start1().y(), 1, everything.map().getPath().listIterator());
 
 		Texture sheet = new Texture(Gdx.files.internal("images/sprite_sheet.png"));
 
@@ -172,13 +175,16 @@ public class GameScreen implements Screen {
 //		tower= new ArrowTower(1000, 1000, 2);
 //		everything.add(tower, true, 2);
 
-		pauseRectangle = new Rectangle(-68, -32, 133, 33);
-		swordRectangle = new Rectangle(225, 8, 40, 40);
-		bowRectangle = new Rectangle(280, 8, 40, 40);
-		serfRectangle = new Rectangle(335, 8, 40, 40);
-		magicRectangle= new Rectangle(225, -41, 40, 40);
-		petRectangle= new Rectangle(280, -41, 40, 40);
-		spiralRectangle= new Rectangle(335, -41, 40, 40);
+		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
+		swordRectangle   = new Rectangle(225, 8, 40, 40);
+		bowRectangle     = new Rectangle(280, 8, 40, 40);
+		serfRectangle    = new Rectangle(335, 8, 40, 40);
+		magicRectangle   = new Rectangle(225, -41, 40, 40);
+		petRectangle     = new Rectangle(280, -41, 40, 40);
+		spiralRectangle  = new Rectangle(335, -41, 40, 40);
+		attackRectangle  = new Rectangle(-50, -200, 40, 40);
+		defendRectangle  = new Rectangle(-100, -200, 40, 40);
+		retreatRectangle = new Rectangle(-150, -200, 40, 40);
 
 		Gdx.input.setInputProcessor(inputProcessor);
 		gameUI = new GameUI();
@@ -333,6 +339,18 @@ public class GameScreen implements Screen {
 				/*
 				 * INSERT CODE HERE
 				 */
+			}
+			if (OverlapTester.pointInRectangle(attackRectangle, touchPoint.x, touchPoint.y))
+			{
+				hero.stance(1);
+			}
+			if (OverlapTester.pointInRectangle(defendRectangle, touchPoint.x, touchPoint.y))
+			{
+				hero.stance(0);
+			}
+			if (OverlapTester.pointInRectangle(retreatRectangle, touchPoint.x, touchPoint.y))
+			{
+				hero.stance(-1);
 			}
 			if (isPaused){
 				//System.out.println(touchPoint.x + " " + touchPoint.y);

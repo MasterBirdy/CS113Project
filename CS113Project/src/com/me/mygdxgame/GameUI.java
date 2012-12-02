@@ -16,6 +16,9 @@ public class GameUI
 	private TextureRegion magicIcon;
 	private TextureRegion petIcon;
 	private TextureRegion spiralIcon;
+	private TextureRegion attackIcon;
+	private TextureRegion defendIcon;
+	private TextureRegion retreatIcon;
 	BitmapFont font;
 	static EverythingHolder everything;
 	
@@ -28,6 +31,9 @@ public class GameUI
 		magicIcon = new TextureRegion(new Texture(Gdx.files.internal("images/magiciconbnw.png")), 40, 40);
 		petIcon = new TextureRegion(new Texture(Gdx.files.internal("images/peticonbnw.png")), 40, 40);
 		spiralIcon = new TextureRegion(new Texture(Gdx.files.internal("images/spiraliconbnw.png")), 40, 40);
+		attackIcon = new TextureRegion(new Texture(Gdx.files.internal("images/magiciconbnw.png")), 40, 40);
+		defendIcon = new TextureRegion(new Texture(Gdx.files.internal("images/peticonbnw.png")), 40, 40);
+		retreatIcon = new TextureRegion(new Texture(Gdx.files.internal("images/spiraliconbnw.png")), 40, 40);
 		font = new BitmapFont();
 	}
 	
@@ -49,7 +55,11 @@ public class GameUI
 		batch.draw(magicIcon, 225, -41);
 		batch.draw(petIcon, 280, -41);
 		batch.draw(spiralIcon, 335, -41);
+		batch.draw(attackIcon, -50, -200);
+		batch.draw(defendIcon, -100, -200);
+		batch.draw(retreatIcon, -150, -200);
 		font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 20);
+		font.draw(batch, "Funds: " + everything.funds(), Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 70);
 	}
 	
 	public int width()

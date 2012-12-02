@@ -62,7 +62,7 @@ public class MyInputProcessor implements InputProcessor
 		this.x = x;
 		this.y = y;
 		
-		hero.stance(-1);
+		//hero.stance(-1);
 		
 		return false;
 	}
@@ -71,7 +71,7 @@ public class MyInputProcessor implements InputProcessor
 	public boolean touchUp(int x, int y, int pointer, int button) {
 		down = false;
 		
-		hero.stance(1);
+		//hero.stance(1);
 		
 		return false;
 	}

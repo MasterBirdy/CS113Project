@@ -2,6 +2,7 @@ package com.me.mygdxgame.entity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me.mygdxgame.map.Coordinate;
@@ -11,7 +12,7 @@ public class Archer extends Minion
 
 	ArrayList<Projectile> projectiles;
 
-	public Archer(int x, int y, int team, Iterator<Coordinate> p)
+	public Archer(int x, int y, int team, ListIterator<Coordinate> p)
 	{
 		super(x, y, team, p);
 		maxHealth = 10;

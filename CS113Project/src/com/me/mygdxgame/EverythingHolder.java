@@ -2,7 +2,9 @@ package com.me.mygdxgame;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me.mygdxgame.entity.Actor;
 import com.me.mygdxgame.entity.Archer;
@@ -25,8 +27,9 @@ public class EverythingHolder
 	long waveTime, waveInterval;
 	boolean spawning;
 	int nano = 1000000000;
-	
-	
+	int income = 100;
+	int funds = 200;
+		
 	public EverythingHolder()
 	{
 		teams[0] = new LinkedList<Actor>();
@@ -63,6 +66,12 @@ public class EverythingHolder
 	
 	public void add(int unit, int team)
 	{
+		if (team == 1)
+		{
+			if (funds < 20)
+				return;
+			funds -= 20;
+		}
 		pools[team - 1].add(unit);
 	}
 	
@@ -90,7 +99,7 @@ public class EverythingHolder
 	private void spawnMob(int m, int team)
 	{
 		Coordinate start = (team == 1 ? map.start1() : map.start2());
-		Iterator<Coordinate> iter = (team == 1 ? map.getPath().iterator() : map.getPath().descendingIterator());
+		ListIterator<Coordinate> iter = (team == 1 ? map.getPath().listIterator() : map.getPath().listIterator(map.getPath().size() - 1));
 		int randX = (int)(Math.random() * 10);
 		int randY = 0; //(int)(Math.random() * 5);
 		
@@ -208,7 +217,9 @@ public class EverythingHolder
 			
 			for (Actor a : teams[0])
 				if (a instanceof Hero && !a.isAlive())
-					((Hero)a).respawn(map.start1().x(), map.start1().y(), map.getPath().iterator());
+					((Hero)a).respawn(map.start1().x(), map.start1().y(), map.getPath().listIterator());
+			funds += income;
+			Gdx.input.vibrate(100);
 		}
 		
 		/*if (spawning && pools[2].isEmpty() && pools[3].isEmpty())
@@ -233,6 +244,11 @@ public class EverythingHolder
 	public Map map()
 	{
 		return map;
+	}
+	
+	public int funds()
+	{
+		return funds;
 	}
 	
 	static public void toggleShowRange()

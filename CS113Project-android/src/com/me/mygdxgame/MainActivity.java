@@ -1,7 +1,10 @@
 package com.me.mygdxgame;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 

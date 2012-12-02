@@ -64,14 +64,23 @@ public abstract class Actor extends Entity
 	
 	public void targetSelector()
 	{
+		float currentDistance;
 		if (target != null && target.isAlive())
-			return;		
+		{
+			currentDistance = getDistanceSquared(target);
+			if (target instanceof ArrowTower)
+				currentDistance -= 3600;
+			if (currentDistance < attackRange * attackRange)
+			{
+				return;
+			}
+		}		
 		
 		LinkedList<Actor> enemy = (team == 1 ? team2 : team1);
 		Iterator<Actor> actorIter = enemy.iterator();
 		Actor newTarget = null;
 		float newDistance = 1000000;
-		float currentDistance = 0;
+		currentDistance = 0;
 		while(actorIter.hasNext())
 		{
 			Actor e = actorIter.next();
