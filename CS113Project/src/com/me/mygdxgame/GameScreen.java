@@ -144,6 +144,7 @@ public class GameScreen implements Screen {
 
 		MyInputProcessor.loadCamera(camera);
 		MyInputProcessor.loadHero(hero);
+		MyInputProcessor.loadGame(this);
 		
 		Building.loadAnimations();
 
@@ -207,15 +208,18 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) 
 	{
+		boundCamera();
+		
 		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClearColor(1, 1, 1, 1);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-		boundCamera();
-
 		camera.update();
 		camera.apply(gl);
-
+		boundCamera();
+		camera.update();
+		camera.apply(gl);
+		
 		uiCamera.update();
 		uiCamera.apply(gl);
 
@@ -343,14 +347,22 @@ public class GameScreen implements Screen {
 			if (OverlapTester.pointInRectangle(attackRectangle, touchPoint.x, touchPoint.y))
 			{
 				hero.stance(1);
+				Gdx.input.vibrate(50);
 			}
 			if (OverlapTester.pointInRectangle(defendRectangle, touchPoint.x, touchPoint.y))
 			{
 				hero.stance(0);
+				Gdx.input.vibrate(50);
 			}
 			if (OverlapTester.pointInRectangle(retreatRectangle, touchPoint.x, touchPoint.y))
 			{
 				hero.stance(-1);
+				Gdx.input.vibrate(50);
+			}
+			Actor a = everything.team(1).getLast();
+			if (OverlapTester.pointInRectangle(new Rectangle(a.xCoord(), a.yCoord(), 40, 40), touchPoint.x, touchPoint.y))
+			{
+				hero.stance(0);
 			}
 			if (isPaused){
 				//System.out.println(touchPoint.x + " " + touchPoint.y);
@@ -365,17 +377,35 @@ public class GameScreen implements Screen {
 
 	public void boundCamera()
 	{
+		if (camera.zoom > 2)
+			camera.zoom = 2;
+		if (camera.zoom < .5)
+			camera.zoom = .5f;
+		/*float width = camera.viewportWidth;
 		int w = Gdx.graphics.getWidth() / 2;
-		int h = Gdx.graphics.getHeight() / 2;
+		int h = Gdx.graphics.getHeight() / 2;*/
+		
+		/*float w = camera.viewportWidth / 2;
+		float h = camera.viewportHeight / 2;*/
+		float w = (camera.frustum.planePoints[1].x - camera.frustum.planePoints[0].x) / 2;
+		float h = (camera.frustum.planePoints[3].y - camera.frustum.planePoints[0].y) / 2;
+		
+		float width = everything.map().width();
+		float height = everything.map().height();
 
-		if (camera.position.y > everything.map().height())
-			camera.position.y = everything.map().height();
+		//if (camera.position.y > everything.map().height() * (1 / (2 - camera.zoom)))
+		//	camera.position.y = everything.map().height() * (1 / (2 - camera.zoom));
+		if (camera.position.y > everything.map().height() - h + 240)
+			camera.position.y = everything.map().height() - h + 240;
 
 		if (camera.position.y < h)
 			camera.position.y = h;
 
-		if (camera.position.x > everything.map().width() + gameUI.width())
-			camera.position.x = everything.map().width() + gameUI.width();
+		//if (camera.position.x > everything.map().width() + gameUI.width())
+		//	camera.position.x = everything.map().width() + gameUI.width();
+		float temp = everything.map().width() - (w / 2) + 400;
+		if (camera.position.x > (everything.map().width() - (w / 2) + 400))//(w / 4) - w + 400)
+			camera.position.x = everything.map().width() - (w / 2) + 400; //(w / 4) - w + 400;
 
 		if (camera.position.x < w)
 			camera.position.x = w;

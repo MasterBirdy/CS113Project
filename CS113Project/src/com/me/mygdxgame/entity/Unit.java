@@ -67,7 +67,7 @@ public abstract class Unit extends Actor
 		//float he = Math.abs(current.getRegionHeight() * 1.5f);
 		
 		if (this instanceof Hero)
-			batch.draw(current, xCoord - 8, yCoord, Math.abs(current.getRegionWidth() / 2), Math.abs(current.getRegionHeight() / 2f), Math.abs(current.getRegionWidth()), Math.abs(current.getRegionHeight()), 1.5f, 1.5f, 180f);
+			batch.draw(current, xCoord, yCoord, Math.abs(current.getRegionWidth() / 2), Math.abs(current.getRegionHeight() / 2f), Math.abs(current.getRegionWidth()), Math.abs(current.getRegionHeight()), 1.5f, 1.5f, 0f);
 			//batch.draw(current, xCoord - 8, yCoord, wi, he);
 		else
 			batch.draw(current, xCoord, yCoord);

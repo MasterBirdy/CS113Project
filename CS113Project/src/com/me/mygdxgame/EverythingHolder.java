@@ -71,6 +71,7 @@ public class EverythingHolder
 			if (funds < 20)
 				return;
 			funds -= 20;
+			Gdx.input.vibrate(50);
 		}
 		pools[team - 1].add(unit);
 	}
@@ -219,7 +220,7 @@ public class EverythingHolder
 				if (a instanceof Hero && !a.isAlive())
 					((Hero)a).respawn(map.start1().x(), map.start1().y(), map.getPath().listIterator());
 			funds += income;
-			Gdx.input.vibrate(100);
+			//Gdx.input.vibrate(1000);
 		}
 		
 		/*if (spawning && pools[2].isEmpty() && pools[3].isEmpty())

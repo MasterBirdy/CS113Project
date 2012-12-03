@@ -4,7 +4,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
 import com.me.mygdxgame.EverythingHolder;
+import com.me.mygdxgame.GameScreen;
 import com.me.mygdxgame.entity.Hero;
 
 public class MyInputProcessor implements InputProcessor
@@ -14,6 +16,14 @@ public class MyInputProcessor implements InputProcessor
 	int deltaX, deltaY;
 	static OrthographicCamera camera;
 	static Hero hero;
+	static GameScreen game;
+	int numberOfFingers = 0;
+	int fingerOnePointer;
+	int fingerTwoPointer;
+	float lastDistance = 0;
+	Vector3 fingerOne = new Vector3();
+	Vector3 fingerTwo = new Vector3();
+	float zoom;
 
 	@Override
 	public boolean keyDown(int keycode) 
@@ -44,6 +54,23 @@ public class MyInputProcessor implements InputProcessor
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) 
 	{
+		// for pinch-to-zoom
+	    numberOfFingers++;
+		if(numberOfFingers == 1)
+		{
+			fingerOnePointer = pointer;
+			fingerOne.set(x, y, 0);
+		}
+		else if(numberOfFingers == 2)
+		{
+			fingerTwoPointer = pointer;
+			fingerTwo.set(x, y, 0);
+			
+			float distance = fingerOne.dst(fingerTwo);
+			lastDistance = distance;
+			zoom = camera.zoom;
+		}
+		 
 		if (pointer == 1)
 		{
 			EverythingHolder.toggleShowRange();
@@ -70,7 +97,22 @@ public class MyInputProcessor implements InputProcessor
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
 		down = false;
-		
+		// for pinch-to-zoom           
+		if(numberOfFingers == 1)
+		{
+			Vector3 touchPoint = new Vector3(x, y, 0);
+			camera.unproject(touchPoint);
+		}
+		numberOfFingers--;
+		 
+		// just some error prevention... clamping number of fingers (ouch! :-)
+		if(numberOfFingers<0)
+		{
+			numberOfFingers = 0;
+		}
+		 
+
+		lastDistance = 0;
 		//hero.stance(1);
 		
 		return false;
@@ -79,6 +121,40 @@ public class MyInputProcessor implements InputProcessor
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) 
 	{
+		// for pinch-to-zoom
+		if (pointer == fingerOnePointer) 
+		{
+			fingerOne.set(x, y, 0);
+		}
+		if (pointer == fingerTwoPointer) 
+		{
+			fingerTwo.set(x, y, 0);
+		}
+		 
+		float distance = fingerOne.dst(fingerTwo);
+		float factor = distance / lastDistance;
+		
+		if (numberOfFingers == 2)
+		{
+			/*if (factor > 2)
+				factor = 2;
+			else if (factor < .5)
+				factor = 0.5f;*/
+			
+			camera.zoom = factor + zoom - 1;
+			game.boundCamera();
+		}
+		
+
+		/*if (lastDistance > distance) 
+		{
+			camera.zoom = factor;
+		} else if (lastDistance < distance) 
+		{
+			camera.zoom = factor;
+		}*/
+		
+		
 		if (pointer == 1 || !down)
 			return false;
 		
@@ -98,7 +174,8 @@ public class MyInputProcessor implements InputProcessor
 
 	@Override
 	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
+		camera.zoom += amount * 0.06;
+		game.boundCamera();
 		return false;
 	}
 	
@@ -110,5 +187,10 @@ public class MyInputProcessor implements InputProcessor
 	public static void loadHero(Hero h)
 	{
 		hero = h;
+	}
+	
+	public static void loadGame(GameScreen g)
+	{
+		game = g;
 	}
 }

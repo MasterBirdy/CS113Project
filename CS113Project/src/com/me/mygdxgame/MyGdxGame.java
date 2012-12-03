@@ -21,7 +21,7 @@ public class MyGdxGame extends Game {
 	@Override
 	public void create() 
 	{
-		this.resize(800, 480);		
+		//this.resize(800, 480);
 		setScreen(new MainMenuScreen(this));
 	}
 	
