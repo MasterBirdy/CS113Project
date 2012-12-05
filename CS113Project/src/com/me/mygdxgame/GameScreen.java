@@ -125,8 +125,8 @@ public class GameScreen implements Screen {
 
 		Actor.linkActors(everything.team(1), everything.team(2));
 		//<<<<<<< HEAD
-		Actor.loadRange(sheet);
-		Entity.loadSheet(sheet);
+		Entity.loadStatics(sheet);
+		Actor.loadRange();
 		Unit.loadAnimations();
 		Projectile.loadProjectiles();
 		Building.loadSprites();

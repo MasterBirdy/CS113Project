@@ -1,11 +1,14 @@
 package com.me.mygdxgame;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -24,10 +27,16 @@ public class MainMenuScreen implements Screen
 	Rectangle playRectangle;
 	private SpriteBatch batch;
 	Vector3 touchPoint;
+	Audio tempMusic = Gdx.audio;
+	Music startMusic;
+	static ParticleEffect fire = new ParticleEffect();
 
 	public MainMenuScreen(Game game)
 	{
 		this.game = game;
+		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/Celeste.wav"));
+		startMusic.setLooping(true);
+		startMusic.play();
 		highscoresBounds = new Rectangle(160 - 150, 200 - 18, 300, 36);
 		float w = 800; //Gdx.graphics.getWidth();
 		float h = 480; //Gdx.graphics.getHeight();
@@ -50,6 +59,10 @@ public class MainMenuScreen implements Screen
 		playSprite.setPosition(w / 2 - playSprite.getWidth() / 2, 100);
 		playRectangle = new Rectangle(w / 2 - playSprite.getWidth() / 2 - 20 - w / 2, 100 - 20 - h / 2, playSprite.getWidth() + 40, playSprite.getHeight() + 40);
 		touchPoint = new Vector3();
+		
+		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
+		fire.setPosition(400, 10);
+		fire.start();
 	}
 
 	@Override
@@ -64,6 +77,9 @@ public class MainMenuScreen implements Screen
 		sprite.draw(batch);
 		titleSprite.draw(batch);
 		playSprite.draw(batch);
+		if (fire.isComplete())
+			fire.start();
+		fire.draw(batch, .01f);//, delta);
 		batch.end();
 	}
 
@@ -74,6 +90,7 @@ public class MainMenuScreen implements Screen
 			//System.out.println(touchPoint.x + " " + touchPoint.y);
 			if (OverlapTester.pointInRectangle(playRectangle, touchPoint.x, touchPoint.y)) {
 				//System.out.println(true);
+				startMusic.stop();
 				game.setScreen(new GameScreen(game));
 				return;
 			}

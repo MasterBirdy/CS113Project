@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.me.mygdxgame.EverythingHolder;
 import com.me.mygdxgame.GameScreen;
+import com.me.mygdxgame.entity.Entity;
 import com.me.mygdxgame.entity.Hero;
 
 public class MyInputProcessor implements InputProcessor
@@ -30,6 +31,26 @@ public class MyInputProcessor implements InputProcessor
 	{
 		if (keycode == Keys.TAB)
 			EverythingHolder.toggleShowRange();
+		if (keycode == Keys.NUM_1)
+			Entity.setVolume(0);
+		if (keycode == Keys.NUM_2)
+			Entity.setVolume(0.1f);
+		if (keycode == Keys.NUM_3)
+			Entity.setVolume(0.2f);
+		if (keycode == Keys.NUM_4)
+			Entity.setVolume(0.3f);
+		if (keycode == Keys.NUM_5)
+			Entity.setVolume(0.4f);
+		if (keycode == Keys.NUM_6)
+			Entity.setVolume(0.5f);
+		if (keycode == Keys.NUM_7)
+			Entity.setVolume(0.6f);
+		if (keycode == Keys.NUM_8)
+			Entity.setVolume(0.7f);
+		if (keycode == Keys.NUM_9)
+			Entity.setVolume(0.8f);
+		if (keycode == Keys.NUM_0)
+			Entity.setVolume(1f);
 		if (keycode == 84)
 		{
 			int temp = 5;

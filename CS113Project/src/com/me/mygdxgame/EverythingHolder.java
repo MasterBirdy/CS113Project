@@ -1,10 +1,12 @@
 package com.me.mygdxgame;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me.mygdxgame.entity.Actor;
 import com.me.mygdxgame.entity.Archer;
@@ -29,6 +31,7 @@ public class EverythingHolder
 	int nano = 1000000000;
 	int income = 100;
 	int funds = 200;
+	private ArrayList<ParticleEffect> effects = new ArrayList<ParticleEffect>();
 		
 	public EverythingHolder()
 	{
@@ -142,6 +145,7 @@ public class EverythingHolder
 				a.draw(batch);
 			else if (!(a instanceof Hero))
 			{
+				effects.add(a.blood());
 				a.destroy();
 				actorIter.remove();
 			}
@@ -157,9 +161,14 @@ public class EverythingHolder
 				a.draw(batch);
 			else
 			{
+				effects.add(a.blood());
 				a.destroy();
 				actorIter.remove();
 			}
+		}
+		for (ParticleEffect e : effects)
+		{
+			e.draw(batch, 0.1f);
 		}
 		/*if (hero2 != null && hero2.isAlive())
 			hero2.draw(batch);*/

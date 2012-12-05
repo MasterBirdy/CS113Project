@@ -1,5 +1,10 @@
 package com.me.mygdxgame.entity;
 
+import java.util.HashMap;
+
+import com.badlogic.gdx.Audio;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -9,6 +14,8 @@ public abstract class Entity
 	float xCoord;
 	float yCoord;
 	static Texture spriteSheet;
+	static HashMap<String, Sound> sounds = new HashMap<String, Sound>(); 
+	static float volume = 1;
 	
 	public Entity()
 	{
@@ -23,9 +30,20 @@ public abstract class Entity
 		this.team = team;
 	}
 	
-	public static void loadSheet(Texture sheet)
+	public static void setVolume(float v)
+	{
+		volume = v;
+		if (v < 0)
+			volume = 0;
+		if (v > 1)
+			volume = 1;
+	}
+	
+	public static void loadStatics(Texture sheet)
 	{
 		spriteSheet = sheet;
+		Audio tempAudio = Gdx.audio;
+		sounds.put("thwp", tempAudio.newSound(Gdx.files.internal("audio/Thwp.wav")));
 	}
 	
 	public abstract void draw(SpriteBatch batch);

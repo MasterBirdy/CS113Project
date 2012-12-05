@@ -18,7 +18,7 @@ public class Archer extends Minion
 		maxHealth = 10;
 		currentHealth = maxHealth;
 		damage = 3;
-		attackSpeed = 30;
+		attackSpeed =70;
 		attackCooldown = 0;
 		attackRange = 100;
 		speed = 1.5f;
@@ -32,6 +32,8 @@ public class Archer extends Minion
 		if (!(target == null || !target.isAlive()))
 		{
 			if (this.attackCooldown <= 0)
+			{
+				sounds.get("thwp").play(volume);
 				if (this.xSpeed > 0)
 					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 1, 0, target));
 				else if (this.xSpeed < 0)
@@ -40,6 +42,7 @@ public class Archer extends Minion
 					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 0, 1, target));
 				else
 					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 0, -1, target));
+			}
 		}
 		else
 			if (projectiles.size() != 0)

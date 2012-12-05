@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -15,6 +17,7 @@ public abstract class Actor extends Entity
 	Actor target;
 	static LinkedList<Actor> team1;
 	static LinkedList<Actor> team2;
+	static ParticleEffect fire = new ParticleEffect();
 	
 	static TextureRegion[] rangeIndicator;
 
@@ -24,11 +27,32 @@ public abstract class Actor extends Entity
 		alive = true;
 	}
 	
-	static public void loadRange(Texture sheet)
+	static public void loadRange()
 	{
 		rangeIndicator = new TextureRegion[2];
-		rangeIndicator[0] = new TextureRegion(sheet, 472, 40, 40, 40);//new Texture(Gdx.files.internal("images/walkingrange.png"));
-		rangeIndicator[1] = new TextureRegion(sheet, 472, 0, 40, 40);//new Texture(Gdx.files.internal("images/attackrange.png"));
+		rangeIndicator[0] = new TextureRegion(spriteSheet, 472, 40, 40, 40);
+		rangeIndicator[1] = new TextureRegion(spriteSheet, 472, 0, 40, 40);
+		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
+		fire.setPosition(50, 50);
+		fire.start();
+	}
+	
+	public ParticleEffect fire()
+	{
+		ParticleEffect e = new ParticleEffect();
+		e.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
+		e.setPosition(xCoord, yCoord);
+		e.start();
+		return e;
+	}
+	
+	public ParticleEffect blood()
+	{
+		ParticleEffect e = new ParticleEffect();
+		e.load(Gdx.files.internal("data/blood.p"), Gdx.files.internal("images"));
+		e.setPosition(xCoord, yCoord + 20);
+		e.start();
+		return e;
 	}
 	
 	protected abstract void attack();
