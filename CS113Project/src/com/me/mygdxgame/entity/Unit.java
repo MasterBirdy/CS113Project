@@ -73,6 +73,12 @@ public abstract class Unit extends Actor
 			batch.draw(current, xCoord, yCoord);
 	}
 	
+	public void takeDamage(int damage)
+	{
+		super.takeDamage(damage);
+		effects.add(this.spark());
+	}
+	
 	public static void loadAnimations()
 	{
 		animations = new ArrayList<ArrayList<Animation>>();

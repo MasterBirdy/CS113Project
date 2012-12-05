@@ -49,8 +49,17 @@ public abstract class Actor extends Entity
 	public ParticleEffect blood()
 	{
 		ParticleEffect e = new ParticleEffect();
-		e.load(Gdx.files.internal("data/blood.p"), Gdx.files.internal("images"));
-		e.setPosition(xCoord, yCoord + 20);
+		e.load(Gdx.files.internal("data/blood4.p"), Gdx.files.internal("images"));
+		e.setPosition(xCoord + 20, yCoord + 20);
+		e.start();
+		return e;
+	}
+	
+	public ParticleEffect spark()
+	{
+		ParticleEffect e = new ParticleEffect();
+		e.load(Gdx.files.internal("data/sparkeffect.p"), Gdx.files.internal("images"));
+		e.setPosition(xCoord + 20, yCoord + 20);
 		e.start();
 		return e;
 	}
@@ -77,7 +86,11 @@ public abstract class Actor extends Entity
 	public void checkAlive()
 	{
 		if (currentHealth <= 0)
+		{
+			if (alive)
+				effects.add(this.blood());
 			alive = false;
+		}
 	}
 	
 	public static void linkActors(LinkedList<Actor> t1, LinkedList<Actor> t2)

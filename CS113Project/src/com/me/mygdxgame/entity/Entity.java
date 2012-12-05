@@ -1,11 +1,13 @@
 package com.me.mygdxgame.entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Entity 
@@ -16,6 +18,7 @@ public abstract class Entity
 	static Texture spriteSheet;
 	static HashMap<String, Sound> sounds = new HashMap<String, Sound>(); 
 	static float volume = 1;
+	static ArrayList<ParticleEffect> effects;
 	
 	public Entity()
 	{
@@ -44,6 +47,11 @@ public abstract class Entity
 		spriteSheet = sheet;
 		Audio tempAudio = Gdx.audio;
 		sounds.put("thwp", tempAudio.newSound(Gdx.files.internal("audio/Thwp.wav")));
+	}
+	
+	public static void loadStatics(ArrayList<ParticleEffect> e)
+	{
+		effects = e;
 	}
 	
 	public abstract void draw(SpriteBatch batch);

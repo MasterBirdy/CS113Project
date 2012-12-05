@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me.mygdxgame.entity.Actor;
 import com.me.mygdxgame.entity.Archer;
+import com.me.mygdxgame.entity.Entity;
 import com.me.mygdxgame.entity.Hero;
 import com.me.mygdxgame.entity.Swordsman;
 import com.me.mygdxgame.entity.ArrowTower;
@@ -42,11 +43,12 @@ public class EverythingHolder
 		pools[2] = new LinkedList<Integer>();
 		pools[3] = new LinkedList<Integer>();
 		
+		Entity.loadStatics(effects);
 		// Wave control
 		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
 		waveInterval = 10000;// = 5000000000; // Milliseconds between waves
 		
-		waveTime = 1000;//(long) (1 * nano); // Milliseconds to spawn a wave
+		waveTime = 2000;//(long) (1 * nano); // Milliseconds to spawn a wave
 				
 		spawning = false;
 	}
@@ -145,7 +147,7 @@ public class EverythingHolder
 				a.draw(batch);
 			else if (!(a instanceof Hero))
 			{
-				effects.add(a.blood());
+				//effects.add(a.blood());
 				a.destroy();
 				actorIter.remove();
 			}
@@ -158,17 +160,27 @@ public class EverythingHolder
 		{
 			a = actorIter.next();
 			if (a.isAlive() || (a instanceof ArrowTower))
+			{
 				a.draw(batch);
+			}
 			else
 			{
-				effects.add(a.blood());
+				//effects.add(a.blood());
 				a.destroy();
 				actorIter.remove();
 			}
 		}
 		for (ParticleEffect e : effects)
 		{
-			e.draw(batch, 0.1f);
+			e.draw(batch, 0.01f);
+		}
+		Iterator iter = effects.iterator();
+		ParticleEffect e = new ParticleEffect();
+		while (iter.hasNext())
+		{
+			e = (ParticleEffect) iter.next();
+			if (e.isComplete())
+				iter.remove();
 		}
 		/*if (hero2 != null && hero2.isAlive())
 			hero2.draw(batch);*/

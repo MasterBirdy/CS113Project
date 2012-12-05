@@ -30,6 +30,8 @@ public class MainMenuScreen implements Screen
 	Audio tempMusic = Gdx.audio;
 	Music startMusic;
 	static ParticleEffect fire = new ParticleEffect();
+	static ParticleEffect spark = new ParticleEffect();
+	static ParticleEffect blood = new ParticleEffect();
 
 	public MainMenuScreen(Game game)
 	{
@@ -63,11 +65,27 @@ public class MainMenuScreen implements Screen
 		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 		fire.setPosition(400, 10);
 		fire.start();
+		
+		spark.load(Gdx.files.internal("data/sparkeffect.p"), Gdx.files.internal("images"));
+		spark.setPosition(400, 300);
+		spark.start();
+		
+		blood.load(Gdx.files.internal("data/blood3.p"), Gdx.files.internal("images"));
+		blood.setPosition(400, 300);
+		blood.start();
+		
+		//Gdx.input.setCursorCatched(false);
 	}
 
 	@Override
 	public void render(float delta) 
 	{
+		int x = Gdx.input.getX();
+		int y = Gdx.input.getY();
+		/*if (x < 0 || x > 800 || y < 0 || y > 480)
+			Gdx.input.setCursorCatched(false);
+		else
+			Gdx.input.setCursorCatched(true);*/
 		update(delta);
 		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClearColor(1, 1, 1, 1);
@@ -79,7 +97,15 @@ public class MainMenuScreen implements Screen
 		playSprite.draw(batch);
 		if (fire.isComplete())
 			fire.start();
-		fire.draw(batch, .01f);//, delta);
+		if (spark.isComplete())
+			spark.start();
+		if (blood.isComplete())
+			blood.start();
+		//fire.setPosition(x, 480-y);
+		fire.draw(batch, delta);//, delta);
+		spark.draw(batch, delta);
+		blood.setPosition(x, 480-y);
+		blood.draw(batch, delta);
 		batch.end();
 	}
 
