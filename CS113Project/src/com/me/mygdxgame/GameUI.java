@@ -25,12 +25,12 @@ public class GameUI
 	public GameUI()
 	{
 		sideUI = new TextureRegion(new Texture(Gdx.files.internal("images/sideui.png")), 200, 480);
-		swordIcon = new TextureRegion(new Texture(Gdx.files.internal("images/swordicon.png")), 40, 40);
-		bowIcon = new TextureRegion(new Texture(Gdx.files.internal("images/bowicon.png")), 40, 40);
-		serfIcon = new TextureRegion(new Texture(Gdx.files.internal("images/serficon.png")), 40, 40);
-		magicIcon = new TextureRegion(new Texture(Gdx.files.internal("images/magiciconbnw.png")), 40, 40);
-		petIcon = new TextureRegion(new Texture(Gdx.files.internal("images/peticonbnw.png")), 40, 40);
-		spiralIcon = new TextureRegion(new Texture(Gdx.files.internal("images/spiraliconbnw.png")), 40, 40);
+		swordIcon = new TextureRegion(new Texture(Gdx.files.internal("images/swordicon.png")), 69, 80);
+		bowIcon = new TextureRegion(new Texture(Gdx.files.internal("images/bowicon.png")), 69, 80);
+		serfIcon = new TextureRegion(new Texture(Gdx.files.internal("images/serficon.png")), 69, 80);
+		magicIcon = new TextureRegion(new Texture(Gdx.files.internal("images/magiciconbnw.png")), 69, 80);
+		petIcon = new TextureRegion(new Texture(Gdx.files.internal("images/peticonbnw.png")), 69, 80);
+		spiralIcon = new TextureRegion(new Texture(Gdx.files.internal("images/spiraliconbnw.png")), 69, 80);
 		attackIcon = new TextureRegion(new Texture(Gdx.files.internal("images/magiciconbnw.png")), 40, 40);
 		defendIcon = new TextureRegion(new Texture(Gdx.files.internal("images/peticonbnw.png")), 40, 40);
 		retreatIcon = new TextureRegion(new Texture(Gdx.files.internal("images/spiraliconbnw.png")), 40, 40);
@@ -49,12 +49,12 @@ public class GameUI
 //		batch.draw(swordIcon, Gdx.graphics.getWidth() / 2 - sideUI.getRegionWidth() + 10 + 5, Gdx.graphics.getHeight() / 2 - swordIcon.getRegionHeight() * 2 - 10);
 //		batch.draw(bowIcon, Gdx.graphics.getWidth() / 2 - sideUI.getRegionWidth() + 10 * 2 + swordIcon.getRegionWidth() + 5, Gdx.graphics.getHeight() / 2 - swordIcon.getRegionHeight() * 2 - 10);
 //		batch.draw(serfIcon, Gdx.graphics.getWidth() / 2 - sideUI.getRegionWidth() + 10 * 3 + swordIcon.getRegionWidth() * 2 + 5, Gdx.graphics.getHeight() / 2 - swordIcon.getRegionHeight() * 2 - 10);
-		batch.draw(swordIcon, 225, 8);
-		batch.draw(bowIcon, 280, 8);
-		batch.draw(serfIcon, 335, 8);
-		batch.draw(magicIcon, 225, -41);
-		batch.draw(petIcon, 280, -41);
-		batch.draw(spiralIcon, 335, -41);
+		batch.draw(swordIcon, 221, -29);
+		batch.draw(bowIcon, 311, -29);
+		batch.draw(serfIcon, 221, -127);
+		batch.draw(magicIcon, 311, -127);
+		batch.draw(petIcon, 221, -227);
+		batch.draw(spiralIcon, 311, -227);
 		batch.draw(attackIcon, -50, -200);
 		batch.draw(defendIcon, -100, -200);
 		batch.draw(retreatIcon, -150, -200);

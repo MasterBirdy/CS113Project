@@ -177,12 +177,12 @@ public class GameScreen implements Screen {
 //		everything.add(tower, true, 2);
 
 		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
-		swordRectangle   = new Rectangle(225, 8, 40, 40);
-		bowRectangle     = new Rectangle(280, 8, 40, 40);
-		serfRectangle    = new Rectangle(335, 8, 40, 40);
-		magicRectangle   = new Rectangle(225, -41, 40, 40);
-		petRectangle     = new Rectangle(280, -41, 40, 40);
-		spiralRectangle  = new Rectangle(335, -41, 40, 40);
+		swordRectangle   = new Rectangle(221, -29, 69, 80);
+		bowRectangle     = new Rectangle(311, -29, 69, 80);
+		serfRectangle    = new Rectangle(221, -127, 69, 80);
+		magicRectangle   = new Rectangle(311, -127, 69, 80);
+		petRectangle     = new Rectangle(221, -227, 69, 80);
+		spiralRectangle  = new Rectangle(311, -227, 69, 80);
 		attackRectangle  = new Rectangle(-50, -200, 40, 40);
 		defendRectangle  = new Rectangle(-100, -200, 40, 40);
 		retreatRectangle = new Rectangle(-150, -200, 40, 40);
