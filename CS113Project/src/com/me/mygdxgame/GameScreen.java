@@ -35,7 +35,7 @@ public class GameScreen implements Screen {
 	TextureRegion pauseRegion;
 	int pauseCooldown;
 	GameUI gameUI;
-	Hero hero;
+	Hero hero, nemesis;
 	Game game;
 	Rectangle pauseRectangle;
 	Rectangle swordRectangle;
@@ -47,7 +47,7 @@ public class GameScreen implements Screen {
 	Rectangle attackRectangle;
 	Rectangle defendRectangle;
 	Rectangle retreatRectangle;
-	Vector3 touchPoint;
+	Vector3 touchPoint, gameTouchPoint;
 	int level = 1;
 	int income, resources;
 
@@ -120,7 +120,7 @@ public class GameScreen implements Screen {
 		EverythingHolder.load(batch, maps[level]);
 
 		hero = new SwordFace(maps[level].start1().x(), maps[level].start1().y(), 1, everything.map().getPath().listIterator());
-
+		nemesis = new ArrowEyes(maps[level].start2().x(), maps[level].start2().y(), 2, everything.map().getPath().listIterator(everything.map().getPath().size() - 1));
 		Texture sheet = new Texture(Gdx.files.internal("images/sprite_sheet.png"));
 
 		Actor.linkActors(everything.team(1), everything.team(2));
@@ -171,18 +171,32 @@ public class GameScreen implements Screen {
 		hero.takeDamage(1000);
 		everything.add(hero, true, 1);
 		
+		nemesis.takeDamage(1000);
+		everything.add(nemesis, true, 2);
+		
 //		tower = new ArrowTower(300, 400, 1);
 //		everything.add(tower, true, 1);
 //		tower= new ArrowTower(1000, 1000, 2);
 //		everything.add(tower, true, 2);
 
+//		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
+//		swordRectangle   = new Rectangle(225, 8, 40, 40);
+//		bowRectangle     = new Rectangle(280, 8, 40, 40);
+//		serfRectangle    = new Rectangle(335, 8, 40, 40);
+//		magicRectangle   = new Rectangle(225, -41, 40, 40);
+//		petRectangle     = new Rectangle(280, -41, 40, 40);
+//		spiralRectangle  = new Rectangle(335, -41, 40, 40);
+//		attackRectangle  = new Rectangle(-50, -200, 40, 40);
+//		defendRectangle  = new Rectangle(-100, -200, 40, 40);
+//		retreatRectangle = new Rectangle(-150, -200, 40, 40);
+		
 		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
-		swordRectangle   = new Rectangle(225, 8, 40, 40);
-		bowRectangle     = new Rectangle(280, 8, 40, 40);
-		serfRectangle    = new Rectangle(335, 8, 40, 40);
-		magicRectangle   = new Rectangle(225, -41, 40, 40);
-		petRectangle     = new Rectangle(280, -41, 40, 40);
-		spiralRectangle  = new Rectangle(335, -41, 40, 40);
+		swordRectangle   = new Rectangle(221, -29, 68, 80);
+		bowRectangle     = new Rectangle(310, -29, 68, 80);
+		serfRectangle    = new Rectangle(221, -125, 68, 80);
+		magicRectangle   = new Rectangle(310, -125, 68, 80);
+		petRectangle     = new Rectangle(221, -226, 68, 80);
+		spiralRectangle  = new Rectangle(310, -226, 68, 80);
 		attackRectangle  = new Rectangle(-50, -200, 40, 40);
 		defendRectangle  = new Rectangle(-100, -200, 40, 40);
 		retreatRectangle = new Rectangle(-150, -200, 40, 40);
@@ -191,6 +205,7 @@ public class GameScreen implements Screen {
 		gameUI = new GameUI();
 		GameUI.load(batch, everything);
 		touchPoint = new Vector3();
+		gameTouchPoint = new Vector3();
 	}
 
 	static public void toggleShowRange()
@@ -276,7 +291,7 @@ public class GameScreen implements Screen {
 			else
 				//everything.add(new Archer(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
 				everything.add(2, 2);
-			counter2 = (int)(Math.random() * 60) + 40;
+			counter2 = (int)(Math.random() * 60) + 60;
 		}
 	}
 	
@@ -309,9 +324,23 @@ public class GameScreen implements Screen {
 			}
 			pauseCooldown = 0;
 		}
-		if (Gdx.input.justTouched()) {
+		if (Gdx.input.justTouched()) 
+		{
 			uiCamera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+			camera.unproject(gameTouchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+			
+			Actor selected = everything.atPoint(gameTouchPoint.x, gameTouchPoint.y);
+			if (selected instanceof Building)
+			{
+				if (!selected.isAlive() && everything.funds() > 40)
+				{
+					((Building) selected).upgrade();
+					everything.funds -= 40;
+				}	
+			}
+			
 			System.out.println("X: " + touchPoint.x + " Y: " + touchPoint.y);
+			System.out.println("X1: " + gameTouchPoint.x + " Y1: " + gameTouchPoint.y);
 			if (OverlapTester.pointInRectangle(swordRectangle, touchPoint.x, touchPoint.y))
 			{
 				buyUnit(1);

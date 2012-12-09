@@ -7,6 +7,7 @@ import java.util.ListIterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me.mygdxgame.entity.Actor;
 import com.me.mygdxgame.entity.Archer;
@@ -51,6 +52,16 @@ public class EverythingHolder
 		waveTime = 2000;//(long) (1 * nano); // Milliseconds to spawn a wave
 				
 		spawning = false;
+	}
+	
+	public Actor atPoint(float x, float y)
+	{
+		for (Actor a : teams[0])
+		{
+			if (a.getDistanceSquared(x, y) <= 1000)
+				return a;
+		}
+		return null;
 	}
 	
 	public void add(Actor a, boolean front, int team)
@@ -163,7 +174,7 @@ public class EverythingHolder
 			{
 				a.draw(batch);
 			}
-			else
+			else if (!(a instanceof Hero))
 			{
 				//effects.add(a.blood());
 				a.destroy();
@@ -240,6 +251,9 @@ public class EverythingHolder
 			for (Actor a : teams[0])
 				if (a instanceof Hero && !a.isAlive())
 					((Hero)a).respawn(map.start1().x(), map.start1().y(), map.getPath().listIterator());
+			for (Actor a : teams[1])
+				if (a instanceof Hero && !a.isAlive())
+					((Hero)a).respawn(map.start2().x(), map.start2().y(), map.getPath().listIterator(map.getPath().size() - 1));
 			funds += income;
 			//Gdx.input.vibrate(1000);
 		}

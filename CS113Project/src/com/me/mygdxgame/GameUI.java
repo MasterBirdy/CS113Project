@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
 public class GameUI 
 {
@@ -49,12 +50,12 @@ public class GameUI
 //		batch.draw(swordIcon, Gdx.graphics.getWidth() / 2 - sideUI.getRegionWidth() + 10 + 5, Gdx.graphics.getHeight() / 2 - swordIcon.getRegionHeight() * 2 - 10);
 //		batch.draw(bowIcon, Gdx.graphics.getWidth() / 2 - sideUI.getRegionWidth() + 10 * 2 + swordIcon.getRegionWidth() + 5, Gdx.graphics.getHeight() / 2 - swordIcon.getRegionHeight() * 2 - 10);
 //		batch.draw(serfIcon, Gdx.graphics.getWidth() / 2 - sideUI.getRegionWidth() + 10 * 3 + swordIcon.getRegionWidth() * 2 + 5, Gdx.graphics.getHeight() / 2 - swordIcon.getRegionHeight() * 2 - 10);
-		batch.draw(swordIcon, 225, 8);
-		batch.draw(bowIcon, 280, 8);
-		batch.draw(serfIcon, 335, 8);
-		batch.draw(magicIcon, 225, -41);
-		batch.draw(petIcon, 280, -41);
-		batch.draw(spiralIcon, 335, -41);
+		batch.draw(swordIcon, 221, -29, 68, 80);
+		batch.draw(bowIcon, 310, -29, 68, 80);
+		batch.draw(serfIcon, 221, -125, 68, 80);
+		batch.draw(magicIcon, 310, -125, 68, 80);
+		batch.draw(petIcon, 221, -226, 68, 80);
+		batch.draw(spiralIcon, 310, -226, 68, 80);
 		batch.draw(attackIcon, -50, -200);
 		batch.draw(defendIcon, -100, -200);
 		batch.draw(retreatIcon, -150, -200);

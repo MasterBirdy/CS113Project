@@ -2,6 +2,8 @@ package com.me.mygdxgame.entity;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -87,7 +89,7 @@ public abstract class Actor extends Entity
 	{
 		if (currentHealth <= 0)
 		{
-			if (alive)
+			if (alive && Gdx.app.getType() == Application.ApplicationType.Desktop)
 				effects.add(this.blood());
 			alive = false;
 		}

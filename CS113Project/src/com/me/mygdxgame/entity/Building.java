@@ -51,7 +51,7 @@ public abstract class Building extends Actor
 		animations = new ArrayList<ArrayList<Animation>>();
 		ArrayList<Animation> unitAnimation = new ArrayList<Animation>();
 		
-		unitAnimation.add(loadAnimation(169, 0, 47, 65, 3, false, false));
+		unitAnimation.add(loadAnimation(371, 447, 47, 65, 3, false, false));
 		animations.add(unitAnimation);
 		
 		

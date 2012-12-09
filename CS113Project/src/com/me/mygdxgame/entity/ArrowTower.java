@@ -11,9 +11,9 @@ public class ArrowTower extends Building
 	public ArrowTower(int x, int y, int team)
 	{
 		super(x, y, team);
-		maxHealth = 40;
+		maxHealth = 200;
 		currentHealth = maxHealth;
-		damage = 2;
+		damage = 8;
 		attackSpeed = 25;
 		attackCooldown = 0;
 		attackRange = 150;

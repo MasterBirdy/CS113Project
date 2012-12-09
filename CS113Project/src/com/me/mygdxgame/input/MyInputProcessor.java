@@ -162,7 +162,7 @@ public class MyInputProcessor implements InputProcessor
 			else if (factor < .5)
 				factor = 0.5f;*/
 			
-			camera.zoom = factor + zoom - 1;
+			camera.zoom = zoom - (factor - 1) * .9f;
 			game.boundCamera();
 		}
 		

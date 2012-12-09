@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -42,9 +43,9 @@ public abstract class Unit extends Actor
 		stateTime += Gdx.graphics.getDeltaTime();
 		TextureRegion current;
 		int unitType;
-		if (this.getClass() == Swordsman.class)
+		if (this.getClass() == Swordsman.class || this.getClass() == SwordFace.class)
 			unitType = 0;
-		else if (this.getClass() == Archer.class)
+		else if (this.getClass() == Archer.class || this.getClass() == ArrowEyes.class)
 			unitType = 1;
 		else
 			unitType = 0;
@@ -76,7 +77,8 @@ public abstract class Unit extends Actor
 	public void takeDamage(int damage)
 	{
 		super.takeDamage(damage);
-		effects.add(this.spark());
+		if (Gdx.app.getType() == Application.ApplicationType.Desktop)
+			effects.add(this.spark());
 	}
 	
 	public static void loadAnimations()
@@ -97,14 +99,18 @@ public abstract class Unit extends Actor
 		
 		unitAnimation = new ArrayList<Animation>();
 		
-		unitAnimation.add(loadAnimation(0, 0, 29, 46, 5, false, true));
-		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, false, true));
-		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, true, true));
-		unitAnimation.add(loadAnimation(0, 90, 31, 43, 5, false, true));
-		unitAnimation.add(loadAnimation(0, 134, 40, 46, 3, false, true));
-		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, false, true));
-		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, true, true));
-		unitAnimation.add(loadAnimation(0, 225, 46, 43, 3, false, true));
+		unitAnimation.add(loadAnimation(169, 0, 35, 46, 5, false, false));
+		unitAnimation.add(loadAnimation(169, 46, 35, 42, 5, false, false));
+		unitAnimation.add(loadAnimation(169, 46, 35, 42, 5, true, false));
+		unitAnimation.add(loadAnimation(169, 88, 41, 46, 5, false, false));
+		unitAnimation.add(loadAnimation(169, 0, 35, 46, 5, false, false));
+		unitAnimation.add(loadAnimation(169, 46, 35, 42, 5, false, false));
+		unitAnimation.add(loadAnimation(169, 46, 35, 42, 5, true, false));
+		unitAnimation.add(loadAnimation(169, 88, 41, 46, 5, false, false));
+//		unitAnimation.add(loadAnimation(0, 134, 40, 46, 3, false, false));
+//		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, false, false));
+//		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, true, false));
+//		unitAnimation.add(loadAnimation(0, 225, 46, 43, 3, false, false));
 		animations.add(unitAnimation);
 	}
 	

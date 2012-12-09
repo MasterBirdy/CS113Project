@@ -5,17 +5,17 @@ import java.util.ListIterator;
 
 import com.me.mygdxgame.map.Coordinate;
 
-public class SwordFace extends Hero
+public class ArrowEyes extends Hero
 {
-	public SwordFace(int x, int y, int team, ListIterator<Coordinate> p)
+	public ArrowEyes(int x, int y, int team, ListIterator<Coordinate> p)
 	{
 		super(x, y, team, p);
-		maxHealth = 600;
+		maxHealth = 450;
 		currentHealth = maxHealth;
-		damage = 4;
-		attackSpeed = 25;
+		damage = 2;
+		attackSpeed = 10;
 		attackCooldown = 0;
-		attackRange = 40;
+		attackRange = 100;
 		speed = 1.5f;
 	}
 
