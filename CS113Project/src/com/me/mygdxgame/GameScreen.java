@@ -36,7 +36,7 @@ public class GameScreen implements Screen {
 	int pauseCooldown;
 	GameUI gameUI;
 	Hero hero;
-	Game game;
+	MyGdxGame game;
 	Rectangle pauseRectangle;
 	Rectangle swordRectangle;
 	Rectangle bowRectangle;
@@ -48,11 +48,12 @@ public class GameScreen implements Screen {
 	Rectangle defendRectangle;
 	Rectangle retreatRectangle;
 	Vector3 touchPoint;
+	Difficulty difficulty;
 	int level = 1;
 	int income, resources;
 
 
-	public GameScreen(Game game)
+	public GameScreen(MyGdxGame game)
 	{
 
 		this.game = game;
@@ -368,7 +369,7 @@ public class GameScreen implements Screen {
 				//System.out.println(touchPoint.x + " " + touchPoint.y);
 				if (OverlapTester.pointInRectangle(pauseRectangle, touchPoint.x, touchPoint.y)) {
 					//System.out.println(true);
-					game.setScreen(new MainMenuScreen(game));
+					game.setScreen(game.mainMenuScreen);
 					return;
 				}
 			}

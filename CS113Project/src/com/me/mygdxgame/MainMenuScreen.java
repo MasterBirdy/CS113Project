@@ -19,12 +19,16 @@ public class MainMenuScreen implements Screen
 {
 
 	Rectangle highscoresBounds;
-	Game game;
+	MyGdxGame game;
 	private OrthographicCamera camera;
 	Sprite sprite;
 	Sprite titleSprite;
 	Sprite playSprite;
+	Sprite newGameSprite;
+	Sprite settingsSprite;
 	Rectangle playRectangle;
+	Rectangle newGameRectangle;
+	Rectangle settingsRectangle;
 	private SpriteBatch batch;
 	Vector3 touchPoint;
 	Audio tempMusic = Gdx.audio;
@@ -33,9 +37,10 @@ public class MainMenuScreen implements Screen
 	static ParticleEffect spark = new ParticleEffect();
 	static ParticleEffect blood = new ParticleEffect();
 
-	public MainMenuScreen(Game game)
+	public MainMenuScreen(MyGdxGame game)
 	{
 		this.game = game;
+		Settings.getInstance();
 		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/Celeste.wav"));
 		startMusic.setLooping(true);
 		startMusic.play();
@@ -49,22 +54,38 @@ public class MainMenuScreen implements Screen
 		TextureRegion region = new TextureRegion(texture, 0, 0, 800, 480);
 		TextureRegion textRegion = new TextureRegion(textTexture, 0, 0, 451, 49);
 		TextureRegion textRegionPlay = new TextureRegion(textTexture, 0, 50, 126, 47);
+		TextureRegion textRegionNewGame = new TextureRegion(textTexture, 7, 97, 237, 38);
+		TextureRegion textRegionSettings = new TextureRegion(textTexture, 7, 141, 229, 37);
 		sprite = new Sprite(region);
 		titleSprite = new Sprite(textRegion);
 		playSprite = new Sprite(textRegionPlay);
+		newGameSprite = new Sprite(textRegionNewGame);
+		settingsSprite = new Sprite(textRegionSettings);
 		titleSprite.setOrigin(0,0);
 		playSprite.setOrigin(0,0);
+		newGameSprite.setOrigin(0,0);
+		settingsSprite.setOrigin(0,0);
 		titleSprite.setPosition((w - titleSprite.getWidth()) / 2, 370);
 		System.out.println(w);
 		System.out.println(h);
 		System.out.println(w / 2 - titleSprite.getWidth());
-		playSprite.setPosition(w / 2 - playSprite.getWidth() / 2, 100);
-		playRectangle = new Rectangle(w / 2 - playSprite.getWidth() / 2 - 20 - w / 2, 100 - 20 - h / 2, playSprite.getWidth() + 40, playSprite.getHeight() + 40);
+		
+		playSprite.setPosition(w / 2 - playSprite.getWidth() / 2, 150);
+		playRectangle = new Rectangle(w / 2 - playSprite.getWidth() / 2 - 20 - w / 2, 150 - 20 - h / 2, playSprite.getWidth() + 40, playSprite.getHeight() + 40);
 		touchPoint = new Vector3();
+		
+		newGameSprite.setPosition(w / 2 - newGameSprite.getWidth() / 2, 100);
+		newGameRectangle = new Rectangle(w / 2 - newGameSprite.getWidth() / 2 - 20 - w / 2, 100 - 20 - h / 2, newGameSprite.getWidth() + 40, newGameSprite.getHeight() + 40);
+		
+		settingsSprite.setPosition(w / 2 - settingsSprite.getWidth() / 2, newGameSprite.getY() - 20 - newGameSprite.getHeight());
+		settingsRectangle = new Rectangle(w / 2 - settingsSprite.getWidth() / 2 - 20 - w / 2, newGameSprite.getY() - 20 - newGameSprite.getHeight() - 20 - h / 2, settingsSprite.getWidth() + 40, settingsSprite.getHeight() + 40);
 		
 		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 		fire.setPosition(400, 10);
 		fire.start();
+		
+		System.out.println(newGameSprite.getY());
+		System.out.println(newGameRectangle.width);
 		
 		spark.load(Gdx.files.internal("data/sparkeffect.p"), Gdx.files.internal("images"));
 		spark.setPosition(400, 300);
@@ -94,7 +115,7 @@ public class MainMenuScreen implements Screen
 		batch.begin();
 		sprite.draw(batch);
 		titleSprite.draw(batch);
-		playSprite.draw(batch);
+		//playSprite.draw(batch);
 		if (fire.isComplete())
 			fire.start();
 		if (spark.isComplete())
@@ -106,6 +127,8 @@ public class MainMenuScreen implements Screen
 		spark.draw(batch, delta);
 		blood.setPosition(x, 480-y);
 		blood.draw(batch, delta);
+		newGameSprite.draw(batch);
+		settingsSprite.draw(batch);
 		batch.end();
 	}
 
@@ -114,10 +137,15 @@ public class MainMenuScreen implements Screen
 		if (Gdx.input.justTouched()) {
 			camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 			//System.out.println(touchPoint.x + " " + touchPoint.y);
-			if (OverlapTester.pointInRectangle(playRectangle, touchPoint.x, touchPoint.y)) {
+			if (OverlapTester.pointInRectangle(newGameRectangle, touchPoint.x, touchPoint.y)) {
 				//System.out.println(true);
 				startMusic.stop();
-				game.setScreen(new GameScreen(game));
+				game.setScreen(game.gameScreen);
+				return;
+			}
+			else if (OverlapTester.pointInRectangle(settingsRectangle, touchPoint.x, touchPoint.y)) {
+				startMusic.stop();
+				game.setScreen(game.settingsScreen);
 				return;
 			}
 		}
@@ -132,7 +160,7 @@ public void resize(int width, int height) {
 @Override
 public void show() {
 	// TODO Auto-generated method stub
-
+	startMusic.play();
 }
 
 @Override
@@ -150,6 +178,7 @@ public void pause() {
 @Override
 public void resume() {
 	// TODO Auto-generated method stub
+
 
 }
 
