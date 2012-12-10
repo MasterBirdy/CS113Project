@@ -26,9 +26,12 @@ public class MainMenuScreen implements Screen
 	Sprite playSprite;
 	Sprite newGameSprite;
 	Sprite settingsSprite;
+	Sprite continueSprite;
+	Sprite continueFadedSprite;
 	Rectangle playRectangle;
 	Rectangle newGameRectangle;
 	Rectangle settingsRectangle;
+	Rectangle continueRectangle;
 	private SpriteBatch batch;
 	Vector3 touchPoint;
 	Audio tempMusic = Gdx.audio;
@@ -36,11 +39,13 @@ public class MainMenuScreen implements Screen
 	static ParticleEffect fire = new ParticleEffect();
 	static ParticleEffect spark = new ParticleEffect();
 	static ParticleEffect blood = new ParticleEffect();
+	boolean newGameStarted;
 
 	public MainMenuScreen(MyGdxGame game)
 	{
 		this.game = game;
 		Settings.getInstance();
+		newGameStarted = false;
 		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/Celeste.wav"));
 		startMusic.setLooping(true);
 		startMusic.play();
@@ -54,13 +59,17 @@ public class MainMenuScreen implements Screen
 		TextureRegion region = new TextureRegion(texture, 0, 0, 800, 480);
 		TextureRegion textRegion = new TextureRegion(textTexture, 0, 0, 451, 49);
 		TextureRegion textRegionPlay = new TextureRegion(textTexture, 0, 50, 126, 47);
-		TextureRegion textRegionNewGame = new TextureRegion(textTexture, 7, 97, 237, 38);
-		TextureRegion textRegionSettings = new TextureRegion(textTexture, 7, 141, 229, 37);
+		TextureRegion textRegionNewGame = new TextureRegion(textTexture, 8, 98, 233, 34);
+		TextureRegion textRegionSettings = new TextureRegion(textTexture, 8, 141, 227, 38);
+		TextureRegion textRegionContinue = new TextureRegion(textTexture, 7, 508, 225, 34);
+		TextureRegion textRegionFadedContinue = new TextureRegion(textTexture, 256, 508, 225, 34);
 		sprite = new Sprite(region);
 		titleSprite = new Sprite(textRegion);
 		playSprite = new Sprite(textRegionPlay);
 		newGameSprite = new Sprite(textRegionNewGame);
 		settingsSprite = new Sprite(textRegionSettings);
+		continueSprite = new Sprite(textRegionContinue);
+		continueFadedSprite = new Sprite(textRegionFadedContinue);
 		titleSprite.setOrigin(0,0);
 		playSprite.setOrigin(0,0);
 		newGameSprite.setOrigin(0,0);
@@ -74,12 +83,16 @@ public class MainMenuScreen implements Screen
 		playRectangle = new Rectangle(w / 2 - playSprite.getWidth() / 2 - 20 - w / 2, 150 - 20 - h / 2, playSprite.getWidth() + 40, playSprite.getHeight() + 40);
 		touchPoint = new Vector3();
 		
-		newGameSprite.setPosition(w / 2 - newGameSprite.getWidth() / 2, 100);
-		newGameRectangle = new Rectangle(w / 2 - newGameSprite.getWidth() / 2 - 20 - w / 2, 100 - 20 - h / 2, newGameSprite.getWidth() + 40, newGameSprite.getHeight() + 40);
+		newGameSprite.setPosition(w / 2 - newGameSprite.getWidth() / 2, 155);
+		newGameRectangle = new Rectangle(w / 2 - newGameSprite.getWidth() / 2 - 5 - w / 2, 155 - 5 - h / 2, newGameSprite.getWidth() + 10, newGameSprite.getHeight() + 10);
+			
+		continueSprite.setPosition(w / 2 - continueSprite.getWidth() / 2, newGameSprite.getY() - 25 - newGameSprite.getHeight());
+		continueFadedSprite.setPosition(w / 2 - continueSprite.getWidth() / 2, newGameSprite.getY() - 25 - newGameSprite.getHeight());
+		continueRectangle = new Rectangle(w / 2 - continueSprite.getWidth() / 2 - 5 - w / 2, newGameSprite.getY() - 25 - newGameSprite.getHeight() - 5 - h/2, continueSprite.getWidth() + 10, continueSprite.getHeight() + 10);
 		
-		settingsSprite.setPosition(w / 2 - settingsSprite.getWidth() / 2, newGameSprite.getY() - 20 - newGameSprite.getHeight());
-		settingsRectangle = new Rectangle(w / 2 - settingsSprite.getWidth() / 2 - 20 - w / 2, newGameSprite.getY() - 20 - newGameSprite.getHeight() - 20 - h / 2, settingsSprite.getWidth() + 40, settingsSprite.getHeight() + 40);
-		
+		settingsSprite.setPosition(w / 2 - settingsSprite.getWidth() / 2, continueSprite.getY() - 30 - continueSprite.getHeight());
+		settingsRectangle = new Rectangle(w / 2 - settingsSprite.getWidth() / 2 - 5 - w / 2,  continueSprite.getY() - 30 - continueSprite.getHeight() - 5 - h / 2, settingsSprite.getWidth() + 10, settingsSprite.getHeight() + 10);
+	
 		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 		fire.setPosition(400, 10);
 		fire.start();
@@ -129,6 +142,10 @@ public class MainMenuScreen implements Screen
 		blood.draw(batch, delta);
 		newGameSprite.draw(batch);
 		settingsSprite.draw(batch);
+		if (newGameStarted)
+			continueSprite.draw(batch);
+		else
+			continueFadedSprite.draw(batch);
 		batch.end();
 	}
 
@@ -140,8 +157,17 @@ public class MainMenuScreen implements Screen
 			if (OverlapTester.pointInRectangle(newGameRectangle, touchPoint.x, touchPoint.y)) {
 				//System.out.println(true);
 				startMusic.stop();
+				game.gameScreen = new GameScreen(game);
+				newGameStarted = true;
 				game.setScreen(game.gameScreen);
 				return;
+			}
+			else if (OverlapTester.pointInRectangle(continueRectangle, touchPoint.x, touchPoint.y)) {
+				if (newGameStarted) {
+				startMusic.stop();
+				game.setScreen(game.gameScreen);
+				return;
+				}
 			}
 			else if (OverlapTester.pointInRectangle(settingsRectangle, touchPoint.x, touchPoint.y)) {
 				startMusic.stop();
@@ -160,7 +186,8 @@ public void resize(int width, int height) {
 @Override
 public void show() {
 	// TODO Auto-generated method stub
-	startMusic.play();
+	if (Settings.getInstance().getSound() == Sound.ON)
+		startMusic.play();
 }
 
 @Override
@@ -186,6 +213,10 @@ public void resume() {
 public void dispose() {
 	// TODO Auto-generated method stub
 
+}
+
+public void gameWon() {
+	newGameStarted = false;
 }
 
 }

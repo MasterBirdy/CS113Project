@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.ListIterator;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.me.mygdxgame.Settings;
+import com.me.mygdxgame.Sound;
 import com.me.mygdxgame.map.Coordinate;
 
 public class Archer extends Minion
@@ -33,7 +35,8 @@ public class Archer extends Minion
 		{
 			if (this.attackCooldown <= 0)
 			{
-				sounds.get("thwp").play(volume);
+				if (Settings.getInstance().getSound() == Sound.ON)
+					sounds.get("thwp").play(volume);
 				if (this.xSpeed > 0)
 					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 1, 0, target));
 				else if (this.xSpeed < 0)
