@@ -56,4 +56,9 @@ public abstract class Projectile extends Entity {
 	@Override
 	public abstract void update();
 
+	public Entity target() 
+	{
+		return target;
+	}
+
 }

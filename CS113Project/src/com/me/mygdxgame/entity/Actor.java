@@ -1,5 +1,6 @@
 package com.me.mygdxgame.entity;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -15,18 +16,20 @@ public abstract class Actor extends Entity
 {
 	int currentHealth, maxHealth, damage;
 	float attackSpeed, attackCooldown, attackRange;
-	boolean alive, attacking;
+	boolean alive, attacking, ranged;
 	Actor target;
 	static LinkedList<Actor> team1;
 	static LinkedList<Actor> team2;
 	static ParticleEffect fire = new ParticleEffect();
+	static ArrayList<Projectile> projectiles;
 	
 	static TextureRegion[] rangeIndicator;
 
-	public Actor(int x, int y, int team)
+	public Actor(int x, int y, boolean ranged, int team)
 	{
 		super(x, y, team);
 		alive = true;
+		this.ranged = ranged;
 	}
 	
 	static public void loadRange()
@@ -37,6 +40,11 @@ public abstract class Actor extends Entity
 		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 		fire.setPosition(50, 50);
 		fire.start();
+	}
+	
+	static public void loadProjectiles(ArrayList<Projectile> p)
+	{
+		projectiles = p;
 	}
 	
 	public ParticleEffect fire()
@@ -66,7 +74,13 @@ public abstract class Actor extends Entity
 		return e;
 	}
 	
-	protected abstract void attack();
+	protected void attack()
+	{
+		if (ranged)
+			rangeAttack();
+		else
+			meleeAttack();
+	}
 	
 	public void rangeIndicator(SpriteBatch batch)
 	{
@@ -143,4 +157,33 @@ public abstract class Actor extends Entity
 	}
 
 	public abstract void destroy();
+
+	protected void rangeAttack() 
+	{
+		if (!(target == null || !target.isAlive()))
+		{
+			if (this.attackCooldown <= 0)
+			{
+				sounds.get("thwp").play(volume);
+				if (target.xCoord() < this.xCoord())
+					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, -1, 0, target));
+				else if (target.xCoord() > this.xCoord())
+					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 1, 0, target));
+				else if (target.yCoord() < this.yCoord())
+					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 0, -1, target));
+				else
+					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 0, 1, target));
+			}
+		}
+		else
+			if (projectiles.size() != 0)
+				projectiles.removeAll(projectiles);
+	}
+	
+	protected void meleeAttack()
+	{
+		if (target == null || !target.isAlive())
+			return;
+		target.takeDamage(damage);
+	}
 }

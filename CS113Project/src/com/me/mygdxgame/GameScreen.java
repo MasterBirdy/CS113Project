@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
 	Rectangle pauseRectangle;
 	Rectangle swordRectangle;
 	Rectangle bowRectangle;
-	Rectangle serfRectangle;
+	Rectangle monkRectangle;
 	Rectangle magicRectangle;
 	Rectangle petRectangle;
 	Rectangle spiralRectangle;
@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
 	{
 
 		this.game = game;
-		Texture.setEnforcePotImages(false);
+		Texture.setEnforcePotImages(true);
 		isPaused = false;
 
 
@@ -71,7 +71,8 @@ public class GameScreen implements Screen {
 
 		camera = new OrthographicCamera(w, h);
 		uiCamera = new OrthographicCamera(w, h);
-		camera.translate(400, 300);
+		camera.translate(950, 700);
+		camera.zoom = 1.9f;
 		batch = new SpriteBatch();
 
 		Texture pauseTexture = new Texture(Gdx.files.internal("images/pausemenu.png"));
@@ -148,10 +149,10 @@ public class GameScreen implements Screen {
 		
 		Building.loadAnimations();
 
-		Building tower = new ArrowTower(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
+		Building tower = new Stronghold(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
 		tower.upgrade();
 		everything.add(tower, true, 1);
-		tower = new ArrowTower(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
+		tower = new Stronghold(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
 		tower.upgrade();
 		everything.add(tower, true, 2);
 		
@@ -168,10 +169,10 @@ public class GameScreen implements Screen {
 			everything.add(tower, true, 2);
 		}
 		
-		hero.takeDamage(1000);
+		//hero.takeDamage(1000);
 		everything.add(hero, true, 1);
 		
-		nemesis.takeDamage(1000);
+		//nemesis.takeDamage(1000);
 		everything.add(nemesis, true, 2);
 		
 //		tower = new ArrowTower(300, 400, 1);
@@ -193,7 +194,7 @@ public class GameScreen implements Screen {
 		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
 		swordRectangle   = new Rectangle(221, -29, 68, 80);
 		bowRectangle     = new Rectangle(310, -29, 68, 80);
-		serfRectangle    = new Rectangle(221, -125, 68, 80);
+		monkRectangle    = new Rectangle(221, -125, 68, 80);
 		magicRectangle   = new Rectangle(310, -125, 68, 80);
 		petRectangle     = new Rectangle(221, -226, 68, 80);
 		spiralRectangle  = new Rectangle(310, -226, 68, 80);
@@ -246,7 +247,7 @@ public class GameScreen implements Screen {
 		batch.begin();
 		everything.map().background().draw(batch);
 		everything.render();
-		font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
+		//ont.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
 
 		batch.end();
 		batch.setProjectionMatrix(uiCamera.combined);
@@ -284,13 +285,15 @@ public class GameScreen implements Screen {
 		}*/
 		if (--counter2 < 0)
 		{
-			boolean sword = Math.random() < 0.6;
-			if (sword)
+			float rand = (float) Math.random();
+			if (rand < 0.3f)
 				//everything.add(new Swordsman(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
 				everything.add(1, 2);
-			else
+			else if (rand < 0.7f)
 				//everything.add(new Archer(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
 				everything.add(2, 2);
+			else
+				everything.add(3, 2);
 			counter2 = (int)(Math.random() * 60) + 60;
 		}
 	}
@@ -332,7 +335,7 @@ public class GameScreen implements Screen {
 			Actor selected = everything.atPoint(gameTouchPoint.x, gameTouchPoint.y);
 			if (selected instanceof Building)
 			{
-				if (!selected.isAlive() && everything.funds() > 40)
+				if (!selected.isAlive() && everything.funds() >= 40)
 				{
 					((Building) selected).upgrade();
 					everything.funds -= 40;
@@ -349,11 +352,9 @@ public class GameScreen implements Screen {
 			{
 				buyUnit(2);
 			}
-			if (OverlapTester.pointInRectangle(serfRectangle, touchPoint.x, touchPoint.y))
+			if (OverlapTester.pointInRectangle(monkRectangle, touchPoint.x, touchPoint.y))
 			{
-				/*
-				 * INSERT CODE HERE
-				 */
+				buyUnit(3);
 			}
 			if (OverlapTester.pointInRectangle(magicRectangle, touchPoint.x, touchPoint.y))
 			{
@@ -388,11 +389,11 @@ public class GameScreen implements Screen {
 				hero.stance(-1);
 				Gdx.input.vibrate(50);
 			}
-			Actor a = everything.team(1).getLast();
-			if (OverlapTester.pointInRectangle(new Rectangle(a.xCoord(), a.yCoord(), 40, 40), touchPoint.x, touchPoint.y))
-			{
-				hero.stance(0);
-			}
+//			Actor a = everything.team(1).getLast();
+//			if (OverlapTester.pointInRectangle(new Rectangle(a.xCoord(), a.yCoord(), 40, 40), touchPoint.x, touchPoint.y))
+//			{
+//				hero.stance(0);
+//			}
 			if (isPaused){
 				//System.out.println(touchPoint.x + " " + touchPoint.y);
 				if (OverlapTester.pointInRectangle(pauseRectangle, touchPoint.x, touchPoint.y)) {

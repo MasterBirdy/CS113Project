@@ -7,9 +7,9 @@ import com.me.mygdxgame.map.Coordinate;
 public abstract class Minion extends Unit 
 {
 	
-	public Minion(int x, int y, int team, ListIterator<Coordinate> p) 
+	public Minion(int x, int y, boolean ranged, int team, ListIterator<Coordinate> p) 
 	{
-		super(x, y, team, p, (int)(Math.random() * 10 - 5), (int)(Math.random() * 5 - 2));
+		super(x, y, ranged, team, p, (int)(Math.random() * 10 - 5), (int)(Math.random() * 5 - 2));
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.me.mygdxgame.input;
 
+import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -25,6 +27,7 @@ public class MyInputProcessor implements InputProcessor
 	Vector3 fingerOne = new Vector3();
 	Vector3 fingerTwo = new Vector3();
 	float zoom;
+	boolean mouse = false;
 
 	@Override
 	public boolean keyDown(int keycode) 
@@ -77,6 +80,19 @@ public class MyInputProcessor implements InputProcessor
 	{
 		// for pinch-to-zoom
 	    numberOfFingers++;
+	    if (button == Buttons.RIGHT)
+	    	mouse = true;
+	    /*if (button == Buttons.LEFT)
+	    	System.out.println("Left");
+	    if (button == Buttons.RIGHT)
+	    	System.out.println("Right");
+	    if (button == Buttons.MIDDLE)
+	    	System.out.println("Middle");
+	    if (button != Buttons.RIGHT || button != Buttons.LEFT)
+	    	mouse = true;
+	    else
+	    	mouse = false;*/
+	    	
 		if(numberOfFingers == 1)
 		{
 			fingerOnePointer = pointer;
@@ -116,7 +132,10 @@ public class MyInputProcessor implements InputProcessor
 	}
 
 	@Override
-	public boolean touchUp(int x, int y, int pointer, int button) {
+	public boolean touchUp(int x, int y, int pointer, int button) 
+	{
+		if (button == Buttons.RIGHT)
+			mouse = false;
 		down = false;
 		// for pinch-to-zoom           
 		if(numberOfFingers == 1)
@@ -155,7 +174,7 @@ public class MyInputProcessor implements InputProcessor
 		float distance = fingerOne.dst(fingerTwo);
 		float factor = distance / lastDistance;
 		
-		if (numberOfFingers == 2)
+		if (numberOfFingers == 2 && (Gdx.app.getType() == ApplicationType.Android))
 		{
 			/*if (factor > 2)
 				factor = 2;

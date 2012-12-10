@@ -25,9 +25,9 @@ public abstract class Unit extends Actor
 	int stance = 1, previousStance = 1;
 	int animationDir = 0;
 	
-	public Unit(int x, int y, int team, ListIterator<Coordinate> pathIter, int rX, int rY)
+	public Unit(int x, int y, boolean ranged, int team, ListIterator<Coordinate> pathIter, int rX, int rY)
 	{
-		super(x + rX, y + rY, team);
+		super(x + rX, y + rY, ranged, team);
 		//this.speed = speed;
 		this.pathIter = pathIter;
 		destination = (team == 1 ? pathIter.next() : pathIter.previous());
@@ -43,10 +43,12 @@ public abstract class Unit extends Actor
 		stateTime += Gdx.graphics.getDeltaTime();
 		TextureRegion current;
 		int unitType;
-		if (this.getClass() == Swordsman.class || this.getClass() == SwordFace.class)
+		if (this instanceof Swordsman || this instanceof SwordFace)
 			unitType = 0;
-		else if (this.getClass() == Archer.class || this.getClass() == ArrowEyes.class)
+		else if (this instanceof Archer || this instanceof ArrowEyes)
 			unitType = 1;
+		else if (this instanceof Monk)
+			unitType = 2;
 		else
 			unitType = 0;
 		
@@ -111,6 +113,18 @@ public abstract class Unit extends Actor
 //		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, false, false));
 //		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, true, false));
 //		unitAnimation.add(loadAnimation(0, 225, 46, 43, 3, false, false));
+		animations.add(unitAnimation);
+		
+		unitAnimation = new ArrayList<Animation>();
+		
+		unitAnimation.add(loadAnimation(0, 267, 30, 41, 5, false, false));
+		unitAnimation.add(loadAnimation(0, 308, 24, 42, 5, false, false));
+		unitAnimation.add(loadAnimation(0, 308, 24, 42, 5, true, false));
+		unitAnimation.add(loadAnimation(0, 350, 30, 42, 5, false, false));
+		unitAnimation.add(loadAnimation(0, 267, 30, 41, 5, false, false));
+		unitAnimation.add(loadAnimation(0, 308, 24, 42, 5, false, false));
+		unitAnimation.add(loadAnimation(0, 308, 24, 42, 5, true, false));
+		unitAnimation.add(loadAnimation(0, 350, 30, 42, 5, false, false));
 		animations.add(unitAnimation);
 	}
 	
@@ -226,13 +240,6 @@ public abstract class Unit extends Actor
 		distance = (float)Math.sqrt(distance);
 		xSpeed = speed * ((destination.x() - xCoord) / distance);
 		ySpeed = speed * ((destination.y() - yCoord) / distance);
-	}
-	
-	protected void attack() 
-	{
-		if (target == null || !target.isAlive())
-			return;
-		target.takeDamage(damage);
 	}
 	
 	protected void sendAura()

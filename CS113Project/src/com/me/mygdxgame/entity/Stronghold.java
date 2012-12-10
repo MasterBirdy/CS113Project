@@ -6,17 +6,17 @@ import java.util.Iterator;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me.mygdxgame.map.Coordinate;
 
-public class ArrowTower extends Building
+public class Stronghold extends Building
 {
-	public ArrowTower(int x, int y, int team)
+	public Stronghold(int x, int y, int team)
 	{
 		super(x, y, true, team);
-		maxHealth = 200;
+		maxHealth = 400;
 		currentHealth = maxHealth;
 		damage = 8;
-		attackSpeed = 25;
+		attackSpeed = 20;
 		attackCooldown = 0;
-		attackRange = 150;
+		attackRange = 160;
 		projectiles = new ArrayList<Projectile>();
 		alive = false;
 	}

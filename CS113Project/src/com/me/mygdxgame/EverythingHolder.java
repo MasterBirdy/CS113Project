@@ -9,12 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.me.mygdxgame.entity.Actor;
-import com.me.mygdxgame.entity.Archer;
-import com.me.mygdxgame.entity.Entity;
-import com.me.mygdxgame.entity.Hero;
-import com.me.mygdxgame.entity.Swordsman;
-import com.me.mygdxgame.entity.ArrowTower;
+import com.me.mygdxgame.entity.*;
 import com.me.mygdxgame.map.Coordinate;
 import com.me.mygdxgame.map.Map;
 
@@ -29,10 +24,12 @@ public class EverythingHolder
 	//Hero hero1, hero2;
 	long waveTimer, spawnTimer1, spawnTimer2, spawnInterval1, spawnInterval2;;
 	long waveTime, waveInterval;
+	long totalTime = 0, previousTime;
 	boolean spawning;
 	int nano = 1000000000;
 	int income = 100;
 	int funds = 200;
+	static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	private ArrayList<ParticleEffect> effects = new ArrayList<ParticleEffect>();
 		
 	public EverythingHolder()
@@ -47,11 +44,13 @@ public class EverythingHolder
 		Entity.loadStatics(effects);
 		// Wave control
 		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
-		waveInterval = 10000;// = 5000000000; // Milliseconds between waves
+		waveInterval = 10000;// // Milliseconds between waves
 		
-		waveTime = 2000;//(long) (1 * nano); // Milliseconds to spawn a wave
+		waveTime = 2000;//// Milliseconds to spawn a wave
 				
 		spawning = false;
+		previousTime = System.nanoTime() / 1000000;
+		Actor.loadProjectiles(projectiles);
 	}
 	
 	public Actor atPoint(float x, float y)
@@ -62,6 +61,20 @@ public class EverythingHolder
 				return a;
 		}
 		return null;
+	}
+	
+	public int timeLeft()
+	{
+		return (int) -((System.nanoTime() / 1000000 - waveTimer - waveInterval)/ 1000);
+	}
+	
+	public String totalTime()
+	{
+		int time = (int) (totalTime / 1000);
+		int min = (int)(time / 60);
+		int sec = time % 60;
+		return (min == 0 ? "00" : (min < 10 ? 0 + min : min)) + ":" + (sec == 0 ? "00" : (sec < 10 ? "0" + sec : sec));
+		//return (int) totalTime / 1000;
 	}
 	
 	public void add(Actor a, boolean front, int team)
@@ -124,6 +137,8 @@ public class EverythingHolder
 			add(new Swordsman(start.x() + randX, start.y() + randY, team, iter), true, team);
 		else if (m == 2)
 			add(new Archer(start.x() + randX, start.y() + randY, team, iter), true, team);
+		else if (m == 3)
+			add(new Monk(start.x() + randX, start.y() + randY, team, iter), true, team);
 	}
 	
 	public LinkedList<Actor> team(int t)
@@ -135,25 +150,27 @@ public class EverythingHolder
 	
 	public void render()
 	{
-		if (showRange)
+		
+		for (Actor a : teams[0])
 		{
-			for (Actor a : teams[0])
-				if (a.isAlive())
-					a.rangeIndicator(batch);
-			for (Actor a : teams[1])
-				if (a.isAlive())
-					a.rangeIndicator(batch);
-			/*if (hero1 != null)
-				hero1.rangeIndicator(batch);
-			if (hero2 != null)
-				hero2.rangeIndicator(batch);*/
+			if (a instanceof Stronghold)
+				a.draw(batch);
 		}
+		for (Actor a : teams[1])
+		{
+			if (a instanceof Stronghold)
+				a.draw(batch);
+		}
+		for (Projectile p : projectiles)
+			p.draw(batch);
 		
 		Iterator<Actor> actorIter = teams[0].iterator();
 		Actor a;
 		while (actorIter.hasNext())
 		{
 			a = actorIter.next();
+			if (a instanceof Stronghold)
+				continue;
 			if (a.isAlive() || (a instanceof ArrowTower))
 				a.draw(batch);
 			else if (!(a instanceof Hero))
@@ -170,6 +187,8 @@ public class EverythingHolder
 		while (actorIter.hasNext())
 		{
 			a = actorIter.next();
+			if (a instanceof Stronghold)
+				continue;
 			if (a.isAlive() || (a instanceof ArrowTower))
 			{
 				a.draw(batch);
@@ -193,6 +212,19 @@ public class EverythingHolder
 			if (e.isComplete())
 				iter.remove();
 		}
+		if (false)//showRange)
+		{
+			for (Actor ac : teams[0])
+				if (ac.isAlive())
+					ac.rangeIndicator(batch);
+			for (Actor ac : teams[1])
+				if (ac.isAlive())
+					ac.rangeIndicator(batch);
+			/*if (hero1 != null)
+				hero1.rangeIndicator(batch);
+			if (hero2 != null)
+				hero2.rangeIndicator(batch);*/
+		}
 		/*if (hero2 != null && hero2.isAlive())
 			hero2.draw(batch);*/
 	}
@@ -203,6 +235,23 @@ public class EverythingHolder
 			a.checkAlive();
 		for (Actor a : teams[1])
 			a.checkAlive();
+		
+		ArrayList<Projectile> removeList = new ArrayList<Projectile>();
+		for (Projectile p : projectiles)
+		{
+				//if (p.xCoord == this.target.xCoord() || )
+			p.update();
+			if (p.getxSpeed() > 0 && p.xCoord() > p.target().xCoord())
+				removeList.add(p);
+			else if (p.getxSpeed() < 0 && p.xCoord() < p.target().xCoord())
+				removeList.add(p);
+			else if (p.getySpeed() > 0 && p.yCoord() > p.target().yCoord())
+				removeList.add(p);
+			else if (p.getySpeed() < 0 && p.yCoord() < p.target().yCoord())
+				removeList.add(p);
+		}
+		
+		projectiles.removeAll(removeList);
 		
 		/*if (hero1 != null)
 			hero1.isAlive();
@@ -227,6 +276,8 @@ public class EverythingHolder
 	private void spawnTimers()
 	{
 		long currentTime = System.nanoTime() / 1000000;
+		totalTime += currentTime - previousTime;
+		previousTime = currentTime;
 		long timeDiff = currentTime - waveTimer;
 		if ((timeDiff) > waveInterval)
 		{

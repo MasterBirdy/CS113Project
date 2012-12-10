@@ -9,10 +9,11 @@ public abstract class Hero extends Unit
 	//int stance = 1, previousStance = 1;
 	boolean changedDirection = false;
 	
-	public Hero(int x, int y, int team, ListIterator<Coordinate> p) 
+	public Hero(int x, int y, boolean ranged, int team, ListIterator<Coordinate> p) 
 	{
-		super(x, y, team, p, 0, 0);
+		super(x, y, ranged, team, p, 0, 0);
 		stance = 1;
+		alive = false;
 	}
 	
 	public void stance(int s)

@@ -97,4 +97,9 @@ public abstract class Entity
 	{
 		yCoord = y; 
 	}
+
+	protected void rangeAttack() {
+		// TODO Auto-generated method stub
+		
+	}
 }

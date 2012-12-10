@@ -20,9 +20,9 @@ public abstract class Building extends Actor
 	ArrayList<Projectile> projectiles;
 	float stateTime;
 	
-	public Building(int x, int y, int team)
+	public Building(int x, int y, boolean ranged, int team)
 	{
-		super(x, y, team);
+		super(x, y, ranged, team);
 		currentSprite = sprites.get(0);
 	}
 
@@ -32,17 +32,23 @@ public abstract class Building extends Actor
 		TextureRegion current;
 		stateTime += Gdx.graphics.getDeltaTime();
 		int unitType;
-		if (this.getClass() == ArrowTower.class)
+		if (this instanceof ArrowTower)
 		{
 			if (level == 0)
 				unitType = 0;
 			else
 				unitType = 1;
 		}
+		else if (this instanceof Stronghold)
+		{
+			unitType = 2;
+		}
 		else
+		{
 			unitType = 0;
+		}
 		current = animations.get(unitType).get(0).getKeyFrame(stateTime, true);
-		batch.draw(current, xCoord, yCoord);
+		batch.draw(current, xCoord + (team == 1 ? 20 : -20), yCoord - (this instanceof Stronghold ? Math.abs(current.getRegionHeight() / 3f) : 0), Math.abs(current.getRegionWidth() / 4), Math.abs(current.getRegionHeight() / 2f), Math.abs(current.getRegionWidth()), Math.abs(current.getRegionHeight()), (team == 1 ? -1f : 1f), 1f, 0f);
 		//batch.draw(currentSprite, xCoord, yCoord);
 	}
 	
@@ -58,6 +64,11 @@ public abstract class Building extends Actor
 		unitAnimation = new ArrayList<Animation>();
 		
 		unitAnimation.add(loadAnimation(424, 0, 46, 96, 1, false, false));
+		animations.add(unitAnimation);
+		
+		unitAnimation = new ArrayList<Animation>();
+		
+		unitAnimation.add(loadAnimation(210, 333, 161, 179, 1, false, false));
 		animations.add(unitAnimation);
 	}
 	

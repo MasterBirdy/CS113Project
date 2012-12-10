@@ -59,7 +59,9 @@ public class GameUI
 		batch.draw(attackIcon, -50, -200);
 		batch.draw(defendIcon, -100, -200);
 		batch.draw(retreatIcon, -150, -200);
-		font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 20);
+		//font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 20);
+		font.draw(batch, "Next wave: " + everything.timeLeft(), Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 20);
+		font.draw(batch, "Time: " + everything.totalTime(), Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 45);
 		font.draw(batch, "Funds: " + everything.funds(), Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 70);
 	}
 	

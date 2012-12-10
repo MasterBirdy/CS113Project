@@ -9,7 +9,7 @@ public class ArrowEyes extends Hero
 {
 	public ArrowEyes(int x, int y, int team, ListIterator<Coordinate> p)
 	{
-		super(x, y, team, p);
+		super(x, y, true, team, p);
 		maxHealth = 450;
 		currentHealth = maxHealth;
 		damage = 2;

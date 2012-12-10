@@ -104,7 +104,7 @@ public class MainMenuScreen implements Screen
 			blood.start();
 		//fire.setPosition(x, 480-y);
 		fire.draw(batch, delta);//, delta);
-		spark.draw(batch, delta);
+		//spark.draw(batch, delta);
 		blood.setPosition(x, 480-y);
 		blood.draw(batch, delta);
 		batch.end();
