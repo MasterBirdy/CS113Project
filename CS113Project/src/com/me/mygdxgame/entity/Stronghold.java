@@ -13,10 +13,10 @@ public class Stronghold extends Building
 		super(x, y, true, team);
 		maxHealth = 400;
 		currentHealth = maxHealth;
-		damage = 8;
-		attackSpeed = 20;
+		damage = 12;
+		attackSpeed = 25;
 		attackCooldown = 0;
-		attackRange = 160;
+		attackRange = 170;
 		projectiles = new ArrayList<Projectile>();
 		alive = false;
 	}

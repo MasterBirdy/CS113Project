@@ -47,7 +47,7 @@ public abstract class Unit extends Actor
 			unitType = 0;
 		else if (this instanceof Archer || this instanceof ArrowEyes)
 			unitType = 1;
-		else if (this instanceof Monk)
+		else if (this instanceof Monk || this instanceof SeaMonk)
 			unitType = 2;
 		else
 			unitType = 0;

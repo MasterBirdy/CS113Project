@@ -3,8 +3,10 @@ package com.me.mygdxgame.entity;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,16 +21,30 @@ public abstract class Building extends Actor
 	int level = 0;
 	ArrayList<Projectile> projectiles;
 	float stateTime;
+	ParticleEffect fire = new ParticleEffect();
 	
 	public Building(int x, int y, boolean ranged, int team)
 	{
 		super(x, y, ranged, team);
 		currentSprite = sprites.get(0);
+		if (Gdx.app.getType() != ApplicationType.Android)
+		{
+			fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
+			fire.setPosition(this.xCoord() + 15, this.yCoord() + 15);
+		}
+		//fire.start();
 	}
 
 	@Override
 	public void draw(SpriteBatch batch)
 	{
+		if (this.isAlive() && currentHealth < maxHealth / 2 && Gdx.app.getType() != ApplicationType.Android)
+		{
+			fire.draw(batch, 0.01f);
+			if  (fire.isComplete())
+				fire.start();
+		}
+		
 		TextureRegion current;
 		stateTime += Gdx.graphics.getDeltaTime();
 		int unitType;

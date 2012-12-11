@@ -69,9 +69,12 @@ public abstract class Actor extends Entity
 	public ParticleEffect spark()
 	{
 		ParticleEffect e = new ParticleEffect();
-		e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/SparkEffect.p")), Gdx.files.internal("images"));
-		e.setPosition(xCoord + 20, yCoord + 20);
-		e.start();
+		if (!(Gdx.app.getType() == ApplicationType.Android))
+		{
+			e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/SparkEffect.p")), Gdx.files.internal("images"));
+			e.setPosition(xCoord + 20, yCoord + 20);
+			e.start();
+		}
 		return e;
 	}
 	
