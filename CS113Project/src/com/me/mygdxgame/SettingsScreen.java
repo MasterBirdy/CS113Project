@@ -14,8 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class SettingsScreen  implements Screen  {
 	
-	Sprite backSprite;
-	Sprite backgroundSprite;
+	Sprite backSprite, backgroundSprite, creditsSprite;
 	Sprite difficultySprite;
 	Sprite easySprite;
 	Sprite easyHighlightedSprite;
@@ -34,6 +33,7 @@ public class SettingsScreen  implements Screen  {
 	Rectangle hardRectangle;
 	Rectangle onRectangle;
 	Rectangle offRectangle;
+	Rectangle creditsRectangle;
 	Vector3 touchPoint;
 	
 	
@@ -58,6 +58,7 @@ public class SettingsScreen  implements Screen  {
 		TextureRegion onHighlightedRegion = new TextureRegion(textTexture, 97, 443, 68, 46);
 		TextureRegion offRegion = new TextureRegion(textTexture, 190, 449, 87, 34);
 		TextureRegion offHighlightedRegion = new TextureRegion(textTexture, 302, 443, 99, 46);
+		TextureRegion creditsRegion = new TextureRegion(textTexture, 8, 569, 190, 31);
 		backSprite = new Sprite(backRegion);
 		backRectangle = new Rectangle(w - backSprite.getWidth() - 20 - 20 - w / 2, backSprite.getHeight() - 10 - 20 - h / 2, backSprite.getWidth() + 40, backSprite.getHeight() + 40);
 		difficultySprite = new Sprite(difficultyRegion);
@@ -71,6 +72,7 @@ public class SettingsScreen  implements Screen  {
 		onHighlightedSprite = new Sprite(onHighlightedRegion);
 		offSprite = new Sprite(offRegion);
 		offHighlightedSprite = new Sprite(offHighlightedRegion);
+		creditsSprite = new Sprite(creditsRegion);
 		backSprite.setPosition(w - backSprite.getWidth() - 20, backSprite.getHeight() - 10);
 		difficultySprite.setPosition(w / 2 - 280 - 20, h / 2 + 141);
 		easySprite.setPosition(w / 2 + 43  - 20, h / 2 + 149);
@@ -82,10 +84,12 @@ public class SettingsScreen  implements Screen  {
 		onHighlightedSprite.setPosition(w / 2 + 37  - 20, h / 2 + 73);
 		offSprite.setPosition(w / 2 + hardSprite.getWidth() + 70 - 20, h / 2 + 79);
 		offHighlightedSprite.setPosition(w / 2 + hardSprite.getWidth() + 64 - 20, h / 2 + 73);
+		creditsSprite.setPosition(w / 2 - creditsSprite.getWidth() / 2, h / 2 + 7);
 		easyRectangle = new Rectangle(w / 2 + 43 - 20 - w / 2, h / 2 + 149 - 20 - h / 2  - 20, easySprite.getWidth() + 40, easySprite.getHeight() + 40);
 		hardRectangle = new Rectangle(w / 2 + hardSprite.getWidth() + 70 - 20 - w / 2  - 20, h / 2 + 149 - 20 - h / 2, hardSprite.getWidth() + 40, hardSprite.getHeight() + 40);
 		onRectangle = new Rectangle(w / 2 + 43 - 20 - 20 - w / 2, h / 2 + 79 - 20 - h / 2, onSprite.getWidth() + 40, onSprite.getHeight()+ 40);
 		offRectangle = new Rectangle(w / 2 + offSprite.getWidth() + 70- 20 - 20 - w / 2, h / 2 + 79 - 20 - h / 2, offSprite.getWidth() + 40, offSprite.getHeight() + 40);
+		creditsRectangle = new Rectangle (w / 2 - creditsSprite.getWidth() / 2 - 5 - w / 2, h / 2 + 7 - 5 - h / 2, creditsSprite.getWidth() + 10, creditsSprite.getHeight() + 10);
 	}
 
 	@Override
@@ -121,6 +125,7 @@ public class SettingsScreen  implements Screen  {
 			onSprite.draw(batch);
 			offHighlightedSprite.draw(batch);
 		}
+		creditsSprite.draw(batch);
 		batch.end();
 	}
 
@@ -154,6 +159,10 @@ public class SettingsScreen  implements Screen  {
 			else if (OverlapTester.pointInRectangle(offRectangle, touchPoint.x, touchPoint.y))
 			{
 				Settings.getInstance().setSound(Sound.OFF);
+			}
+			else if (OverlapTester.pointInRectangle(creditsRectangle, touchPoint.x, touchPoint.y))
+			{
+				game.setScreen(game.creditsScreen);
 			}
 		}
 	}
