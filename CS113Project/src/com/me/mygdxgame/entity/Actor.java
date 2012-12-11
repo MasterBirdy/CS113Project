@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -59,7 +60,7 @@ public abstract class Actor extends Entity
 	public ParticleEffect blood()
 	{
 		ParticleEffect e = new ParticleEffect();
-		e.load(Gdx.files.internal("data/blood4.p"), Gdx.files.internal("images"));
+		e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
 		e.setPosition(xCoord + 20, yCoord + 20);
 		e.start();
 		return e;
@@ -68,7 +69,7 @@ public abstract class Actor extends Entity
 	public ParticleEffect spark()
 	{
 		ParticleEffect e = new ParticleEffect();
-		e.load(Gdx.files.internal("data/sparkeffect.p"), Gdx.files.internal("images"));
+		e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/SparkEffect.p")), Gdx.files.internal("images"));
 		e.setPosition(xCoord + 20, yCoord + 20);
 		e.start();
 		return e;
@@ -103,7 +104,7 @@ public abstract class Actor extends Entity
 	{
 		if (currentHealth <= 0)
 		{
-			if (alive && Gdx.app.getType() == Application.ApplicationType.Desktop)
+			if (alive)// && Gdx.app.getType() == Application.ApplicationType.Desktop)
 				effects.add(this.blood());
 			alive = false;
 		}
@@ -165,14 +166,15 @@ public abstract class Actor extends Entity
 			if (this.attackCooldown <= 0)
 			{
 				sounds.get("thwp").play(volume);
-				if (target.xCoord() < this.xCoord())
-					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, -1, 0, target));
-				else if (target.xCoord() > this.xCoord())
-					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 1, 0, target));
-				else if (target.yCoord() < this.yCoord())
-					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 0, -1, target));
+				if (!(this instanceof Stronghold))
+				{
+					projectiles.add(new ArrowProjectile(this.xCoord + (this instanceof ArrowTower ? 10 : 0), this.yCoord + (this instanceof ArrowTower ? 40 : 0), this.team, 3, target));
+				}
 				else
-					projectiles.add(new ArrowProjectile(this.xCoord, this.yCoord, this.team, 0, 1, target));
+				{
+					projectiles.add(new CannonProjectile(this.xCoord, this.yCoord + 50, this.team, 3, target));
+				}
+				target.takeDamage(damage);
 			}
 		}
 		else

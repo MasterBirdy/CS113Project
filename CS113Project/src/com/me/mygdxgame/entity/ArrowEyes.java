@@ -10,13 +10,13 @@ public class ArrowEyes extends Hero
 	public ArrowEyes(int x, int y, int team, ListIterator<Coordinate> p)
 	{
 		super(x, y, true, team, p);
-		maxHealth = 450;
+		maxHealth = 75;
 		currentHealth = maxHealth;
-		damage = 2;
-		attackSpeed = 10;
+		damage = 7;
+		attackSpeed = 20;
 		attackCooldown = 0;
 		attackRange = 100;
-		speed = 1.5f;
+		speed = 1.34f;
 	}
 
 	@Override

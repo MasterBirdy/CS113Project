@@ -277,21 +277,22 @@ public class GameScreen implements Screen {
 			batch.draw(pauseRegion, 0-pauseRegion.getRegionWidth() / 2 , 0-pauseRegion.getRegionHeight() / 2);
 		batch.end();
 	}
+	
+	private void endGame(int t)
+	{
+		everything.end();
+		game.mainMenuScreen.gameWon();
+		game.setScreen(game.mainMenuScreen);
+	}
 
 	public void update()
 	{
 		everything.update();
 		randomSpawner();
 		if (!everything.team(1).getLast().isAlive())
-		{
-			game.mainMenuScreen.gameWon();
-			game.setScreen(game.mainMenuScreen);
-		}
+			endGame(1);
 		else if (!everything.team(2).getLast().isAlive())
-		{
-			game.mainMenuScreen.gameWon();
-			game.setScreen(game.mainMenuScreen);
-		}
+			endGame(2);
 	}
 
 	public void randomSpawner()
@@ -480,6 +481,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void pause() 
 	{
+		
 	}
 
 	@Override
@@ -491,14 +493,14 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		if (Settings.getInstance().getSound() == Sound.ON)
-			startMusic.play();
+			everything.musicPlay();
 
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		startMusic.stop();
+		everything.end();
 
 	}
 }

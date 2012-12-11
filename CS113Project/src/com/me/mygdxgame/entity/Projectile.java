@@ -12,7 +12,9 @@ public abstract class Projectile extends Entity {
 	
 	static TextureRegion[] projectileIndicator;
 	float speed;
-	int xSpeed, ySpeed;
+	float xSpeed, ySpeed;
+	double angle = 0;
+	int damage;
 	Actor target;
 	
 	public Projectile(float x, float y, int team) 
@@ -20,20 +22,23 @@ public abstract class Projectile extends Entity {
 		super(x, y, team);
 	}
 	
-	public Projectile(float x, float y, int team, int xSpeed, int ySpeed, Actor target) 
+	public Projectile(float x, float y, int team, float speed, Actor target) 
 	{
 		super(x, y, team);
-		this.xSpeed = xSpeed;
-		this.ySpeed = ySpeed;
+//		this.xSpeed = xSpeed;
+//		this.ySpeed = ySpeed;
 		this.target = target;
+		this.angle = getAngleToEntity(target);
+		this.xSpeed =  (float) (speed * Math.sin(Math.toRadians(angle)));
+		this.ySpeed = (float) (-speed * Math.cos(Math.toRadians(angle)));
 	}
 	
-	public int getxSpeed ()
+	public float getxSpeed ()
 	{
 		return xSpeed;
 	}
 	
-	public int getySpeed ()
+	public float getySpeed ()
 	{
 		return ySpeed;
 	}
@@ -53,8 +58,14 @@ public abstract class Projectile extends Entity {
 	@Override
 	public abstract void draw(SpriteBatch batch);
 
+//	@Override
+//	public abstract void update();
+	
 	@Override
-	public abstract void update();
+	public void update() {
+		this.xCoord(xCoord + this.xSpeed);// * speed);
+		this.yCoord(yCoord + this.ySpeed);// * speed);
+	}
 
 	public Entity target() 
 	{

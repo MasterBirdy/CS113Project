@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,6 +33,9 @@ public class EverythingHolder
 	int funds = 200;
 	static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	private ArrayList<ParticleEffect> effects = new ArrayList<ParticleEffect>();
+	Audio tempMusic = Gdx.audio;
+	private Music music;
+	static float musicVolume = 1f;
 		
 	public EverythingHolder()
 	{
@@ -51,6 +56,24 @@ public class EverythingHolder
 		spawning = false;
 		previousTime = System.nanoTime() / 1000000;
 		Actor.loadProjectiles(projectiles);
+		
+		music = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
+		music.setLooping(true);
+	}
+	
+	public void end()
+	{
+		music.stop();
+	}
+	
+	public void musicPlay()
+	{
+		music.play();
+	}
+	
+	static public void setMusicVolume(float v)
+	{
+		musicVolume = v;
 	}
 	
 	public Actor atPoint(float x, float y)
@@ -269,6 +292,8 @@ public class EverythingHolder
 			hero1.update();
 		if (hero2 != null)
 			hero2.update();*/
+		
+		music.setVolume(musicVolume);
 		
 		spawnTimers();
 	}

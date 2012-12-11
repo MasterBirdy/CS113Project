@@ -12,11 +12,11 @@ public class Swordsman extends Minion
 		super(x, y, false, team, p);
 		maxHealth = 45;
 		currentHealth = maxHealth;
-		damage = 10;
-		attackSpeed = 50;
+		damage = 11;
+		attackSpeed = 55;
 		attackCooldown = 0;
 		attackRange = 25;
-		speed = 1.45f;
+		speed = 1.3f;
 	}
 
 	@Override
