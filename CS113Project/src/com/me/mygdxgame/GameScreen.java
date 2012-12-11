@@ -1,11 +1,13 @@
 package com.me.mygdxgame;
 
 //import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,8 +38,9 @@ public class GameScreen implements Screen {
 	int pauseCooldown;
 	GameUI gameUI;
 	Hero hero, nemesis;
-	Game game;
+	MyGdxGame game;
 	Rectangle pauseRectangle;
+	Rectangle pauseRectangle2;
 	Rectangle swordRectangle;
 	Rectangle bowRectangle;
 	Rectangle monkRectangle;
@@ -47,18 +50,24 @@ public class GameScreen implements Screen {
 	Rectangle attackRectangle;
 	Rectangle defendRectangle;
 	Rectangle retreatRectangle;
-	Vector3 touchPoint, gameTouchPoint;
+	Vector3 touchPoint;
+	Vector3 gameTouchPoint;
+	Difficulty difficulty;
 	int level = 1;
 	int income, resources;
+	Audio tempMusic = Gdx.audio;
+	Music startMusic;
 
 
-	public GameScreen(Game game)
+	public GameScreen(MyGdxGame game)
 	{
 
 		this.game = game;
 		Texture.setEnforcePotImages(true);
 		isPaused = false;
 
+		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
+		startMusic.setLooping(true);
 
 		//Gdx.graphics.setDisplayMode(800, 480, false);
 		float w = Gdx.graphics.getWidth();
@@ -192,12 +201,22 @@ public class GameScreen implements Screen {
 //		retreatRectangle = new Rectangle(-150, -200, 40, 40);
 		
 		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
-		swordRectangle   = new Rectangle(221, -29, 68, 80);
-		bowRectangle     = new Rectangle(310, -29, 68, 80);
-		monkRectangle    = new Rectangle(221, -125, 68, 80);
-		magicRectangle   = new Rectangle(310, -125, 68, 80);
-		petRectangle     = new Rectangle(221, -226, 68, 80);
-		spiralRectangle  = new Rectangle(310, -226, 68, 80);
+//<<<<<<< HEAD
+//		swordRectangle   = new Rectangle(221, -29, 68, 80);
+//		bowRectangle     = new Rectangle(310, -29, 68, 80);
+//		monkRectangle    = new Rectangle(221, -125, 68, 80);
+//		magicRectangle   = new Rectangle(310, -125, 68, 80);
+//		petRectangle     = new Rectangle(221, -226, 68, 80);
+//		spiralRectangle  = new Rectangle(310, -226, 68, 80);
+//=======
+		pauseRectangle2  = new Rectangle(-76, -76, 156, 27);
+		swordRectangle   = new Rectangle(221, -29, 69, 80);
+		bowRectangle     = new Rectangle(311, -29, 69, 80);
+		monkRectangle    = new Rectangle(221, -127, 69, 80);
+		magicRectangle   = new Rectangle(311, -127, 69, 80);
+		petRectangle     = new Rectangle(221, -227, 69, 80);
+		spiralRectangle  = new Rectangle(311, -227, 69, 80);
+
 		attackRectangle  = new Rectangle(-50, -200, 40, 40);
 		defendRectangle  = new Rectangle(-100, -200, 40, 40);
 		retreatRectangle = new Rectangle(-150, -200, 40, 40);
@@ -264,9 +283,15 @@ public class GameScreen implements Screen {
 		everything.update();
 		randomSpawner();
 		if (!everything.team(1).getLast().isAlive())
-			game.setScreen(new MainMenuScreen(game));
+		{
+			game.mainMenuScreen.gameWon();
+			game.setScreen(game.mainMenuScreen);
+		}
 		else if (!everything.team(2).getLast().isAlive())
-			game.setScreen(new MainMenuScreen(game));
+		{
+			game.mainMenuScreen.gameWon();
+			game.setScreen(game.mainMenuScreen);
+		}
 	}
 
 	public void randomSpawner()
@@ -398,7 +423,13 @@ public class GameScreen implements Screen {
 				//System.out.println(touchPoint.x + " " + touchPoint.y);
 				if (OverlapTester.pointInRectangle(pauseRectangle, touchPoint.x, touchPoint.y)) {
 					//System.out.println(true);
-					game.setScreen(new MainMenuScreen(game));
+					game.setScreen(game.mainMenuScreen);
+					return;
+				}
+				
+				if (OverlapTester.pointInRectangle(pauseRectangle2, touchPoint.x, touchPoint.y)) {
+					//System.out.println(true);
+					game.setScreen(game.settingsScreen);
 					return;
 				}
 			}
@@ -459,13 +490,15 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		if (Settings.getInstance().getSound() == Sound.ON)
+			startMusic.play();
 
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
+		startMusic.stop();
 
 	}
 }

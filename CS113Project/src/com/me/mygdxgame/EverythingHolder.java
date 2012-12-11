@@ -305,7 +305,10 @@ public class EverythingHolder
 			for (Actor a : teams[1])
 				if (a instanceof Hero && !a.isAlive())
 					((Hero)a).respawn(map.start2().x(), map.start2().y(), map.getPath().listIterator(map.getPath().size() - 1));
-			funds += income;
+			if (Settings.getInstance().getDifficulty() == Difficulty.EASY)
+				funds += income;
+			else if (Settings.getInstance().getDifficulty() == Difficulty.HARD)
+				funds += income * .75;
 			//Gdx.input.vibrate(1000);
 		}
 		

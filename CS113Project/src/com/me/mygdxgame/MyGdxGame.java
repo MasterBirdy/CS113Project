@@ -17,12 +17,19 @@ import com.me.mygdxgame.map.Coordinate;
 import com.me.mygdxgame.map.Map;
 
 public class MyGdxGame extends Game {
+	
+	MainMenuScreen mainMenuScreen;
+	GameScreen gameScreen;
+	SettingsScreen settingsScreen;
 
 	@Override
 	public void create() 
 	{
 		//this.resize(800, 480);
-		setScreen(new MainMenuScreen(this));
+		mainMenuScreen = new MainMenuScreen(this);
+		gameScreen = new GameScreen(this);
+		settingsScreen = new SettingsScreen(this);
+		setScreen(mainMenuScreen);
 	}
 	
 }
