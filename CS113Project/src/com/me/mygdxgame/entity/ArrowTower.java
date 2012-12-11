@@ -21,14 +21,14 @@ public class ArrowTower extends Building
 		alive = false;
 	}
 
-	@Override
-	protected void attack() 
-	{
-		if (target == null || !target.isAlive() || level == 0)
-			return;
-		target.takeDamage(damage);
-		projectiles.add(new CannonProjectile(this.xCoord, this.yCoord, this.team, 1, 1, target));
-	}
+//	@Override
+//	protected void attack() 
+//	{
+//		if (target == null || !target.isAlive() || level == 0)
+//			return;
+//		target.takeDamage(damage);
+//		projectiles.add(new CannonProjectile(this.xCoord, this.yCoord, this.team, 1, 1, target));
+//	}
 	
 	@Override
 	public void checkAlive()

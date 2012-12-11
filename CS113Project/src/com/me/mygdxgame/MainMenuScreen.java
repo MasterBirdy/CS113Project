@@ -4,6 +4,7 @@ import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -67,12 +68,15 @@ public class MainMenuScreen implements Screen
 		fire.setPosition(400, 10);
 		fire.start();
 		
-		spark.load(Gdx.files.internal("data/sparkeffect.p"), Gdx.files.internal("images"));
+		spark.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/SparkEffect.p")), Gdx.files.internal("images"));
 		spark.setPosition(400, 300);
 		spark.start();
 		
-		blood.load(Gdx.files.internal("data/blood3.p"), Gdx.files.internal("images"));
+		blood.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
 		blood.setPosition(400, 300);
+		for (ParticleEmitter pe : blood.getEmitters())
+			pe.setContinuous(true);
+		
 		blood.start();
 		
 		//Gdx.input.setCursorCatched(false);
@@ -106,7 +110,7 @@ public class MainMenuScreen implements Screen
 		fire.draw(batch, delta);//, delta);
 		//spark.draw(batch, delta);
 		blood.setPosition(x, 480-y);
-		blood.draw(batch, delta);
+		blood.draw(batch, .01f);
 		batch.end();
 	}
 

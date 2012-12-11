@@ -78,6 +78,16 @@ public abstract class Entity
 		return (xCoord - x) * (xCoord - x) + (yCoord - y) * (yCoord - y);
 	}
 	
+	public double getAngleToEntity(Entity target)
+	{
+		double x = target.xCoord();
+		double y = target.yCoord();
+		double toActor = Math.toDegrees(Math.atan2(x - this.xCoord(), this.yCoord() - y));
+		if (toActor < 0)
+			toActor += 360;
+		return toActor;
+	}
+	
 	public float xCoord()
 	{
 		return xCoord;

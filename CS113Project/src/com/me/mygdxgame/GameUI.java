@@ -32,8 +32,8 @@ public class GameUI
 		magicIcon = new TextureRegion(new Texture(Gdx.files.internal("images/magiciconbnw.png")), 40, 40);
 		petIcon = new TextureRegion(new Texture(Gdx.files.internal("images/peticonbnw.png")), 40, 40);
 		spiralIcon = new TextureRegion(new Texture(Gdx.files.internal("images/spiraliconbnw.png")), 40, 40);
-		attackIcon = new TextureRegion(new Texture(Gdx.files.internal("images/magiciconbnw.png")), 40, 40);
-		defendIcon = new TextureRegion(new Texture(Gdx.files.internal("images/peticonbnw.png")), 40, 40);
+		attackIcon = new TextureRegion(new Texture(Gdx.files.internal("images/swordicon.png")), 40, 40);
+		defendIcon = new TextureRegion(new Texture(Gdx.files.internal("images/serficon.png")), 40, 40);
 		retreatIcon = new TextureRegion(new Texture(Gdx.files.internal("images/spiraliconbnw.png")), 40, 40);
 		font = new BitmapFont();
 	}

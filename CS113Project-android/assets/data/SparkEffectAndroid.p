@@ -7,8 +7,8 @@ lowMax: 0.0
 lowMin: 200.0
 lowMax: 200.0
 - Count - 
-min: 1
-max: 3
+min: 0
+max: 1
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
@@ -181,13 +181,15 @@ max: 1
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 2.0
-highMax: 2.0
+highMin: 0.0
+highMax: 1.0
 relative: false
-scalingCount: 1
+scalingCount: 2
 scaling0: 1.0
-timelineCount: 1
+scaling1: 1.0
+timelineCount: 2
 timeline0: 0.0
+timeline1: 1.0
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
@@ -316,8 +318,8 @@ active: false
 lowMin: 100.0
 lowMax: 100.0
 - Count - 
-min: 2
-max: 5
+min: 0
+max: 1
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0

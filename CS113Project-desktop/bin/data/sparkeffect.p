@@ -8,7 +8,7 @@ lowMin: 200.0
 lowMax: 200.0
 - Count - 
 min: 1
-max: 2
+max: 3
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
@@ -60,8 +60,8 @@ timeline0: 0.0
 - Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 15.0
-highMax: 15.0
+highMin: 5.0
+highMax: 5.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -71,8 +71,8 @@ timeline0: 0.0
 active: true
 lowMin: 25.0
 lowMax: 25.0
-highMin: 250.0
-highMax: 250.0
+highMin: 80.0
+highMax: 200.0
 relative: false
 scalingCount: 2
 scaling0: 1.0
@@ -166,7 +166,7 @@ aligned: false
 additive: false
 behind: false
 - Image Path -
-C:\Users\Mike\Pictures\Particles\sparkparticle.png
+sparkparticle.png
 
 
 large sparks
@@ -229,8 +229,8 @@ timeline0: 0.0
 - Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 30.0
-highMax: 30.0
+highMin: 8.0
+highMax: 8.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -240,7 +240,7 @@ timeline0: 0.0
 active: true
 lowMin: 50.0
 lowMax: 50.0
-highMin: 75.0
+highMin: 30.0
 highMax: 75.0
 relative: false
 scalingCount: 1
@@ -373,8 +373,8 @@ timeline0: 0.0
 - Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 10.0
-highMax: 10.0
+highMin: 6.0
+highMax: 6.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -385,7 +385,7 @@ active: true
 lowMin: 0.0
 lowMax: 0.0
 highMin: 30.0
-highMax: 80.0
+highMax: 100.0
 relative: false
 scalingCount: 1
 scaling0: 1.0

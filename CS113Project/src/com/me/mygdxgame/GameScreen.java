@@ -258,15 +258,21 @@ public class GameScreen implements Screen {
 			batch.draw(pauseRegion, 0-pauseRegion.getRegionWidth() / 2 , 0-pauseRegion.getRegionHeight() / 2);
 		batch.end();
 	}
+	
+	private void endGame(int t)
+	{
+		everything.end();
+		game.setScreen(new MainMenuScreen(game));
+	}
 
 	public void update()
 	{
 		everything.update();
 		randomSpawner();
 		if (!everything.team(1).getLast().isAlive())
-			game.setScreen(new MainMenuScreen(game));
+			endGame(1);
 		else if (!everything.team(2).getLast().isAlive())
-			game.setScreen(new MainMenuScreen(game));
+			endGame(2);
 	}
 
 	public void randomSpawner()
@@ -449,6 +455,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void pause() 
 	{
+		
 	}
 
 	@Override

@@ -35,7 +35,10 @@ public class MyInputProcessor implements InputProcessor
 		if (keycode == Keys.TAB)
 			EverythingHolder.toggleShowRange();
 		if (keycode == Keys.NUM_1)
+		{
+			EverythingHolder.setMusicVolume(0f);
 			Entity.setVolume(0);
+		}
 		if (keycode == Keys.NUM_2)
 			Entity.setVolume(0.1f);
 		if (keycode == Keys.NUM_3)
@@ -53,7 +56,10 @@ public class MyInputProcessor implements InputProcessor
 		if (keycode == Keys.NUM_9)
 			Entity.setVolume(0.8f);
 		if (keycode == Keys.NUM_0)
+		{
+			EverythingHolder.setMusicVolume(1f);
 			Entity.setVolume(1f);
+		}
 		if (keycode == 84)
 		{
 			int temp = 5;

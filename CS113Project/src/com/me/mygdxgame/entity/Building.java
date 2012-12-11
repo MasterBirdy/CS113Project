@@ -48,7 +48,7 @@ public abstract class Building extends Actor
 			unitType = 0;
 		}
 		current = animations.get(unitType).get(0).getKeyFrame(stateTime, true);
-		batch.draw(current, xCoord + (team == 1 ? 20 : -20), yCoord - (this instanceof Stronghold ? Math.abs(current.getRegionHeight() / 3f) : 0), Math.abs(current.getRegionWidth() / 4), Math.abs(current.getRegionHeight() / 2f), Math.abs(current.getRegionWidth()), Math.abs(current.getRegionHeight()), (team == 1 ? -1f : 1f), 1f, 0f);
+		batch.draw(current, xCoord + (team == 1 ? 20 : -20), yCoord - (false ? Math.abs(current.getRegionHeight() / 3f) : 0), Math.abs(current.getRegionWidth() / 4), Math.abs(current.getRegionHeight() / 2f), Math.abs(current.getRegionWidth()), Math.abs(current.getRegionHeight()), (team == 1 ? -1f : 1f), 1f, 0f);
 		//batch.draw(currentSprite, xCoord, yCoord);
 	}
 	
@@ -57,18 +57,18 @@ public abstract class Building extends Actor
 		animations = new ArrayList<ArrayList<Animation>>();
 		ArrayList<Animation> unitAnimation = new ArrayList<Animation>();
 		
-		unitAnimation.add(loadAnimation(371, 447, 47, 65, 3, false, false));
+		unitAnimation.add(loadAnimation(0, 515, 47, 65, 3, false, false));
 		animations.add(unitAnimation);
 		
 		
 		unitAnimation = new ArrayList<Animation>();
 		
-		unitAnimation.add(loadAnimation(424, 0, 46, 96, 1, false, false));
+		unitAnimation.add(loadAnimation(0, 580, 56, 90, 3, false, false));
 		animations.add(unitAnimation);
 		
 		unitAnimation = new ArrayList<Animation>();
 		
-		unitAnimation.add(loadAnimation(210, 333, 161, 179, 1, false, false));
+		unitAnimation.add(loadAnimation(0, 670, 72, 128, 1, false, false));
 		animations.add(unitAnimation);
 	}
 	
@@ -86,7 +86,7 @@ public abstract class Building extends Actor
 				frames[i].flip(flipX, flipY);
 		}
 		
-		Animation tempAnimation = new Animation(.08f, frames);
+		Animation tempAnimation = new Animation(.1f, frames);
 		tempAnimation.setPlayMode(Animation.LOOP_PINGPONG);
 		return tempAnimation;
 	}
@@ -119,5 +119,5 @@ public abstract class Building extends Actor
 		return temp;
 	}
 	
-	protected abstract void attack();
+//	protected abstract void attack();
 }
