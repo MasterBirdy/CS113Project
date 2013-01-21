@@ -1,7 +1,6 @@
 package com.me.mygdxgame.entity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;

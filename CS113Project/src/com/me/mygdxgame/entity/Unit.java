@@ -1,10 +1,8 @@
 package com.me.mygdxgame.entity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ListIterator;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

@@ -2,7 +2,6 @@ package com.me.mygdxgame;
 
 //import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Audio;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -66,8 +65,8 @@ public class GameScreen implements Screen {
 		Texture.setEnforcePotImages(true);
 		isPaused = false;
 
-		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
-		startMusic.setLooping(true);
+//		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
+//		startMusic.setLooping(true);
 
 		//Gdx.graphics.setDisplayMode(800, 480, false);
 		float w = Gdx.graphics.getWidth();
@@ -266,7 +265,7 @@ public class GameScreen implements Screen {
 		batch.begin();
 		everything.map().background().draw(batch);
 		everything.render();
-		//ont.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
+		//font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
 
 		batch.end();
 		batch.setProjectionMatrix(uiCamera.combined);
@@ -457,17 +456,17 @@ public class GameScreen implements Screen {
 
 		//if (camera.position.y > everything.map().height() * (1 / (2 - camera.zoom)))
 		//	camera.position.y = everything.map().height() * (1 / (2 - camera.zoom));
-		if (camera.position.y > everything.map().height() - h + 240)
-			camera.position.y = everything.map().height() - h + 240;
+		if (camera.position.y > height - h + 240)
+			camera.position.y = height - h + 240;
 
 		if (camera.position.y < h)
 			camera.position.y = h;
 
 		//if (camera.position.x > everything.map().width() + gameUI.width())
 		//	camera.position.x = everything.map().width() + gameUI.width();
-		float temp = everything.map().width() - (w / 2) + 400;
-		if (camera.position.x > (everything.map().width() - (w / 2) + 400))//(w / 4) - w + 400)
-			camera.position.x = everything.map().width() - (w / 2) + 400; //(w / 4) - w + 400;
+		float temp = width - (w / 2) + 400;
+		if (camera.position.x > (width - (w / 2) + 400))//(w / 4) - w + 400)
+			camera.position.x = width - (w / 2) + 400; //(w / 4) - w + 400;
 
 		if (camera.position.x < w)
 			camera.position.x = w;

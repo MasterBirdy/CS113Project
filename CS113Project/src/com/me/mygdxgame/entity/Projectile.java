@@ -1,12 +1,9 @@
 package com.me.mygdxgame.entity;
 
-import java.util.Iterator;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.me.mygdxgame.map.Coordinate;
 
 public abstract class Projectile extends Entity {
 	

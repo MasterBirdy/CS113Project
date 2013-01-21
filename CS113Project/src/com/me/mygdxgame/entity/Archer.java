@@ -1,12 +1,8 @@
 package com.me.mygdxgame.entity;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ListIterator;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.me.mygdxgame.Settings;
-import com.me.mygdxgame.Sound;
 import com.me.mygdxgame.map.Coordinate;
 
 public class Archer extends Minion

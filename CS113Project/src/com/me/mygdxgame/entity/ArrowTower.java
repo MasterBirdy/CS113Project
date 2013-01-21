@@ -1,10 +1,8 @@
 package com.me.mygdxgame.entity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.me.mygdxgame.map.Coordinate;
 
 public class ArrowTower extends Building
 {

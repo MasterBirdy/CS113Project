@@ -1,6 +1,5 @@
 package com.me.mygdxgame.entity;
 
-import java.util.Iterator;
 import java.util.ListIterator;
 
 import com.me.mygdxgame.map.Coordinate;
