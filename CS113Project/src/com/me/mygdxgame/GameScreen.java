@@ -344,6 +344,10 @@ public class GameScreen implements Screen {
 			isPaused = !isPaused;
 			pauseCooldown = 0;
 		}
+		if ((Gdx.input.isKeyPressed(Input.Keys.PLUS)))
+			camera.zoom += 1;
+		if ((Gdx.input.isKeyPressed(Input.Keys.MINUS)))
+			camera.zoom -= 1;
 		if ((Gdx.input.isKeyPressed(Input.Keys.Q)) && pauseCooldown > 100)
 		{
 			for (Actor a : everything.team(1))

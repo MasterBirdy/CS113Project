@@ -39,6 +39,10 @@ public class MyInputProcessor implements InputProcessor
 			EverythingHolder.setMusicVolume(0f);
 			Entity.setVolume(0);
 		}
+		if (keycode == Keys.Z)
+			camera.zoom -= .1f;
+		if (keycode == Keys.X)
+			camera.zoom += .1f;
 		if (keycode == Keys.NUM_2)
 			Entity.setVolume(0.1f);
 		if (keycode == Keys.NUM_3)

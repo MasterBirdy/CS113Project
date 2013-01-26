@@ -29,7 +29,7 @@ public class EverythingHolder
 	long totalTime = 0, previousTime;
 	boolean spawning;
 	int nano = 1000000000;
-	int income = 100;
+	int income = 150;
 	int funds = 200;
 	static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	private ArrayList<ParticleEffect> effects = new ArrayList<ParticleEffect>();

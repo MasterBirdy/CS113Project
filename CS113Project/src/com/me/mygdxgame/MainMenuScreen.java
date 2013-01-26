@@ -103,7 +103,7 @@ public class MainMenuScreen implements Screen
 		spark.setPosition(400, 300);
 		spark.start();
 		
-		blood.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
+		blood.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/HeroRegenAura.p")), Gdx.files.internal("images"));
 		blood.setPosition(400, 300);
 		for (ParticleEmitter pe : blood.getEmitters())
 			pe.setContinuous(true);
