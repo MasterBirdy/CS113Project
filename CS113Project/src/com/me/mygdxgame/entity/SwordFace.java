@@ -1,6 +1,5 @@
 package com.me.mygdxgame.entity;
 
-import java.util.Iterator;
 import java.util.ListIterator;
 
 import com.me.mygdxgame.map.Coordinate;
@@ -10,10 +9,10 @@ public class SwordFace extends Hero
 	public SwordFace(int x, int y, int team, ListIterator<Coordinate> p)
 	{
 		super(x, y, false, team, p);
-		maxHealth = 100;
+		maxHealth = 120;
 		currentHealth = maxHealth;
 		damage = 15;
-		attackSpeed = 60;
+		attackSpeed = 70;
 		attackCooldown = 0;
 		attackRange = 40;
 		speed = 1.34f;

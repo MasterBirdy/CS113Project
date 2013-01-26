@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -69,9 +66,12 @@ public abstract class Actor extends Entity
 	public ParticleEffect spark()
 	{
 		ParticleEffect e = new ParticleEffect();
-		e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/SparkEffect.p")), Gdx.files.internal("images"));
-		e.setPosition(xCoord + 20, yCoord + 20);
-		e.start();
+		if (!(Gdx.app.getType() == ApplicationType.Android))
+		{
+			e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/SparkEffect.p")), Gdx.files.internal("images"));
+			e.setPosition(xCoord + 20, yCoord + 20);
+			e.start();
+		}
 		return e;
 	}
 	

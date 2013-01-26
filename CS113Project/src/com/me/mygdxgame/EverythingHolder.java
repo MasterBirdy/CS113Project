@@ -9,7 +9,6 @@ import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me.mygdxgame.entity.*;
 import com.me.mygdxgame.map.Coordinate;
@@ -57,18 +56,18 @@ public class EverythingHolder
 		previousTime = System.nanoTime() / 1000000;
 		Actor.loadProjectiles(projectiles);
 		
-		music = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
-		music.setLooping(true);
+//		music = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
+//		music.setLooping(true);
 	}
 	
 	public void end()
 	{
-		music.stop();
+//		music.stop();
 	}
 	
 	public void musicPlay()
 	{
-		music.play();
+//		music.play();
 	}
 	
 	static public void setMusicVolume(float v)
@@ -293,7 +292,7 @@ public class EverythingHolder
 		if (hero2 != null)
 			hero2.update();*/
 		
-		music.setVolume(musicVolume);
+//		music.setVolume(musicVolume);
 		
 		spawnTimers();
 	}

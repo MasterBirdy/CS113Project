@@ -1,10 +1,8 @@
 package com.me.mygdxgame.entity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.me.mygdxgame.map.Coordinate;
 
 public class Stronghold extends Building
 {
@@ -13,10 +11,10 @@ public class Stronghold extends Building
 		super(x, y, true, team);
 		maxHealth = 400;
 		currentHealth = maxHealth;
-		damage = 8;
-		attackSpeed = 20;
+		damage = 12;
+		attackSpeed = 25;
 		attackCooldown = 0;
-		attackRange = 160;
+		attackRange = 170;
 		projectiles = new ArrayList<Projectile>();
 		alive = false;
 	}

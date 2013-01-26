@@ -1,7 +1,6 @@
 package com.me.mygdxgame;
 
 import com.badlogic.gdx.Audio;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Application.ApplicationType;
@@ -16,6 +15,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+
+// Jason Rogers
+// Mike Tang
+// Matthew Ito
+// Raymond Hon
+// Cecilia Bishton
 
 public class MainMenuScreen implements Screen 
 {
@@ -99,7 +104,8 @@ public class MainMenuScreen implements Screen
 		fire.setPosition(400, 10);
 		fire.start();
 		
-		spark.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/SparkEffect.p")), Gdx.files.internal("images"));
+		//spark.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/SparkEffect.p")), Gdx.files.internal("images"));
+		spark.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/HeroRegenAura.p" : "data/MinionRegenAura.p")), Gdx.files.internal("images"));
 		spark.setPosition(400, 300);
 		spark.start();
 		

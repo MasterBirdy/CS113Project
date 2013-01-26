@@ -8,7 +8,7 @@ public class Settings {
     // Private constructor prevents instantiation from other classes
     private Settings() {
     	difficulty = Difficulty.EASY;
-    	sound = sound.ON;
+    	sound = Sound.ON;
     }
 
     /**

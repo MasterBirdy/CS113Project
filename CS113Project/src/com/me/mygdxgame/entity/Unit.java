@@ -1,10 +1,8 @@
 package com.me.mygdxgame.entity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ListIterator;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -47,7 +45,7 @@ public abstract class Unit extends Actor
 			unitType = 0;
 		else if (this instanceof Archer || this instanceof ArrowEyes)
 			unitType = 1;
-		else if (this instanceof Monk)
+		else if (this instanceof Monk || this instanceof SeaMonk)
 			unitType = 2;
 		else
 			unitType = 0;

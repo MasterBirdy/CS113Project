@@ -1,6 +1,5 @@
 package com.me.mygdxgame.entity;
 
-import java.util.Iterator;
 import java.util.ListIterator;
 
 import com.me.mygdxgame.map.Coordinate;
@@ -13,7 +12,7 @@ public class Swordsman extends Minion
 		maxHealth = 45;
 		currentHealth = maxHealth;
 		damage = 11;
-		attackSpeed = 55;
+		attackSpeed = 75;
 		attackCooldown = 0;
 		attackRange = 25;
 		speed = 1.3f;
