@@ -7,6 +7,7 @@ public class MyGdxGame extends Game {
 	MainMenuScreen mainMenuScreen;
 	GameScreen gameScreen;
 	SettingsScreen settingsScreen;
+	GameChoiceScreen gameChoiceScreen;
 
 	@Override
 	public void create() 
@@ -15,6 +16,7 @@ public class MyGdxGame extends Game {
 		mainMenuScreen = new MainMenuScreen(this);
 		gameScreen = new GameScreen(this);
 		settingsScreen = new SettingsScreen(this);
+		gameChoiceScreen = new GameChoiceScreen(this);
 		setScreen(mainMenuScreen);
 	}
 	

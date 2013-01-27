@@ -164,10 +164,10 @@ public class MainMenuScreen implements Screen
 			//System.out.println(touchPoint.x + " " + touchPoint.y);
 			if (OverlapTester.pointInRectangle(newGameRectangle, touchPoint.x, touchPoint.y)) {
 				//System.out.println(true);
-				startMusic.stop();
-				game.gameScreen = new GameScreen(game);
-				newGameStarted = true;
-				game.setScreen(game.gameScreen);
+			//	startMusic.stop();
+			//	game.gameScreen = new GameScreen(game);
+			//	newGameStarted = true;
+				game.setScreen(game.gameChoiceScreen);
 				return;
 			}
 			else if (OverlapTester.pointInRectangle(continueRectangle, touchPoint.x, touchPoint.y)) {
@@ -225,6 +225,10 @@ public void dispose() {
 
 public void gameWon() {
 	newGameStarted = false;
+}
+
+public void gameStarted(){
+	newGameStarted = true;
 }
 
 }
