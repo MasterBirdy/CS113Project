@@ -281,7 +281,11 @@ public class GameScreen implements Screen {
 	{
 		everything.end();
 		game.mainMenuScreen.gameWon();
-		game.setScreen(game.mainMenuScreen);
+		if (t == 1)
+			game.setScreen(new WinnerLoserScreen(game, true));
+		else
+			game.setScreen(new WinnerLoserScreen(game, false));
+		//game.setScreen(game.mainMenuScreen);
 	}
 
 	public void update()

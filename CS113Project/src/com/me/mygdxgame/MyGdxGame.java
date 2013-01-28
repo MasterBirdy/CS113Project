@@ -17,7 +17,8 @@ public class MyGdxGame extends Game {
 		gameScreen = new GameScreen(this);
 		settingsScreen = new SettingsScreen(this);
 		gameChoiceScreen = new GameChoiceScreen(this);
-		setScreen(mainMenuScreen);
+		//setScreen(mainMenuScreen);
+		setScreen(new WinnerLoserScreen(this, true));
 	}
 	
 }
