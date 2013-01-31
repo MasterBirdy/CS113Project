@@ -53,9 +53,9 @@ public class MainMenuScreen implements Screen
 		this.game = game;
 		Settings.getInstance();
 		newGameStarted = false;
-		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/Celeste.wav"));
-		startMusic.setLooping(true);
-		startMusic.play();
+//		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/Celeste.wav"));
+//		startMusic.setLooping(true);
+//		startMusic.play();
 		highscoresBounds = new Rectangle(160 - 150, 200 - 18, 300, 36);
 		float w = 800; //Gdx.graphics.getWidth();
 		float h = 480; //Gdx.graphics.getHeight();
@@ -164,7 +164,7 @@ public class MainMenuScreen implements Screen
 			//System.out.println(touchPoint.x + " " + touchPoint.y);
 			if (OverlapTester.pointInRectangle(newGameRectangle, touchPoint.x, touchPoint.y)) {
 				//System.out.println(true);
-				startMusic.stop();
+//				startMusic.stop();
 				game.gameScreen = new GameScreen(game);
 				newGameStarted = true;
 				game.setScreen(game.gameScreen);
@@ -172,13 +172,13 @@ public class MainMenuScreen implements Screen
 			}
 			else if (OverlapTester.pointInRectangle(continueRectangle, touchPoint.x, touchPoint.y)) {
 				if (newGameStarted) {
-				startMusic.stop();
+//				startMusic.stop();
 				game.setScreen(game.gameScreen);
 				return;
 				}
 			}
 			else if (OverlapTester.pointInRectangle(settingsRectangle, touchPoint.x, touchPoint.y)) {
-				startMusic.stop();
+//				startMusic.stop();
 				game.setScreen(game.settingsScreen);
 				return;
 			}
@@ -194,8 +194,8 @@ public void resize(int width, int height) {
 @Override
 public void show() {
 	// TODO Auto-generated method stub
-	if (Settings.getInstance().getSound() == Sound.ON)
-		startMusic.play();
+//	if (Settings.getInstance().getSound() == Sound.ON)
+//		startMusic.play();
 }
 
 @Override
