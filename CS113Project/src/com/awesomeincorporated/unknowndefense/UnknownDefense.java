@@ -13,8 +13,8 @@ public class UnknownDefense extends Game {
 	{
 		//this.resize(800, 480);
 		mainMenuScreen = new MainMenuScreen(this);
-		gameScreen = new GameScreen(this);
-		settingsScreen = new SettingsScreen(this);
+//		gameScreen = new GameScreen(this);
+//		settingsScreen = new SettingsScreen(this);
 		setScreen(mainMenuScreen);
 	}
 	

@@ -51,6 +51,8 @@ public abstract class Unit extends Actor
 			unitType = 3;
 		else if (this instanceof Ninja)
 			unitType = 4;
+		else if (this instanceof Eagle)
+			unitType = 5;
 		else
 			unitType = 0;
 		
@@ -116,12 +118,12 @@ public abstract class Unit extends Actor
 		// Monk
 		unitAnimation = new ArrayList<Animation>();
 		unitAnimation.add(loadAnimation(0, 267, 30, 41, 5, false, false));
-		unitAnimation.add(loadAnimation(0, 308, 24, 42, 5, false, false));
-		unitAnimation.add(loadAnimation(0, 308, 24, 42, 5, true, false));
+		unitAnimation.add(loadAnimation(0, 308, 27, 42, 5, false, false));
+		unitAnimation.add(loadAnimation(0, 308, 27, 42, 5, true, false));
 		unitAnimation.add(loadAnimation(0, 350, 30, 42, 5, false, false));
 		unitAnimation.add(loadAnimation(0, 391, 30, 42, 4, false, false));
-		unitAnimation.add(loadAnimation(0, 433, 25, 41, 4, false, false));
-		unitAnimation.add(loadAnimation(0, 433, 25, 41, 4, true, false));
+		unitAnimation.add(loadAnimation(0, 433, 27, 41, 4, false, false));
+		unitAnimation.add(loadAnimation(0, 433, 27, 41, 4, true, false));
 		unitAnimation.add(loadAnimation(0, 474, 39, 41, 4, false, false));
 		animations.add(unitAnimation);
 		
@@ -147,6 +149,18 @@ public abstract class Unit extends Actor
 		unitAnimation.add(loadAnimation(374, 165, 30, 41, 4, false, false));
 		unitAnimation.add(loadAnimation(374, 165, 30, 41, 4, true, false));
 		unitAnimation.add(loadAnimation(374, 206, 42, 40, 4, false, false));
+		animations.add(unitAnimation);
+		
+		// Eagle
+		unitAnimation = new ArrayList<Animation>();
+		unitAnimation.add(loadAnimation(374, 246, 44, 84, 4, false, false));
+		unitAnimation.add(loadAnimation(374, 330, 45, 84, 4, false, false));
+		unitAnimation.add(loadAnimation(374, 330, 45, 84, 4, true, false));
+		unitAnimation.add(loadAnimation(374, 414, 43, 78, 4, false, false));
+		unitAnimation.add(loadAnimation(374, 492, 44, 59, 4, false, false));
+		unitAnimation.add(loadAnimation(374, 551, 44, 59, 4, false, false));
+		unitAnimation.add(loadAnimation(374, 551, 44, 59, 4, true, false));
+		unitAnimation.add(loadAnimation(374, 610, 43, 57, 4, false, false));
 		animations.add(unitAnimation);
 	}
 	

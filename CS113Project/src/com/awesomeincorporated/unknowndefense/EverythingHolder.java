@@ -35,6 +35,8 @@ public class EverythingHolder
 	Audio tempMusic = Gdx.audio;
 	private Music music;
 	static float musicVolume = 1f;
+	byte team;
+	boolean running = false;
 		
 	public EverythingHolder()
 	{
@@ -47,17 +49,29 @@ public class EverythingHolder
 		
 		Entity.loadStatics(effects);
 		// Wave control
-		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
+//		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
 		waveInterval = 10000;// // Milliseconds between waves
 		
 		waveTime = 2000;//// Milliseconds to spawn a wave
 				
 		spawning = false;
-		previousTime = System.nanoTime() / 1000000;
+//		previousTime = System.nanoTime() / 1000000;
 		Actor.loadProjectiles(projectiles);
 		
 //		music = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
 //		music.setLooping(true);
+	}
+	
+	public void setTeam(byte team)
+	{
+		this.team = team;
+	}
+	
+	public void setRunning(boolean run)
+	{
+		running = run;
+		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
+		previousTime = System.nanoTime() / 1000000;
 	}
 	
 	public void end()
@@ -87,11 +101,15 @@ public class EverythingHolder
 	
 	public int timeLeft()
 	{
+		if (!running)
+			return 0;
 		return (int) -((System.nanoTime() / 1000000 - waveTimer - waveInterval)/ 1000);
 	}
 	
 	public String totalTime()
 	{
+		if (!running)
+			return "00";
 		int time = (int) (totalTime / 1000);
 		int min = (int)(time / 60);
 		int sec = time % 60;
@@ -117,14 +135,14 @@ public class EverythingHolder
 	
 	public void add(int unit, int team)
 	{
-		if (team == 1)
+		if (team == this.team)
 		{
 			if (funds < 20)
 				return;
 			funds -= 20;
 			Gdx.input.vibrate(50);
 		}
-		pools[team - 1].add(unit);
+		pools[team].add(unit);
 	}
 	
 	public void spawnPools()
@@ -152,7 +170,7 @@ public class EverythingHolder
 	{
 		Coordinate start = (team == 1 ? map.start1() : map.start2());
 		ListIterator<Coordinate> iter = (team == 1 ? map.getPath().listIterator() : map.getPath().listIterator(map.getPath().size() - 1));
-		int randX = (int)(Math.random() * 10);
+		int randX = 0; //(int)(Math.random() * 10);
 		int randY = 0; //(int)(Math.random() * 5);
 		
 		if (m == 1)
@@ -165,6 +183,8 @@ public class EverythingHolder
 			add(new Mage(start.x() + randX, start.y() + randY, team, iter), true, team);
 		else if (m == 5)
 			add(new Ninja(start.x() + randX, start.y() + randY, team, iter), true, team);
+		else if (m == 6)
+			add(new Eagle(start.x() + randX, start.y() + randY, team, iter), true, team);
 	}
 	
 	public LinkedList<Actor> team(int t)
@@ -176,7 +196,6 @@ public class EverythingHolder
 	
 	public void render()
 	{
-		
 		for (Actor a : teams[0])
 		{
 			if (a instanceof Stronghold)
@@ -230,13 +249,15 @@ public class EverythingHolder
 		{
 			e.draw(batch, 0.01f);
 		}
-		Iterator iter = effects.iterator();
-		ParticleEffect e = new ParticleEffect();
+		Iterator<ParticleEffect> iter = effects.iterator();
+//		ParticleEffect e = new ParticleEffect();
 		while (iter.hasNext())
 		{
-			e = (ParticleEffect) iter.next();
-			if (e.isComplete())
+			if ((iter.next()).isComplete())
 				iter.remove();
+//			e = (ParticleEffect) iter.next();
+//			if (e.isComplete())
+//				iter.remove();
 		}
 		if (false)//showRange)
 		{
@@ -246,13 +267,7 @@ public class EverythingHolder
 			for (Actor ac : teams[1])
 				if (ac.isAlive())
 					ac.rangeIndicator(batch);
-			/*if (hero1 != null)
-				hero1.rangeIndicator(batch);
-			if (hero2 != null)
-				hero2.rangeIndicator(batch);*/
 		}
-		/*if (hero2 != null && hero2.isAlive())
-			hero2.draw(batch);*/
 	}
 	
 	public void update()
@@ -303,6 +318,8 @@ public class EverythingHolder
 	
 	private void spawnTimers()
 	{
+		if (!running)
+			return;
 		long currentTime = System.nanoTime() / 1000000;
 		totalTime += currentTime - previousTime;
 		previousTime = currentTime;

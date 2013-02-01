@@ -22,6 +22,8 @@ public class GameUI
 	BitmapFont font;
 	static EverythingHolder everything;
 	
+	float screenX, screenY;
+	
 	public GameUI()
 	{
 		sideUI = new TextureRegion(new Texture(Gdx.files.internal("images/sideui.png")), 200, 480);
@@ -35,6 +37,8 @@ public class GameUI
 		defendIcon = new TextureRegion(new Texture(Gdx.files.internal("images/holdicon.png")), 40, 40);
 		retreatIcon = new TextureRegion(new Texture(Gdx.files.internal("images/retreaticon.png")), 40, 40);
 		font = new BitmapFont();
+		screenX = Gdx.graphics.getWidth() / 2;
+		screenY = Gdx.graphics.getHeight() / 2;
 	}
 	
 	static public void load(SpriteBatch b, EverythingHolder things)
@@ -45,7 +49,7 @@ public class GameUI
 	
 	public void render()
 	{
-		batch.draw(sideUI, Gdx.graphics.getWidth() / 2 - sideUI.getRegionWidth(), Gdx.graphics.getHeight() / 2 - sideUI.getRegionHeight());
+		batch.draw(sideUI, screenX - sideUI.getRegionWidth(), screenY - sideUI.getRegionHeight());
 //		batch.draw(swordIcon, Gdx.graphics.getWidth() / 2 - sideUI.getRegionWidth() + 10 + 5, Gdx.graphics.getHeight() / 2 - swordIcon.getRegionHeight() * 2 - 10);
 //		batch.draw(bowIcon, Gdx.graphics.getWidth() / 2 - sideUI.getRegionWidth() + 10 * 2 + swordIcon.getRegionWidth() + 5, Gdx.graphics.getHeight() / 2 - swordIcon.getRegionHeight() * 2 - 10);
 //		batch.draw(serfIcon, Gdx.graphics.getWidth() / 2 - sideUI.getRegionWidth() + 10 * 3 + swordIcon.getRegionWidth() * 2 + 5, Gdx.graphics.getHeight() / 2 - swordIcon.getRegionHeight() * 2 - 10);
@@ -68,9 +72,9 @@ public class GameUI
 		batch.draw(defendIcon, -100, -200);
 		batch.draw(retreatIcon, -150, -200);
 		//font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 20);
-		font.draw(batch, "Next wave: " + everything.timeLeft(), Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 20);
-		font.draw(batch, "Time: " + everything.totalTime(), Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 45);
-		font.draw(batch, "Funds: " + everything.funds(), Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 70);
+		font.draw(batch, "Next wave: " + everything.timeLeft(), screenX - 150, screenY - 20);
+		font.draw(batch, "Time: " + everything.totalTime(), screenX - 150, screenY - 45);
+		font.draw(batch, "Funds: " + everything.funds(), screenX - 150, screenY - 70);
 	}
 	
 	public int width()

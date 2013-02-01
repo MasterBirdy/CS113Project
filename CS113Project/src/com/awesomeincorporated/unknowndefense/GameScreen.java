@@ -1,6 +1,8 @@
 package com.awesomeincorporated.unknowndefense;
 
 //import com.badlogic.gdx.ApplicationListener;
+import java.io.IOException;
+
 import com.awesomeincorporated.unknowndefense.entity.*;
 import com.awesomeincorporated.unknowndefense.input.MyInputProcessor;
 import com.awesomeincorporated.unknowndefense.map.Coordinate;
@@ -20,6 +22,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Listener.ThreadedListener;
+import com.awesomeincorporated.unknowndefense.networking.Network.*;
+import com.awesomeincorporated.unknowndefense.networking.Network;
+import com.awesomeincorporated.unknowndefense.networking.User;
 
 public class GameScreen implements Screen {
 	private OrthographicCamera camera, uiCamera;
@@ -36,7 +45,7 @@ public class GameScreen implements Screen {
 	TextureRegion pauseRegion;
 	int pauseCooldown;
 	GameUI gameUI;
-	Hero hero, nemesis;
+	Hero[] heroes = new Hero[2];
 	UnknownDefense game;
 	Rectangle pauseRectangle;
 	Rectangle pauseRectangle2;
@@ -56,6 +65,13 @@ public class GameScreen implements Screen {
 	int income, resources;
 	Audio tempMusic = Gdx.audio;
 	Music startMusic;
+	
+	float timeAccumulator = 0;
+	boolean multiplayer = true;
+	boolean running = false;
+	boolean connected = false;
+	byte team;
+	Client client;
 
 
 	public GameScreen(UnknownDefense game)
@@ -128,8 +144,8 @@ public class GameScreen implements Screen {
 
 		EverythingHolder.load(batch, maps[level]);
 
-		hero = new SwordFace(maps[level].start1().x(), maps[level].start1().y(), 1, everything.map().getPath().listIterator());
-		nemesis = new ArrowEyes(maps[level].start2().x(), maps[level].start2().y(), 2, everything.map().getPath().listIterator(everything.map().getPath().size() - 1));
+		heroes[0] = new SwordFace(maps[level].start1().x(), maps[level].start1().y(), 1, everything.map().getPath().listIterator());
+		heroes[1] = new ArrowEyes(maps[level].start2().x(), maps[level].start2().y(), 2, everything.map().getPath().listIterator(everything.map().getPath().size() - 1));
 		Texture sheet = new Texture(Gdx.files.internal("images/sprite_sheet.png"));
 
 		Actor.linkActors(everything.team(1), everything.team(2));
@@ -152,7 +168,7 @@ public class GameScreen implements Screen {
 		inputProcessor = new MyInputProcessor();
 
 		MyInputProcessor.loadCamera(camera);
-		MyInputProcessor.loadHero(hero);
+		MyInputProcessor.loadHero(heroes[0]);
 		MyInputProcessor.loadGame(this);
 		
 		Building.loadAnimations();
@@ -178,36 +194,12 @@ public class GameScreen implements Screen {
 		}
 		
 		//hero.takeDamage(1000);
-		everything.add(hero, true, 1);
+		everything.add(heroes[0], true, 1);
 		
 		//nemesis.takeDamage(1000);
-		everything.add(nemesis, true, 2);
-		
-//		tower = new ArrowTower(300, 400, 1);
-//		everything.add(tower, true, 1);
-//		tower= new ArrowTower(1000, 1000, 2);
-//		everything.add(tower, true, 2);
-
-//		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
-//		swordRectangle   = new Rectangle(225, 8, 40, 40);
-//		bowRectangle     = new Rectangle(280, 8, 40, 40);
-//		serfRectangle    = new Rectangle(335, 8, 40, 40);
-//		magicRectangle   = new Rectangle(225, -41, 40, 40);
-//		petRectangle     = new Rectangle(280, -41, 40, 40);
-//		spiralRectangle  = new Rectangle(335, -41, 40, 40);
-//		attackRectangle  = new Rectangle(-50, -200, 40, 40);
-//		defendRectangle  = new Rectangle(-100, -200, 40, 40);
-//		retreatRectangle = new Rectangle(-150, -200, 40, 40);
+		everything.add(heroes[1], true, 2);
 		
 		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
-//<<<<<<< HEAD
-//		swordRectangle   = new Rectangle(221, -29, 68, 80);
-//		bowRectangle     = new Rectangle(310, -29, 68, 80);
-//		monkRectangle    = new Rectangle(221, -125, 68, 80);
-//		magicRectangle   = new Rectangle(310, -125, 68, 80);
-//		petRectangle     = new Rectangle(221, -226, 68, 80);
-//		spiralRectangle  = new Rectangle(310, -226, 68, 80);
-//=======
 		pauseRectangle2  = new Rectangle(-76, -76, 156, 27);
 		swordRectangle   = new Rectangle(221, -29, 69, 80);
 		bowRectangle     = new Rectangle(311, -29, 69, 80);
@@ -225,6 +217,9 @@ public class GameScreen implements Screen {
 		GameUI.load(batch, everything);
 		touchPoint = new Vector3();
 		gameTouchPoint = new Vector3();
+		
+		if (!connected)
+			networkSetup();
 	}
 
 	static public void toggleShowRange()
@@ -244,6 +239,8 @@ public class GameScreen implements Screen {
 	{
 		boundCamera();
 		
+		timeAccumulator += delta;
+		
 		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClearColor(1, 1, 1, 1);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -257,8 +254,14 @@ public class GameScreen implements Screen {
 		uiCamera.update();
 		uiCamera.apply(gl);
 
-		if (!isPaused)
-			update();
+		if (!isPaused && timeAccumulator > 0.02 && running)
+		{
+			while (timeAccumulator > 0.02)
+			{
+				update();
+				timeAccumulator -= 0.02;
+			}
+		}
 		handleInput();
 
 		batch.setProjectionMatrix(camera.combined);
@@ -266,6 +269,9 @@ public class GameScreen implements Screen {
 		everything.map().background().draw(batch);
 		everything.render();
 		//font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
+		//font.draw(batch, "delta: " + delta, 800, 555);
+//		font.draw(batch, "fps: " + (1 / delta), 800, 555);
+		font.draw(batch, "team: " + team, 800, 555);
 
 		batch.end();
 		batch.setProjectionMatrix(uiCamera.combined);
@@ -287,7 +293,7 @@ public class GameScreen implements Screen {
 	public void update()
 	{
 		everything.update();
-		randomSpawner();
+//		randomSpawner();
 		if (!everything.team(1).getLast().isAlive())
 			endGame(1);
 		else if (!everything.team(2).getLast().isAlive())
@@ -330,7 +336,31 @@ public class GameScreen implements Screen {
 	
 	public void buyUnit(int unit)
 	{
-		everything.add(unit, 1);
+//		everything.add(unit, 1);
+		if (multiplayer)
+		{
+			System.out.println("Trying to send unit " + unit + " from team " + team);
+			Command cmd = new Command();
+			cmd.team = team;
+			cmd.type = (byte)unit;
+			client.sendTCP(cmd);
+		}
+		else
+			everything.add(unit, 1);
+	}
+	
+	public void setHeroStance(int stance)
+	{
+		if (multiplayer)
+		{
+			Command cmd = new Command();
+			cmd.type = (byte)(stance + 8);
+			cmd.team = team;
+			System.out.println("Setting hero " + cmd.team + " to stance " + (cmd.type - 8));
+			client.sendTCP(cmd);
+		}
+		else
+			heroes[0].stance(stance);
 	}
 
 	private void handleInput()
@@ -395,29 +425,32 @@ public class GameScreen implements Screen {
 			{
 				buyUnit(4);
 			}
+			// Ninja
 			if (OverlapTester.pointInRectangle(petRectangle, touchPoint.x, touchPoint.y))
 			{
 				buyUnit(5);
 			}
+			// Eagle
 			if (OverlapTester.pointInRectangle(spiralRectangle, touchPoint.x, touchPoint.y))
 			{
-				/*
-				 * INSERT CODE HERE
-				 */
+				buyUnit(6);
 			}
 			if (OverlapTester.pointInRectangle(attackRectangle, touchPoint.x, touchPoint.y))
 			{
-				hero.stance(1);
+				setHeroStance(1);
+				//heroes.stance(1);
 				Gdx.input.vibrate(50);
 			}
 			if (OverlapTester.pointInRectangle(defendRectangle, touchPoint.x, touchPoint.y))
 			{
-				hero.stance(0);
+				setHeroStance(0);
+//				heroes.stance(0);
 				Gdx.input.vibrate(50);
 			}
 			if (OverlapTester.pointInRectangle(retreatRectangle, touchPoint.x, touchPoint.y))
 			{
-				hero.stance(-1);
+				setHeroStance(-1);
+//				heroes.stance(-1);
 				Gdx.input.vibrate(50);
 			}
 //			Actor a = everything.team(1).getLast();
@@ -476,6 +509,143 @@ public class GameScreen implements Screen {
 
 		if (camera.position.x < w)
 			camera.position.x = w;
+	}
+	
+	private void networkSetup()
+	{
+		client = new Client();
+		client.start();
+		Network.register(client);
+		
+		// ThreadedListener runs the listener methods on a different thread.
+        client.addListener(new ThreadedListener(new Listener() 
+        {
+        	public void connected (Connection connection) 
+        	{
+        	}
+        	
+        	public void received (Connection connection, Object object) 
+        	{
+        		if (object instanceof LoginStatus)
+        		{
+        			LoginStatus status = (LoginStatus)object;
+        			if (status.status >= 0)
+        			{
+        				team = (byte)status.status;
+        				everything.setTeam(team);
+        				
+        				System.out.println("Entering as player " + team);
+        				connected = true;
+        				return;
+        			}
+        			else if (status.status == -1)
+        			{
+        				System.out.println("Server is full.");
+        				System.exit(-1);
+        			}
+        			return;
+        		}
+        		
+        		if (object instanceof AddUnit)
+        		{
+        			System.out.println("Adding unit");
+        			everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
+        			return;
+        		}
+        		
+        		if (object instanceof CommandIn)
+        		{
+        			CommandIn command = (CommandIn)object;
+        			if (command.command > 0 && command.command < 7)
+        			{
+        				everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
+        				return;
+        			}
+        			if (command.command > 6 && command.command < 10)
+        			{
+        				System.out.println("Received hero command.");
+//        				heroes[command.team].stance(command.command - 8);
+        				heroes[0].stance(command.command - 8);
+        				heroes[1].stance(command.command - 8);
+        				return;
+        			}
+        		}
+        		
+        		if (object instanceof ServerMessage)
+        		{
+        			ServerMessage msg = (ServerMessage)object;
+        			
+        			if (msg.message == 1)
+        			{
+        				System.out.println("Game is starting!");
+        				running = true;
+        				everything.setRunning(true);
+        			}
+        			return;
+        		}
+        	}
+        	
+        	public void disconnected (Connection connection) 
+        	{
+        		System.out.println("Disconnected");
+        		System.exit(0);
+        	}
+        }));
+        
+//        ui = new UI();
+//
+//        String host = ui.inputHost();
+        try 
+        {
+                client.connect(5000, "localhost", Network.port);
+                // Server communication after connection can go here, or in Listener#connected().
+        } 
+        catch (IOException ex) 
+        {
+        	System.out.println(ex.getMessage());
+        	//System.exit(1);
+//        	throw new FailedConnectionException(ex.getMessage());
+                //ex.printStackTrace();
+        }
+
+//        name = ui.inputName();
+        Login login = new Login();
+        login.name = "Player";
+        client.sendTCP(login);
+
+//        while (true) 
+//        {
+//        	int ch;
+//            try 
+//            {
+//            	ch = System.in.read();
+//            } 
+//            catch (IOException ex) 
+//            {
+//            	ex.printStackTrace();
+//                break;
+//            }
+//            
+//            MoveUnit msg = new MoveUnit();
+//            switch (ch) 
+//            {
+//                case 'w':
+//                        msg.y = -1;
+//                        break;
+//                case 's':
+//                        msg.y = 1;
+//                        break;
+//                case 'a':
+//                        msg.x = -1;
+//                        break;
+//                case 'd':
+//                        msg.x = 1;
+//                        break;
+//                default:
+//                        msg = null;
+//            }
+//            if (msg != null) client.sendTCP(msg);
+//        }
 	}
 
 	@Override

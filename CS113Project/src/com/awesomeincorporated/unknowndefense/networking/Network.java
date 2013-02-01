@@ -19,7 +19,8 @@ public class Network
 		kryo.register(Command.class);
 		kryo.register(ClientMessage.class);
         kryo.register(LoginStatus.class);
-        kryo.register(UnitQueue.class);
+        kryo.register(CommandIn.class);
+        kryo.register(AddUnit.class);
         kryo.register(UpdateUnit.class);
         kryo.register(UpdateHero.class);
         kryo.register(GameStatus.class);
@@ -36,13 +37,19 @@ public class Network
 	
 	static public class AccountMessage
 	{
-		byte message;
+		public byte message;
 	}
 	
 	static public class Command
 	{
-		byte type;
-		int target;
+		public byte type;
+		public byte team;
+		
+//		public Command(byte type, byte team)
+//		{
+//			this.type = type;
+//			this.team = team;
+//		}
 	}
 	
 	static public class ClientMessage
@@ -54,13 +61,36 @@ public class Network
 	// From server
 	static public class LoginStatus
 	{
-		byte status;
+		public byte status;
 	}
 	
-	static public class UnitQueue
+	static public class CommandIn
 	{
-		LinkedList<Byte>[] pools = new LinkedList[2];
-		int turn;
+		public byte command;
+		public byte team;
+		public int turn;
+		
+//		public CommandIn(byte command, byte team, int turn)
+//		{
+//			this.command = command;
+//			this.team = team;
+//			this.turn = turn;
+//		}
+	}
+	
+	static public class AddUnit
+	{
+//		LinkedList<Byte>[] pools = new LinkedList[2];
+		public byte unit;
+		public int turn;
+		public byte team;
+		
+//		public AddUnit(byte unit, int turn, byte team)
+//		{
+//			this.unit = unit;
+//			this.turn = turn;
+//			this.team = team;
+//		}
 	}
 	
 	static public class UpdateUnit
@@ -87,7 +117,12 @@ public class Network
 	
 	static public class ServerMessage
 	{
-		byte message;
+		public byte message;
+		
+//		ServerMessage(byte msg)
+//		{
+//			message = msg;
+//		}
 	}
 	
 	static public class AccountInfo
