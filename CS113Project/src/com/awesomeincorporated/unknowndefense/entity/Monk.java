@@ -9,12 +9,12 @@ public class Monk extends Minion
 	public Monk(int x, int y, int team, ListIterator<Coordinate> p)
 	{
 		super(x, y, false, team, p);
-		maxHealth = 45;
+		maxHealth = 150;
 		currentHealth = maxHealth;
-		damage = 6;
-		attackSpeed = 40;
+		damage = 10;
+		attackSpeed = 50;
 		attackCooldown = 0;
-		attackRange = 25;
+		attackRange = 35;
 		speed = 1.3f;
 	}
 

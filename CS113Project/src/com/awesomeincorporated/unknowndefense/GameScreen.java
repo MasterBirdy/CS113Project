@@ -67,12 +67,15 @@ public class GameScreen implements Screen {
 	Music startMusic;
 	
 	float timeAccumulator = 0;
-	boolean multiplayer = true;
-	boolean running = false;
+	boolean multiplayer = false; 	// True with multiplayer
+	boolean running = false;		// False with Multiplayer
 	boolean connected = false;
-	byte team;
+	byte team;						// Team 1 is top and Team 2 is bottom
 	Client client;
-
+//	String serverIp = "localhost"; 	// Local Host
+//	String serverIp = "evil-monkey.ics.uci.edu";//"128.195.6.172";
+	String serverIp = "ernie-the-giant-chicken.ics.uci.edu";//"128.195.6.172";
+	float stepTime = 0.02f;
 
 	public GameScreen(UnknownDefense game)
 	{
@@ -118,7 +121,8 @@ public class GameScreen implements Screen {
 		}
 		else
 		{
-			texture = new Texture(Gdx.files.internal("images/map1.png"));
+//			texture = new Texture(Gdx.files.internal("images/map1.png"));
+			texture = new Texture(Gdx.files.internal("images/map1.jpg"));
 			region = new TextureRegion(texture, 0, 0, 1200, 960);
 			sprite = new Sprite(region);
 			
@@ -130,15 +134,15 @@ public class GameScreen implements Screen {
 			maps[1].add(new Coordinate(1200, 480));
 			
 			Coordinate[] sites = new Coordinate[3];
-			sites[0] = new Coordinate(1230, 750);
-			sites[1] = new Coordinate(600, 910);
-			sites[2] = new Coordinate(900, 910);
+			sites[0] = new Coordinate(600, 910);
+			sites[1] = new Coordinate(900, 910);
+			sites[2] = new Coordinate(1230, 750);
 			maps[1].buildSites(sites, 1);
 			
 			sites = new Coordinate[3];
-			sites[0] = new Coordinate(300, 550);
+			sites[0] = new Coordinate(900, 430);
 			sites[1] = new Coordinate(600, 430);
-			sites[2] = new Coordinate(900, 430);
+			sites[2] = new Coordinate(300, 550);
 			maps[1].buildSites(sites, 2);
 		}
 
@@ -180,16 +184,18 @@ public class GameScreen implements Screen {
 		tower.upgrade();
 		everything.add(tower, true, 2);
 		
+		int towerNumber = 1;
 		for (Coordinate c : everything.map().buildSites(1))
 		{
-			tower = new ArrowTower(c.x(), c.y(), 1);
+			tower = new ArrowTower(c.x(), c.y(), 1, towerNumber++);
 			everything.add(tower, true, 1);
 		}
 		
+		towerNumber = 1;
 		for (Coordinate c : everything.map().buildSites(2))
 		{
-			tower = new ArrowTower(c.x(), c.y(), 2);
-			tower.upgrade();
+			tower = new ArrowTower(c.x(), c.y(), 2, towerNumber++);
+//			tower.upgrade();
 			everything.add(tower, true, 2);
 		}
 		
@@ -218,8 +224,15 @@ public class GameScreen implements Screen {
 		touchPoint = new Vector3();
 		gameTouchPoint = new Vector3();
 		
-		if (!connected)
+		if (!connected && multiplayer)
 			networkSetup();
+		if (!multiplayer)
+		{
+			running = true;
+			everything.setRunning(true);
+			team = 1;
+			everything.setTeam((byte)1);
+		}
 	}
 
 	static public void toggleShowRange()
@@ -254,12 +267,12 @@ public class GameScreen implements Screen {
 		uiCamera.update();
 		uiCamera.apply(gl);
 
-		if (!isPaused && timeAccumulator > 0.02 && running)
+		if (!isPaused && timeAccumulator > stepTime && running)
 		{
-			while (timeAccumulator > 0.02)
+			while (timeAccumulator > stepTime)
 			{
 				update();
-				timeAccumulator -= 0.02;
+				timeAccumulator -= stepTime;
 			}
 		}
 		handleInput();
@@ -271,7 +284,7 @@ public class GameScreen implements Screen {
 		//font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
 		//font.draw(batch, "delta: " + delta, 800, 555);
 //		font.draw(batch, "fps: " + (1 / delta), 800, 555);
-		font.draw(batch, "team: " + team, 800, 555);
+//		font.draw(batch, "team: " + team, 800, 555);
 
 		batch.end();
 		batch.setProjectionMatrix(uiCamera.combined);
@@ -293,7 +306,8 @@ public class GameScreen implements Screen {
 	public void update()
 	{
 		everything.update();
-//		randomSpawner();
+		if (!multiplayer)
+			randomSpawner();
 		if (!everything.team(1).getLast().isAlive())
 			endGame(1);
 		else if (!everything.team(2).getLast().isAlive())
@@ -319,16 +333,18 @@ public class GameScreen implements Screen {
 			float rand = (float) Math.random();
 			if (rand < 0.20f)
 				//everything.add(new Swordsman(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
-				everything.add(1, 2);
+				everything.add(1, 1);
 			else if (rand < 0.4f)
 				//everything.add(new Archer(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
-				everything.add(2, 2);
+				everything.add(2, 1);
 			else if (rand < 0.6f)
-				everything.add(3, 2);
+				everything.add(3, 1);
 			else if (rand < 0.8f)
-				everything.add(4, 2);
+				everything.add(4, 1);
+			else if (rand < 0.9f)
+				everything.add(5, 1);
 			else
-				everything.add(5, 2);
+				everything.add(6, 1);
 			
 			counter2 = (int)(Math.random() * 60) + 60;
 		}
@@ -346,7 +362,11 @@ public class GameScreen implements Screen {
 			client.sendTCP(cmd);
 		}
 		else
-			everything.add(unit, 1);
+		{
+			System.out.println("Trying to send unit " + unit + " from team " + team);
+			//everything.add(unit, 1);
+			everything.add(unit, 0);
+		}
 	}
 	
 	public void setHeroStance(int stance)
@@ -361,6 +381,24 @@ public class GameScreen implements Screen {
 		}
 		else
 			heroes[0].stance(stance);
+	}
+	
+	public void upgradeTower(int tower)
+	{
+//		if (multiplayer)
+//		{
+//			System.out.println("Trying to upgrade tower " + tower + " from team " + team);
+//			Command cmd = new Command();
+//			cmd.team = team;
+//			cmd.type = (byte)(tower + 10);
+//			client.sendTCP(cmd);
+//		}
+//		else
+//		{
+			everything.upgradeTower(tower, team);
+			everything.funds -= 40;
+			System.out.println("Trying to upgrade towers " + tower + " from team " + team);
+//		}
 	}
 
 	private void handleInput()
@@ -378,9 +416,14 @@ public class GameScreen implements Screen {
 			isPaused = !isPaused;
 			pauseCooldown = 0;
 		}
+		if (Gdx.input.isKeyPressed(Input.Keys.HOME))
+		{
+			client.close();
+			Gdx.app.exit();
+		}
 		if ((Gdx.input.isKeyPressed(Input.Keys.Q)) && pauseCooldown > 100)
 		{
-			for (Actor a : everything.team(1))
+			for (Actor a : (team == 1 ? everything.team(1) : everything.team(2)))
 			{
 				if (a instanceof ArrowTower)
 					((ArrowTower) a).upgrade();
@@ -395,15 +438,18 @@ public class GameScreen implements Screen {
 			Actor selected = everything.atPoint(gameTouchPoint.x, gameTouchPoint.y);
 			if (selected instanceof Building)
 			{
-				if (!selected.isAlive() && everything.funds() >= 40)
+				System.out.println(selected.team() + " Tower number: " + ((Building)selected).towerNumber() + " by team " + team);
+				if (selected.team() == team && !selected.isAlive() && everything.funds() >= 40)
 				{
-					((Building) selected).upgrade();
-					everything.funds -= 40;
+					System.out.println("Tower number: " + ((Building)selected).towerNumber() + " by team " + team);
+					upgradeTower(((Building)selected).towerNumber());
+//					((Building) selected).upgrade();
+//					everything.funds -= 40;
 				}	
 			}
 			
-			System.out.println("X: " + touchPoint.x + " Y: " + touchPoint.y);
-			System.out.println("X1: " + gameTouchPoint.x + " Y1: " + gameTouchPoint.y);
+//			System.out.println("X: " + touchPoint.x + " Y: " + touchPoint.y);
+//			System.out.println("X1: " + gameTouchPoint.x + " Y1: " + gameTouchPoint.y);
 			
 			// Swordsman
 			if (OverlapTester.pointInRectangle(swordRectangle, touchPoint.x, touchPoint.y))
@@ -413,12 +459,12 @@ public class GameScreen implements Screen {
 			// Archer
 			if (OverlapTester.pointInRectangle(bowRectangle, touchPoint.x, touchPoint.y))
 			{
-				buyUnit(2);
+				buyUnit(3);
 			}
 			// Monk
 			if (OverlapTester.pointInRectangle(monkRectangle, touchPoint.x, touchPoint.y))
 			{
-				buyUnit(3);
+				buyUnit(2);
 			}
 			// Mage
 			if (OverlapTester.pointInRectangle(magicRectangle, touchPoint.x, touchPoint.y))
@@ -564,9 +610,20 @@ public class GameScreen implements Screen {
         			if (command.command > 6 && command.command < 10)
         			{
         				System.out.println("Received hero command.");
+        				heroes[command.team].stance(command.command - 8);
+//        				heroes[0].stance(command.command - 8);
+//        				heroes[1].stance(command.command - 8);
+        				return;
+        			}
+        			if (command.command > 9 && command.command < 13)
+        			{
+        				System.out.println("Received tower command.");
+        				everything.upgradeTower(command.command - 10, team);
+        				everything.funds -= 40;
+        				System.out.println("Trying to upgrade tower " + (command.command - 10) + " from team " + team);
 //        				heroes[command.team].stance(command.command - 8);
-        				heroes[0].stance(command.command - 8);
-        				heroes[1].stance(command.command - 8);
+//        				heroes[0].stance(command.command - 8);
+//        				heroes[1].stance(command.command - 8);
         				return;
         			}
         		}
@@ -597,7 +654,7 @@ public class GameScreen implements Screen {
 //        String host = ui.inputHost();
         try 
         {
-                client.connect(5000, "localhost", Network.port);
+                client.connect(5000, serverIp, Network.port);
                 // Server communication after connection can go here, or in Listener#connected().
         } 
         catch (IOException ex) 
@@ -656,7 +713,8 @@ public class GameScreen implements Screen {
 	@Override
 	public void pause() 
 	{
-		
+//		client.close();
+//		client.stop();
 	}
 
 	@Override
@@ -676,6 +734,10 @@ public class GameScreen implements Screen {
 	public void hide() {
 		// TODO Auto-generated method stub
 		everything.end();
-
+		if (client != null)
+		{
+			client.close();
+			client.stop();
+		}
 	}
 }

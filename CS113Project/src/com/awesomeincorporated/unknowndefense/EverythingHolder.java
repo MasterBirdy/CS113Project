@@ -25,6 +25,7 @@ public class EverythingHolder
 	//Hero hero1, hero2;
 	long waveTimer, spawnTimer1, spawnTimer2, spawnInterval1, spawnInterval2;;
 	long waveTime, waveInterval;
+//	int waveTime, waveInterval;
 	long totalTime = 0, previousTime;
 	boolean spawning;
 	int nano = 1000000000;
@@ -37,6 +38,7 @@ public class EverythingHolder
 	static float musicVolume = 1f;
 	byte team;
 	boolean running = false;
+	int turn = 0;
 		
 	public EverythingHolder()
 	{
@@ -72,6 +74,19 @@ public class EverythingHolder
 		running = run;
 		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
 		previousTime = System.nanoTime() / 1000000;
+	}
+	
+	public void upgradeTower(int tower, int team)
+	{
+		for (Actor b : teams[team-1])
+		{
+			if (b instanceof Building)
+			{
+				Building buil = (Building)b;
+				System.out.println("Building: " + tower + " Team: " + team);
+			}
+		}
+		//((Building)teams[team].get(tower)).upgrade();
 	}
 	
 	public void end()
@@ -135,7 +150,8 @@ public class EverythingHolder
 	
 	public void add(int unit, int team)
 	{
-		if (team == this.team)
+		System.out.println("Trying to add " + unit + " on team " + team);
+		if (team == 0)//(team == this.team)
 		{
 			if (funds < 20)
 				return;
@@ -312,7 +328,8 @@ public class EverythingHolder
 			hero2.update();*/
 		
 //		music.setVolume(musicVolume);
-		
+		if (++turn % 200 == 0)
+			System.out.println("Turn: " + turn);
 		spawnTimers();
 	}
 	
@@ -320,11 +337,13 @@ public class EverythingHolder
 	{
 		if (!running)
 			return;
+//		int currentTurn = turn++;
 		long currentTime = System.nanoTime() / 1000000;
 		totalTime += currentTime - previousTime;
 		previousTime = currentTime;
 		long timeDiff = currentTime - waveTimer;
 		if ((timeDiff) > waveInterval)
+//		if (currentTurn % waveInterval == 0)
 		{
 			spawning = true;
 			waveTimer = currentTime;

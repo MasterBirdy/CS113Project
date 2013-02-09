@@ -17,13 +17,13 @@ public abstract class Building extends Actor
 	static ArrayList<Sprite> sprites;
 	static ArrayList<ArrayList<Animation>> animations;
 	Sprite currentSprite;
-	int level = 0;
+	int level = 0, towerNumber = 0;
 	ArrayList<Projectile> projectiles;
 	float stateTime;
 	ParticleEffect fire = new ParticleEffect();
 	boolean debug = false;
 	
-	public Building(int x, int y, boolean ranged, int team)
+	public Building(int x, int y, boolean ranged, int team, int towerNumber)
 	{
 		super(x, y, ranged, team);
 		currentSprite = sprites.get(0);
@@ -32,7 +32,13 @@ public abstract class Building extends Actor
 			fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 			fire.setPosition(this.xCoord() + 15, this.yCoord() + 15);
 		}
+		this.towerNumber = towerNumber;
 		//fire.start();
+	}
+	
+	public int towerNumber()
+	{
+		return towerNumber;
 	}
 
 	@Override

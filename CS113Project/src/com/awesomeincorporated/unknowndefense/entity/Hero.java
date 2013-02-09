@@ -53,9 +53,9 @@ public abstract class Hero extends Unit
 		}
 		else
 		{
-			if (previousStance == -1 && pathIter.hasNext())
+			if (previousStance == -1 && (this.team == 1 ? pathIter.hasNext() : pathIter.hasPrevious()))
 			{
-				destination = pathIter.next();
+				destination = (this.team == 1 ? pathIter.next() : pathIter.previous());
 				xSpeed = 0;
 				ySpeed = 0;
 			}

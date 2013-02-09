@@ -14,7 +14,7 @@ public class Eagle extends Minion
 		damage = 6;
 		attackSpeed = 40;
 		attackCooldown = 0;
-		attackRange = 25;
+		attackRange = 35;
 		speed = 1.3f;
 	}
 

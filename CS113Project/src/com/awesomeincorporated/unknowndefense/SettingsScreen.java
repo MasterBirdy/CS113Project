@@ -44,7 +44,7 @@ public class SettingsScreen  implements Screen  {
 		camera = new OrthographicCamera(w, h);
 		touchPoint = new Vector3();
 		Texture textTexture = new Texture(Gdx.files.internal("images/textmenuscreen.png"));
-		Texture backgroundTexture = new Texture(Gdx.files.internal("images/mainmenubackground.png"));
+		Texture backgroundTexture = new Texture(Gdx.files.internal("images/mainmenubackground.jpg"));
 		TextureRegion backRegion = new TextureRegion(textTexture, 5, 179, 125, 40);
 		TextureRegion difficultyRegion = new TextureRegion(textTexture, 8, 224, 267, 42);
 		TextureRegion backgroundRegion = new TextureRegion(backgroundTexture, 0, 0, 800, 480);

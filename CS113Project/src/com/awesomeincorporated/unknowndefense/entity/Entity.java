@@ -33,6 +33,11 @@ public abstract class Entity
 		this.team = team;
 	}
 	
+	public int team()
+	{
+		return team;
+	}
+	
 	public static void setVolume(float v)
 	{
 		volume = v;

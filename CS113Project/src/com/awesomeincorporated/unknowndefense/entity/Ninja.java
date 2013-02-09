@@ -9,12 +9,12 @@ public class Ninja extends Minion
 	public Ninja(int x, int y, int team, ListIterator<Coordinate> p)
 	{
 		super(x, y, false, team, p);
-		maxHealth = 45;
+		maxHealth = 85;
 		currentHealth = maxHealth;
-		damage = 6;
-		attackSpeed = 40;
+		damage = 15;
+		attackSpeed = 50;
 		attackCooldown = 0;
-		attackRange = 25;
+		attackRange = 35;
 		speed = 1.3f;
 	}
 

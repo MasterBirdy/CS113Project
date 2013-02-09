@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class GameUI 
 {
 	static SpriteBatch batch;
+	private Texture icons; 
 	private TextureRegion sideUI;
 	private TextureRegion swordIcon;
 	private TextureRegion bowIcon;
@@ -27,15 +28,28 @@ public class GameUI
 	public GameUI()
 	{
 		sideUI = new TextureRegion(new Texture(Gdx.files.internal("images/sideui.png")), 200, 480);
-		swordIcon = new TextureRegion(new Texture(Gdx.files.internal("images/swordicon.png")), 69, 80);
-		bowIcon = new TextureRegion(new Texture(Gdx.files.internal("images/bowicon.png")), 69, 80);
-		serfIcon = new TextureRegion(new Texture(Gdx.files.internal("images/serficon.png")), 69, 80);
-		magicIcon = new TextureRegion(new Texture(Gdx.files.internal("images/magiciconbnw.png")), 69, 80);
-		petIcon = new TextureRegion(new Texture(Gdx.files.internal("images/peticonbnw.png")), 69, 80);
-		spiralIcon = new TextureRegion(new Texture(Gdx.files.internal("images/spiraliconbnw.png")), 69, 80);
-		attackIcon = new TextureRegion(new Texture(Gdx.files.internal("images/attackicon.png")), 40, 40);
-		defendIcon = new TextureRegion(new Texture(Gdx.files.internal("images/holdicon.png")), 40, 40);
-		retreatIcon = new TextureRegion(new Texture(Gdx.files.internal("images/retreaticon.png")), 40, 40);
+		
+		icons = new Texture(Gdx.files.internal("images/icons.jpg"));
+		
+		swordIcon = new TextureRegion(icons, 0, 0, 69, 80);
+		bowIcon = new TextureRegion(icons, 69, 0, 69, 80);
+		serfIcon = new TextureRegion(icons, 138, 0, 69, 80);
+		magicIcon = new TextureRegion(icons, 0, 80, 69, 80);
+		petIcon = new TextureRegion(icons, 69, 80, 69, 80);
+		spiralIcon = new TextureRegion(icons, 138, 80, 69, 80);
+		attackIcon = new TextureRegion(icons, 207, 0, 40, 40);
+		defendIcon = new TextureRegion(icons, 207, 40, 40, 40);
+		retreatIcon = new TextureRegion(icons, 207, 80, 40, 40);
+		
+//		swordIcon = new TextureRegion(new Texture(Gdx.files.internal("images/swordicon.png")), 69, 80);
+//		bowIcon = new TextureRegion(new Texture(Gdx.files.internal("images/bowicon.png")), 69, 80);
+//		serfIcon = new TextureRegion(new Texture(Gdx.files.internal("images/serficon.png")), 69, 80);
+//		magicIcon = new TextureRegion(new Texture(Gdx.files.internal("images/magiciconbnw.png")), 69, 80);
+//		petIcon = new TextureRegion(new Texture(Gdx.files.internal("images/peticonbnw.png")), 69, 80);
+//		spiralIcon = new TextureRegion(new Texture(Gdx.files.internal("images/spiraliconbnw.png")), 69, 80);
+//		attackIcon = new TextureRegion(new Texture(Gdx.files.internal("images/attackicon.png")), 40, 40);
+//		defendIcon = new TextureRegion(new Texture(Gdx.files.internal("images/holdicon.png")), 40, 40);
+//		retreatIcon = new TextureRegion(new Texture(Gdx.files.internal("images/retreaticon.png")), 40, 40);
 		font = new BitmapFont();
 		screenX = Gdx.graphics.getWidth() / 2;
 		screenY = Gdx.graphics.getHeight() / 2;

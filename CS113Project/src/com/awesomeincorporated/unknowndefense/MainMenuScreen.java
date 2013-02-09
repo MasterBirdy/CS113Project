@@ -61,7 +61,7 @@ public class MainMenuScreen implements Screen
 		float h = 480; //Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(w, h);
-		Texture texture = new Texture(Gdx.files.internal("images/mainmenubackground.png"));
+		Texture texture = new Texture(Gdx.files.internal("images/mainmenubackground.jpg"));
 		Texture textTexture = new Texture(Gdx.files.internal("images/textmenuscreen.png"));
 		TextureRegion region = new TextureRegion(texture, 0, 0, 800, 480);
 		TextureRegion textRegion = new TextureRegion(textTexture, 0, 0, 451, 49);

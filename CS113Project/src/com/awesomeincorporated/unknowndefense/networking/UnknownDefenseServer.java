@@ -6,7 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.HashSet;
+import java.util.LinkedList;
+
+import javax.swing.Timer;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -17,13 +21,19 @@ import com.esotericsoftware.minlog.Log;
 public class UnknownDefenseServer 
 {
 	Server server;
-	User[] users = new User[2];
+	//LinkedList<User> waitingUsers = new LinkedList<User>();
+	LinkedList<UserConnection> userConnection = new LinkedList<UserConnection>();
+	LinkedList<UserConnection[]> games = new LinkedList<UserConnection[]>();
 //    HashSet<User> loggedIn = new HashSet();
     int totalUsers = 0;
     int currentTurn = 0;
-
+    long timeLastUsed;
+    int allowedUptime = 7200000;
+    NetworkClock networkClock = new NetworkClock(this, allowedUptime);
     public UnknownDefenseServer() throws IOException 
     {
+    	System.out.println("Clock");
+//    	waitingUsers.get(0).
     	server = new Server() 
     	{
     		protected Connection newConnection() 
@@ -37,7 +47,11 @@ public class UnknownDefenseServer
     	// For consistency, the classes to be sent over the network are
         // registered by the same method for both the client and server.
         Network.register(server);
-
+        
+        System.out.println(InetAddress.getByName(InetAddress.getLocalHost().getHostName()) + " : " + Network.port);
+        
+//        Listener listen = new Listener();
+//        server.addListener();
         server.addListener(new Listener() 
         {
         	public void received (Connection c, Object object) 
@@ -71,9 +85,9 @@ public class UnknownDefenseServer
 //                    	}
 //                    }
                     
-                    if (totalUsers >= 5)
+                    if (userConnection.size() >= 2)//totalUsers >= 5)
                     {
-                    	System.out.println("Server full with " + totalUsers + " users");
+                    	System.out.println("Server full with " + userConnection.size() + " users");
                     	ServerMessage msg = new ServerMessage();
                     	msg.message = -2;
                     	c.sendTCP(msg);
@@ -116,16 +130,38 @@ public class UnknownDefenseServer
                 		add.turn = currentTurn;
                 		System.out.println("Sending unit " + cmd.type + " from player " + cmd.team);
                 		
-                		server.sendToAllTCP(add);
+                		server.sendToTCP(userConnection.get(0).getID(), add);
+                		server.sendToTCP(userConnection.get(1).getID(), add);
+//                		server.sendToAllTCP(add);
                 	}
-                	if (cmd.type > 6 && cmd.type < 10)
+                	if (cmd.type > 6 && cmd.type < 10) // 7-9 is retreat, guard, and attack.
                 	{
-                		System.out.println("Sending command out");
+                		System.out.println("Sending command out (Hero)");
                 		CommandIn cmdIn = new CommandIn();
                 		cmdIn.command = cmd.type;
                 		cmdIn.team = cmd.team;
-                		server.sendToAllTCP(cmdIn);
+                		server.sendToTCP(userConnection.get(0).getID(), cmdIn);
+                		server.sendToTCP(userConnection.get(1).getID(), cmdIn);
+//                		server.sendToAllTCP(cmdIn);
                 	}
+                	if (cmd.type > 9 && cmd.type < 13) // 10-12 is upgrade towers 1, 2, and 3.
+                	{
+                		System.out.println("Sending command out (tower)");
+                		CommandIn cmdIn = new CommandIn();
+                		cmdIn.command = cmd.type;
+                		cmdIn.team = cmd.team;
+                		server.sendToTCP(userConnection.get(0).getID(), cmdIn);
+                		server.sendToTCP(userConnection.get(1).getID(), cmdIn);
+//                		server.sendToAllTCP(cmdIn);
+                	}
+//                	if (cmd.type > 9 && cmd.type < 13)
+//                	{
+//                		System.out.println("Upgrading tower");
+//                		CommandIn cmdIn = new CommandIn();
+//                		cmdIn.command = (byte) (cmd.type - 10);
+//                		cmdIn.team = cmd.team;
+//                		
+//                	}
                 	return;
                 }
                 
@@ -232,6 +268,14 @@ public class UnknownDefenseServer
 //                	server.sendToAllTCP(removeUnit);
 //                	users--;
 //                }
+        		System.out.println("Player logged out.");
+        		if (userConnection.contains(c))
+        		{
+        			System.out.println("Player removed");
+        			userConnection.remove(c);
+        		}
+        		//waitingUsers.remove(waitingUsers.indexOf(c));
+        		//for ()
         		totalUsers--;
         	}
         });
@@ -239,6 +283,11 @@ public class UnknownDefenseServer
         server.bind(Network.port);
         server.start();
         System.out.println("Server started");
+    }
+    
+    public void kill()
+    {
+    	this.server.stop();
     }
     
     void loggedIn (UserConnection c, User user) 
@@ -252,21 +301,36 @@ public class UnknownDefenseServer
 //        	addUnit.unit = other;
 //        	c.sendTCP(addUnit);
 //        }
-        System.out.println("Player " + user.name + totalUsers + " just joined.");
+        System.out.println("Player " + user.name + userConnection.size() + " just joined.");
         
         LoginStatus status = new LoginStatus();
-        status.status = (byte)totalUsers;
+        status.status = (byte)userConnection.size();//waitingUsers.size();
         
-        users[totalUsers++] = user;
+        if (userConnection.size() > 2)
+        {
+        	status.status = -1;
+        	c.sendTCP(status);
+        	totalUsers++;
+        	System.out.println("Too many users");
+        	return;
+        }
+        
+//        waitingUsers.add(user);
+        userConnection.add(c);
         
         c.sendTCP(status);
         
-        if (totalUsers >= 2)
+        if (userConnection.size() >= 2)
         {
         	ServerMessage msg = new ServerMessage();
         	msg.message = 1;
-        	server.sendToAllTCP(msg);
+        	//server.sendToAllTCP(msg);
+        	server.sendToTCP(userConnection.get(0).getID(), msg);
+        	server.sendToTCP(userConnection.get(1).getID(), msg);
+        	//waitingUsers.get(0)., msg)
         }
+        
+        
         
         // Add logged in character to all connections.
 //        AddUnit addUnit = new AddUnit();

@@ -14,7 +14,7 @@ public class ArrowEyes extends Hero
 		damage = 11;
 		attackSpeed = 30;
 		attackCooldown = 0;
-		attackRange = 100;
+		attackRange = 130;
 		speed = 1.34f;
 	}
 

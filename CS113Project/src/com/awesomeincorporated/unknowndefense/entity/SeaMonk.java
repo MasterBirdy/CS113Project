@@ -14,7 +14,7 @@ public class SeaMonk extends Hero
 		damage = 15;
 		attackSpeed = 70;
 		attackCooldown = 0;
-		attackRange = 40;
+		attackRange = 45;
 		speed = 1.34f;
 	}
 

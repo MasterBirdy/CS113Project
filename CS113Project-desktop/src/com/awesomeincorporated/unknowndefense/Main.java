@@ -11,6 +11,8 @@ public class Main {
 		cfg.useGL20 = false;
 		cfg.width = 800;
 		cfg.height = 480;
+//		cfg.width = 1280;
+//		cfg.height = 720;
 		cfg.resizable = false;
 		
 		new LwjglApplication(new UnknownDefense(), cfg);

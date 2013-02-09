@@ -10,12 +10,12 @@ public class Archer extends Minion
 	public Archer(int x, int y, int team, ListIterator<Coordinate> p)
 	{
 		super(x, y, true, team, p);
-		maxHealth = 35;
+		maxHealth = 50;
 		currentHealth = maxHealth;
-		damage = 10;
-		attackSpeed = 130;
+		damage = 20;
+		attackSpeed = 50;
 		attackCooldown = 0;
-		attackRange = 100;
+		attackRange = 80;
 		speed = 1.3f;
 	}
 

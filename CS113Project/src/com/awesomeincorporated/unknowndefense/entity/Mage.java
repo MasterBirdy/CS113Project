@@ -9,12 +9,12 @@ public class Mage extends Minion
 	public Mage(int x, int y, int team, ListIterator<Coordinate> p)
 	{
 		super(x, y, false, team, p);
-		maxHealth = 45;
+		maxHealth = 65;
 		currentHealth = maxHealth;
-		damage = 6;
-		attackSpeed = 40;
+		damage = 15;
+		attackSpeed = 50;
 		attackCooldown = 0;
-		attackRange = 25;
+		attackRange = 80;
 		speed = 1.3f;
 	}
 
