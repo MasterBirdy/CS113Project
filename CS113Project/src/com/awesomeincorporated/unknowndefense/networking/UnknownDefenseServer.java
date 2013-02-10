@@ -23,7 +23,7 @@ public class UnknownDefenseServer
 	Server server;
 	//LinkedList<User> waitingUsers = new LinkedList<User>();
 	LinkedList<UserConnection> userConnection = new LinkedList<UserConnection>();
-	LinkedList<UserConnection[]> games = new LinkedList<UserConnection[]>();
+	LinkedList<Game[]> games = new LinkedList<Game[]>();
 //    HashSet<User> loggedIn = new HashSet();
     int totalUsers = 0;
     int currentTurn = 0;
@@ -57,7 +57,7 @@ public class UnknownDefenseServer
         	public void received (Connection c, Object object) 
         	{
         		System.out.println("Received message");
-        		// We know all connections for this server are actually UnitConnections.
+        		// We know all connections for this server are actually UserConnections.
         		UserConnection connection = (UserConnection)c;
                 User user = connection.user;
 

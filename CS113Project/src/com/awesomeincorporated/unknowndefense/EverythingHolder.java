@@ -78,7 +78,7 @@ public class EverythingHolder
 	
 	public void upgradeTower(int tower, int team)
 	{
-		for (Actor b : teams[team-1])
+		for (Actor b : teams[team - 1])
 		{
 			if (b instanceof Building)
 			{
@@ -106,7 +106,7 @@ public class EverythingHolder
 	
 	public Actor atPoint(float x, float y)
 	{
-		for (Actor a : teams[0])
+		for (Actor a : teams[team])// - 1])
 		{
 			if (a.getDistanceSquared(x, y) <= 1000)
 				return a;
@@ -135,9 +135,9 @@ public class EverythingHolder
 	public void add(Actor a, boolean front, int team)
 	{
 		if (front)
-			(team == 1 ? teams[0] : teams[1]).add(0, a);
+			teams[team - 1].add(0, a);
 		else
-			(team == 1 ? teams[0] : teams[1]).add(a);		
+			teams[team - 1].add(a);		
 	}
 	
 	/*public void addHero(Hero h, int team)
@@ -151,7 +151,7 @@ public class EverythingHolder
 	public void add(int unit, int team)
 	{
 		System.out.println("Trying to add " + unit + " on team " + team);
-		if (team == 0)//(team == this.team)
+		if (team == this.team)//(team == 0)
 		{
 			if (funds < 20)
 				return;

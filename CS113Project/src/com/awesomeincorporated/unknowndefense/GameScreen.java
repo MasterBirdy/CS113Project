@@ -67,14 +67,16 @@ public class GameScreen implements Screen {
 	Music startMusic;
 	
 	float timeAccumulator = 0;
-	boolean multiplayer = false; 	// True with multiplayer
+	boolean multiplayer = true; 	// True with multiplayer
 	boolean running = false;		// False with Multiplayer
 	boolean connected = false;
 	byte team;						// Team 1 is top and Team 2 is bottom
 	Client client;
 //	String serverIp = "localhost"; 	// Local Host
 //	String serverIp = "evil-monkey.ics.uci.edu";//"128.195.6.172";
-	String serverIp = "ernie-the-giant-chicken.ics.uci.edu";//"128.195.6.172";
+//	String serverIp = "ernie-the-giant-chicken.ics.uci.edu";//"128.195.6.172";
+//	String serverIp = "169.234.242.202"; 	// My desktop
+	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
 	float stepTime = 0.02f;
 
 	public GameScreen(UnknownDefense game)
