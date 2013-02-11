@@ -9,6 +9,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.me.mygdxgame.MusicSound;
+import com.me.mygdxgame.Settings;
+import com.me.mygdxgame.Sound;
 
 public abstract class Actor extends Entity
 {
@@ -165,7 +168,8 @@ public abstract class Actor extends Entity
 		{
 			if (this.attackCooldown <= 0)
 			{
-				sounds.get("thwp").play(volume);
+				if (Settings.getInstance().getSound() == Sound.ON)
+					sounds.get("thwp").play(volume);
 				if (!(this instanceof Stronghold))
 				{
 					projectiles.add(new ArrowProjectile(this.xCoord + (this instanceof ArrowTower ? 10 : 0), this.yCoord + (this instanceof ArrowTower ? 40 : 0), this.team, 3, target));

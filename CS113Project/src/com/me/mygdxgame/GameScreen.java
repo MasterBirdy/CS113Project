@@ -281,7 +281,7 @@ public class GameScreen implements Screen {
 	{
 		everything.end();
 		game.mainMenuScreen.gameWon();
-		if (t == 1)
+		if (t == 2)
 			game.setScreen(new WinnerLoserScreen(game, true));
 		else
 			game.setScreen(new WinnerLoserScreen(game, false));
@@ -495,7 +495,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		if (Settings.getInstance().getSound() == Sound.ON)
+		if (Settings.getInstance().getMusic() == MusicSound.ON)
 			everything.musicPlay();
 
 	}

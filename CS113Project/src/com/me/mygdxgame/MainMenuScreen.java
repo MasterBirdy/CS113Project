@@ -194,7 +194,7 @@ public void resize(int width, int height) {
 @Override
 public void show() {
 	// TODO Auto-generated method stub
-	if (Settings.getInstance().getSound() == Sound.ON)
+	if (Settings.getInstance().getMusic() == MusicSound.ON)
 		startMusic.play();
 }
 

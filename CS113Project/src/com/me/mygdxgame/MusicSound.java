@@ -1,7 +1,6 @@
 package com.me.mygdxgame;
 
-public enum Sound {
-	
+public enum MusicSound {
 	ON, OFF
 
 }
