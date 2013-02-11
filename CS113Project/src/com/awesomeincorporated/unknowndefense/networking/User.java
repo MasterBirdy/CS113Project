@@ -9,7 +9,7 @@ public class User
 {
 	public String name;
 	public String otherStuff;
-	public int id, x, y;
+	public int id, x, y, room;
 	static TextureRegion[] texture = new TextureRegion[2];
 	
 	public User()
@@ -17,14 +17,15 @@ public class User
 		x = 0;
 		y = 0;
 		id = 0;
+		room = -1;
 	}
 	
-	public User(int team)
-	{
-		x = 0;
-		y = 0;
-		id = team;
-	}
+//	public User(int team)
+//	{
+//		x = 0;
+//		y = 0;
+//		id = team;
+//	}
 //	
 //	public void draw(SpriteBatch batch)
 //	{

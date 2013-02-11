@@ -118,6 +118,7 @@ public class Network
 	static public class ServerMessage
 	{
 		public byte message;
+		public int gameID;
 		
 //		ServerMessage(byte msg)
 //		{

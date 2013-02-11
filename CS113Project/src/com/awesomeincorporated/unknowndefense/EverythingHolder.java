@@ -106,7 +106,7 @@ public class EverythingHolder
 	
 	public Actor atPoint(float x, float y)
 	{
-		for (Actor a : teams[team])// - 1])
+		for (Actor a : teams[team - 1])// - 1])
 		{
 			if (a.getDistanceSquared(x, y) <= 1000)
 				return a;
@@ -158,7 +158,7 @@ public class EverythingHolder
 			funds -= 20;
 			Gdx.input.vibrate(50);
 		}
-		pools[team].add(unit);
+		pools[team - 1].add(unit);
 	}
 	
 	public void spawnPools()

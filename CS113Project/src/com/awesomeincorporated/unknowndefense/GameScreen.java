@@ -72,11 +72,11 @@ public class GameScreen implements Screen {
 	boolean connected = false;
 	byte team;						// Team 1 is top and Team 2 is bottom
 	Client client;
-//	String serverIp = "localhost"; 	// Local Host
+	String serverIp = "localhost"; 	// Local Host
 //	String serverIp = "evil-monkey.ics.uci.edu";//"128.195.6.172";
 //	String serverIp = "ernie-the-giant-chicken.ics.uci.edu";//"128.195.6.172";
 //	String serverIp = "169.234.242.202"; 	// My desktop
-	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
+//	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
 	float stepTime = 0.02f;
 
 	public GameScreen(UnknownDefense game)
@@ -358,6 +358,11 @@ public class GameScreen implements Screen {
 		if (multiplayer)
 		{
 			System.out.println("Trying to send unit " + unit + " from team " + team);
+			if (everything.funds < 20)
+			{
+				System.out.println("Out of money.");
+				return;
+			}
 			Command cmd = new Command();
 			cmd.team = team;
 			cmd.type = (byte)unit;
@@ -612,7 +617,7 @@ public class GameScreen implements Screen {
         			if (command.command > 6 && command.command < 10)
         			{
         				System.out.println("Received hero command.");
-        				heroes[command.team].stance(command.command - 8);
+        				heroes[command.team - 1].stance(command.command - 8);
 //        				heroes[0].stance(command.command - 8);
 //        				heroes[1].stance(command.command - 8);
         				return;
