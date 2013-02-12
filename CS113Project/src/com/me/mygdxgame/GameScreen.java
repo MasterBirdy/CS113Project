@@ -56,7 +56,15 @@ public class GameScreen implements Screen {
 	int income, resources;
 	Audio tempMusic = Gdx.audio;
 	Music startMusic;
-
+	private Sprite pausedSprite;
+	private Sprite pauseSprite;
+	private Button pausedButton;
+	private Sprite settingsSprite;
+	private Button settingsButton;
+	private Sprite resumeSprite;
+	private Button resumeButton;
+	private Sprite mainMenuSprite;
+	private Button mainMenuButton;
 
 	public GameScreen(MyGdxGame game)
 	{
@@ -71,6 +79,7 @@ public class GameScreen implements Screen {
 		//Gdx.graphics.setDisplayMode(800, 480, false);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
+		System.out.println(w + " " + h);
 
 
 		counter1 = 0;
@@ -83,8 +92,13 @@ public class GameScreen implements Screen {
 		camera.zoom = 1.9f;
 		batch = new SpriteBatch();
 
-		Texture pauseTexture = new Texture(Gdx.files.internal("images/pausemenu.png"));
-		pauseRegion = new TextureRegion(pauseTexture, 0, 0, 270, 190);
+		//Texture pauseTexture = new Texture(Gdx.files.internal("images/pausemenu.png"));
+		//pauseRegion = new TextureRegion(pauseTexture, 0, 0, 270, 190);
+		
+		pauseSprite = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("images/mainmenubackk.png")), 7, 5, 401, 306));
+		pauseSprite.setPosition(-pauseSprite.getWidth() / 2, -pauseSprite.getHeight() / 2 );
+		System.out.println(pauseSprite.getX());
+		System.out.println(pauseSprite.getY());
 		TextureRegion region;
 		
 		if (level == 0)
@@ -133,20 +147,12 @@ public class GameScreen implements Screen {
 		Texture sheet = new Texture(Gdx.files.internal("images/sprite_sheet.png"));
 
 		Actor.linkActors(everything.team(1), everything.team(2));
-		//<<<<<<< HEAD
 		Entity.loadStatics(sheet);
 		Actor.loadRange();
 		Unit.loadAnimations();
 		Projectile.loadProjectiles();
 		Building.loadSprites();
 		sprite.setSize(1600, 1200);
-		//=======
-		//		Actor.loadRange();
-		//		Entity.loadSheet(new Texture(Gdx.files.internal("images/sprite_sheet.png")));
-		//		Unit.loadAnimations();
-		//		Projectile.loadProjectiles();
-		//		sprite.setSize(1600, 1200);
-		//>>>>>>> Jason-Split-Branch
 		font = new BitmapFont();
 		EverythingHolder.showRange = true;
 		inputProcessor = new MyInputProcessor();
@@ -183,31 +189,7 @@ public class GameScreen implements Screen {
 		//nemesis.takeDamage(1000);
 		everything.add(nemesis, true, 2);
 		
-//		tower = new ArrowTower(300, 400, 1);
-//		everything.add(tower, true, 1);
-//		tower= new ArrowTower(1000, 1000, 2);
-//		everything.add(tower, true, 2);
-
-//		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
-//		swordRectangle   = new Rectangle(225, 8, 40, 40);
-//		bowRectangle     = new Rectangle(280, 8, 40, 40);
-//		serfRectangle    = new Rectangle(335, 8, 40, 40);
-//		magicRectangle   = new Rectangle(225, -41, 40, 40);
-//		petRectangle     = new Rectangle(280, -41, 40, 40);
-//		spiralRectangle  = new Rectangle(335, -41, 40, 40);
-//		attackRectangle  = new Rectangle(-50, -200, 40, 40);
-//		defendRectangle  = new Rectangle(-100, -200, 40, 40);
-//		retreatRectangle = new Rectangle(-150, -200, 40, 40);
-		
 		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
-//<<<<<<< HEAD
-//		swordRectangle   = new Rectangle(221, -29, 68, 80);
-//		bowRectangle     = new Rectangle(310, -29, 68, 80);
-//		monkRectangle    = new Rectangle(221, -125, 68, 80);
-//		magicRectangle   = new Rectangle(310, -125, 68, 80);
-//		petRectangle     = new Rectangle(221, -226, 68, 80);
-//		spiralRectangle  = new Rectangle(310, -226, 68, 80);
-//=======
 		pauseRectangle2  = new Rectangle(-76, -76, 156, 27);
 		swordRectangle   = new Rectangle(221, -29, 69, 80);
 		bowRectangle     = new Rectangle(311, -29, 69, 80);
@@ -225,6 +207,22 @@ public class GameScreen implements Screen {
 		GameUI.load(batch, everything);
 		touchPoint = new Vector3();
 		gameTouchPoint = new Vector3();
+		
+		Texture textTexture = new Texture(Gdx.files.internal("images/textmenuscreen.png"));
+		
+		pausedSprite = new Sprite(new TextureRegion(textTexture, 12, 934, 193, 46));
+		pausedButton = new Button( -pausedSprite.getWidth() / 2,  -pauseSprite.getHeight() / 2 + 250, 800, 480, pausedSprite, false);
+		
+		resumeSprite = new Sprite(new TextureRegion(textTexture, 13, 1060, 184, 34));
+		resumeButton = new Button(-resumeSprite.getWidth() / 2, -pauseSprite.getHeight() / 2 + 180, 800, 480, resumeSprite, false);
+		
+		settingsSprite = new Sprite(new TextureRegion(textTexture, 12, 1001, 242, 34));
+		settingsButton = new Button(-settingsSprite.getWidth() / 2,  -pauseSprite.getHeight() / 2 + 110, 800, 480, settingsSprite, false);
+		
+		mainMenuSprite = new Sprite(new TextureRegion(textTexture, 12, 1119, 265, 34));
+		mainMenuButton = new Button(-mainMenuSprite.getWidth() / 2, -pauseSprite.getHeight() / 2 + 110 - 70, 800, 480, mainMenuSprite, false);
+		
+		
 	}
 
 	static public void toggleShowRange()
@@ -273,7 +271,14 @@ public class GameScreen implements Screen {
 		gameUI.render();
 		pauseCooldown++;
 		if (isPaused)
-			batch.draw(pauseRegion, 0-pauseRegion.getRegionWidth() / 2 , 0-pauseRegion.getRegionHeight() / 2);
+		{
+			//batch.draw(pauseRegion, 0-pauseRegion.getRegionWidth() / 2 , 0-pauseRegion.getRegionHeight() / 2);
+			pauseSprite.draw(batch);
+			pausedButton.draw(batch);
+			resumeButton.draw(batch);
+			settingsButton.draw(batch);
+			mainMenuButton.draw(batch);
+		}
 		batch.end();
 	}
 	
@@ -373,6 +378,7 @@ public class GameScreen implements Screen {
 			
 			System.out.println("X: " + touchPoint.x + " Y: " + touchPoint.y);
 			System.out.println("X1: " + gameTouchPoint.x + " Y1: " + gameTouchPoint.y);
+			System.out.println(isPaused);
 			if (OverlapTester.pointInRectangle(swordRectangle, touchPoint.x, touchPoint.y))
 			{
 				buyUnit(1);
@@ -424,16 +430,35 @@ public class GameScreen implements Screen {
 //				hero.stance(0);
 //			}
 			if (isPaused){
-				//System.out.println(touchPoint.x + " " + touchPoint.y);
-				if (OverlapTester.pointInRectangle(pauseRectangle, touchPoint.x, touchPoint.y)) {
-					//System.out.println(true);
-					game.setScreen(game.mainMenuScreen);
+//				//System.out.println(touchPoint.x + " " + touchPoint.y);
+//				if (OverlapTester.pointInRectangle(pauseRectangle, touchPoint.x, touchPoint.y)) {
+//					//System.out.println(true);
+//					game.setScreen(game.mainMenuScreen);
+//					return;
+//				}
+//				
+//				if (OverlapTester.pointInRectangle(pauseRectangle2, touchPoint.x, touchPoint.y)) {
+//					//System.out.println(true);
+//					game.setScreen(game.settingsScreen);
+//					return;
+//				}
+				System.out.println(resumeButton.getRectangle().getX());
+				System.out.println(resumeButton.getRectangle().getY());
+				System.out.println(resumeButton.getRectangle().getWidth());
+				System.out.println(resumeButton.getRectangle().getHeight());
+				if(OverlapTester.pointInRectangle(resumeButton.getRectangle(), touchPoint.x, touchPoint.y)){
+					isPaused = !isPaused;
+					pauseCooldown = 0;
+				}
+
+				
+				else if (OverlapTester.pointInRectangle(settingsButton.getRectangle(), touchPoint.x, touchPoint.y)){
+					game.setScreen(game.settingsScreen);
 					return;
 				}
 				
-				if (OverlapTester.pointInRectangle(pauseRectangle2, touchPoint.x, touchPoint.y)) {
-					//System.out.println(true);
-					game.setScreen(game.settingsScreen);
+				else if (OverlapTester.pointInRectangle(mainMenuButton.getRectangle(),  touchPoint.x, touchPoint.y)){
+					game.setScreen(game.mainMenuScreen);
 					return;
 				}
 			}

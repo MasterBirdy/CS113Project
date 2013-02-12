@@ -104,11 +104,9 @@ public class SettingsScreen  implements Screen  {
 
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
 		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClearColor(1, 1, 1, 1);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		//batch.setProjectionMatrix(camera.combined);
 		update(delta);
 		batch.begin();
 		
@@ -151,6 +149,10 @@ public class SettingsScreen  implements Screen  {
 	{
 		if (Gdx.input.justTouched()) {
 			camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+			System.out.println(easyButton.getRectangle().getX());
+			System.out.println(easyButton.getRectangle().getY());
+			System.out.println(easyButton.getRectangle().getWidth());
+			System.out.println(easyButton.getRectangle().getHeight());
 			if (OverlapTester.pointInRectangle(backButton.getRectangle(), touchPoint.x, touchPoint.y))
 			{
 				game.setScreen(game.mainMenuScreen);
