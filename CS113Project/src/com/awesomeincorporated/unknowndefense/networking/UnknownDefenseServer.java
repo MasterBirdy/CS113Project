@@ -223,6 +223,16 @@ public class UnknownDefenseServer
     	this.server.stop();
     }
     
+    public int userCount()
+    {
+    	return userConnection.size();
+    }
+    
+    public int roomCount()
+    {
+    	return games.size();
+    }
+    
     void loggedIn (UserConnection c, User user) 
     {
     	c.user = user;

@@ -39,6 +39,8 @@ public class EverythingHolder
 	byte team;
 	boolean running = false;
 	int turn = 0;
+	
+	int petType = 0;
 		
 	public EverythingHolder()
 	{
@@ -200,7 +202,17 @@ public class EverythingHolder
 		else if (m == 5)
 			add(new Ninja(start.x() + randX, start.y() + randY, team, iter), true, team);
 		else if (m == 6)
-			add(new Eagle(start.x() + randX, start.y() + randY, team, iter), true, team);
+		{
+			petType++;
+			if (petType > 2)
+				petType = 0;
+			if (petType == 0)
+				add(new Eagle(start.x() + randX, start.y() + randY, team, iter), true, team);
+			else if (petType == 1)
+				add(new Wolf(start.x() + randX, start.y() + randY, team, iter), true, team);
+			else
+				add(new Elemental(start.x() + randX, start.y() + randY, team, iter), true, team);
+		}
 	}
 	
 	public LinkedList<Actor> team(int t)

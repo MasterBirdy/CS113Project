@@ -4,14 +4,14 @@ import java.util.ListIterator;
 
 import com.awesomeincorporated.unknowndefense.map.Coordinate;
 
-public class Eagle extends Minion
+public class Elemental extends Minion
 {
-	public Eagle(int x, int y, int team, ListIterator<Coordinate> p)
+	public Elemental(int x, int y, int team, ListIterator<Coordinate> p)
 	{
 		super(x, y, false, team, p);
-		maxHealth = 40;
+		maxHealth = 150;
 		currentHealth = maxHealth;
-		damage = 15;
+		damage = 9;
 		attackSpeed = 40;
 		attackCooldown = 0;
 		attackRange = 35;

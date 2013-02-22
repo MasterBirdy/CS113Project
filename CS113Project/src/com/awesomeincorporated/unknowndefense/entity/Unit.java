@@ -53,6 +53,10 @@ public abstract class Unit extends Actor
 			unitType = 4;
 		else if (this instanceof Eagle)
 			unitType = 5;
+		else if (this instanceof Wolf)
+			unitType = 6;
+		else if (this instanceof Elemental)
+			unitType = 7;
 		else
 			unitType = 0;
 		
@@ -161,6 +165,30 @@ public abstract class Unit extends Actor
 		unitAnimation.add(loadAnimation(374, 551, 44, 59, 4, false, false));
 		unitAnimation.add(loadAnimation(374, 551, 44, 59, 4, true, false));
 		unitAnimation.add(loadAnimation(374, 610, 43, 57, 4, false, false));
+		animations.add(unitAnimation);
+		
+		// Wolf
+		unitAnimation = new ArrayList<Animation>();
+		unitAnimation.add(loadAnimation(554, 0, 18, 53, 4, false, false));
+		unitAnimation.add(loadAnimation(554, 53, 56, 31, 4, false, false));
+		unitAnimation.add(loadAnimation(554, 53, 56, 31, 4, true, false));
+		unitAnimation.add(loadAnimation(554, 84, 20, 50, 4, false, false));
+		unitAnimation.add(loadAnimation(554, 134, 24, 55, 4, false, false));
+		unitAnimation.add(loadAnimation(554, 189, 56, 35, 4, false, false));
+		unitAnimation.add(loadAnimation(554, 189, 56, 35, 4, true, false));
+		unitAnimation.add(loadAnimation(554, 224, 22, 48, 4, false, false));
+		animations.add(unitAnimation);
+
+		// Elemental
+		unitAnimation = new ArrayList<Animation>();
+		unitAnimation.add(loadAnimation(554, 272, 51, 38, 5, false, false));
+		unitAnimation.add(loadAnimation(554, 310, 32, 38, 5, false, false));
+		unitAnimation.add(loadAnimation(554, 310, 32, 38, 5, true, false));
+		unitAnimation.add(loadAnimation(554, 348, 50, 39, 5, false, false));
+		unitAnimation.add(loadAnimation(554, 387, 51, 38, 4, false, false));
+		unitAnimation.add(loadAnimation(554, 425, 32, 37, 4, false, false));
+		unitAnimation.add(loadAnimation(554, 425, 32, 37, 4, true, false));
+		unitAnimation.add(loadAnimation(554, 462, 56, 39, 4, false, false));
 		animations.add(unitAnimation);
 	}
 	

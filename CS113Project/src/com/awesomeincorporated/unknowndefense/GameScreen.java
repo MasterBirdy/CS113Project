@@ -72,11 +72,11 @@ public class GameScreen implements Screen {
 	boolean connected = false;
 	byte team;						// Team 1 is top and Team 2 is bottom
 	Client client;
-	String serverIp = "localhost"; 	// Local Host
+//	String serverIp = "localhost"; 	// Local Host
 //	String serverIp = "evil-monkey.ics.uci.edu";//"128.195.6.172";
 //	String serverIp = "ernie-the-giant-chicken.ics.uci.edu";//"128.195.6.172";
 //	String serverIp = "169.234.242.202"; 	// My desktop
-//	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
+	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
 	float stepTime = 0.02f;
 
 	public GameScreen(UnknownDefense game)
@@ -335,18 +335,18 @@ public class GameScreen implements Screen {
 			float rand = (float) Math.random();
 			if (rand < 0.20f)
 				//everything.add(new Swordsman(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
-				everything.add(1, 1);
+				everything.add(1, 2);
 			else if (rand < 0.4f)
 				//everything.add(new Archer(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
-				everything.add(2, 1);
+				everything.add(2, 2);
 			else if (rand < 0.6f)
-				everything.add(3, 1);
+				everything.add(3, 2);
 			else if (rand < 0.8f)
-				everything.add(4, 1);
+				everything.add(4, 2);
 			else if (rand < 0.9f)
-				everything.add(5, 1);
+				everything.add(5, 2);
 			else
-				everything.add(6, 1);
+				everything.add(6, 2);
 			
 			counter2 = (int)(Math.random() * 60) + 60;
 		}
@@ -372,7 +372,7 @@ public class GameScreen implements Screen {
 		{
 			System.out.println("Trying to send unit " + unit + " from team " + team);
 			//everything.add(unit, 1);
-			everything.add(unit, 0);
+			everything.add(unit, 1);
 		}
 	}
 	

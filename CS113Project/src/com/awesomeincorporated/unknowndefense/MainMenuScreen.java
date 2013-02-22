@@ -19,8 +19,8 @@ import com.badlogic.gdx.math.Vector3;
 // Jason Rogers
 // Mike Tang
 // Matthew Ito
-// Raymond Hon
 // Cecilia Bishton
+// Michael Chen
 
 public class MainMenuScreen implements Screen 
 {

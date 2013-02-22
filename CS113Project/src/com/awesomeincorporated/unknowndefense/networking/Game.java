@@ -1,7 +1,5 @@
 package com.awesomeincorporated.unknowndefense.networking;
 
-import java.util.LinkedList;
-
 import com.awesomeincorporated.unknowndefense.networking.Network.AddUnit;
 import com.awesomeincorporated.unknowndefense.networking.Network.Command;
 import com.awesomeincorporated.unknowndefense.networking.Network.CommandIn;
