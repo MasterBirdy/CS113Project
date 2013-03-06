@@ -2,6 +2,8 @@ package com.awesomeincorporated.unknowndefense;
 
 //import com.badlogic.gdx.ApplicationListener;
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 import com.awesomeincorporated.unknowndefense.entity.*;
 import com.awesomeincorporated.unknowndefense.input.MyInputProcessor;
@@ -30,7 +32,8 @@ import com.awesomeincorporated.unknowndefense.networking.Network.*;
 import com.awesomeincorporated.unknowndefense.networking.Network;
 import com.awesomeincorporated.unknowndefense.networking.User;
 
-public class GameScreen implements Screen {
+public class GameScreen implements Screen 
+{
 	private OrthographicCamera camera, uiCamera;
 	private SpriteBatch batch;
 	private Texture texture;
@@ -72,12 +75,15 @@ public class GameScreen implements Screen {
 	boolean connected = false;
 	byte team;						// Team 1 is top and Team 2 is bottom
 	Client client;
-//	String serverIp = "localhost"; 	// Local Host
+	String serverIp = "localhost"; 	// Local Host
 //	String serverIp = "evil-monkey.ics.uci.edu";//"128.195.6.172";
 //	String serverIp = "ernie-the-giant-chicken.ics.uci.edu";//"128.195.6.172";
 //	String serverIp = "169.234.242.202"; 	// My desktop
-	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
+	
+//	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
 	float stepTime = 0.02f;
+	Comparator<Object> comparator = new MessageCompare();
+	PriorityQueue<Object> commandQueue = new PriorityQueue<Object>(20, comparator);
 
 	public GameScreen(UnknownDefense game)
 	{
@@ -304,9 +310,64 @@ public class GameScreen implements Screen {
 		game.mainMenuScreen.gameWon();
 		game.setScreen(game.mainMenuScreen);
 	}
+	
+	public void pullCommand()
+	{
+		Object object;
+		
+		while(true)
+		{
+			if (commandQueue.isEmpty())
+				return;
+			System.out.println(((CommandIn)commandQueue.peek()).turn + " : " + everything.turn);
+			if (everything.turn != ((CommandIn)commandQueue.peek()).turn)
+				return;
+			
+			object = commandQueue.remove();
+			
+	//		if (object instanceof AddUnit)
+	//		{
+	//			System.out.println("Adding unit");
+	//			everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
+	//			return;
+	//		}
+			
+			if (object instanceof CommandIn)
+			{
+				CommandIn command = (CommandIn)object;
+				if (command.command > 0 && command.command < 7)
+				{
+					System.out.println("Pulled unit send command.");
+					everything.add(((CommandIn)object).command, ((CommandIn)object).team);
+					return;
+				}
+				if (command.command > 6 && command.command < 10)
+				{
+					System.out.println("Pulled hero command.");
+					heroes[command.team - 1].stance(command.command - 8);
+	//				heroes[0].stance(command.command - 8);
+	//				heroes[1].stance(command.command - 8);
+					return;
+				}
+				if (command.command > 9 && command.command < 13)
+				{
+					System.out.println("Pulled tower command.");
+					everything.upgradeTower(command.command - 10, team);
+//					everything.funds -= 40;
+					System.out.println("Trying to upgrade tower " + (command.command - 10) + " from team " + team);
+	//				heroes[command.team].stance(command.command - 8);
+	//				heroes[0].stance(command.command - 8);
+	//				heroes[1].stance(command.command - 8);
+					return;
+				}
+			}
+		}
+	}
 
 	public void update()
 	{
+		if (multiplayer)
+			pullCommand();
 		everything.update();
 		if (!multiplayer)
 			randomSpawner();
@@ -358,7 +419,7 @@ public class GameScreen implements Screen {
 		if (multiplayer)
 		{
 			System.out.println("Trying to send unit " + unit + " from team " + team);
-			if (everything.funds < 20)
+			if (everything.funds() < 20)
 			{
 				System.out.println("Out of money.");
 				return;
@@ -366,6 +427,7 @@ public class GameScreen implements Screen {
 			Command cmd = new Command();
 			cmd.team = team;
 			cmd.type = (byte)unit;
+			cmd.turn = everything.turn();
 			client.sendTCP(cmd);
 		}
 		else
@@ -383,6 +445,7 @@ public class GameScreen implements Screen {
 			Command cmd = new Command();
 			cmd.type = (byte)(stance + 8);
 			cmd.team = team;
+			cmd.turn = everything.turn();
 			System.out.println("Setting hero " + cmd.team + " to stance " + (cmd.type - 8));
 			client.sendTCP(cmd);
 		}
@@ -403,7 +466,7 @@ public class GameScreen implements Screen {
 //		else
 //		{
 			everything.upgradeTower(tower, team);
-			everything.funds -= 40;
+//			everything.funds -= 40;
 			System.out.println("Trying to upgrade towers " + tower + " from team " + team);
 //		}
 	}
@@ -599,41 +662,55 @@ public class GameScreen implements Screen {
         			return;
         		}
         		
-        		if (object instanceof AddUnit)
-        		{
-        			System.out.println("Adding unit");
-        			everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
-        			return;
-        		}
+//        		if (object instanceof AddUnit)
+//        		{
+//        			System.out.println("Adding unit");
+//        			everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
+//        			return;
+//        		}
+//        		
+//        		if (object instanceof CommandIn)
+//        		{
+//        			CommandIn command = (CommandIn)object;
+//        			if (command.command > 0 && command.command < 7)
+//        			{
+//        				everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
+//        				return;
+//        			}
+//        			if (command.command > 6 && command.command < 10)
+//        			{
+//        				System.out.println("Received hero command.");
+//        				heroes[command.team - 1].stance(command.command - 8);
+////        				heroes[0].stance(command.command - 8);
+////        				heroes[1].stance(command.command - 8);
+//        				return;
+//        			}
+//        			if (command.command > 9 && command.command < 13)
+//        			{
+//        				System.out.println("Received tower command.");
+//        				everything.upgradeTower(command.command - 10, team);
+//        				everything.funds -= 40;
+//        				System.out.println("Trying to upgrade tower " + (command.command - 10) + " from team " + team);
+////        				heroes[command.team].stance(command.command - 8);
+////        				heroes[0].stance(command.command - 8);
+////        				heroes[1].stance(command.command - 8);
+//        				return;
+//        			}
+//        		}
         		
         		if (object instanceof CommandIn)
         		{
-        			CommandIn command = (CommandIn)object;
-        			if (command.command > 0 && command.command < 7)
-        			{
-        				everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
-        				return;
-        			}
-        			if (command.command > 6 && command.command < 10)
-        			{
-        				System.out.println("Received hero command.");
-        				heroes[command.team - 1].stance(command.command - 8);
-//        				heroes[0].stance(command.command - 8);
-//        				heroes[1].stance(command.command - 8);
-        				return;
-        			}
-        			if (command.command > 9 && command.command < 13)
-        			{
-        				System.out.println("Received tower command.");
-        				everything.upgradeTower(command.command - 10, team);
-        				everything.funds -= 40;
-        				System.out.println("Trying to upgrade tower " + (command.command - 10) + " from team " + team);
-//        				heroes[command.team].stance(command.command - 8);
-//        				heroes[0].stance(command.command - 8);
-//        				heroes[1].stance(command.command - 8);
-        				return;
-        			}
+        			System.out.println("CommandIn");
+        			commandQueue.add(object);
         		}
+        		
+//        		if (object instanceof AddUnit)
+//        		{
+//        			System.out.println("Add unit");
+//        			commandQueue.add(object);
+//        			//everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
+//        			return;
+//        		}
         		
         		if (object instanceof ServerMessage)
         		{
@@ -643,6 +720,7 @@ public class GameScreen implements Screen {
         			{
         				System.out.println("Game is starting!");
         				running = true;
+        				timeAccumulator = 0;
         				everything.setRunning(true);
         			}
         			return;
@@ -745,6 +823,18 @@ public class GameScreen implements Screen {
 		{
 			client.close();
 			client.stop();
+		}
+	}
+	
+	public class MessageCompare implements Comparator
+	{
+		public int compare(Object msg1, Object msg2)
+		{
+			if (((CommandIn)msg1).turn > ((CommandIn)msg2).turn)
+				return 1;
+			else if (((CommandIn)msg1).turn < ((CommandIn)msg2).turn)
+				return -1;
+			return 0;
 		}
 	}
 }

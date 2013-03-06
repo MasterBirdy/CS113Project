@@ -1,5 +1,6 @@
 package com.awesomeincorporated.unknowndefense.networking;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 
 import com.esotericsoftware.kryo.Kryo;
@@ -44,6 +45,7 @@ public class Network
 	{
 		public byte type;
 		public byte team;
+		public int 	turn;
 		
 //		public Command(byte type, byte team)
 //		{

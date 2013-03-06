@@ -33,6 +33,7 @@ public class UnknownDefenseServer
     long timeLastUsed;
     int allowedUptime = 7200000;
     NetworkClock networkClock = new NetworkClock(this, allowedUptime);
+    
     public UnknownDefenseServer() throws IOException 
     {
     	System.out.println("Clock");

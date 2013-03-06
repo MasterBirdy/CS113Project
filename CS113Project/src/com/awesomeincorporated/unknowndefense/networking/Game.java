@@ -14,6 +14,8 @@ public class Game
 	UserConnection[] players = new UserConnection[2];
 	int gameID, gameType;
 	int currentTurn = 0;
+	float stepTime = 0.02f;
+	int turnBuffer = 30;
 	
 	public Game(UserConnection p1, UserConnection p2, Server s, int ID)//Server s, int ID)
 	{
@@ -47,14 +49,19 @@ public class Game
 		System.out.println("(Game)Recevied command " + cmd.type);
     	if (cmd.type > 0 && cmd.type < 7)
     	{
-    		AddUnit add = new AddUnit();
-    		add.team = cmd.team;
-    		add.unit = cmd.type;
-    		add.turn = currentTurn;
+//    		AddUnit add = new AddUnit();
+//    		add.team = cmd.team;
+//    		add.unit = cmd.type;
+//    		add.turn = cmd.turn + turnBuffer;
+//    		add.turn = currentTurn;
+    		CommandIn cmdIn = new CommandIn();
+    		cmdIn.command = cmd.type;
+    		cmdIn.team = cmd.team;
+    		cmdIn.turn = cmd.turn + turnBuffer;
     		System.out.println("(Game)Sending unit " + cmd.type + " from player " + cmd.team);
     		
-    		server.sendToTCP(players[0].getID(), add);
-    		server.sendToTCP(players[1].getID(), add);
+    		server.sendToTCP(players[0].getID(), cmdIn);
+    		server.sendToTCP(players[1].getID(), cmdIn);
 //        		server.sendToAllTCP(add);
     	}
     	else if (cmd.type > 6 && cmd.type < 10) // 7-9 is retreat, guard, and attack.
@@ -63,6 +70,7 @@ public class Game
     		CommandIn cmdIn = new CommandIn();
     		cmdIn.command = cmd.type;
     		cmdIn.team = cmd.team;
+    		cmdIn.turn = cmd.turn + turnBuffer;
     		server.sendToTCP(players[0].getID(), cmdIn);
     		server.sendToTCP(players[1].getID(), cmdIn);
 //        		server.sendToAllTCP(cmdIn);
@@ -73,6 +81,7 @@ public class Game
     		CommandIn cmdIn = new CommandIn();
     		cmdIn.command = cmd.type;
     		cmdIn.team = cmd.team;
+    		cmdIn.turn = cmd.turn + turnBuffer;
     		server.sendToTCP(players[0].getID(), cmdIn);
     		server.sendToTCP(players[1].getID(), cmdIn);
     	}

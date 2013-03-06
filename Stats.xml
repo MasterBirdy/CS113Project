@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stats>
+       <minion type = "archer">
+              <stat type = "maxhealth">			1		11		111		1111	</stat>
+              <stat type = "damage">			1		11		111		1111	</stat>
+              <stat type = "attackspeed">		1		11		111		1111	</stat>
+              <stat type = "attackcooldown">	1		11		111		1111	</stat>
+              <stat type = "attackrange">		1		11		111		1111	</stat>
+              <stat type = "speed">				1f		11f		111f	1111f	</stat>
+              <stat type = "cost"> 				1		11		111		1111	</stat>
+              <stat type = "ranged"> true </stat>
+       </minion>
+       <minion type = "monk">
+              <stat type = "maxhealth">			2		21		211		2111	</stat>
+              <stat type = "damage">			2		21		211		2111	</stat>
+              <stat type = "attackspeed">		2		21		211		2111	</stat>
+              <stat type = "attackcooldown">	2		21		211		2111	</stat>
+              <stat type = "attackrange">		2		21		211		2111	</stat>
+              <stat type = "speed">				2f		21f		211f	2111f	</stat>
+              <stat type = "cost"> 				2		21		211		2111	</stat>
+              <stat type = "ranged"> false </stat>
+       </minion>
+       <minion type = "swordsman">
+              <stat type = "maxhealth">			3		31		311		3111	</stat>
+              <stat type = "damage">			3		31		311		3111	</stat>
+              <stat type = "attackspeed">		3		31		311		3111	</stat>
+              <stat type = "attackcooldown">	3		31		311		3111	</stat>
+              <stat type = "attackrange">		3		31		311		3111	</stat>
+              <stat type = "speed">				3f		31f		311f	3111f	</stat>
+              <stat type = "cost"> 				3		31		311		3111	</stat>
+              <stat type = "ranged"> false </stat>
+       </minion>
+       <minion type = "mage">
+              <stat type = "maxhealth">			4		41		411		4111	</stat>
+              <stat type = "damage">			4		41		411		4111	</stat>
+              <stat type = "attackspeed">		4		41		411		4111	</stat>
+              <stat type = "attackcooldown">	4		41		411		4111	</stat>
+              <stat type = "attackrange">		4		41		411		4111	</stat>
+              <stat type = "speed">				4f		41f		411f	4111f	</stat>
+              <stat type = "cost"> 				4		41		411		4111	</stat>
+              <stat type = "ranged"> true </stat>
+       </minion>
+       <minion type = "ninja">
+              <stat type = "maxhealth">			5		51		511		5111	</stat>
+              <stat type = "damage">			5		51		511		5111	</stat>
+              <stat type = "attackspeed">		5		51		511		5111	</stat>
+              <stat type = "attackcooldown">	5		51		511		5111	</stat>
+              <stat type = "attackrange">		5		51		511		5111	</stat>
+              <stat type = "speed">				5f		51f		511f	5111f	</stat>
+              <stat type = "cost"> 				5		51		511		5111	</stat>
+              <stat type = "ranged"> false </stat>
+       </minion>
+       <building type = "tower">
+              <stat type = "maxhealth">			6		61		611		6111	</stat>
+              <stat type = "damage">			6		61		611		6111	</stat>
+              <stat type = "attackspeed">		6		61		611		6111	</stat>
+              <stat type = "attackcooldown">	6		61		611		6111	</stat>
+              <stat type = "attackrange">		6		61		611		6111	</stat>
+              <stat type = "cost"> 				6		61		611		6111	</stat>
+              <stat type = "ranged"> true </stat>
+       </building>
+              <building type = "base">
+              <stat type = "maxhealth">			7		71		711		7111	</stat>
+              <stat type = "damage">			7		71		711		7111	</stat>
+              <stat type = "attackspeed">		7		71		711		7111	</stat>
+              <stat type = "attackcooldown">	7		71		711		7111	</stat>
+              <stat type = "attackrange">		7		71		711		7111	</stat>
+              <stat type = "cost"> 				7		71		711		7111	</stat>
+              <stat type = "ranged"> true </stat>
+       </building>     
+</stats>

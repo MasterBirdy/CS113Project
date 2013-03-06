@@ -1,13 +1,14 @@
 package com.awesomeincorporated.unknowndefense;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
 import com.awesomeincorporated.unknowndefense.entity.*;
-import com.awesomeincorporated.unknowndefense.map.Coordinate;
-import com.awesomeincorporated.unknowndefense.map.Map;
+import com.awesomeincorporated.unknowndefense.map.*;
+import com.awesomeincorporated.unknowndefense.parser.*;
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -23,14 +24,15 @@ public class EverythingHolder
 	static boolean showRange;
 	static Map map;
 	//Hero hero1, hero2;
-	long waveTimer, spawnTimer1, spawnTimer2, spawnInterval1, spawnInterval2;;
-	long waveTime, waveInterval;
+//	long waveTimer, spawnTimer1, spawnTimer2, spawnInterval1, spawnInterval2;
+//	long waveTime, waveInterval;
+	int waveInterval, waveTime, waveTimer, previousTime, spawnTimer1, spawnTimer2, spawnInterval1, spawnInterval2;
 //	int waveTime, waveInterval;
-	long totalTime = 0, previousTime;
+//	long totalTime = 0, previousTime;
 	boolean spawning;
 	int nano = 1000000000;
 	int income = 100;
-	int funds = 200;
+	int funds1 = 200, funds2 = 200;
 	static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	private ArrayList<ParticleEffect> effects = new ArrayList<ParticleEffect>();
 	Audio tempMusic = Gdx.audio;
@@ -39,8 +41,15 @@ public class EverythingHolder
 	byte team;
 	boolean running = false;
 	int turn = 0;
+	float stepTime = 0.02f;
 	
 	int petType = 0;
+	
+	MinionStructure[][] playerUnits;// = new String[2][6]; 
+	
+	HashMap<String, MinionStructure> minions = new HashMap<String, MinionStructure>();
+	HashMap<String, BuildingStructure> buildings = new HashMap<String, BuildingStructure>();
+	HashMap<String, HeroStructure> heroes = new HashMap<String, HeroStructure>();
 		
 	public EverythingHolder()
 	{
@@ -51,12 +60,19 @@ public class EverythingHolder
 		pools[2] = new LinkedList<Integer>();
 		pools[3] = new LinkedList<Integer>();
 		
+		UnitParser unitParser = new UnitParser();
+		minions = unitParser.getMinionStats();
+		buildings = unitParser.getBuildingStats();
+		heroes = unitParser.getHeroStats();
+		
+		playerUnits = new MinionStructure[][]{{minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk")}
+											 ,{minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk")}};
+		
 		Entity.loadStatics(effects);
 		// Wave control
 //		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
-		waveInterval = 10000;// // Milliseconds between waves
-		
-		waveTime = 2000;//// Milliseconds to spawn a wave
+		waveInterval = 	(int) (10 / stepTime); 	// Turns (10 seconds)
+		waveTime = 		(int) (2 / stepTime);	// Turns (2 seconds)
 				
 		spawning = false;
 //		previousTime = System.nanoTime() / 1000000;
@@ -64,6 +80,11 @@ public class EverythingHolder
 		
 //		music = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
 //		music.setLooping(true);
+	}
+	
+	public int turn()
+	{
+		return turn;
 	}
 	
 	public void setTeam(byte team)
@@ -74,8 +95,10 @@ public class EverythingHolder
 	public void setRunning(boolean run)
 	{
 		running = run;
-		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
-		previousTime = System.nanoTime() / 1000000;
+//		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
+//		previousTime = System.nanoTime() / 1000000;
+		waveTimer = 0;
+		previousTime = 0;
 	}
 	
 	public void upgradeTower(int tower, int team)
@@ -120,14 +143,21 @@ public class EverythingHolder
 	{
 		if (!running)
 			return 0;
-		return (int) -((System.nanoTime() / 1000000 - waveTimer - waveInterval)/ 1000);
+		int left = (int) -((turn - waveTimer - waveInterval) * stepTime) + 1;
+		return (left > 10 ? 10 : left);
+//		return (int) ((waveInterval - waveTimer) / stepTime);
+//		return (int) -((System.nanoTime() / 1000000 - waveTimer - waveInterval)/ 1000);
 	}
 	
 	public String totalTime()
 	{
 		if (!running)
 			return "00";
-		int time = (int) (totalTime / 1000);
+//		int time = (int) (totalTime / 1000);
+//		int min = (int)(time / 60);
+//		int sec = time % 60;
+		
+		int time = (int) (turn * stepTime);
 		int min = (int)(time / 60);
 		int sec = time % 60;
 		return (min == 0 ? "00" : (min < 10 ? 0 + min : min)) + ":" + (sec == 0 ? "00" : (sec < 10 ? "0" + sec : sec));
@@ -153,13 +183,27 @@ public class EverythingHolder
 	public void add(int unit, int team)
 	{
 		System.out.println("Trying to add " + unit + " on team " + team);
-		if (team == this.team)//(team == 0)
-		{
-			if (funds < 20)
+//		if (team == this.team)//(team == 0)
+//		{
+			if ((team == 1 ? funds1 : funds2) < 20)
 				return;
-			funds -= 20;
-			Gdx.input.vibrate(50);
-		}
+			if (team == 1)
+				funds1 -= 20;
+			else
+				funds2 -= 20;
+			
+			if (team == this.team)
+				Gdx.input.vibrate(50);
+//		}
+//		else
+//		{
+//			if ((team == 1 ? funds2 : funds) < 20)
+//				return;
+//			if (team == 1)
+//				funds1 -= 20;
+//			else
+//				funds2 -= 20;
+//		}
 		pools[team - 1].add(unit);
 	}
 	
@@ -350,22 +394,22 @@ public class EverythingHolder
 		if (!running)
 			return;
 //		int currentTurn = turn++;
-		long currentTime = System.nanoTime() / 1000000;
-		totalTime += currentTime - previousTime;
-		previousTime = currentTime;
-		long timeDiff = currentTime - waveTimer;
+//		long currentTime = System.nanoTime() / 1000000;
+		//totalTime += currentTime - previousTime;
+		previousTime = turn;
+		int timeDiff = turn - waveTimer;
 		if ((timeDiff) > waveInterval)
 //		if (currentTurn % waveInterval == 0)
 		{
 			spawning = true;
-			waveTimer = currentTime;
+			waveTimer = turn;
 			spawnTimer1 = waveTimer;
 			
-			spawnInterval1 = (!pools[0].isEmpty() ? waveTime / pools[0].size() : 10000);
-				
+//			spawnInterval1 = (!pools[0].isEmpty() ? waveTime / pools[0].size() : waveInterval);
+			spawnInterval1 = 4;	
 			spawnTimer2 = waveTimer;
-			spawnInterval2 = (!pools[1].isEmpty() ? waveTime / pools[1].size() : 10000);
-			
+//			spawnInterval2 = (!pools[1].isEmpty() ? waveTime / pools[1].size() : waveInterval);
+			spawnInterval2 = 4;
 			pools[2] = pools[0];
 			pools[3] = pools[1];
 			pools[0] = new LinkedList<Integer>();
@@ -381,10 +425,13 @@ public class EverythingHolder
 			for (Actor a : teams[1])
 				if (a instanceof Hero && !a.isAlive())
 					((Hero)a).respawn(map.start2().x(), map.start2().y(), map.getPath().listIterator(map.getPath().size() - 1));
-			if (Settings.getInstance().getDifficulty() == Difficulty.EASY)
-				funds += income;
-			else if (Settings.getInstance().getDifficulty() == Difficulty.HARD)
-				funds += income * .75;
+//			if (Settings.getInstance().getDifficulty() == Difficulty.EASY)
+//				funds += income;
+//			else if (Settings.getInstance().getDifficulty() == Difficulty.HARD)
+//				funds += income * .75;
+			
+			funds1 += income;
+			funds2 += income;
 			//Gdx.input.vibrate(1000);
 		}
 		
@@ -393,16 +440,16 @@ public class EverythingHolder
 		
 		if (spawning)
 		{*/
-			if (!pools[2].isEmpty() && currentTime - spawnTimer1 > spawnInterval1)
+			if (!pools[2].isEmpty() && turn - spawnTimer1 > spawnInterval1)
 			{
 				spawnPool(1);
-				spawnTimer1 = currentTime;
+				spawnTimer1 = turn;
 			}
 			
-			if (!pools[3].isEmpty() && currentTime - spawnTimer2 > spawnInterval2)
+			if (!pools[3].isEmpty() && turn - spawnTimer2 > spawnInterval2)
 			{
 				spawnPool(2);
-				spawnTimer2 = currentTime;
+				spawnTimer2 = turn;
 			}
 		//}
 	}
@@ -414,7 +461,7 @@ public class EverythingHolder
 	
 	public int funds()
 	{
-		return funds;
+		return team == 1 ? funds1 : funds2;
 	}
 	
 	static public void toggleShowRange()
