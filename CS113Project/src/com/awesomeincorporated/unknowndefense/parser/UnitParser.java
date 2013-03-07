@@ -31,26 +31,27 @@ public class UnitParser
 	public static void main(String args[]) 
 	{
 		UnitParser unitParser = new UnitParser();
-		unitParser.parseStats("minion");
-		unitParser.parseStats("building");
 	}
 	
 	public UnitParser()
 	{
 		parseStats("minion");
+		parseStats("hero");
 		parseStats("building");
 	}
 
 	public void parseStats(String entity) 
 	{
 		try 
-		{
-			//Create new instances to build and store in the hashmap
-			MinionStructure minion = new MinionStructure();
-			BuildingStructure building = new BuildingStructure();
-			
+		{			
 			//Prep the doc for parsing
-			File stats = new File("../Stats.xml");
+			File stats;
+			stats = new File("../Stats.xml");
+			if (stats.length() < 1)
+			{
+				System.out.println("Yeah");
+				stats = new File("Stats.xml");
+			}
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(stats);
@@ -71,102 +72,47 @@ public class UnitParser
 				if (node.getNodeType() == Node.ELEMENT_NODE) 
 				{
 					Element element = (Element) node;
-					NodeList subNodes = node.getChildNodes();
-					
-					//Iterate through the entity's stat node list
-					for (int n = 0; n < subNodes.getLength(); n++) 
+					if (entity.equals("minion"))
 					{
-						Node subNode = subNodes.item(n);
-						
-						if (subNode.getNodeType() == Node.ELEMENT_NODE) 
-						{
-							Element subElement = (Element) subNode;
-							System.out.println(subNode.getNodeName() + ": " + ((Element) subNode).getAttribute("type"));
-							
-							//Store minion values
-							if (entity.equals("minion"))
-							{
-								if (subElement.getAttribute("type").equals("maxhealth")) 
-								{
-									minion.maxHealth = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("damage"))
-								{
-									minion.damage = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("attackspeed"))
-								{
-									minion.attackSpeed = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("attackcooldown"))
-								{
-									minion.attackCoolDown = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("attackrange"))
-								{
-									minion.attackRange = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("speed"))
-								{
-									minion.speed = tokenizeFloat(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("cost"))
-								{
-									minion.cost = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("ranged"))
-								{
-									minion.ranged = tokenizeBool(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								
-							//Store building values
-							}
-							else if (entity.equals("building"))
-							{
-								if (subElement.getAttribute("type").equals("maxhealth")) 
-								{
-									building.maxHealth = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("damage"))
-								{
-									building.damage = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("attackspeed"))
-								{
-									building.attackSpeed = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("attackcooldown"))
-								{
-									building.attackCoolDown = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("attackrange"))
-								{
-									building.attackRange = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("cost"))
-								{
-									building.cost = tokenizeInt(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-								else if (subElement.getAttribute("type").equals("ranged"))
-								{
-									building.ranged = tokenizeBool(subNode.getFirstChild().getNodeValue(), subElement);
-								}
-							}
-						}
+						MinionStructure minion = new MinionStructure();
+						minion.maxHealth = tokenizeInt(element.getElementsByTagName("maxhealth").item(0).getTextContent());
+						minion.damage = tokenizeInt(element.getElementsByTagName("damage").item(0).getTextContent());
+						minion.attackSpeed = tokenizeInt(element.getElementsByTagName("attackspeed").item(0).getTextContent());
+						minion.attackRange = tokenizeInt(element.getElementsByTagName("attackrange").item(0).getTextContent());
+						minion.speed = tokenizeFloat(element.getElementsByTagName("speed").item(0).getTextContent());
+						minion.cost = tokenizeInt(element.getElementsByTagName("cost").item(0).getTextContent());
+						minion.animation = tokenizeInt(element.getElementsByTagName("animation").item(0).getTextContent());
+						minion.ranged = tokenizeBool(element.getElementsByTagName("ranged").item(0).getTextContent());
+						minionStatsMap.put(element.getAttribute("type"), minion);
+					}
+					else if (entity.equals("hero"))
+					{
+						HeroStructure hero = new HeroStructure();
+						hero.maxHealth = tokenizeInt(element.getElementsByTagName("maxhealth").item(0).getTextContent());
+						hero.damage = tokenizeInt(element.getElementsByTagName("damage").item(0).getTextContent());
+						hero.attackSpeed = tokenizeInt(element.getElementsByTagName("attackspeed").item(0).getTextContent());
+						hero.attackRange = tokenizeInt(element.getElementsByTagName("attackrange").item(0).getTextContent());
+						hero.speed = tokenizeFloat(element.getElementsByTagName("speed").item(0).getTextContent());
+						hero.cost = tokenizeInt(element.getElementsByTagName("cost").item(0).getTextContent());
+						hero.animation = tokenizeInt(element.getElementsByTagName("animation").item(0).getTextContent());
+						hero.ranged = tokenizeBool(element.getElementsByTagName("ranged").item(0).getTextContent());
+						heroStatsMap.put(element.getAttribute("type"), hero);
+					}
+					else if (entity.equals("building"))
+					{
+						BuildingStructure building = new BuildingStructure();
+						building.maxHealth = tokenizeInt(element.getElementsByTagName("maxhealth").item(0).getTextContent());
+						building.damage = tokenizeInt(element.getElementsByTagName("damage").item(0).getTextContent());
+						building.attackSpeed = tokenizeInt(element.getElementsByTagName("attackspeed").item(0).getTextContent());
+						building.attackRange = tokenizeInt(element.getElementsByTagName("attackrange").item(0).getTextContent());
+						building.cost = tokenizeInt(element.getElementsByTagName("cost").item(0).getTextContent());
+						building.animation = tokenizeInt(element.getElementsByTagName("animation").item(0).getTextContent());
+						building.ranged = tokenizeBool(element.getElementsByTagName("ranged").item(0).getTextContent());
+						buildingStatsMap.put(element.getAttribute("type"), building);
 					}
 				}
-				
-				//Store in the HashMap
-				if (entity.equals("minion"))
-				{
-					minionStatsMap.put(((Element) node).getAttribute("type"), minion);
-				}
-				else if (entity.equals("building"))
-				{
-					buildingStatsMap.put(((Element) node).getAttribute("type"), building);
-				}
 			}
-		} 
+		}
 		catch (Exception ex) 
 		{
 			ex.printStackTrace();
@@ -203,7 +149,7 @@ public class UnitParser
 	
 	//Breaks down string values from the XML and storing them in and returning an int ArrayList. 
 	//The strings may hold multiple stat values - up to one per level.	
-	private static ArrayList<Integer> tokenizeInt(String values, Element element) 
+	private static ArrayList<Integer> tokenizeInt(String values) 
 	{
 		StringTokenizer st = new StringTokenizer(values);
 		ArrayList<Integer> stats = new ArrayList<Integer>();
@@ -220,7 +166,7 @@ public class UnitParser
 		return stats;
 	}
 		
-	private static ArrayList<Float> tokenizeFloat(String values, Element element) 
+	private static ArrayList<Float> tokenizeFloat(String values) 
 	{
 		StringTokenizer st = new StringTokenizer(values);
 		ArrayList<Float> stats = new ArrayList<Float>();
@@ -236,7 +182,7 @@ public class UnitParser
 		return stats;
 	}
 	
-	private static ArrayList<Boolean> tokenizeBool(String values, Element element) 
+	private static ArrayList<Boolean> tokenizeBool(String values) 
 	{	
 		StringTokenizer st = new StringTokenizer(values);
 		ArrayList<Boolean> stats = new ArrayList<Boolean>();

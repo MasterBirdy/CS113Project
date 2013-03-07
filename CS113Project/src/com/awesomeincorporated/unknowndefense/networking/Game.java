@@ -47,7 +47,7 @@ public class Game
 	public void messageCommand(Command cmd)
 	{
 		System.out.println("(Game)Recevied command " + cmd.type);
-    	if (cmd.type > 0 && cmd.type < 7)
+    	if (cmd.type >= 0 && cmd.type < 6)
     	{
 //    		AddUnit add = new AddUnit();
 //    		add.team = cmd.team;

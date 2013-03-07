@@ -72,7 +72,8 @@ public abstract class Unit extends Actor
 			animationDir += 4;
 		else if (!attacking && animationDir > 3)
 			animationDir -= 4;
-		current = animations.get(unitType).get(animationDir).getKeyFrame(stateTime, true);
+		current = animations.get(animation).get(animationDir).getKeyFrame(stateTime, true);
+//		current = animations.get(unitType).get(animationDir).getKeyFrame(stateTime, true);
 		
 		//float wi = Math.abs(current.getRegionWidth() * 1.5f);
 		//float he = Math.abs(current.getRegionHeight() * 1.5f);

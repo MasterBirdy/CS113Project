@@ -11,6 +11,7 @@ public abstract class ActorStructure
 	ArrayList<Integer> attackRange;
 	ArrayList<Integer> cost;
 	ArrayList<Boolean> ranged;
+	ArrayList<Integer> animation;
 	
 	public int maxHealth(int i)
 	{
@@ -27,10 +28,10 @@ public abstract class ActorStructure
 		return attackSpeed.get(i);
 	}
 	
-	public int attackCoolDown(int i)
-	{
-		return attackCoolDown.get(i);
-	}
+//	public int attackCoolDown(int i)
+//	{
+//		return attackCoolDown.get(i);
+//	}
 	
 	public int attackRange(int i)
 	{
@@ -45,5 +46,10 @@ public abstract class ActorStructure
 	public boolean ranged(int i)
 	{
 		return ranged.get(i);
+	}
+	
+	public int animation(int i)
+	{
+		return animation.get(i);
 	}
 }

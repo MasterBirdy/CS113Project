@@ -22,6 +22,8 @@ public abstract class Actor extends Entity
 	static ArrayList<Projectile> projectiles;
 	
 	static TextureRegion[] rangeIndicator;
+	
+	int animation = 0, level = 0;
 
 	public Actor(int x, int y, boolean ranged, int team)
 	{
@@ -68,7 +70,7 @@ public abstract class Actor extends Entity
 		ParticleEffect e = new ParticleEffect();
 		if (!(Gdx.app.getType() == ApplicationType.Android))
 		{
-			e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/SparkEffect.p")), Gdx.files.internal("images"));
+			e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/sparkeffect.p")), Gdx.files.internal("images"));
 			e.setPosition(xCoord + 20, yCoord + 20);
 			e.start();
 		}

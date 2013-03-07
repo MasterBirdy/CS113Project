@@ -3,6 +3,7 @@ package com.awesomeincorporated.unknowndefense;
 //import com.badlogic.gdx.ApplicationListener;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.ListIterator;
 import java.util.PriorityQueue;
 
 import com.awesomeincorporated.unknowndefense.entity.*;
@@ -31,6 +32,7 @@ import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 import com.awesomeincorporated.unknowndefense.networking.Network.*;
 import com.awesomeincorporated.unknowndefense.networking.Network;
 import com.awesomeincorporated.unknowndefense.networking.User;
+import com.awesomeincorporated.unknowndefense.parser.HeroStructure;
 
 public class GameScreen implements Screen 
 {
@@ -153,11 +155,13 @@ public class GameScreen implements Screen
 			sites[2] = new Coordinate(300, 550);
 			maps[1].buildSites(sites, 2);
 		}
-
-		EverythingHolder.load(batch, maps[level]);
-
-		heroes[0] = new SwordFace(maps[level].start1().x(), maps[level].start1().y(), 1, everything.map().getPath().listIterator());
-		heroes[1] = new ArrowEyes(maps[level].start2().x(), maps[level].start2().y(), 2, everything.map().getPath().listIterator(everything.map().getPath().size() - 1));
+		
+		everything.load(batch, maps[level]);
+//		EverythingHolder.load(batch, maps[level]);
+		
+//		heroes[0] = new Hero(maps[level].start1().x(), maps[level].start1().y(), 1, everything.map().getPath().listIterator(), HeroStructure struct);
+//		heroes[0] = new SwordFace(maps[level].start1().x(), maps[level].start1().y(), 1, everything.map().getPath().listIterator());
+//		heroes[1] = new ArrowEyes(maps[level].start2().x(), maps[level].start2().y(), 2, everything.map().getPath().listIterator(everything.map().getPath().size() - 1));
 		Texture sheet = new Texture(Gdx.files.internal("images/sprite_sheet.png"));
 
 		Actor.linkActors(everything.team(1), everything.team(2));
@@ -180,7 +184,7 @@ public class GameScreen implements Screen
 		inputProcessor = new MyInputProcessor();
 
 		MyInputProcessor.loadCamera(camera);
-		MyInputProcessor.loadHero(heroes[0]);
+//		MyInputProcessor.loadHero(heroes[0]);
 		MyInputProcessor.loadGame(this);
 		
 		Building.loadAnimations();
@@ -207,11 +211,13 @@ public class GameScreen implements Screen
 			everything.add(tower, true, 2);
 		}
 		
-		//hero.takeDamage(1000);
-		everything.add(heroes[0], true, 1);
+		everything.initializeHeroes();
 		
-		//nemesis.takeDamage(1000);
-		everything.add(heroes[1], true, 2);
+		//hero.takeDamage(1000);
+//		everything.add(heroes[0], true, 1);
+//		
+//		//nemesis.takeDamage(1000);
+//		everything.add(heroes[1], true, 2);
 		
 		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
 		pauseRectangle2  = new Rectangle(-76, -76, 156, 27);
@@ -335,7 +341,7 @@ public class GameScreen implements Screen
 			if (object instanceof CommandIn)
 			{
 				CommandIn command = (CommandIn)object;
-				if (command.command > 0 && command.command < 7)
+				if (command.command >= 0 && command.command < 6)
 				{
 					System.out.println("Pulled unit send command.");
 					everything.add(((CommandIn)object).command, ((CommandIn)object).team);
@@ -344,7 +350,8 @@ public class GameScreen implements Screen
 				if (command.command > 6 && command.command < 10)
 				{
 					System.out.println("Pulled hero command.");
-					heroes[command.team - 1].stance(command.command - 8);
+					everything.setHeroStance(command.team, command.command - 8);
+//					heroes[command.team - 1].stance(command.command - 8);
 	//				heroes[0].stance(command.command - 8);
 	//				heroes[1].stance(command.command - 8);
 					return;
@@ -524,12 +531,12 @@ public class GameScreen implements Screen
 			// Swordsman
 			if (OverlapTester.pointInRectangle(swordRectangle, touchPoint.x, touchPoint.y))
 			{
-				buyUnit(1);
+				buyUnit(0);
 			}
 			// Archer
 			if (OverlapTester.pointInRectangle(bowRectangle, touchPoint.x, touchPoint.y))
 			{
-				buyUnit(3);
+				buyUnit(1);
 			}
 			// Monk
 			if (OverlapTester.pointInRectangle(monkRectangle, touchPoint.x, touchPoint.y))
@@ -539,17 +546,17 @@ public class GameScreen implements Screen
 			// Mage
 			if (OverlapTester.pointInRectangle(magicRectangle, touchPoint.x, touchPoint.y))
 			{
-				buyUnit(4);
+				buyUnit(3);
 			}
 			// Ninja
 			if (OverlapTester.pointInRectangle(petRectangle, touchPoint.x, touchPoint.y))
 			{
-				buyUnit(5);
+				buyUnit(4);
 			}
 			// Eagle
 			if (OverlapTester.pointInRectangle(spiralRectangle, touchPoint.x, touchPoint.y))
 			{
-				buyUnit(6);
+				buyUnit(5);
 			}
 			if (OverlapTester.pointInRectangle(attackRectangle, touchPoint.x, touchPoint.y))
 			{

@@ -12,17 +12,19 @@ public class Minion extends Unit
 		super(x, y, ranged, team, p, 0, 0);//(int)(Math.random() * 10 - 5), (int)(Math.random() * 5 - 2));
 	}
 	
-	public Minion(int x, int y, int team, ListIterator<Coordinate> p, MinionStructure struct)
+	public Minion(int x, int y, int team, ListIterator<Coordinate> p, MinionStructure struct, int level)
 	{
 		super(x, y, struct.ranged(0), team, p, 0, 0);
-		
-		maxHealth = struct.maxHealth(0);
+		this.level = level;
+		maxHealth = struct.maxHealth(level);
 		currentHealth = maxHealth;
-		damage = struct.damage(0);
-		attackSpeed = struct.attackSpeed(0);
-		attackCooldown = struct.attackCoolDown(0);
-		attackRange = struct.attackRange(0);
-		speed = struct.speed(0);
+		damage = struct.damage(level);
+		attackSpeed = struct.attackSpeed(level);
+//		attackCooldown = struct.attackCoolDown(level);
+		attackRange = struct.attackRange(level);
+		speed = struct.speed(level);
+		animation = struct.animation(level);
+//		animation = 2;
 	}
 
 	@Override

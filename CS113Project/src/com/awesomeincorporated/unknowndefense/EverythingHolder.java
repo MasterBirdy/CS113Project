@@ -23,6 +23,8 @@ public class EverythingHolder
 	static private SpriteBatch batch;
 	static boolean showRange;
 	static Map map;
+	Hero playerHeroes[] = new Hero[2];
+	Building playerBases[] = new Building[2];
 	//Hero hero1, hero2;
 //	long waveTimer, spawnTimer1, spawnTimer2, spawnInterval1, spawnInterval2;
 //	long waveTime, waveInterval;
@@ -46,6 +48,7 @@ public class EverythingHolder
 	int petType = 0;
 	
 	MinionStructure[][] playerUnits;// = new String[2][6]; 
+	HeroStructure[] heroUnits;
 	
 	HashMap<String, MinionStructure> minions = new HashMap<String, MinionStructure>();
 	HashMap<String, BuildingStructure> buildings = new HashMap<String, BuildingStructure>();
@@ -65,8 +68,7 @@ public class EverythingHolder
 		buildings = unitParser.getBuildingStats();
 		heroes = unitParser.getHeroStats();
 		
-		playerUnits = new MinionStructure[][]{{minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk")}
-											 ,{minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk"), minions.get("monk")}};
+//		initializeHeroes();
 		
 		Entity.loadStatics(effects);
 		// Wave control
@@ -80,6 +82,24 @@ public class EverythingHolder
 		
 //		music = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
 //		music.setLooping(true);
+	}
+	
+	public void initializeHeroes()
+	{
+		playerUnits = new MinionStructure[][]{
+				{minions.get("swordsman"), minions.get("archer"), minions.get("monk"), minions.get("mage"), minions.get("ninja"), minions.get("eagle")}
+			   ,{minions.get("swordsman"), minions.get("archer"), minions.get("monk"), minions.get("mage"), minions.get("ninja"), minions.get("elemental")}};
+		heroUnits = new HeroStructure[]{heroes.get("mrwizard"), heroes.get("arroweyes")};
+
+		playerHeroes[0] = new Hero(map.start1().x(), map.start1().y(), 1, map().getPath().listIterator(), heroUnits[0]);
+		playerHeroes[1] = new Hero(map.start2().x(), map.start2().y(), 2, map().getPath().listIterator(map().getPath().size() - 1), heroUnits[1]);
+		add(playerHeroes[0], true, 1);
+		add(playerHeroes[1], true, 2);		
+	}
+	
+	public void setHeroStance(int team, int s)
+	{
+		playerHeroes[team-1].stance(s);
 	}
 	
 	public int turn()
@@ -235,28 +255,29 @@ public class EverythingHolder
 		int randX = 0; //(int)(Math.random() * 10);
 		int randY = 0; //(int)(Math.random() * 5);
 		
-		if (m == 1)
-			add(new Swordsman(start.x() + randX, start.y() + randY, team, iter), true, team);
-		else if (m == 2)
-			add(new Archer(start.x() + randX, start.y() + randY, team, iter), true, team);
-		else if (m == 3)
-			add(new Monk(start.x() + randX, start.y() + randY, team, iter), true, team);
-		else if (m == 4)
-			add(new Mage(start.x() + randX, start.y() + randY, team, iter), true, team);
-		else if (m == 5)
-			add(new Ninja(start.x() + randX, start.y() + randY, team, iter), true, team);
-		else if (m == 6)
-		{
-			petType++;
-			if (petType > 2)
-				petType = 0;
-			if (petType == 0)
-				add(new Eagle(start.x() + randX, start.y() + randY, team, iter), true, team);
-			else if (petType == 1)
-				add(new Wolf(start.x() + randX, start.y() + randY, team, iter), true, team);
-			else
-				add(new Elemental(start.x() + randX, start.y() + randY, team, iter), true, team);
-		}
+		add(new Minion(start.x(), start.y(), team, iter, playerUnits[team-1][m], 0), true, team);
+//		if (m == 1)
+//			add(new Swordsman(start.x() + randX, start.y() + randY, team, iter), true, team);
+//		else if (m == 2)
+//			add(new Archer(start.x() + randX, start.y() + randY, team, iter), true, team);
+//		else if (m == 3)
+//			add(new Monk(start.x() + randX, start.y() + randY, team, iter), true, team);
+//		else if (m == 4)
+//			add(new Mage(start.x() + randX, start.y() + randY, team, iter), true, team);
+//		else if (m == 5)
+//			add(new Ninja(start.x() + randX, start.y() + randY, team, iter), true, team);
+//		else if (m == 6)
+//		{
+//			petType++;
+//			if (petType > 2)
+//				petType = 0;
+//			if (petType == 0)
+//				add(new Eagle(start.x() + randX, start.y() + randY, team, iter), true, team);
+//			else if (petType == 1)
+//				add(new Wolf(start.x() + randX, start.y() + randY, team, iter), true, team);
+//			else
+//				add(new Elemental(start.x() + randX, start.y() + randY, team, iter), true, team);
+//		}
 	}
 	
 	public LinkedList<Actor> team(int t)
@@ -469,9 +490,10 @@ public class EverythingHolder
 		showRange = (showRange ? false : true);
 	}
 	
-	static void load(SpriteBatch b, Map m)
+	public void load(SpriteBatch b, Map m)
 	{
 		batch = b;
 		map = m;
+//		initializeHeroes();
 	}
 }

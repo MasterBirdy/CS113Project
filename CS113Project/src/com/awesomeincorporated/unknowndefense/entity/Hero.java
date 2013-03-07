@@ -2,8 +2,10 @@ package com.awesomeincorporated.unknowndefense.entity;
 import java.util.ListIterator;
 
 import com.awesomeincorporated.unknowndefense.map.Coordinate;
+import com.awesomeincorporated.unknowndefense.parser.HeroStructure;
+import com.awesomeincorporated.unknowndefense.parser.MinionStructure;
 
-public abstract class Hero extends Unit 
+public class Hero extends Unit 
 {
 	//int stance = 1, previousStance = 1;
 	boolean changedDirection = false;
@@ -11,6 +13,21 @@ public abstract class Hero extends Unit
 	public Hero(int x, int y, boolean ranged, int team, ListIterator<Coordinate> p) 
 	{
 		super(x, y, ranged, team, p, 0, 0);
+		stance = 1;
+		alive = false;
+	}
+	
+	public Hero(int x, int y, int team, ListIterator<Coordinate> p, HeroStructure struct)
+	{
+		super(x, y, struct.ranged(0), team, p, 0, 0);
+		this.level = 0;
+		maxHealth = struct.maxHealth(level);
+		currentHealth = maxHealth;
+		damage = struct.damage(level);
+		attackSpeed = struct.attackSpeed(level);
+		attackRange = struct.attackRange(level);
+		speed = struct.speed(level);
+		animation = struct.animation(level);
 		stance = 1;
 		alive = false;
 	}
@@ -84,5 +101,11 @@ public abstract class Hero extends Unit
 	public int stance()
 	{
 		return stance;
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
 	}
 }
