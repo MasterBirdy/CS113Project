@@ -28,7 +28,8 @@ public abstract class Unit extends Actor
 		super(x + rX, y + rY, ranged, team);
 		//this.speed = speed;
 		this.pathIter = pathIter;
-		destination = (team == 1 ? pathIter.next() : pathIter.previous());
+		destination = pathIter.next();
+//		destination = (team == 1 ? pathIter.next() : pathIter.previous());
 		stateTime = 0f;
 		changedDirection = true;
 		randX = rX;
@@ -40,25 +41,6 @@ public abstract class Unit extends Actor
 	{		
 		stateTime += Gdx.graphics.getDeltaTime();
 		TextureRegion current;
-		int unitType;
-		if (this instanceof Swordsman || this instanceof SwordFace)
-			unitType = 0;
-		else if (this instanceof Archer || this instanceof ArrowEyes)
-			unitType = 1;
-		else if (this instanceof Monk || this instanceof SeaMonk)
-			unitType = 2;
-		else if (this instanceof Mage)
-			unitType = 3;
-		else if (this instanceof Ninja)
-			unitType = 4;
-		else if (this instanceof Eagle)
-			unitType = 5;
-		else if (this instanceof Wolf)
-			unitType = 6;
-		else if (this instanceof Elemental)
-			unitType = 7;
-		else
-			unitType = 0;
 		
 		if (xSpeed > 0.6)
 			animationDir = (attacking ? 6 : 2);
@@ -218,8 +200,10 @@ public abstract class Unit extends Actor
 		
 		if (previousStance == -1)
 		{
-			if ((team == 1 ? pathIter.hasNext() : pathIter.hasPrevious()))
-				destination = (team == 1 ? pathIter.next() : pathIter.previous());
+			if (pathIter.hasNext())
+				destination = pathIter.next();
+//			if ((team == 1 ? pathIter.hasNext() : pathIter.hasPrevious()))
+//				destination = (team == 1 ? pathIter.next() : pathIter.previous());
 			distance = getDistanceSquared(destination.x(), destination.y());
 			//setSpeed(distance);
 			xSpeed = 0;
@@ -235,8 +219,10 @@ public abstract class Unit extends Actor
 			{
 				this.xCoord(destination.x());
 				this.yCoord(destination.y());
-				if ((team == 1 ? pathIter.hasNext() : pathIter.hasPrevious()))
-					destination = (team == 1 ? pathIter.next() : pathIter.previous());
+				if (pathIter.hasNext())
+					destination = pathIter.next();
+//				if ((team == 1 ? pathIter.hasNext() : pathIter.hasPrevious()))
+//					destination = (team == 1 ? pathIter.next() : pathIter.previous());
 				else
 				{
 					alive = false;
@@ -264,10 +250,14 @@ public abstract class Unit extends Actor
 		
 		if (previousStance != -1)
 		{
-			if ((team == 1 ? pathIter.hasPrevious() : pathIter.hasNext()))
-				destination = (team == 1 ? pathIter.previous() : pathIter.next());
-			if ((team == 1 ? pathIter.hasPrevious() : pathIter.hasNext()))
-				destination = (team == 1 ? pathIter.previous() : pathIter.next());
+			if (pathIter.hasPrevious())
+				destination = pathIter.previous();
+			if (pathIter.hasPrevious())
+				destination = pathIter.previous();
+//			if ((team == 1 ? pathIter.hasPrevious() : pathIter.hasNext()))
+//				destination = (team == 1 ? pathIter.previous() : pathIter.next());
+//			if ((team == 1 ? pathIter.hasPrevious() : pathIter.hasNext()))
+//				destination = (team == 1 ? pathIter.previous() : pathIter.next());
 			distance = getDistanceSquared(destination.x(), destination.y());
 			setSpeed(distance);
 		}
@@ -281,8 +271,10 @@ public abstract class Unit extends Actor
 		{
 			this.xCoord(destination.x());
 			this.yCoord(destination.y());
-			if ((team == 1 ? pathIter.hasPrevious() : pathIter.hasNext()))
-				destination = (team == 1 ? pathIter.previous() : pathIter.next());
+			if (pathIter.hasPrevious())
+				destination = pathIter.previous();
+//			if ((team == 1 ? pathIter.hasPrevious() : pathIter.hasNext()))
+//				destination = (team == 1 ? pathIter.previous() : pathIter.next());
 			else
 			{
 				return;

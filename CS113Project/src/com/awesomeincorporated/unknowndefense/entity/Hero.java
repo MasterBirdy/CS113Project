@@ -61,7 +61,9 @@ public class Hero extends Unit
 			previousStance = -1;
 		}
 		else if (stance == 0)
+		{
 			hold();
+		}
 		else if (attacking && attackCooldown <= 0)
 		{
 			attack();
@@ -70,12 +72,18 @@ public class Hero extends Unit
 		}
 		else
 		{
-			if (previousStance == -1 && (this.team == 1 ? pathIter.hasNext() : pathIter.hasPrevious()))
+			if (previousStance == -1 && pathIter.hasNext())
 			{
-				destination = (this.team == 1 ? pathIter.next() : pathIter.previous());
+				destination = pathIter.next();
 				xSpeed = 0;
 				ySpeed = 0;
 			}
+//			if (previousStance == -1 && (this.team == 1 ? pathIter.hasNext() : pathIter.hasPrevious()))
+//			{
+//				destination = (this.team == 1 ? pathIter.next() : pathIter.previous());
+//				xSpeed = 0;
+//				ySpeed = 0;
+//			}
 			advance();
 			previousStance = 1;
 		}

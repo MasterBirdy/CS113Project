@@ -89,10 +89,11 @@ public class EverythingHolder
 		playerUnits = new MinionStructure[][]{
 				{minions.get("swordsman"), minions.get("archer"), minions.get("monk"), minions.get("mage"), minions.get("ninja"), minions.get("eagle")}
 			   ,{minions.get("swordsman"), minions.get("archer"), minions.get("monk"), minions.get("mage"), minions.get("ninja"), minions.get("elemental")}};
-		heroUnits = new HeroStructure[]{heroes.get("mrwizard"), heroes.get("arroweyes")};
+		heroUnits = new HeroStructure[]{heroes.get("arroweyes"), heroes.get("mrwizard")};
 
 		playerHeroes[0] = new Hero(map.start1().x(), map.start1().y(), 1, map().getPath().listIterator(), heroUnits[0]);
-		playerHeroes[1] = new Hero(map.start2().x(), map.start2().y(), 2, map().getPath().listIterator(map().getPath().size() - 1), heroUnits[1]);
+		playerHeroes[1] = new Hero(map.start2().x(), map.start2().y(), 2, map().getReversePath().listIterator(), heroUnits[1]);
+//		playerHeroes[1] = new Hero(map.start2().x(), map.start2().y(), 2, map().getPath().listIterator(map().getPath().size() - 1), heroUnits[1]);
 		add(playerHeroes[0], true, 1);
 		add(playerHeroes[1], true, 2);		
 	}
@@ -251,7 +252,8 @@ public class EverythingHolder
 	private void spawnMob(int m, int team)
 	{
 		Coordinate start = (team == 1 ? map.start1() : map.start2());
-		ListIterator<Coordinate> iter = (team == 1 ? map.getPath().listIterator() : map.getPath().listIterator(map.getPath().size() - 1));
+		ListIterator<Coordinate> iter = (team == 1 ? map.getPath().listIterator() : map.getReversePath().listIterator());
+//		ListIterator<Coordinate> iter = (team == 1 ? map.getPath().listIterator() : map.getPath().listIterator(map.getPath().size() - 1));
 		int randX = 0; //(int)(Math.random() * 10);
 		int randY = 0; //(int)(Math.random() * 5);
 		
@@ -445,7 +447,8 @@ public class EverythingHolder
 					((Hero)a).respawn(map.start1().x(), map.start1().y(), map.getPath().listIterator());
 			for (Actor a : teams[1])
 				if (a instanceof Hero && !a.isAlive())
-					((Hero)a).respawn(map.start2().x(), map.start2().y(), map.getPath().listIterator(map.getPath().size() - 1));
+					((Hero)a).respawn(map.start2().x(), map.start2().y(), map.getReversePath().listIterator());
+//					((Hero)a).respawn(map.start2().x(), map.start2().y(), map.getPath().listIterator(map.getPath().size() - 1));
 //			if (Settings.getInstance().getDifficulty() == Difficulty.EASY)
 //				funds += income;
 //			else if (Settings.getInstance().getDifficulty() == Difficulty.HARD)
