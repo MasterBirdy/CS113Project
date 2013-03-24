@@ -116,6 +116,8 @@ public class MainMenuScreen implements Screen
 		
 		blood.start();
 		
+		
+		Gdx.graphics.setVSync(true);
 		//Gdx.input.setCursorCatched(false);
 	}
 
@@ -144,7 +146,7 @@ public class MainMenuScreen implements Screen
 		if (blood.isComplete())
 			blood.start();
 		//fire.setPosition(x, 480-y);
-		fire.draw(batch, delta);//, delta);
+		fire.draw(batch);//, delta);
 		//spark.draw(batch, delta);
 		blood.setPosition(x, 480-y);
 		newGameSprite.draw(batch);

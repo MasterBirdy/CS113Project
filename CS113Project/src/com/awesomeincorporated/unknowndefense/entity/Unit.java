@@ -39,6 +39,7 @@ public abstract class Unit extends Actor
 	@Override
 	public void draw(SpriteBatch batch)
 	{		
+		super.draw(batch);
 		stateTime += Gdx.graphics.getDeltaTime();
 		TextureRegion current;
 		

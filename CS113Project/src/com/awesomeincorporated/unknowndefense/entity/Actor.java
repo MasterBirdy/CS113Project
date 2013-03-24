@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.awesomeincorporated.unknowndefense.skill.SkillEffect;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -12,15 +13,21 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class Actor extends Entity
 {
-	int currentHealth, maxHealth, damage;
-	float attackSpeed, attackCooldown, attackRange;
-	boolean alive, attacking, ranged;
+	int currentHealth, maxHealth, damage,
+		damageBoost = 0;								// For buffs
+	float attackSpeed, attackCooldown, attackRange,
+		  attackSpeedBoost = 0, attackRangeBoost = 0;	// For buffs
+	boolean attacking, ranged;
 	Actor target;
-	static LinkedList<Actor> team1;
-	static LinkedList<Actor> team2;
+	ArrayList<SkillEffect> skillEffects = new ArrayList<SkillEffect>(5);
+	ArrayList<ParticleEffect> peEffect = new ArrayList<ParticleEffect>(5);
+	static SkillEffect nullSkillEffect = new SkillEffect();
+	static ParticleEffect nullParticleEffect = new ParticleEffect();
+//	static LinkedList<Actor> team1;
+//	static LinkedList<Actor> team2;
 	static ParticleEffect fire = new ParticleEffect();
 	static ArrayList<Projectile> projectiles;
-	
+	int firstEmpty;
 	static TextureRegion[] rangeIndicator;
 	
 	int animation = 0, level = 0;
@@ -40,6 +47,83 @@ public abstract class Actor extends Entity
 		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 		fire.setPosition(50, 50);
 		fire.start();
+	}
+	
+	public void takeSkillEffect(SkillEffect skill)
+	{
+		firstEmpty = skillEffects.indexOf(nullSkillEffect);
+		if (firstEmpty >= 0)
+			skillEffects.add(firstEmpty, skill);
+		else
+			skillEffects.add(skill);
+		
+		skill.affected.start();
+		firstEmpty = peEffect.indexOf(nullParticleEffect);
+		if (firstEmpty >= 0)
+			peEffect.add(firstEmpty, skill.affected);
+		else
+			peEffect.add(skill.affected);
+	}
+	
+	public void update()
+	{		
+		for (SkillEffect skill : skillEffects)
+		{
+			skill.update();
+//			if (skill.ticksLeft <= 0)
+//				skill = nullSkillEffect;
+//			if (skill == nullSkillEffect)
+//				continue;
+//			
+//			switch (skill.effect)
+//			{
+//				case 1:
+//					takeDamage(skill.effectAmount);
+//					break;
+//				case 2:
+//					takeDamage(-1 * skill.effectAmount);
+//					break;
+//				case 3:
+//					damageBoost += skill.effectAmount;
+//					break;
+//				case 4:
+//					attackSpeedBoost += skill.effectAmount;
+//					break;
+//				case 5:
+//					attackRangeBoost += skill.effectAmount;
+//					break;
+//			}
+//			skill.ticksLeft--;
+			
+			// For continuous effects
+//			if (skill.continuous)
+//			{
+//				firstEmpty = peEffect.indexOf(nullParticleEffect);
+//				if (firstEmpty >= 0)
+//					peEffect.add(firstEmpty, skill.affected);
+//				else
+//					peEffect.add(skill.affected);
+//			}
+		}
+	}
+	
+	public void draw(SpriteBatch batch)
+	{
+		for (ParticleEffect e : peEffect)
+			e.draw(batch);
+//		for (SkillEffect skill : skillEffects)
+//		{
+//			skill.draw(batch);
+//		}
+	}
+	
+	public void drawParticleEffects(SpriteBatch batch)
+	{
+		for (ParticleEffect effect : peEffect)
+		{
+			effect.setPosition(xCoord, yCoord + 10);
+			effect.draw(batch);
+		}
 	}
 	
 	static public void loadProjectiles(ArrayList<Projectile> p)
@@ -97,11 +181,6 @@ public abstract class Actor extends Entity
 		currentHealth -= damage;
 	}
 	
-	public boolean isAlive()
-	{
-		return alive;
-	}
-	
 	public void checkAlive()
 	{
 		if (currentHealth <= 0)
@@ -112,11 +191,11 @@ public abstract class Actor extends Entity
 		}
 	}
 	
-	public static void linkActors(LinkedList<Actor> t1, LinkedList<Actor> t2)
-	{
-		team1 = t1;
-		team2 = t2;
-	}
+//	public static void linkActors(LinkedList<Actor> t1, LinkedList<Actor> t2)
+//	{
+//		team1 = t1;
+//		team2 = t2;
+//	}
 	
 	public void targetSelector()
 	{
@@ -132,7 +211,8 @@ public abstract class Actor extends Entity
 			}
 		}		
 		
-		LinkedList<Actor> enemy = (team == 1 ? team2 : team1);
+		ArrayList<Actor> enemy = (team == 1 ? everything.team(2) : everything.team(1));
+//		LinkedList<Actor> enemy = (team == 1 ? team2 : team1);
 		Iterator<Actor> actorIter = enemy.iterator();
 		Actor newTarget = null;
 		float newDistance = 1000000;

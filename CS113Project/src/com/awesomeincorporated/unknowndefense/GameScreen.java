@@ -164,7 +164,7 @@ public class GameScreen implements Screen
 //		heroes[1] = new ArrowEyes(maps[level].start2().x(), maps[level].start2().y(), 2, everything.map().getPath().listIterator(everything.map().getPath().size() - 1));
 		Texture sheet = new Texture(Gdx.files.internal("images/sprite_sheet.png"));
 
-		Actor.linkActors(everything.team(1), everything.team(2));
+//		Actor.linkActors(everything.team(1), everything.team(2));
 		//<<<<<<< HEAD
 		Entity.loadStatics(sheet);
 		Actor.loadRange();
@@ -191,16 +191,19 @@ public class GameScreen implements Screen
 
 		Building tower = new Stronghold(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
 		tower.upgrade();
-		everything.add(tower, true, 1);
+		everything.add(tower, 1);
+//		everything.add(tower, true, 1);
 		tower = new Stronghold(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
 		tower.upgrade();
-		everything.add(tower, true, 2);
+		everything.add(tower, 2);
+//		everything.add(tower, true, 2);
 		
 		int towerNumber = 1;
 		for (Coordinate c : everything.map().buildSites(1))
 		{
 			tower = new ArrowTower(c.x(), c.y(), 1, towerNumber++);
-			everything.add(tower, true, 1);
+			everything.add(tower, 1);
+//			everything.add(tower, true, 1);
 		}
 		
 		towerNumber = 1;
@@ -208,7 +211,8 @@ public class GameScreen implements Screen
 		{
 			tower = new ArrowTower(c.x(), c.y(), 2, towerNumber++);
 //			tower.upgrade();
-			everything.add(tower, true, 2);
+			everything.add(tower, 2);
+//			everything.add(tower, true, 2);
 		}
 		
 		everything.initializeHeroes();
@@ -312,6 +316,7 @@ public class GameScreen implements Screen
 	
 	private void endGame(int t)
 	{
+		if (t == 0) return;
 		everything.end();
 		game.mainMenuScreen.gameWon();
 		game.setScreen(game.mainMenuScreen);
@@ -378,10 +383,11 @@ public class GameScreen implements Screen
 		everything.update();
 		if (!multiplayer)
 			randomSpawner();
-		if (!everything.team(1).getLast().isAlive())
-			endGame(1);
-		else if (!everything.team(2).getLast().isAlive())
-			endGame(2);
+		endGame(everything.winCondition());
+//		if (!everything.team(1).getLast().isAlive())
+//			endGame(1);
+//		else if (!everything.team(2).getLast().isAlive())
+//			endGame(2);
 	}
 
 	public void randomSpawner()
@@ -500,11 +506,11 @@ public class GameScreen implements Screen
 		}
 		if ((Gdx.input.isKeyPressed(Input.Keys.Q)) && pauseCooldown > 100)
 		{
-			for (Actor a : (team == 1 ? everything.team(1) : everything.team(2)))
-			{
-				if (a instanceof ArrowTower)
-					((ArrowTower) a).upgrade();
-			}
+//			for (Actor a : (team == 1 ? everything.team(1) : everything.team(2)))
+//			{
+//				if (a instanceof ArrowTower)
+//					((ArrowTower) a).upgrade();
+//			}
 			pauseCooldown = 0;
 		}
 		if (Gdx.input.justTouched()) 

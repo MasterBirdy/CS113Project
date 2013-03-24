@@ -5,21 +5,26 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 public class SkillStructure 
 {
 	////////////////////////////
-	int 			state,
+	public int		aoe,
+					targetTeam,
+					effect,
+					effectAmount, 
+					state,
 					castTime,
 					cooldown, 
-					damage, 
 					cost,
-					aoe,
-					duration,
-					targetTeam;
+					duration;
 	////////////////////////////
-	boolean 		damageSplit;
+	public boolean 	damageSplit,
+					additive,
+					continuous;
 	////////////////////////////
-	float			speed;
+	public float	speed;
 	////////////////////////////
-	ParticleEffect 	cast, 
-					travel, 
-					trigger;
+	public String		 	cast, 
+							travel, 
+							detonateEffect,
+							affected;
 	////////////////////////////	
+	public String name;
 }

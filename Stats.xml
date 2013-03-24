@@ -105,7 +105,7 @@
 		<damage>			18		51		511		5111		</damage>
 		<attackspeed>		50		51		511		5111		</attackspeed>
 		<attackrange>		90		51		511		5111		</attackrange>
-		<speed>				1.3f	51f		511f	5111f		</speed>
+		<speed>				1.34f	51f		511f	5111f		</speed>
 		<cost> 				20		51		511		5111		</cost>
 		<animation> 		3		3		3		3			</animation>
 		<ranged> 			true 								</ranged>

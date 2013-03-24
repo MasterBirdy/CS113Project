@@ -4,17 +4,22 @@ import java.util.ListIterator;
 import com.awesomeincorporated.unknowndefense.map.Coordinate;
 import com.awesomeincorporated.unknowndefense.parser.HeroStructure;
 import com.awesomeincorporated.unknowndefense.parser.MinionStructure;
+import com.awesomeincorporated.unknowndefense.parser.SkillStructure;
+import com.awesomeincorporated.unknowndefense.skill.TargetedSkill;
+import com.awesomeincorporated.unknowndefense.skill.TestFireBall;
 
 public class Hero extends Unit 
 {
 	//int stance = 1, previousStance = 1;
 	boolean changedDirection = false;
+	SkillStructure activeSkill;
 	
 	public Hero(int x, int y, boolean ranged, int team, ListIterator<Coordinate> p) 
 	{
 		super(x, y, ranged, team, p, 0, 0);
 		stance = 1;
 		alive = false;
+		activeSkill = new TestFireBall();
 	}
 	
 	public Hero(int x, int y, int team, ListIterator<Coordinate> p, HeroStructure struct)
@@ -30,6 +35,7 @@ public class Hero extends Unit
 		animation = struct.animation(level);
 		stance = 1;
 		alive = false;
+		activeSkill = new TestFireBall();
 	}
 	
 	public void stance(int s)
@@ -53,6 +59,7 @@ public class Hero extends Unit
 	@Override
 	public void update() 
 	{
+		super.update();
 		attackCooldown--;
 		
 		if (stance == -1)
@@ -109,6 +116,13 @@ public class Hero extends Unit
 	public int stance()
 	{
 		return stance;
+	}
+	
+	
+	public void attack()
+	{
+		super.attack();
+		everything.add(new TargetedSkill(activeSkill, this, target), this.team);
 	}
 
 	@Override

@@ -40,10 +40,11 @@ public abstract class Building extends Actor
 	{
 		return towerNumber;
 	}
-
+	
 	@Override
 	public void draw(SpriteBatch batch)
 	{
+		super.draw(batch);
 		if (this.isAlive() && currentHealth < maxHealth / 2 && Gdx.app.getType() != ApplicationType.Android)
 		{
 			fire.draw(batch, 0.01f);

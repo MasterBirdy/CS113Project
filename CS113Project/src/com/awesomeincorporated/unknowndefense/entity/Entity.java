@@ -3,6 +3,7 @@ package com.awesomeincorporated.unknowndefense.entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.awesomeincorporated.unknowndefense.EverythingHolder;
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -15,15 +16,18 @@ public abstract class Entity
 	int team;
 	float xCoord;
 	float yCoord;
+	protected boolean alive;
 	static Texture spriteSheet;
 	static HashMap<String, Sound> sounds = new HashMap<String, Sound>(); 
 	static float volume = 1;
+	protected static EverythingHolder everything;
 	static ArrayList<ParticleEffect> effects;
 	
 	public Entity()
 	{
 		xCoord = 0;
 		yCoord = 0;
+		alive = false;
 	}
 	
 	public Entity(float x, float y, int team)
@@ -31,6 +35,11 @@ public abstract class Entity
 		xCoord = x;
 		yCoord = y;
 		this.team = team;
+	}
+	
+	static public void linkHolder(EverythingHolder e)
+	{
+		everything = e;
 	}
 	
 	public int team()
@@ -113,8 +122,13 @@ public abstract class Entity
 		yCoord = y; 
 	}
 
-	protected void rangeAttack() {
+	protected void rangeAttack() 
+	{
 		// TODO Auto-generated method stub
-		
+	}
+	
+	public boolean isAlive()
+	{
+		return alive;
 	}
 }
