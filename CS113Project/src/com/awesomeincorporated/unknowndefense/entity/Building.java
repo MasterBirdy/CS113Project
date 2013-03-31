@@ -44,7 +44,7 @@ public abstract class Building extends Actor
 	@Override
 	public void draw(SpriteBatch batch)
 	{
-		super.draw(batch);
+//		super.draw(batch);
 		if (this.isAlive() && currentHealth < maxHealth / 2 && Gdx.app.getType() != ApplicationType.Android)
 		{
 			fire.draw(batch, 0.01f);
@@ -71,7 +71,8 @@ public abstract class Building extends Actor
 			unitType = 0;
 		}
 		current = animations.get(unitType).get(0).getKeyFrame(stateTime, true);
-		batch.draw(current, xCoord + (team == 1 ? 20 : -20), yCoord - (debug ? Math.abs(current.getRegionHeight() / 3f) : 0), Math.abs(current.getRegionWidth() / 4), Math.abs(current.getRegionHeight() / 2f), Math.abs(current.getRegionWidth()), Math.abs(current.getRegionHeight()), (team == 1 ? -1f : 1f), 1f, 0f);
+//		batch.draw(current, xCoord + (team == 1 ? 20 : -20), yCoord - (debug ? Math.abs(current.getRegionHeight() / 3f) : 0), Math.abs(current.getRegionWidth() / 4), Math.abs(current.getRegionHeight() / 2f), Math.abs(current.getRegionWidth()), Math.abs(current.getRegionHeight()), (team == 1 ? -1f : 1f), 1f, 0f);
+		batch.draw(current, xCoord, yCoord);
 		//batch.draw(currentSprite, xCoord, yCoord);
 	}
 	

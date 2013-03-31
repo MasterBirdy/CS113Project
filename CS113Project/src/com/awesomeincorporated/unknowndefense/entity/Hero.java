@@ -38,6 +38,11 @@ public class Hero extends Unit
 		activeSkill = new TestFireBall();
 	}
 	
+	public void activeSkill()
+	{
+		everything.add(new TargetedSkill(activeSkill, this, target), team);
+	}
+	
 	public void stance(int s)
 	{
 		stance = s;
@@ -122,7 +127,6 @@ public class Hero extends Unit
 	public void attack()
 	{
 		super.attack();
-		everything.add(new TargetedSkill(activeSkill, this, target), this.team);
 	}
 
 	@Override

@@ -79,6 +79,7 @@ public abstract class Skill extends Entity
 			temp.add(caster);
 			return temp;
 		}
+		
 		return everything.team(targetTeam);
 	}
 	
@@ -108,7 +109,9 @@ public abstract class Skill extends Entity
 	
 	public void applyToTargets()
 	{
+		System.out.println("Applying to targets (Skill)");
 		for (Actor a : inRange())
-			a.takeSkillEffect(new SkillEffect(this, a));
+			if (a.isAlive())
+				a.takeSkillEffect(new SkillEffect(this, a));
 	}
 }

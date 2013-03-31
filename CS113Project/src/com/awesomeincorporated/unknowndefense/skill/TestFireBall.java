@@ -6,15 +6,15 @@ public class TestFireBall extends SkillStructure
 {
 	public TestFireBall()
 	{
-		aoe = 0;
-		targetTeam = 1;
+		aoe = 20;
+		targetTeam = -1;
 		effect = 0;
-		effectAmount = 500;
+		effectAmount = 1000;
 		duration = 1;
 		damageSplit = false;
 		additive = true;
 		continuous = true;
-		speed = 2;
+		speed = 0;
 		cast = "fire";
 		travel = "fire";
 		detonateEffect = "fire";

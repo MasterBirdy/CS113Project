@@ -4,6 +4,7 @@ import com.awesomeincorporated.unknowndefense.EverythingHolder;
 import com.awesomeincorporated.unknowndefense.GameScreen;
 import com.awesomeincorporated.unknowndefense.entity.Entity;
 import com.awesomeincorporated.unknowndefense.entity.Hero;
+import com.awesomeincorporated.unknowndefense.ui.GameUI;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
@@ -17,17 +18,21 @@ public class MyInputProcessor implements InputProcessor
 	boolean down = false;
 	int x, y;
 	int deltaX, deltaY;
-	static OrthographicCamera camera;
+	static OrthographicCamera camera, uiCamera;
 	static Hero hero;
 	static GameScreen game;
+	static GameUI gameUI3;
 	int numberOfFingers = 0;
 	int fingerOnePointer;
 	int fingerTwoPointer;
 	float lastDistance = 0;
+	Vector3 touchPoint = new Vector3();
 	Vector3 fingerOne = new Vector3();
 	Vector3 fingerTwo = new Vector3();
 	float zoom;
 	boolean mouse = false;
+	
+	int hit;
 
 	@Override
 	public boolean keyDown(int keycode) 
@@ -120,8 +125,14 @@ public class MyInputProcessor implements InputProcessor
 			return false;
 		}
 		
-		if (x >= 600)
+//		if (x >= 600)
+//			return false;
+		uiCamera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+		
+		if (buttonHit(gameUI3.hit(touchPoint.x, touchPoint.y)))
+		{
 			return false;
+		}
 		
 		if (!down)
 		{
@@ -133,8 +144,22 @@ public class MyInputProcessor implements InputProcessor
 		this.y = y;
 		
 		//hero.stance(-1);
+		System.out.println(x + ": " + y);
 		
 		return false;
+	}
+	
+	private boolean buttonHit(int h)
+	{
+		if (h == -1)
+			return false;
+		if (h < 6)
+			game.buyUnit(h);
+		else if (h < 9)
+			game.setHeroStance(7 - h);
+		else
+			game.castHeroActive();
+		return true;
 	}
 
 	@Override
@@ -225,9 +250,10 @@ public class MyInputProcessor implements InputProcessor
 		return false;
 	}
 	
-	public static void loadCamera(OrthographicCamera cameraIn)
+	public static void loadCamera(OrthographicCamera cameraIn, OrthographicCamera uiCam)
 	{
 		camera = cameraIn;
+		uiCamera = uiCam;
 	}
 	
 	public static void loadHero(Hero h)
@@ -235,8 +261,9 @@ public class MyInputProcessor implements InputProcessor
 		hero = h;
 	}
 	
-	public static void loadGame(GameScreen g)
+	public static void loadGame(GameScreen g, GameUI ui)
 	{
 		game = g;
+		gameUI3 = ui;
 	}
 }

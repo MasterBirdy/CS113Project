@@ -12,6 +12,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+
 
 public class UnitParser 
 {
@@ -50,7 +53,13 @@ public class UnitParser
 			if (stats.length() < 1)
 			{
 				System.out.println("Yeah");
-				stats = new File("Stats.xml");
+				
+//				stats = new File("assets/Stats.xml");
+//				FileHandle stats1 = Gdx.files.internal("Stats.xml");
+				stats = Gdx.files.local("assets/Stats.xml").file();
+//				System.out.println(stats1.toString());
+//				stats = stats1.file();
+//				stats = new Gdx.files.internal("data/Stats.xml");//new File("Stats.xml");
 			}
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();

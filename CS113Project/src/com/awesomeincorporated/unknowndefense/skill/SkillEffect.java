@@ -45,14 +45,14 @@ public class SkillEffect
 		else
 			ticksLeft = ((TargetedSkill)s).duration;
 		continuous = s.continuous;
-		affected.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
-		affected.setPosition(400, 300);
-		
-		affected.start();
-//		affected.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
-////		affected = s.affected;
-//		affected.setPosition(target.xCoord(), target.yCoord());
+//		affected.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
+//		affected.setPosition(400, 300);
+//		
 //		affected.start();
+		affected.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
+//		affected = s.affected;
+		affected.setPosition(target.xCoord(), target.yCoord());
+		affected.start();
 		alive = true;
 	}
 	
@@ -60,7 +60,8 @@ public class SkillEffect
 	{
 		if (!alive)
 			return;
-		if (target.isAlive() || --ticksLeft < 0)
+		System.out.println("Updating Skill Effect");
+		if (!target.isAlive() || --ticksLeft < 0)
 		{
 			kill();
 			return;
@@ -72,6 +73,8 @@ public class SkillEffect
 	
 	public void draw(SpriteBatch batch)
 	{
+		if (!alive)
+			return;
 //		if (!alive || affected.isComplete())
 //			return;
 		System.out.println("Drawing Skill Effect");
@@ -103,7 +106,8 @@ public class SkillEffect
 	
 	public void kill()
 	{
+		System.out.println("KILLLING WTF");
 		alive = false;
-		affected.dispose();
+//		affected.dispose();
 	}
 }

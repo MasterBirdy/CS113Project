@@ -39,7 +39,7 @@ public abstract class Unit extends Actor
 	@Override
 	public void draw(SpriteBatch batch)
 	{		
-		super.draw(batch);
+//		super.draw(batch);
 		stateTime += Gdx.graphics.getDeltaTime();
 		TextureRegion current;
 		
@@ -66,6 +66,7 @@ public abstract class Unit extends Actor
 			//batch.draw(current, xCoord - 8, yCoord, wi, he);
 		else
 			batch.draw(current, xCoord, yCoord);
+		drawParticleEffects(batch);
 	}
 	
 	public void takeDamage(int damage)
@@ -73,6 +74,17 @@ public abstract class Unit extends Actor
 		super.takeDamage(damage);
 		//if (Gdx.app.getType() == Application.ApplicationType.Desktop)
 			effects.add(this.spark());
+	}
+	
+	public void takeDamage(int damage, int type)
+	{
+		super.takeDamage(damage);
+		if (type == 0)
+			effects.add(this.blood());
+		else if (type == 1)
+			effects.add(this.fire());
+		else if (type == 2)
+			effects.add(this.blood());
 	}
 	
 	public static void loadAnimations()

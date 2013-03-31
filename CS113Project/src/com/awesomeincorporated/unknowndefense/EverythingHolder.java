@@ -14,6 +14,7 @@ import com.awesomeincorporated.unknowndefense.parser.*;
 import com.awesomeincorporated.unknowndefense.skill.Skill;
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -99,6 +100,18 @@ public class EverythingHolder
 		ParticleEffect temp = new ParticleEffect();
 		temp.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 		particleEffects.put("fire", temp);
+		
+		temp = new ParticleEffect();
+		temp.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
+		particleEffects.put("blood", temp);
+		
+		temp = new ParticleEffect();
+		temp.load(Gdx.files.internal("data/fireballeffect.p"), Gdx.files.internal("images"));
+		particleEffects.put("fireball", temp);
+		
+		temp = new ParticleEffect();
+		temp.load(Gdx.files.internal("data/fireballexplosioneffect.p"), Gdx.files.internal("images"));
+		particleEffects.put("fireballexplosion", temp);
 	}
 	
 	public ParticleEffect getEffect(String e)
@@ -136,6 +149,11 @@ public class EverythingHolder
 	public void setHeroStance(int team, int s)
 	{
 		playerHeroes[team-1].stance(s);
+	}
+	
+	public void activeHeroSkill(int team)
+	{
+		playerHeroes[team-1].activeSkill();
 	}
 	
 	public int turn()
@@ -550,7 +568,7 @@ public class EverythingHolder
 //				a.update();
 		for (int i = 0; i < entities.size(); i++)
 		{
-			if (entities.get(i) != null)
+			if (entities.get(i) != null && entities.get(i).isAlive())
 				entities.get(i).update();
 		}
 //		for (Entity e : entities)

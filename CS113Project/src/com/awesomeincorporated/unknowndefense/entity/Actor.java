@@ -20,7 +20,7 @@ public abstract class Actor extends Entity
 	boolean attacking, ranged;
 	Actor target;
 	ArrayList<SkillEffect> skillEffects = new ArrayList<SkillEffect>(5);
-	ArrayList<ParticleEffect> peEffect = new ArrayList<ParticleEffect>(5);
+//	ArrayList<ParticleEffect> peEffect = new ArrayList<ParticleEffect>(5);
 	static SkillEffect nullSkillEffect = new SkillEffect();
 	static ParticleEffect nullParticleEffect = new ParticleEffect();
 //	static LinkedList<Actor> team1;
@@ -52,17 +52,17 @@ public abstract class Actor extends Entity
 	public void takeSkillEffect(SkillEffect skill)
 	{
 		firstEmpty = skillEffects.indexOf(nullSkillEffect);
+		skill.affected.start();
 		if (firstEmpty >= 0)
 			skillEffects.add(firstEmpty, skill);
 		else
 			skillEffects.add(skill);
 		
-		skill.affected.start();
-		firstEmpty = peEffect.indexOf(nullParticleEffect);
-		if (firstEmpty >= 0)
-			peEffect.add(firstEmpty, skill.affected);
-		else
-			peEffect.add(skill.affected);
+//		firstEmpty = peEffect.indexOf(nullParticleEffect);
+//		if (firstEmpty >= 0)
+//			peEffect.add(firstEmpty, skill.affected);
+//		else
+//			peEffect.add(skill.affected);
 	}
 	
 	public void update()
@@ -107,23 +107,27 @@ public abstract class Actor extends Entity
 		}
 	}
 	
-	public void draw(SpriteBatch batch)
-	{
-		for (ParticleEffect e : peEffect)
-			e.draw(batch);
+//	public void draw(SpriteBatch batch)
+//	{
+//		for (ParticleEffect e : peEffect)
+//			e.draw(batch);
 //		for (SkillEffect skill : skillEffects)
 //		{
 //			skill.draw(batch);
 //		}
-	}
+//	}
 	
 	public void drawParticleEffects(SpriteBatch batch)
 	{
-		for (ParticleEffect effect : peEffect)
+		for (SkillEffect skill : skillEffects)
 		{
-			effect.setPosition(xCoord, yCoord + 10);
-			effect.draw(batch);
+			skill.draw(batch);
 		}
+//		for (ParticleEffect effect : peEffect)
+//		{
+//			effect.setPosition(xCoord, yCoord + 10);
+//			effect.draw(batch);
+//		}
 	}
 	
 	static public void loadProjectiles(ArrayList<Projectile> p)
@@ -181,11 +185,26 @@ public abstract class Actor extends Entity
 		currentHealth -= damage;
 	}
 	
+	public void takeDamage(int damage, int type)
+	{
+		takeDamage(damage);
+		if (effects.isEmpty())
+			effects.add(this.fire());
+//		if (type == 0)
+//			effects.add(this.spark());
+//		else if (type == 1)
+//			effects.add(this.fire());
+//		else if (type == 2)
+//			effects.add(this.blood());
+		System.out.println("Effects");
+	}
+	
 	public void checkAlive()
 	{
 		if (currentHealth <= 0)
 		{
 			if (alive)// && Gdx.app.getType() == Application.ApplicationType.Desktop)
+//				effects.add(this.fire());
 				effects.add(this.blood());
 			alive = false;
 		}

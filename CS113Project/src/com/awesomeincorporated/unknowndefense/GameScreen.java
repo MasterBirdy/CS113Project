@@ -33,6 +33,7 @@ import com.awesomeincorporated.unknowndefense.networking.Network.*;
 import com.awesomeincorporated.unknowndefense.networking.Network;
 import com.awesomeincorporated.unknowndefense.networking.User;
 import com.awesomeincorporated.unknowndefense.parser.HeroStructure;
+import com.awesomeincorporated.unknowndefense.ui.GameUI;
 
 public class GameScreen implements Screen 
 {
@@ -49,20 +50,20 @@ public class GameScreen implements Screen
 	EverythingHolder everything = new EverythingHolder();
 	TextureRegion pauseRegion;
 	int pauseCooldown;
-	GameUI gameUI;
+	GameUI gameUI3;
 	Hero[] heroes = new Hero[2];
 	UnknownDefense game;
-	Rectangle pauseRectangle;
-	Rectangle pauseRectangle2;
-	Rectangle swordRectangle;
-	Rectangle bowRectangle;
-	Rectangle monkRectangle;
-	Rectangle magicRectangle;
-	Rectangle petRectangle;
-	Rectangle spiralRectangle;
-	Rectangle attackRectangle;
-	Rectangle defendRectangle;
-	Rectangle retreatRectangle;
+//	Rectangle pauseRectangle;
+//	Rectangle pauseRectangle2;
+//	Rectangle swordRectangle;
+//	Rectangle bowRectangle;
+//	Rectangle monkRectangle;
+//	Rectangle magicRectangle;
+//	Rectangle petRectangle;
+//	Rectangle spiralRectangle;
+//	Rectangle attackRectangle;
+//	Rectangle defendRectangle;
+//	Rectangle retreatRectangle;
 	Vector3 touchPoint;
 	Vector3 gameTouchPoint;
 	Difficulty difficulty;
@@ -71,8 +72,10 @@ public class GameScreen implements Screen
 	Audio tempMusic = Gdx.audio;
 	Music startMusic;
 	
+	float cameraW, cameraH, width, height, screenH;
+	
 	float timeAccumulator = 0;
-	boolean multiplayer = true; 	// True with multiplayer
+	boolean multiplayer = false; 	// True with multiplayer
 	boolean running = false;		// False with Multiplayer
 	boolean connected = false;
 	byte team;						// Team 1 is top and Team 2 is bottom
@@ -84,8 +87,8 @@ public class GameScreen implements Screen
 	
 //	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
 	float stepTime = 0.02f;
-	Comparator<Object> comparator = new MessageCompare();
-	PriorityQueue<Object> commandQueue = new PriorityQueue<Object>(20, comparator);
+	Comparator<CommandIn> comparator = new MessageCompare();
+	PriorityQueue<CommandIn> commandQueue = new PriorityQueue<CommandIn>(20, comparator);
 
 	public GameScreen(UnknownDefense game)
 	{
@@ -93,7 +96,10 @@ public class GameScreen implements Screen
 		this.game = game;
 		Texture.setEnforcePotImages(true);
 		isPaused = false;
-
+		
+//		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
+//		startMusic.setLooping(true);
+//		startMusic.play();
 //		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
 //		startMusic.setLooping(true);
 
@@ -183,9 +189,13 @@ public class GameScreen implements Screen
 		EverythingHolder.showRange = true;
 		inputProcessor = new MyInputProcessor();
 
-		MyInputProcessor.loadCamera(camera);
+		Gdx.input.setInputProcessor(inputProcessor);
+		gameUI3 = new GameUI();
+		GameUI.load(batch, everything);
+		
+		MyInputProcessor.loadCamera(camera, uiCamera);
 //		MyInputProcessor.loadHero(heroes[0]);
-		MyInputProcessor.loadGame(this);
+		MyInputProcessor.loadGame(this, gameUI3);
 		
 		Building.loadAnimations();
 
@@ -223,22 +233,19 @@ public class GameScreen implements Screen
 //		//nemesis.takeDamage(1000);
 //		everything.add(heroes[1], true, 2);
 		
-		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
-		pauseRectangle2  = new Rectangle(-76, -76, 156, 27);
-		swordRectangle   = new Rectangle(221, -29, 69, 80);
-		bowRectangle     = new Rectangle(311, -29, 69, 80);
-		monkRectangle    = new Rectangle(221, -127, 69, 80);
-		magicRectangle   = new Rectangle(311, -127, 69, 80);
-		petRectangle     = new Rectangle(221, -227, 69, 80);
-		spiralRectangle  = new Rectangle(311, -227, 69, 80);
+//		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
+//		pauseRectangle2  = new Rectangle(-76, -76, 156, 27);
+//		swordRectangle   = new Rectangle(221, -29, 69, 80);
+//		bowRectangle     = new Rectangle(311, -29, 69, 80);
+//		monkRectangle    = new Rectangle(221, -127, 69, 80);
+//		magicRectangle   = new Rectangle(311, -127, 69, 80);
+//		petRectangle     = new Rectangle(221, -227, 69, 80);
+//		spiralRectangle  = new Rectangle(311, -227, 69, 80);
+//
+//		attackRectangle  = new Rectangle(-50, -200, 40, 40);
+//		defendRectangle  = new Rectangle(-100, -200, 40, 40);
+//		retreatRectangle = new Rectangle(-150, -200, 40, 40);
 
-		attackRectangle  = new Rectangle(-50, -200, 40, 40);
-		defendRectangle  = new Rectangle(-100, -200, 40, 40);
-		retreatRectangle = new Rectangle(-150, -200, 40, 40);
-
-		Gdx.input.setInputProcessor(inputProcessor);
-		gameUI = new GameUI();
-		GameUI.load(batch, everything);
 		touchPoint = new Vector3();
 		gameTouchPoint = new Vector3();
 		
@@ -251,6 +258,10 @@ public class GameScreen implements Screen
 			team = 1;
 			everything.setTeam((byte)1);
 		}
+		
+		width = everything.map().width();
+		height = everything.map().height();
+		screenH = Gdx.graphics.getHeight() / 2;
 	}
 
 	static public void toggleShowRange()
@@ -293,7 +304,7 @@ public class GameScreen implements Screen
 				timeAccumulator -= stepTime;
 			}
 		}
-		handleInput();
+//		handleInput();
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
@@ -307,7 +318,7 @@ public class GameScreen implements Screen
 		batch.end();
 		batch.setProjectionMatrix(uiCamera.combined);
 		batch.begin();
-		gameUI.render();
+		gameUI3.render();
 		pauseCooldown++;
 		if (isPaused)
 			batch.draw(pauseRegion, 0-pauseRegion.getRegionWidth() / 2 , 0-pauseRegion.getRegionHeight() / 2);
@@ -378,6 +389,7 @@ public class GameScreen implements Screen
 
 	public void update()
 	{
+		handleInput();
 		if (multiplayer)
 			pullCommand();
 		everything.update();
@@ -409,18 +421,18 @@ public class GameScreen implements Screen
 			float rand = (float) Math.random();
 			if (rand < 0.20f)
 				//everything.add(new Swordsman(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
-				everything.add(1, 2);
+				everything.add(0, 2);
 			else if (rand < 0.4f)
 				//everything.add(new Archer(start2.x(), start2.y(), 2, everything.map().getPath().descendingIterator()), false, 2);
-				everything.add(2, 2);
+				everything.add(1, 2);
 			else if (rand < 0.6f)
-				everything.add(3, 2);
+				everything.add(2, 2);
 			else if (rand < 0.8f)
-				everything.add(4, 2);
+				everything.add(3, 2);
 			else if (rand < 0.9f)
-				everything.add(5, 2);
+				everything.add(4, 2);
 			else
-				everything.add(6, 2);
+				everything.add(5, 2);
 			
 			counter2 = (int)(Math.random() * 60) + 60;
 		}
@@ -463,7 +475,21 @@ public class GameScreen implements Screen
 			client.sendTCP(cmd);
 		}
 		else
-			heroes[0].stance(stance);
+			everything.setHeroStance(1, stance);
+//			heroes[0].stance(stance);
+	}
+	
+	public void castHeroActive()
+	{
+		if (multiplayer)
+		{
+			
+		}
+		else
+		{
+			System.out.println("CASTING SPELL");
+			everything.activeHeroSkill(1);
+		}
 	}
 	
 	public void upgradeTower(int tower)
@@ -535,72 +561,72 @@ public class GameScreen implements Screen
 //			System.out.println("X1: " + gameTouchPoint.x + " Y1: " + gameTouchPoint.y);
 			
 			// Swordsman
-			if (OverlapTester.pointInRectangle(swordRectangle, touchPoint.x, touchPoint.y))
-			{
-				buyUnit(0);
-			}
-			// Archer
-			if (OverlapTester.pointInRectangle(bowRectangle, touchPoint.x, touchPoint.y))
-			{
-				buyUnit(1);
-			}
-			// Monk
-			if (OverlapTester.pointInRectangle(monkRectangle, touchPoint.x, touchPoint.y))
-			{
-				buyUnit(2);
-			}
-			// Mage
-			if (OverlapTester.pointInRectangle(magicRectangle, touchPoint.x, touchPoint.y))
-			{
-				buyUnit(3);
-			}
-			// Ninja
-			if (OverlapTester.pointInRectangle(petRectangle, touchPoint.x, touchPoint.y))
-			{
-				buyUnit(4);
-			}
-			// Eagle
-			if (OverlapTester.pointInRectangle(spiralRectangle, touchPoint.x, touchPoint.y))
-			{
-				buyUnit(5);
-			}
-			if (OverlapTester.pointInRectangle(attackRectangle, touchPoint.x, touchPoint.y))
-			{
-				setHeroStance(1);
-				//heroes.stance(1);
-				Gdx.input.vibrate(50);
-			}
-			if (OverlapTester.pointInRectangle(defendRectangle, touchPoint.x, touchPoint.y))
-			{
-				setHeroStance(0);
-//				heroes.stance(0);
-				Gdx.input.vibrate(50);
-			}
-			if (OverlapTester.pointInRectangle(retreatRectangle, touchPoint.x, touchPoint.y))
-			{
-				setHeroStance(-1);
-//				heroes.stance(-1);
-				Gdx.input.vibrate(50);
-			}
+//			if (OverlapTester.pointInRectangle(swordRectangle, touchPoint.x, touchPoint.y))
+//			{
+//				buyUnit(0);
+//			}
+//			// Archer
+//			if (OverlapTester.pointInRectangle(bowRectangle, touchPoint.x, touchPoint.y))
+//			{
+//				buyUnit(1);
+//			}
+//			// Monk
+//			if (OverlapTester.pointInRectangle(monkRectangle, touchPoint.x, touchPoint.y))
+//			{
+//				buyUnit(2);
+//			}
+//			// Mage
+//			if (OverlapTester.pointInRectangle(magicRectangle, touchPoint.x, touchPoint.y))
+//			{
+//				buyUnit(3);
+//			}
+//			// Ninja
+//			if (OverlapTester.pointInRectangle(petRectangle, touchPoint.x, touchPoint.y))
+//			{
+//				buyUnit(4);
+//			}
+//			// Eagle
+//			if (OverlapTester.pointInRectangle(spiralRectangle, touchPoint.x, touchPoint.y))
+//			{
+//				buyUnit(5);
+//			}
+//			if (OverlapTester.pointInRectangle(attackRectangle, touchPoint.x, touchPoint.y))
+//			{
+//				setHeroStance(1);
+//				//heroes.stance(1);
+//				Gdx.input.vibrate(50);
+//			}
+//			if (OverlapTester.pointInRectangle(defendRectangle, touchPoint.x, touchPoint.y))
+//			{
+//				setHeroStance(0);
+////				heroes.stance(0);
+//				Gdx.input.vibrate(50);
+//			}
+//			if (OverlapTester.pointInRectangle(retreatRectangle, touchPoint.x, touchPoint.y))
+//			{
+//				setHeroStance(-1);
+////				heroes.stance(-1);
+//				Gdx.input.vibrate(50);
+//			}
 //			Actor a = everything.team(1).getLast();
 //			if (OverlapTester.pointInRectangle(new Rectangle(a.xCoord(), a.yCoord(), 40, 40), touchPoint.x, touchPoint.y))
 //			{
 //				hero.stance(0);
 //			}
-			if (isPaused){
-				//System.out.println(touchPoint.x + " " + touchPoint.y);
-				if (OverlapTester.pointInRectangle(pauseRectangle, touchPoint.x, touchPoint.y)) {
-					//System.out.println(true);
-					game.setScreen(game.mainMenuScreen);
-					return;
-				}
-				
-				if (OverlapTester.pointInRectangle(pauseRectangle2, touchPoint.x, touchPoint.y)) {
-					//System.out.println(true);
-					game.setScreen(game.settingsScreen);
-					return;
-				}
-			}
+//			if (isPaused){
+//				//System.out.println(touchPoint.x + " " + touchPoint.y);
+//				if (OverlapTester.pointInRectangle(pauseRectangle, touchPoint.x, touchPoint.y)) {
+//					//System.out.println(true);
+//					game.setScreen(game.mainMenuScreen);
+//					return;
+//				}
+//				
+//				if (OverlapTester.pointInRectangle(pauseRectangle2, touchPoint.x, touchPoint.y)) {
+//					//System.out.println(true);
+//					game.setScreen(game.settingsScreen);
+//					return;
+//				}
+//			}
 		}
 	}
 
@@ -616,28 +642,37 @@ public class GameScreen implements Screen
 		
 		/*float w = camera.viewportWidth / 2;
 		float h = camera.viewportHeight / 2;*/
-		float w = (camera.frustum.planePoints[1].x - camera.frustum.planePoints[0].x) / 2;
-		float h = (camera.frustum.planePoints[3].y - camera.frustum.planePoints[0].y) / 2;
-		
-		float width = everything.map().width();
-		float height = everything.map().height();
+		cameraW = (camera.frustum.planePoints[1].x - camera.frustum.planePoints[0].x) / 2;
+		cameraH = (camera.frustum.planePoints[3].y - camera.frustum.planePoints[0].y) / 2;
 
 		//if (camera.position.y > everything.map().height() * (1 / (2 - camera.zoom)))
 		//	camera.position.y = everything.map().height() * (1 / (2 - camera.zoom));
-		if (camera.position.y > height - h + 240)
-			camera.position.y = height - h + 240;
+		if (camera.position.y > height - cameraH + 240)
+		{
+//			System.out.println("Cam y: " + camera.position.y);
+//			System.out.println("height: " + height);
+//			System.out.println("h: " + cameraH);
+//			System.out.println("screenH: " + screenH);
+			
+			camera.position.y = height - cameraH + 240;
+		}
 
-		if (camera.position.y < h)
-			camera.position.y = h;
+		if (camera.position.y < cameraH)
+		{
+//			System.out.println("Cam y: " + camera.position.y);
+//			System.out.println("height: " + height);
+//			System.out.println("h: " + cameraH);
+			camera.position.y = cameraH;
+		}
 
 		//if (camera.position.x > everything.map().width() + gameUI.width())
 		//	camera.position.x = everything.map().width() + gameUI.width();
-		float temp = width - (w / 2) + 400;
+		float temp = width - (cameraW / 2);
 		if (camera.position.x > temp) //(width - (w / 2) + 400))//(w / 4) - w + 400)
 			camera.position.x = temp; //width - (w / 2) + 400; //(w / 4) - w + 400;
 
-		if (camera.position.x < w)
-			camera.position.x = w;
+		if (camera.position.x < cameraW)
+			camera.position.x = cameraW;
 	}
 	
 	private void networkSetup()
@@ -675,61 +710,17 @@ public class GameScreen implements Screen
         			return;
         		}
         		
-//        		if (object instanceof AddUnit)
-//        		{
-//        			System.out.println("Adding unit");
-//        			everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
-//        			return;
-//        		}
-//        		
-//        		if (object instanceof CommandIn)
-//        		{
-//        			CommandIn command = (CommandIn)object;
-//        			if (command.command > 0 && command.command < 7)
-//        			{
-//        				everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
-//        				return;
-//        			}
-//        			if (command.command > 6 && command.command < 10)
-//        			{
-//        				System.out.println("Received hero command.");
-//        				heroes[command.team - 1].stance(command.command - 8);
-////        				heroes[0].stance(command.command - 8);
-////        				heroes[1].stance(command.command - 8);
-//        				return;
-//        			}
-//        			if (command.command > 9 && command.command < 13)
-//        			{
-//        				System.out.println("Received tower command.");
-//        				everything.upgradeTower(command.command - 10, team);
-//        				everything.funds -= 40;
-//        				System.out.println("Trying to upgrade tower " + (command.command - 10) + " from team " + team);
-////        				heroes[command.team].stance(command.command - 8);
-////        				heroes[0].stance(command.command - 8);
-////        				heroes[1].stance(command.command - 8);
-//        				return;
-//        			}
-//        		}
-        		
         		if (object instanceof CommandIn)
         		{
         			System.out.println("CommandIn");
-        			commandQueue.add(object);
+        			commandQueue.add((CommandIn)object);
         		}
-        		
-//        		if (object instanceof AddUnit)
-//        		{
-//        			System.out.println("Add unit");
-//        			commandQueue.add(object);
-//        			//everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
-//        			return;
-//        		}
         		
         		if (object instanceof ServerMessage)
         		{
-        			ServerMessage msg = (ServerMessage)object;
+//        			ServerMessage msg = (ServerMessage)object;
         			
-        			if (msg.message == 1)
+        			if (((ServerMessage)object).message == 1)
         			{
         				System.out.println("Game is starting!");
         				running = true;
@@ -767,40 +758,6 @@ public class GameScreen implements Screen
         Login login = new Login();
         login.name = "Player";
         client.sendTCP(login);
-
-//        while (true) 
-//        {
-//        	int ch;
-//            try 
-//            {
-//            	ch = System.in.read();
-//            } 
-//            catch (IOException ex) 
-//            {
-//            	ex.printStackTrace();
-//                break;
-//            }
-//            
-//            MoveUnit msg = new MoveUnit();
-//            switch (ch) 
-//            {
-//                case 'w':
-//                        msg.y = -1;
-//                        break;
-//                case 's':
-//                        msg.y = 1;
-//                        break;
-//                case 'a':
-//                        msg.x = -1;
-//                        break;
-//                case 'd':
-//                        msg.x = 1;
-//                        break;
-//                default:
-//                        msg = null;
-//            }
-//            if (msg != null) client.sendTCP(msg);
-//        }
 	}
 
 	@Override
@@ -839,13 +796,13 @@ public class GameScreen implements Screen
 		}
 	}
 	
-	public class MessageCompare implements Comparator
+	public class MessageCompare implements Comparator<CommandIn>
 	{
-		public int compare(Object msg1, Object msg2)
+		public int compare(CommandIn msg1, CommandIn msg2)
 		{
-			if (((CommandIn)msg1).turn > ((CommandIn)msg2).turn)
+			if (msg1.turn > msg2.turn)
 				return 1;
-			else if (((CommandIn)msg1).turn < ((CommandIn)msg2).turn)
+			else if (msg1.turn < msg2.turn)
 				return -1;
 			return 0;
 		}
