@@ -113,9 +113,10 @@ public class GameScreen implements Screen
 		pauseCooldown = 0;
 
 		camera = new OrthographicCamera(w, h);
-		uiCamera = new OrthographicCamera(w, h);
 		camera.translate(950, 700);
 		camera.zoom = 1.9f;
+		uiCamera = new OrthographicCamera(w, h);
+		uiCamera.setToOrtho(false);
 		batch = new SpriteBatch();
 
 		Texture pauseTexture = new Texture(Gdx.files.internal("images/pausemenu.png"));
@@ -321,7 +322,7 @@ public class GameScreen implements Screen
 		gameUI3.render();
 		pauseCooldown++;
 		if (isPaused)
-			batch.draw(pauseRegion, 0-pauseRegion.getRegionWidth() / 2 , 0-pauseRegion.getRegionHeight() / 2);
+			batch.draw(pauseRegion, 400 - pauseRegion.getRegionWidth() / 2 , 240 - pauseRegion.getRegionHeight() / 2);
 		batch.end();
 	}
 	
@@ -520,11 +521,11 @@ public class GameScreen implements Screen
 			camera.translate(10, 0);
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))
 			camera.translate(-10, 0);
-		if ((Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Keys.MENU)) && pauseCooldown > 10)
-		{
-			isPaused = !isPaused;
-			pauseCooldown = 0;
-		}
+//		if ((Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Keys.MENU)) && pauseCooldown > 10)
+//		{
+//			isPaused = !isPaused;
+//			pauseCooldown = 0;
+//		}
 		if (Gdx.input.isKeyPressed(Input.Keys.HOME))
 		{
 			client.close();

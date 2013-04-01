@@ -22,13 +22,13 @@ public class RoundButton extends Button
 	
 	public boolean hit(float x, float y)
 	{
-		System.out.println("Button " + x + ": " + y);
+//		System.out.println("Button " + x + ": " + y);
 		if (getDistanceSquared(x, y) > diameter * diameter)
 		{
-			System.out.println("Miss");
+//			System.out.println("Miss");
 			return false;
 		}
-		System.out.println("HIT!");
+//		System.out.println("HIT!");
 		return true;
 	}
 	

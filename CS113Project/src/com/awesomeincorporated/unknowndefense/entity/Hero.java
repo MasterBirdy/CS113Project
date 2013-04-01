@@ -6,7 +6,7 @@ import com.awesomeincorporated.unknowndefense.parser.HeroStructure;
 import com.awesomeincorporated.unknowndefense.parser.MinionStructure;
 import com.awesomeincorporated.unknowndefense.parser.SkillStructure;
 import com.awesomeincorporated.unknowndefense.skill.TargetedSkill;
-import com.awesomeincorporated.unknowndefense.skill.TestFireBall;
+//import com.awesomeincorporated.unknowndefense.skill.TestFireBall;
 
 public class Hero extends Unit 
 {
@@ -19,7 +19,8 @@ public class Hero extends Unit
 		super(x, y, ranged, team, p, 0, 0);
 		stance = 1;
 		alive = false;
-		activeSkill = new TestFireBall();
+		activeSkill = everything.getSkill("testfireball");
+//		activeSkill = new TestFireBall();
 	}
 	
 	public Hero(int x, int y, int team, ListIterator<Coordinate> p, HeroStructure struct)
@@ -35,7 +36,8 @@ public class Hero extends Unit
 		animation = struct.animation(level);
 		stance = 1;
 		alive = false;
-		activeSkill = new TestFireBall();
+		activeSkill = everything.getSkill(struct.activeSkill(level));
+//		activeSkill = new TestFireBall();
 	}
 	
 	public void activeSkill()

@@ -13,43 +13,43 @@ public abstract class ActorStructure
 	ArrayList<Boolean> ranged;
 	ArrayList<Integer> animation;
 	
-	public int maxHealth(int i)
+	public int maxHealth(int level)
 	{
-		return maxHealth.get(i);
+		return maxHealth.get(level);
 	}
 	
-	public int damage(int i)
+	public int damage(int level)
 	{
-		return damage.get(i);
+		return damage.get(level);
 	}
 	
-	public int attackSpeed(int i)
+	public int attackSpeed(int level)
 	{
-		return attackSpeed.get(i);
+		return attackSpeed.get(level);
 	}
 	
-//	public int attackCoolDown(int i)
+//	public int attackCoolDown(int level)
 //	{
-//		return attackCoolDown.get(i);
+//		return attackCoolDown.get(level);
 //	}
 	
-	public int attackRange(int i)
+	public int attackRange(int level)
 	{
-		return attackRange.get(i);
+		return attackRange.get(level);
 	}
 	
-	public int cost(int i)
+	public int cost(int level)
 	{
-		return cost.get(i);
+		return cost.get(level);
 	}
 	
-	public boolean ranged(int i)
+	public boolean ranged(int level)
 	{
-		return ranged.get(i);
+		return ranged.get(level);
 	}
 	
-	public int animation(int i)
+	public int animation(int level)
 	{
-		return animation.get(i);
+		return animation.get(level);
 	}
 }

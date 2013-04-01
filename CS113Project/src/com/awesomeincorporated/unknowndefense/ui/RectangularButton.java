@@ -26,7 +26,7 @@ public class RectangularButton extends Button
 		if (xCoord() > x || xCoord() + width < x || yCoord() > y || yCoord() + height < y)
 			return false;
 		
-		System.out.println("HIT!");
+//		System.out.println("HIT!");
 		return true;
 	}
 	

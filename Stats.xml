@@ -89,6 +89,7 @@
 		<cost> 				20		51		511		5111		</cost>
 		<animation> 		0		0		0		0			</animation>
 		<ranged> 			false 								</ranged>
+		<activeskill>		testfireball						</activeskill>
 	</hero>
 	<hero type = "arroweyes">
 		<maxhealth>			75		51		511		5111		</maxhealth>
@@ -99,6 +100,7 @@
 		<cost> 				20		51		511		5111		</cost>
 		<animation> 		1		1		1		1			</animation>
 		<ranged> 			true 								</ranged>
+		<activeskill>		testfireball						</activeskill>
 	</hero>
 	<hero type = "mrwizard">
 		<maxhealth>			65		51		511		5111		</maxhealth>
@@ -109,6 +111,7 @@
 		<cost> 				20		51		511		5111		</cost>
 		<animation> 		3		3		3		3			</animation>
 		<ranged> 			true 								</ranged>
+		<activeskill>		testfireball						</activeskill>
 	</hero> 
 	<building type = "tower">
 		<maxhealth>			400		61		611		6111		</maxhealth>
@@ -127,5 +130,37 @@
 		<cost> 				50		71		711		7111		</cost>
 		<animation> 		1		1		1		1			</animation>
 		<ranged> 			true 								</ranged>
-	</building>     
+	</building>
+	<skill type = "testfireball">
+		<aoe> 				50									</aoe>
+		<targetTeam> 		1									</targetTeam>
+		<effect>			0									</effect>
+		<effectAmount>		1000								</effectAmount>
+		<duration>			1									</duration>
+		<damageSplit>		false								</damageSplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<speed>				5									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			largefireball						</travel>
+		<detonateEffect>	largefireballexplosion				</detonateEffect>
+		<affected>			fire								</affected>
+	</skill>
+	<skill type = "testheal">
+		<aoe> 				80									</aoe>
+		<targetTeam> 		-1									</targetTeam>
+		<effect>			1									</effect>
+		<effectAmount>		1000								</effectAmount>
+		<duration>			1									</duration>
+		<damageSplit>		false								</damageSplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<speed>				0									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			heal								</travel>
+		<detonateEffect>	smokebomb							</detonateEffect>
+		<affected>			fire								</affected>
+	</skill>
 </stats>

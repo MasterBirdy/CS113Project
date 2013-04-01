@@ -62,8 +62,8 @@ timeline0: 0.0
 - Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 15.0
-highMax: 25.0
+highMin: 20.0
+highMax: 35.0
 relative: true
 scalingCount: 7
 scaling0: 1.0
@@ -118,20 +118,12 @@ active: false
 - Gravity - 
 active: false
 - Tint - 
-colorsCount: 9
+colorsCount: 3
 colors0: 1.0
-colors1: 0.047058824
-colors2: 0.047058824
-colors3: 1.0
-colors4: 0.047058824
-colors5: 0.8235294
-colors6: 1.0
-colors7: 0.047058824
-colors8: 0.047058824
-timelineCount: 3
+colors1: 1.0
+colors2: 1.0
+timelineCount: 1
 timeline0: 0.0
-timeline1: 0.51224107
-timeline2: 1.0
 - Transparency - 
 lowMin: 0.0
 lowMax: 0.0

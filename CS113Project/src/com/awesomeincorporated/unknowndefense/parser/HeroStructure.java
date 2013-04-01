@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class HeroStructure extends UnitStructure
 {
+	ArrayList<String> activeSkill;
 //	ArrayList<Integer> maxHealth;
 //	ArrayList<Integer> damage;
 //	ArrayList<Integer> attackSpeed;
@@ -12,4 +13,9 @@ public class HeroStructure extends UnitStructure
 //	ArrayList<Integer> cost;
 //	ArrayList<Boolean> ranged;	
 //	ArrayList<Float> speed;
+	
+	public String activeSkill(int level)
+	{
+		return activeSkill.get(level);
+	}
 }

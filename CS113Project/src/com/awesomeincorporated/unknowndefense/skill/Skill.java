@@ -33,12 +33,12 @@ public abstract class Skill extends Entity
 	{
 		xCoord(c.xCoord());
 		yCoord(c.yCoord());
-		aoe = s.aoe;
-		if (s.targetTeam == 0)
+		aoe = s.aoe.get(0);
+		if (s.targetTeam.get(0) == 0)
 		{
 			targetTeam = 0;
 		}
-		else if (s.targetTeam == 1)
+		else if (s.targetTeam.get(0) == 1)
 		{
 			if (c.team() == 0)
 				targetTeam = 1;
@@ -52,20 +52,21 @@ public abstract class Skill extends Entity
 			else
 				targetTeam = 1;
 		}
-		targetTeam = s.targetTeam;
-		effect = s.effect;
-		effectAmount = s.effectAmount;
-		damageSplit = s.damageSplit;
-		additive = s.additive;
-		continuous = s.continuous;
-		detonateEffect = everything.getEffect(s.detonateEffect);
+//		targetTeam = s.targetTeam.get(0);
+		effect = s.effect.get(0);
+		effectAmount = s.effectAmount.get(0);
+		damageSplit = s.damageSplit.get(0);
+		additive = s.additive.get(0);
+		continuous = s.continuous.get(0);
+		travelEffect = everything.getEffect(s.travel.get(0));
+		detonateEffect = everything.getEffect(s.detonateEffect.get(0));
 		affected = new ParticleEffect();
 		affected.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 //		affected = everything.getEffect(s.affected);
 		
 //		detonateEffect = s.detonateEffect;
 //		affected = s.affected;
-		name = s.name;
+//		name = s.name.get(0);
 		caster = c;
 		alive = true;
 	}
@@ -79,6 +80,10 @@ public abstract class Skill extends Entity
 			temp.add(caster);
 			return temp;
 		}
+		else
+		{
+			
+		}
 		
 		return everything.team(targetTeam);
 	}
@@ -88,6 +93,7 @@ public abstract class Skill extends Entity
 		applyToTargets();
 		detonateEffect.setPosition(xCoord(), yCoord());
 		detonateEffect.start();
+		this.addParticle(detonateEffect);
 //		travelEffect.dispose();
 		alive = false;
 //		detonateSound.play();
@@ -95,9 +101,9 @@ public abstract class Skill extends Entity
 	
 	public void draw(SpriteBatch batch)
 	{
-		if (detonateEffect.isComplete())
-			detonateEffect.start();
-		detonateEffect.draw(batch);
+//		if (detonateEffect.isComplete())
+//			detonateEffect.start();
+//		detonateEffect.draw(batch);
 //		if (alive || !detonateEffect.isComplete())
 //			detonateEffect.draw(batch);
 	}

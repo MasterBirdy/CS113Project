@@ -39,6 +39,11 @@ public abstract class Actor extends Entity
 		this.ranged = ranged;
 	}
 	
+	public float getHealthRatio()
+	{
+		return (float)currentHealth / maxHealth;
+	}
+	
 	static public void loadRange()
 	{
 		rangeIndicator = new TextureRegion[2];
@@ -51,6 +56,7 @@ public abstract class Actor extends Entity
 	
 	public void takeSkillEffect(SkillEffect skill)
 	{
+		System.out.println("Taking SKILL");
 		firstEmpty = skillEffects.indexOf(nullSkillEffect);
 		skill.affected.start();
 		if (firstEmpty >= 0)
@@ -183,6 +189,10 @@ public abstract class Actor extends Entity
 	public void takeDamage(int damage)
 	{
 		currentHealth -= damage;
+		if (currentHealth > maxHealth)
+			currentHealth = maxHealth;
+		if (currentHealth < 0)
+			currentHealth = 0;
 	}
 	
 	public void takeDamage(int damage, int type)

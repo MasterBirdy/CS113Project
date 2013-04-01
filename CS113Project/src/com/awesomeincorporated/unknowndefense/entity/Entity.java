@@ -56,6 +56,11 @@ public abstract class Entity
 			volume = 1;
 	}
 	
+	public void addParticle(ParticleEffect pe)
+	{
+		effects.add(pe);
+	}
+	
 	public static void loadStatics(Texture sheet)
 	{
 		spriteSheet = sheet;

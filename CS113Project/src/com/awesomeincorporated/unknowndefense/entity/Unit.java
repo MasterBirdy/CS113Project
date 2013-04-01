@@ -22,6 +22,7 @@ public abstract class Unit extends Actor
 	float stateTime;
 	int stance = 1, previousStance = 1;
 	int animationDir = 0;
+	int direction = 2;
 	
 	public Unit(int x, int y, boolean ranged, int team, ListIterator<Coordinate> pathIter, int rX, int rY)
 	{
@@ -34,6 +35,20 @@ public abstract class Unit extends Actor
 		changedDirection = true;
 		randX = rX;
 		randY = rY;
+	}
+	
+	// 0 = Up, 1 = Right, 2 = Down, 3 = Left
+	public int getDirection()
+	{
+		if (ySpeed < -0.6)
+			direction = 0;
+		else if (xSpeed > 0.6)
+			direction = 1;
+		else if (xSpeed < -0.6)
+			direction = 3;
+		else if (ySpeed > 0.6)
+			direction = 2;
+		return direction;
 	}
 
 	@Override

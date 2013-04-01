@@ -36,7 +36,7 @@ public class SkillEffect
 	{
 		target = a;
 		effect = s.effect;
-		if (additive == false)
+		if (s.damageSplit == true)
 			effectAmount = s.effectAmount / s.totalAffected();
 		else
 			effectAmount = s.effectAmount;

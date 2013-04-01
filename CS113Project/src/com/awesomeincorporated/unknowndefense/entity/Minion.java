@@ -30,7 +30,7 @@ public class Minion extends Unit
 	@Override
 	public void update() 
 	{
-		
+		super.update();
 		if (attacking && attackCooldown <= 0)
 		{
 			attack();

@@ -77,6 +77,7 @@ public class EverythingHolder
 		minionStats = unitParser.getMinionStats();
 		buildingStats = unitParser.getBuildingStats();
 		heroStats = unitParser.getHeroStats();
+		skillStats = unitParser.getSkillStats();
 		
 //		initializeHeroes();
 		
@@ -95,23 +96,51 @@ public class EverythingHolder
 //		music.setLooping(true);
 	}
 	
+	public SkillStructure getSkill(String skill)
+	{
+		return skillStats.get(skill);
+	}
+	
+	public float heroHealthRatio()
+	{
+		return playerHeroes[0].getHealthRatio();
+	}
+	
 	public void loadEffects()
 	{
-		ParticleEffect temp = new ParticleEffect();
-		temp.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
-		particleEffects.put("fire", temp);
+		String[] particleNames = {
+				"fireball", "fireballexplosion", 
+				"heal", 
+				"largefireball", "largefireballexplosion", 
+				"mediumfireball", "mediumfireballexplosion",
+				"smallfireball", "smallfireballexplosion",
+				"smokebomb",
+				"stunattack",
+				"fire",
+				"blood"};
 		
-		temp = new ParticleEffect();
-		temp.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
-		particleEffects.put("blood", temp);
+		for (String name : particleNames)
+		{
+			ParticleEffect temp = new ParticleEffect();
+			temp.load(Gdx.files.internal("data/" + name + ".p"), Gdx.files.internal("images"));
+			particleEffects.put(name, temp);
+		}
 		
-		temp = new ParticleEffect();
-		temp.load(Gdx.files.internal("data/fireballeffect.p"), Gdx.files.internal("images"));
-		particleEffects.put("fireball", temp);
-		
-		temp = new ParticleEffect();
-		temp.load(Gdx.files.internal("data/fireballexplosioneffect.p"), Gdx.files.internal("images"));
-		particleEffects.put("fireballexplosion", temp);
+//		ParticleEffect temp = new ParticleEffect();
+//		temp.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
+//		particleEffects.put("fire", temp);
+//		
+//		temp = new ParticleEffect();
+//		temp.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
+//		particleEffects.put("blood", temp);
+//		
+//		temp = new ParticleEffect();
+//		temp.load(Gdx.files.internal("data/fireballeffect.p"), Gdx.files.internal("images"));
+//		particleEffects.put("fireball", temp);
+//		
+//		temp = new ParticleEffect();
+//		temp.load(Gdx.files.internal("data/fireballexplosioneffect.p"), Gdx.files.internal("images"));
+//		particleEffects.put("fireballexplosion", temp);
 	}
 	
 	public ParticleEffect getEffect(String e)
@@ -133,8 +162,8 @@ public class EverythingHolder
 	public void initializeHeroes()
 	{
 		playerUnits = new MinionStructure[][]{
-				{minionStats.get("swordsman"), minionStats.get("archer"), minionStats.get("monk"), minionStats.get("mage"), minionStats.get("ninja"), minionStats.get("eagle")}
-			   ,{minionStats.get("swordsman"), minionStats.get("archer"), minionStats.get("monk"), minionStats.get("mage"), minionStats.get("ninja"), minionStats.get("elemental")}};
+				{minionStats.get("swordsman"), minionStats.get("archer"), minionStats.get("ninja"), minionStats.get("mage"), minionStats.get("monk"), minionStats.get("eagle")}
+			   ,{minionStats.get("swordsman"), minionStats.get("archer"), minionStats.get("ninja"), minionStats.get("mage"), minionStats.get("monk"), minionStats.get("elemental")}};
 		heroUnits = new HeroStructure[]{heroStats.get("arroweyes"), heroStats.get("mrwizard")};
 
 		playerHeroes[0] = new Hero(map.start1().x(), map.start1().y(), 1, map().getPath().listIterator(), heroUnits[0]);
