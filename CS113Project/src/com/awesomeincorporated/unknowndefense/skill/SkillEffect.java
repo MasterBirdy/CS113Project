@@ -12,7 +12,8 @@ public class SkillEffect
 {
 	public int 			effect,			// Type of effect (Damage, heal, slow, etc.)
 						effectAmount,   // The amount of the effect (Damage, heal, slow, etc.)	
-//						effectTick,     // Ticks between effect applying
+						effectTick,     // Ticks between effect applying
+						effectTickCounter,
 						ticksLeft;		// Ticks until effect is removed		
 	public boolean 		additive,
 						continuous, // For particle effect
@@ -40,8 +41,10 @@ public class SkillEffect
 			effectAmount = s.effectAmount / s.totalAffected();
 		else
 			effectAmount = s.effectAmount;
+		effectTick = s.effectTick;
+		effectTickCounter = effectTick;
 		if (s instanceof PassiveSkill)
-			ticksLeft = 2;
+			ticksLeft = 1;
 		else
 			ticksLeft = ((TargetedSkill)s).duration;
 		continuous = s.continuous;
@@ -49,10 +52,10 @@ public class SkillEffect
 //		affected.setPosition(400, 300);
 //		
 //		affected.start();
-		affected.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
-//		affected = s.affected;
-		affected.setPosition(target.xCoord(), target.yCoord());
-		affected.start();
+//		affected.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
+////		affected = s.affected;
+//		affected.setPosition(target.xCoord(), target.yCoord());
+//		affected.start();
 		alive = true;
 	}
 	
@@ -68,7 +71,11 @@ public class SkillEffect
 		}
 		
 		affected.setPosition(target.xCoord(), target.yCoord());
-		causeEffect();
+		if (--effectTickCounter < 0)
+		{
+			effectTickCounter = effectTick;
+			causeEffect();
+		}
 	}
 	
 	public void draw(SpriteBatch batch)
@@ -89,10 +96,22 @@ public class SkillEffect
 		{
 			case 0:
 				target.takeDamage(effectAmount);
-			break;
+				break;
 			case 1:
 				target.takeDamage(-effectAmount);
-			break;
+				break;
+			case 2:
+				target.stun(effectAmount);
+				break;
+//			case 3:
+//				damageBoost += skill.effectAmount;
+//				break;
+//			case 4:
+//				attackSpeedBoost += skill.effectAmount;
+//				break;
+//			case 5:
+//				attackRangeBoost += skill.effectAmount;
+//				break;
 		}
 		
 		continueParticleEffect();
@@ -106,7 +125,7 @@ public class SkillEffect
 	
 	public void kill()
 	{
-		System.out.println("KILLLING WTF");
+//		System.out.println("KILLLING WTF");
 		alive = false;
 //		affected.dispose();
 	}

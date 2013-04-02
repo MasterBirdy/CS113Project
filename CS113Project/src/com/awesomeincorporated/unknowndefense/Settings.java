@@ -3,12 +3,12 @@ package com.awesomeincorporated.unknowndefense;
 public class Settings {
 	
 	Difficulty difficulty;
-	Sound sound;
+	SoundEnum sound;
 
     // Private constructor prevents instantiation from other classes
     private Settings() {
     	difficulty = Difficulty.EASY;
-    	sound = Sound.ON;
+    	sound = SoundEnum.ON;
     }
 
     /**
@@ -33,12 +33,12 @@ public class Settings {
     	return difficulty;
     }
     
-    public void setSound(Sound s)
+    public void setSound(SoundEnum s)
     {
     	sound = s;
     }
     
-    public Sound getSound()
+    public SoundEnum getSound()
     {
     	return sound;
     }

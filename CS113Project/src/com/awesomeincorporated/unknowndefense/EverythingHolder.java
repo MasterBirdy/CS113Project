@@ -16,6 +16,7 @@ import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -63,6 +64,8 @@ public class EverythingHolder
 	HashMap<String, HeroStructure> heroStats = new HashMap<String, HeroStructure>();
 	HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>();
 	HashMap<String, SkillStructure> skillStats = new HashMap<String, SkillStructure>();
+	HashMap<String, Sound> sounds = new HashMap<String, Sound>();
+	HashMap<String, SoundPack> unitSounds = new HashMap<String, SoundPack>();
 		
 	public EverythingHolder()
 	{
@@ -92,8 +95,19 @@ public class EverythingHolder
 		Actor.loadProjectiles(projectiles);
 		Entity.linkHolder(this);
 		loadEffects();
+		loadSounds();
 //		music = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
 //		music.setLooping(true);
+	}
+	
+	public SoundPack getUnitSounds(String name)
+	{
+		return unitSounds.get(name);
+	}
+	
+	public Sound getSound(String sound)
+	{
+		return sounds.get(sound);
 	}
 	
 	public SkillStructure getSkill(String skill)
@@ -104,6 +118,31 @@ public class EverythingHolder
 	public float heroHealthRatio()
 	{
 		return playerHeroes[0].getHealthRatio();
+	}
+	
+	public void loadSounds()
+	{
+		String[] soundNames = {
+				"thwp"};
+		
+//		Audio tempAudio = Gdx.audio;
+		for (String name : soundNames)
+			sounds.put(name, Gdx.audio.newSound(Gdx.files.internal("audio/" + name + ".wav")));
+		
+		String[] unitNames = {
+				"herowarrior",
+				"heroarcher",
+				"herowizard",
+				"minionwarrior",
+				"minionarcher",
+				"minionninja",
+				"minionwizard",
+				"minionmonk",
+				"minionwolf",
+				"minionelemental",
+				"minioneagle"};
+		for (String name : unitNames)
+			unitSounds.put(name, new SoundPack(name));
 	}
 	
 	public void loadEffects()
@@ -119,9 +158,10 @@ public class EverythingHolder
 				"fire",
 				"blood"};
 		
+		ParticleEffect temp;
 		for (String name : particleNames)
 		{
-			ParticleEffect temp = new ParticleEffect();
+			temp = new ParticleEffect();
 			temp.load(Gdx.files.internal("data/" + name + ".p"), Gdx.files.internal("images"));
 			particleEffects.put(name, temp);
 		}
@@ -597,7 +637,7 @@ public class EverythingHolder
 //				a.update();
 		for (int i = 0; i < entities.size(); i++)
 		{
-			if (entities.get(i) != null && entities.get(i).isAlive())
+			if (entities.get(i) != null && (entities.get(i).isAlive() || entities.get(i) instanceof Hero))
 				entities.get(i).update();
 		}
 //		for (Entity e : entities)
@@ -619,6 +659,10 @@ public class EverythingHolder
 		if (++turn % 200 == 0)
 			System.out.println("Turn: " + turn);
 		spawnTimers();
+		if (!playerHeroes[0].isAlive() && playerHeroes[0].canRespawn())
+			playerHeroes[0].respawn(map.start1().x(), map.start1().y(), map.getPath().listIterator());
+		if (!playerHeroes[1].isAlive() && playerHeroes[1].canRespawn())
+			playerHeroes[1].respawn(map.start2().x(), map.start2().y(), map.getReversePath().listIterator());
 	}
 	
 	private void spawnTimers()
@@ -651,10 +695,10 @@ public class EverythingHolder
 			if (pools[3] == null)
 				pools[3] = new LinkedList<Integer>();
 			
-			if (!playerHeroes[0].isAlive())
-				playerHeroes[0].respawn(map.start1().x(), map.start1().y(), map.getPath().listIterator());
-			if (!playerHeroes[1].isAlive())
-				playerHeroes[1].respawn(map.start2().x(), map.start2().y(), map.getReversePath().listIterator());
+//			if (!playerHeroes[0].isAlive())
+//				playerHeroes[0].respawn(map.start1().x(), map.start1().y(), map.getPath().listIterator());
+//			if (!playerHeroes[1].isAlive())
+//				playerHeroes[1].respawn(map.start2().x(), map.start2().y(), map.getReversePath().listIterator());
 			
 //			for (Actor a : teams[0])
 //				if (a instanceof Hero && !a.isAlive())

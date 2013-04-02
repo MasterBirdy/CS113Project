@@ -14,7 +14,9 @@ public class SkillStructure
 							effectAmount, 
 							state,
 							castTime,
-							cooldown, 
+							cooldown,
+							effectTick,
+							travelTime,
 							cost,
 							duration;
 	////////////////////////////

@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.awesomeincorporated.unknowndefense.SoundPack;
+import com.awesomeincorporated.unknowndefense.parser.ActorStructure;
+import com.awesomeincorporated.unknowndefense.parser.SkillStructure;
+import com.awesomeincorporated.unknowndefense.skill.PassiveSkill;
 import com.awesomeincorporated.unknowndefense.skill.SkillEffect;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,7 +24,7 @@ public abstract class Actor extends Entity
 		  attackSpeedBoost = 0, attackRangeBoost = 0;	// For buffs
 	boolean attacking, ranged;
 	Actor target;
-	ArrayList<SkillEffect> skillEffects = new ArrayList<SkillEffect>(5);
+	ArrayList<SkillEffect> skillEffects;// = new ArrayList<SkillEffect>(5);
 //	ArrayList<ParticleEffect> peEffect = new ArrayList<ParticleEffect>(5);
 	static SkillEffect nullSkillEffect = new SkillEffect();
 	static ParticleEffect nullParticleEffect = new ParticleEffect();
@@ -29,14 +34,48 @@ public abstract class Actor extends Entity
 	static ArrayList<Projectile> projectiles;
 	int firstEmpty;
 	static TextureRegion[] rangeIndicator;
+	PassiveSkill passiveSkill;
+	Sound attackSound;
+	SoundPack soundPack;
 	
 	int animation = 0, level = 0;
 
-	public Actor(int x, int y, boolean ranged, int team)
+	public Actor(int x, int y, boolean ranged, int team, ActorStructure a)
 	{
 		super(x, y, team);
 		alive = true;
 		this.ranged = ranged;
+		skillEffects = new ArrayList<SkillEffect>(5);
+		if (this instanceof Building)
+		{
+			this.attackSound = everything.getSound("thwp");
+			this.soundPack = everything.getUnitSounds("minionarcher");
+		}
+		else
+		{
+			if (!a.passiveSkill(level).equals("empty"))
+				this.loadPassiveSkill(everything.getSkill(a.passiveSkill(level)));
+			if (!a.soundPack(level).equals("empty"))
+				this.soundPack = everything.getUnitSounds(a.soundPack(level));
+//			if (!a.attackSound(level).equals("empty"))
+//				this.attackSound = everything.getSound(a.attackSound(level));
+		}
+	}
+	
+	public void stun(int stun)
+	{
+		System.out.println("Stun");
+		attackCooldown = stun;
+//		if (isAlive())
+//		{
+//			if (attackCooldown < stun)
+//				attackCooldown = stun;
+//		}
+	}
+	
+	public void loadPassiveSkill(SkillStructure pSkill)
+	{
+		passiveSkill = new PassiveSkill(pSkill, this);
 	}
 	
 	public float getHealthRatio()
@@ -72,7 +111,10 @@ public abstract class Actor extends Entity
 	}
 	
 	public void update()
-	{		
+	{
+		if (passiveSkill != null)
+			passiveSkill.update();
+		
 		for (SkillEffect skill : skillEffects)
 		{
 			skill.update();
@@ -171,13 +213,6 @@ public abstract class Actor extends Entity
 		return e;
 	}
 	
-	protected void attack()
-	{
-		if (ranged)
-			rangeAttack();
-		else
-			meleeAttack();
-	}
 	
 	public void rangeIndicator(SpriteBatch batch)
 	{
@@ -198,8 +233,8 @@ public abstract class Actor extends Entity
 	public void takeDamage(int damage, int type)
 	{
 		takeDamage(damage);
-		if (effects.isEmpty())
-			effects.add(this.fire());
+//		if (effects.isEmpty())
+//			effects.add(this.fire());
 //		if (type == 0)
 //			effects.add(this.spark());
 //		else if (type == 1)
@@ -214,9 +249,14 @@ public abstract class Actor extends Entity
 		if (currentHealth <= 0)
 		{
 			if (alive)// && Gdx.app.getType() == Application.ApplicationType.Desktop)
+			{
 //				effects.add(this.fire());
+				for (SkillEffect skill : skillEffects)
+					skill.kill();
 				effects.add(this.blood());
-			alive = false;
+				soundPack.playDie();
+				alive = false;
+			}
 		}
 	}
 	
@@ -270,33 +310,60 @@ public abstract class Actor extends Entity
 
 	public abstract void destroy();
 
+	protected void attack()
+	{
+		if (target == null || !target.isAlive())
+			return;
+		soundPack.playAttack();
+//		if (attackSound != null)
+//			attackSound.play(volume);
+		if (ranged)
+			rangeAttack();
+		else
+			meleeAttack();
+	}
+	
 	protected void rangeAttack() 
 	{
-		if (!(target == null || !target.isAlive()))
+		if (!(this instanceof Stronghold))
 		{
-			if (this.attackCooldown <= 0)
-			{
-				sounds.get("thwp").play(volume);
-				if (!(this instanceof Stronghold))
-				{
-					projectiles.add(new ArrowProjectile(this.xCoord + (this instanceof ArrowTower ? 10 : 0), this.yCoord + (this instanceof ArrowTower ? 40 : 0), this.team, 3, target));
-				}
-				else
-				{
-					projectiles.add(new CannonProjectile(this.xCoord, this.yCoord + 50, this.team, 3, target));
-				}
-				target.takeDamage(damage);
-			}
+			projectiles.add(new ArrowProjectile(this.xCoord + (this instanceof ArrowTower ? 10 : 0), this.yCoord + (this instanceof ArrowTower ? 40 : 0), this.team, 3, target));
 		}
 		else
-			if (projectiles.size() != 0)
-				projectiles.removeAll(projectiles);
+		{
+			projectiles.add(new CannonProjectile(this.xCoord, this.yCoord + 50, this.team, 3, target));
+		}
+		target.takeDamage(damage);
+//		if (target == null || !target.isAlive())
+//			return;
+		
+//		if (!(target == null || !target.isAlive()))
+//		{
+//			if (this.attackCooldown <= 0)
+//			{
+////				sounds.get("thwp").play(volume);
+////				everything.getSound("thwp");
+////				attackSound.play(volume);
+//				if (!(this instanceof Stronghold))
+//				{
+//					projectiles.add(new ArrowProjectile(this.xCoord + (this instanceof ArrowTower ? 10 : 0), this.yCoord + (this instanceof ArrowTower ? 40 : 0), this.team, 3, target));
+//				}
+//				else
+//				{
+//					projectiles.add(new CannonProjectile(this.xCoord, this.yCoord + 50, this.team, 3, target));
+//				}
+//				target.takeDamage(damage);
+//			}
+//		}
+//		else
+//			if (projectiles.size() != 0)
+//				projectiles.removeAll(projectiles);
 	}
 	
 	protected void meleeAttack()
 	{
-		if (target == null || !target.isAlive())
-			return;
+//		if (target == null || !target.isAlive())
+//			return;
 		target.takeDamage(damage);
 	}
 }

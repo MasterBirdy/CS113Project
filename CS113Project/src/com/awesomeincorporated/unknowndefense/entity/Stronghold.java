@@ -8,7 +8,7 @@ public class Stronghold extends Building
 {
 	public Stronghold(int x, int y, int team)
 	{
-		super(x, y, true, team, 0);
+		super(x, y, true, team, 0, null);
 		maxHealth = 400;
 		currentHealth = maxHealth;
 		damage = 12;

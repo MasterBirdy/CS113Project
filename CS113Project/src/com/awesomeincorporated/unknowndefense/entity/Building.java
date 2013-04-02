@@ -3,6 +3,8 @@ package com.awesomeincorporated.unknowndefense.entity;
 import java.util.ArrayList;
 
 import com.awesomeincorporated.unknowndefense.map.Coordinate;
+import com.awesomeincorporated.unknowndefense.parser.BuildingStructure;
+import com.awesomeincorporated.unknowndefense.parser.MinionStructure;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -23,9 +25,9 @@ public abstract class Building extends Actor
 	ParticleEffect fire = new ParticleEffect();
 	boolean debug = false;
 	
-	public Building(int x, int y, boolean ranged, int team, int towerNumber)
+	public Building(int x, int y, boolean ranged, int team, int towerNumber, BuildingStructure struct)
 	{
-		super(x, y, ranged, team);
+		super(x, y, ranged, team, null); // Will add structure
 		currentSprite = sprites.get(0);
 		if (Gdx.app.getType() != ApplicationType.Android)
 		{

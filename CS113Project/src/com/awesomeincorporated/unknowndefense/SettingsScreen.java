@@ -110,12 +110,12 @@ public class SettingsScreen  implements Screen  {
 		easyHighlightedSprite.draw(batch);
 		hardSprite.draw(batch);
 		}
-		if (Settings.getInstance().getSound() == Sound.ON)
+		if (Settings.getInstance().getSound() == SoundEnum.ON)
 		{
 			onHighlightedSprite.draw(batch);
 			offSprite.draw(batch);
 		}
-		else if (Settings.getInstance().getSound() == Sound.OFF)
+		else if (Settings.getInstance().getSound() == SoundEnum.OFF)
 		{
 			onSprite.draw(batch);
 			offHighlightedSprite.draw(batch);
@@ -148,11 +148,11 @@ public class SettingsScreen  implements Screen  {
 			}
 			else if (OverlapTester.pointInRectangle(onRectangle, touchPoint.x, touchPoint.y))
 			{
-				Settings.getInstance().setSound(Sound.ON);
+				Settings.getInstance().setSound(SoundEnum.ON);
 			}
 			else if (OverlapTester.pointInRectangle(offRectangle, touchPoint.x, touchPoint.y))
 			{
-				Settings.getInstance().setSound(Sound.OFF);
+				Settings.getInstance().setSound(SoundEnum.OFF);
 			}
 		}
 	}

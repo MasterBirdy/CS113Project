@@ -18,15 +18,15 @@ public abstract class Entity
 	float yCoord;
 	protected boolean alive;
 	static Texture spriteSheet;
-	static HashMap<String, Sound> sounds = new HashMap<String, Sound>(); 
+//	static HashMap<String, Sound> sounds = new HashMap<String, Sound>(); 
 	static float volume = 1;
 	protected static EverythingHolder everything;
 	static ArrayList<ParticleEffect> effects;
 	
 	public Entity()
 	{
-		xCoord = 0;
-		yCoord = 0;
+//		xCoord = 0;
+//		yCoord = 0;
 		alive = false;
 	}
 	
@@ -64,8 +64,8 @@ public abstract class Entity
 	public static void loadStatics(Texture sheet)
 	{
 		spriteSheet = sheet;
-		Audio tempAudio = Gdx.audio;
-		sounds.put("thwp", tempAudio.newSound(Gdx.files.internal("audio/Thwp.wav")));
+//		Audio tempAudio = Gdx.audio;
+//		sounds.put("thwp", tempAudio.newSound(Gdx.files.internal("audio/Thwp.wav")));
 	}
 	
 	public static void loadStatics(ArrayList<ParticleEffect> e)

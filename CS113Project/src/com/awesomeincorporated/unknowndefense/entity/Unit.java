@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 import com.awesomeincorporated.unknowndefense.map.Coordinate;
+import com.awesomeincorporated.unknowndefense.parser.UnitStructure;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -22,38 +24,33 @@ public abstract class Unit extends Actor
 	float stateTime;
 	int stance = 1, previousStance = 1;
 	int animationDir = 0;
-	int direction = 2;
+	ParticleEffect spark, fire, heal;
 	
-	public Unit(int x, int y, boolean ranged, int team, ListIterator<Coordinate> pathIter, int rX, int rY)
+	public Unit(int x, int y, boolean ranged, int team, ListIterator<Coordinate> pathIter, UnitStructure u)//int rX, int rY)
 	{
-		super(x + rX, y + rY, ranged, team);
+		super(x, y, ranged, team, u);
 		//this.speed = speed;
 		this.pathIter = pathIter;
 		destination = pathIter.next();
 //		destination = (team == 1 ? pathIter.next() : pathIter.previous());
 		stateTime = 0f;
 		changedDirection = true;
-		randX = rX;
-		randY = rY;
+		spark = this.spark();
+		fire = everything.getEffect("fireball");
+		heal = everything.getEffect("heal");
+//		randX = rX;
+//		randY = rY;
 	}
 	
-	// 0 = Up, 1 = Right, 2 = Down, 3 = Left
+	// 0 = Up, 1 = Left, 2 = Right, 3 = Down
 	public int getDirection()
 	{
-		if (ySpeed < -0.6)
-			direction = 0;
-		else if (xSpeed > 0.6)
-			direction = 1;
-		else if (xSpeed < -0.6)
-			direction = 3;
-		else if (ySpeed > 0.6)
-			direction = 2;
-		return direction;
+		return animationDir % 4;
 	}
 
 	@Override
 	public void draw(SpriteBatch batch)
-	{		
+	{
 //		super.draw(batch);
 		stateTime += Gdx.graphics.getDeltaTime();
 		TextureRegion current;
@@ -95,9 +92,9 @@ public abstract class Unit extends Actor
 	{
 		super.takeDamage(damage);
 		if (type == 0)
-			effects.add(this.blood());
-		else if (type == 1)
 			effects.add(this.fire());
+		else if (type == 1)
+			effects.add(this.blood());
 		else if (type == 2)
 			effects.add(this.blood());
 	}

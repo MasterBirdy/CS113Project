@@ -8,7 +8,7 @@ public class ArrowTower extends Building
 {
 	public ArrowTower(int x, int y, int team, int towerNumber)
 	{
-		super(x, y, true, team, towerNumber);
+		super(x, y, true, team, towerNumber, null);
 		maxHealth = 250;
 		currentHealth = maxHealth;
 		damage = 11;

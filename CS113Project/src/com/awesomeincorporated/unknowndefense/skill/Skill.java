@@ -17,7 +17,8 @@ public abstract class Skill extends Entity
 					targetTeam,
 					effect,			// Type of effect (Damage, heal, slow, etc.)
 					effectAmount,   // The amount of the effect (Damage, heal, slow, etc.)	
-					effectTick;		// Ticks between effect applying
+					effectTick,		// Ticks between effect applying
+					tickCounter;
 	boolean 		damageSplit, 	// If damage is split among enemies
 					additive,		// If it stacks
 					active,			// If active
@@ -31,6 +32,7 @@ public abstract class Skill extends Entity
 	
 	public Skill(SkillStructure s, Actor c)
 	{
+		int level = 0;
 		xCoord(c.xCoord());
 		yCoord(c.yCoord());
 		aoe = s.aoe.get(0);
@@ -40,26 +42,28 @@ public abstract class Skill extends Entity
 		}
 		else if (s.targetTeam.get(0) == 1)
 		{
-			if (c.team() == 0)
-				targetTeam = 1;
-			else
+			if (c.team() == 1)
 				targetTeam = 2;
+			else
+				targetTeam = 1;
 		}
 		else
 		{
-			if (c.team() == 0)
-				targetTeam = 2;
-			else
+			if (c.team() == 1)
 				targetTeam = 1;
+			else
+				targetTeam = 2;
 		}
 //		targetTeam = s.targetTeam.get(0);
-		effect = s.effect.get(0);
-		effectAmount = s.effectAmount.get(0);
-		damageSplit = s.damageSplit.get(0);
-		additive = s.additive.get(0);
-		continuous = s.continuous.get(0);
-		travelEffect = everything.getEffect(s.travel.get(0));
-		detonateEffect = everything.getEffect(s.detonateEffect.get(0));
+		effect = s.effect.get(level);
+		effectAmount = s.effectAmount.get(level);
+		effectTick = s.effectTick.get(level);
+//		tickCounter = effectTick;
+		damageSplit = s.damageSplit.get(level);
+		additive = s.additive.get(level);
+		continuous = s.continuous.get(level);
+		travelEffect = everything.getEffect(s.travel.get(level));
+		detonateEffect = everything.getEffect(s.detonateEffect.get(level));
 		affected = new ParticleEffect();
 		affected.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 //		affected = everything.getEffect(s.affected);
@@ -72,21 +76,22 @@ public abstract class Skill extends Entity
 	}
 	
 	// Returns list of actors in range of aoe
-	public ArrayList<Actor> inRange() 
-	{
-		if (aoe == 0)
-		{
-			ArrayList<Actor> temp = new ArrayList<Actor>();
-			temp.add(caster);
-			return temp;
-		}
-		else
-		{
-			
-		}
-		
-		return everything.team(targetTeam);
-	}
+	public abstract ArrayList<Actor> inRange();
+//	public ArrayList<Actor> inRange() 
+//	{
+//		if (aoe == 0)
+//		{
+//			ArrayList<Actor> temp = new ArrayList<Actor>();
+//			temp.add(caster);
+//			return temp;
+//		}
+//		else
+//		{
+//			
+//		}
+//		
+//		return everything.team(targetTeam);
+//	}
 	
 	public void detonate()
 	{
@@ -115,7 +120,6 @@ public abstract class Skill extends Entity
 	
 	public void applyToTargets()
 	{
-		System.out.println("Applying to targets (Skill)");
 		for (Actor a : inRange())
 			if (a.isAlive())
 				a.takeSkillEffect(new SkillEffect(this, a));

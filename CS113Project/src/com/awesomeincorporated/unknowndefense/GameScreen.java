@@ -668,7 +668,7 @@ public class GameScreen implements Screen
 
 		//if (camera.position.x > everything.map().width() + gameUI.width())
 		//	camera.position.x = everything.map().width() + gameUI.width();
-		float temp = width - (cameraW / 2);
+		float temp = width - cameraW + 400;
 		if (camera.position.x > temp) //(width - (w / 2) + 400))//(w / 4) - w + 400)
 			camera.position.x = temp; //width - (w / 2) + 400; //(w / 4) - w + 400;
 
@@ -781,7 +781,7 @@ public class GameScreen implements Screen
 
 	@Override
 	public void show() {
-		if (Settings.getInstance().getSound() == Sound.ON)
+		if (Settings.getInstance().getSound() == SoundEnum.ON)
 			everything.musicPlay();
 
 	}

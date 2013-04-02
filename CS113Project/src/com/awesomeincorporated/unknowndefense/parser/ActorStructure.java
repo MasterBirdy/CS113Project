@@ -12,10 +12,32 @@ public abstract class ActorStructure
 	ArrayList<Integer> cost;
 	ArrayList<Boolean> ranged;
 	ArrayList<Integer> animation;
+	ArrayList<String> attackSound;
+	ArrayList<String> passiveSkill;
+	ArrayList<String> soundPack;
+	
+	public String soundPack(int level)
+	{
+		return soundPack.get(level);
+	}
+	
+	public String passiveSkill(int level)
+	{
+		return passiveSkill.get(level);
+	}
+	
+	public String attackSound(int level)
+	{
+		if (attackSound.size() > level)
+			return attackSound.get(level);
+		return attackSound.get(attackSound.size());
+	}
 	
 	public int maxHealth(int level)
 	{
-		return maxHealth.get(level);
+		if (maxHealth.size() > level)
+			return maxHealth.get(level);
+		return maxHealth.get(maxHealth.size());
 	}
 	
 	public int damage(int level)

@@ -5,27 +5,29 @@ import com.awesomeincorporated.unknowndefense.map.Coordinate;
 import com.awesomeincorporated.unknowndefense.parser.HeroStructure;
 import com.awesomeincorporated.unknowndefense.parser.MinionStructure;
 import com.awesomeincorporated.unknowndefense.parser.SkillStructure;
+import com.awesomeincorporated.unknowndefense.skill.SkillEffect;
 import com.awesomeincorporated.unknowndefense.skill.TargetedSkill;
 //import com.awesomeincorporated.unknowndefense.skill.TestFireBall;
 
 public class Hero extends Unit 
 {
 	//int stance = 1, previousStance = 1;
+	int respawnTime = 100, respawnCounter = 0;
 	boolean changedDirection = false;
 	SkillStructure activeSkill;
 	
-	public Hero(int x, int y, boolean ranged, int team, ListIterator<Coordinate> p) 
-	{
-		super(x, y, ranged, team, p, 0, 0);
-		stance = 1;
-		alive = false;
-		activeSkill = everything.getSkill("testfireball");
-//		activeSkill = new TestFireBall();
-	}
+//	public Hero(int x, int y, boolean ranged, int team, ListIterator<Coordinate> p) 
+//	{
+//		super(x, y, ranged, team, p);
+//		stance = 1;
+//		alive = false;
+//		activeSkill = everything.getSkill("testfireball");
+////		activeSkill = new TestFireBall();
+//	}
 	
 	public Hero(int x, int y, int team, ListIterator<Coordinate> p, HeroStructure struct)
 	{
-		super(x, y, struct.ranged(0), team, p, 0, 0);
+		super(x, y, struct.ranged(0), team, p, struct);
 		this.level = 0;
 		maxHealth = struct.maxHealth(level);
 		currentHealth = maxHealth;
@@ -37,12 +39,16 @@ public class Hero extends Unit
 		stance = 1;
 		alive = false;
 		activeSkill = everything.getSkill(struct.activeSkill(level));
-//		activeSkill = new TestFireBall();
+//		if (!struct.passiveSkill(level).equals("empty"))
+//			this.loadPassiveSkill(everything.getSkill(struct.passiveSkill(level)));
+//		if (!struct.attackSound(level).equals("empty"))
+//			this.attackSound = everything.getSound(struct.attackSound(level));
 	}
 	
 	public void activeSkill()
 	{
-		everything.add(new TargetedSkill(activeSkill, this, target), team);
+		if (activeSkill != null && this.isAlive())
+			everything.add(new TargetedSkill(activeSkill, this, target), team);
 	}
 	
 	public void stance(int s)
@@ -62,11 +68,22 @@ public class Hero extends Unit
 		xSpeed = 0;
 		ySpeed = 0;
 	}
+	
+	public boolean canRespawn()
+	{
+		return (respawnCounter < 0);
+	}
 
 	@Override
 	public void update() 
 	{
 		super.update();
+		if (!isAlive())
+		{
+			--respawnCounter;
+//			respawnCounter = respawnTime;
+			return;
+		}
 		attackCooldown--;
 		
 		if (stance == -1)
@@ -118,6 +135,7 @@ public class Hero extends Unit
 		ySpeed = 0;
 		stance = 1;
 		previousStance = 1;
+		respawnCounter = respawnTime;
 	}
 	
 	public int stance()

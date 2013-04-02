@@ -16,7 +16,8 @@ public class TargetedSkill extends Skill
 {
 	int 	duration,
 			cooldown,
-			ticksLeft = 40;
+			ticksLeft = 40,
+			travelTime;
 	float 	speed,
 			speedX = 0,
 			speedY = 0,
@@ -37,6 +38,7 @@ public class TargetedSkill extends Skill
 		target = t;
 		duration = s.duration.get(0);
 		speed = s.speed.get(0);
+		ticksLeft = s.travelTime.get(0);
 		if (t != null)
 		{
 			targetX = t.xCoord();
@@ -44,7 +46,7 @@ public class TargetedSkill extends Skill
 		}
 		else
 		{
-			System.out.println("No target");
+//			System.out.println("No target");
 			targetX = c.xCoord();
 			targetY = c.yCoord();
 			switch (((Hero)c).getDirection())
@@ -53,15 +55,30 @@ public class TargetedSkill extends Skill
 					targetY -= 1000;
 					break;
 				case 1:
-					targetX += 1000;
-					break;
-				case 2:
-					targetY += 1000;
-					break;
-				case 3:
 					targetX -= 1000;
 					break;
+				case 2:
+					targetX += 1000;
+					break;
+				case 3:
+					targetY += 1000;
+					break;
 			}
+//			switch (((Hero)c).getDirection())
+//			{
+//				case 0:
+//					targetY -= 1000;
+//					break;
+//				case 1:
+//					targetX += 1000;
+//					break;
+//				case 2:
+//					targetY += 1000;
+//					break;
+//				case 3:
+//					targetX -= 1000;
+//					break;
+//			}
 		}
 //		part = new ParticleEffect();
 //		part.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
