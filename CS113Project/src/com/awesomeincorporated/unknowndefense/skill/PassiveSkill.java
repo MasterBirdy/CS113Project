@@ -8,9 +8,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class PassiveSkill extends Skill
 {
+	int cooldown, cooldownCounter;
+	
 	public PassiveSkill(SkillStructure s, Actor c)
 	{
 		super(s, c);
+		cooldown = s.cooldown.get(0);
+		cooldownCounter = cooldown;
 	}
 
 	@Override
@@ -37,12 +41,16 @@ public class PassiveSkill extends Skill
 	{
 		if (!caster.isAlive())
 			return;
+		
 		xCoord(caster.xCoord());
 		yCoord(caster.yCoord());
 		
-		if (--tickCounter >= 0)
+		if (--cooldownCounter >= 0)
 			return;
-		tickCounter = effectTick;
+//		if (--tickCounter >= 0)
+//			return;
+//		tickCounter = effectTick;
+			cooldownCounter = cooldown;
 		System.out.println("Applying Effect");
 		applyToTargets();
 	}

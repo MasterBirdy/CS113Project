@@ -47,7 +47,7 @@ public class GameScreen implements Screen
 	BitmapFont font;
 	static boolean showRange;
 	MyInputProcessor inputProcessor;
-	EverythingHolder everything = new EverythingHolder();
+	static EverythingHolder everything;// = new EverythingHolder();
 	TextureRegion pauseRegion;
 	int pauseCooldown;
 	GameUI gameUI3;
@@ -75,6 +75,7 @@ public class GameScreen implements Screen
 	float cameraW, cameraH, width, height, screenH;
 	
 	float timeAccumulator = 0;
+	float volume = .2f;
 	boolean multiplayer = false; 	// True with multiplayer
 	boolean running = false;		// False with Multiplayer
 	boolean connected = false;
@@ -90,16 +91,17 @@ public class GameScreen implements Screen
 	Comparator<CommandIn> comparator = new MessageCompare();
 	PriorityQueue<CommandIn> commandQueue = new PriorityQueue<CommandIn>(20, comparator);
 
-	public GameScreen(UnknownDefense game)
+	public GameScreen(UnknownDefense game, boolean multiplayer)
 	{
-
 		this.game = game;
+		this.multiplayer = multiplayer;
 		Texture.setEnforcePotImages(true);
 		isPaused = false;
 		
-//		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
-//		startMusic.setLooping(true);
-//		startMusic.play();
+		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
+		startMusic.setLooping(true);
+		startMusic.setVolume(volume);
+		startMusic.play();
 //		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
 //		startMusic.setLooping(true);
 
@@ -264,6 +266,11 @@ public class GameScreen implements Screen
 		height = everything.map().height();
 		screenH = Gdx.graphics.getHeight() / 2;
 	}
+	
+	static public void setEverything(EverythingHolder e)
+	{
+		everything = e;
+	}
 
 	static public void toggleShowRange()
 	{
@@ -330,6 +337,7 @@ public class GameScreen implements Screen
 	{
 		if (t == 0) return;
 		everything.end();
+		startMusic.stop();
 		game.mainMenuScreen.gameWon();
 		game.setScreen(game.mainMenuScreen);
 	}
@@ -769,6 +777,7 @@ public class GameScreen implements Screen
 	@Override
 	public void pause() 
 	{
+		startMusic.stop();
 //		client.close();
 //		client.stop();
 	}

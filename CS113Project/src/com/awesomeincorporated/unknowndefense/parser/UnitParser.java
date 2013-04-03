@@ -154,6 +154,7 @@ public class UnitParser
 							skill.effectAmount = tokenizeInt(getElement("effectamount"));
 							skill.duration = tokenizeInt(getElement("duration"));
 							skill.effectTick = tokenizeInt(getElement("effecttick"));
+							skill.cooldown = tokenizeInt(getElement("cooldown"));
 							skill.travelTime = tokenizeInt(getElement("traveltime"));
 							skill.damageSplit = tokenizeBool(getElement("damagesplit"));
 							skill.additive = tokenizeBool(getElement("additive"));

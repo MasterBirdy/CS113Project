@@ -18,9 +18,11 @@ public class TopUI
 	public TopUI(Texture icons)
 	{
 		this.icons = icons;
-		frame = new TextureRegion(icons, 519, 0, 971, 87);
-		topBar = new TextureRegion(icons, 519, 87, 971, 87);
-		emptyHealth = new TextureRegion(icons, 519, 174, 971, 87);
+		frame = new TextureRegion(icons, 519, 0, 431, 87);
+//		frame = new TextureRegion(icons, 519, 0, 971, 87);
+		topBar = new TextureRegion(icons, 519, 99, 800, 83);
+		emptyHealth = new TextureRegion(icons, 598, 200, 345, 20);
+//		emptyHealth = new TextureRegion(icons, 519, 174, 971, 87);
 		fullHealth = new TextureRegion(icons, 598, 287, 345, 20);
 //		fullHealth = new TextureRegion(icons, 519, 261, 971, 87);
 		nextWave = new TextureRegion(icons, 519, 348, 166, 74);
@@ -28,20 +30,29 @@ public class TopUI
 		height = Gdx.graphics.getHeight();
 		topX = 0;
 		topY = Gdx.graphics.getHeight();
-		adTopY = topY - 70;
+		adTopY = topY - 84;
 		adHeight = width * 87 / 971;
 	}
 	
 	public void draw()
 	{
-		batch.draw(topBar, topX, adTopY, width, adHeight);
-		batch.draw(emptyHealth, topX, adTopY, width, adHeight);
-//		fullHealth.setRegionWidth(width);
-//		fullHealth = new TextureRegion(icons, 519, 261, 400, 87);
-//		batch.draw(fullHealth, topX, adTopY, 400, adHeight);
-		batch.draw(fullHealth, topX + 66, adTopY + 32, 281 * everything.heroHealthRatio(), 16);
-//		batch.draw(new TextureRegion(fullHealth, 0, 0, 400, 87), topX, adTopY, width, adHeight);
-		batch.draw(frame, topX, adTopY, width, adHeight);
+		batch.draw(topBar, topX, adTopY + 34, width, 50);
+		
+		// Left Side
+		batch.draw(emptyHealth, topX + 66, adTopY + 47, 282, 16);
+		batch.draw(fullHealth, topX + 66, adTopY + 47, 282 * everything.baseHealthRatio(), 16);
+		batch.draw(frame, 0, adTopY + 15, 356, adHeight);
+//		batch.draw(frame, topX, adTopY + 15, width, adHeight);
+		
+		// Right Side
+		batch.draw(emptyHealth, 734, adTopY + 47, -282, 16);
+		batch.draw(fullHealth, 734, adTopY + 47, -282 * everything.heroHealthRatio(), 16);
+		batch.draw(frame, 800, adTopY + 15, -356, adHeight);
+//		batch.draw(frame, 800, adTopY + 15, -width, adHeight);
+		
+		// Wave Timer
+		batch.draw(nextWave, 320, adTopY, 166 * .95f, 74 * .95f);
+		everything.font2.draw(batch, String.format("%02d", everything.timeLeft()), 374, adTopY + 58);
 	}
 	
 	static public void load(SpriteBatch b, EverythingHolder things)

@@ -84,7 +84,7 @@ active: false
 - Tint - 
 colorsCount: 9
 colors0: 1.0
-colors1: 0.8666667
+colors1: 0.85882354
 colors2: 0.30588236
 colors3: 1.0
 colors4: 0.54901963
@@ -110,9 +110,9 @@ timeline0: 0.0
 timeline1: 1.0
 - Options - 
 attached: false
-continuous: true
+continuous: false
 aligned: false
 additive: false
 behind: false
 - Image Path -
-C:\Users\Mikey\Desktop\Particle Effects\stunattackparticle.png
+C:\Users\Mikey\Documents\TowerDefense Docs\Particle Effects\stunattackparticle.png

@@ -13,25 +13,26 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class GameUI 
 {
 	static SpriteBatch batch;
-	private Texture icons; 
+	private Texture icons;
+	TextureRegion buttonFrame;
 	Button[] buttons = new Button[10];
 	int width = Gdx.graphics.getWidth();
 	int height = Gdx.graphics.getHeight();
-	int buttonRadius = width / 20;
-	int stackTopX = 675;
-	int stackTopY = 360;
-	int spaceX = 80;
-	int spaceY = 60;
+	int buttonRadius = (int) (width * .95f / 20);
+	int stackTopX = 680; //658;
+	int stackTopY = 335;//355;
+	int spaceX = 75;
+	int spaceY = 54;
 	
 //	int buttonRadius = 40;
 //	int stackTopX = 275;
 //	int stackTopY = 120;
 //	int spaceX = 80;
 //	int spaceY = 60;
-	BitmapFont font;
+//	BitmapFont font;
 	static EverythingHolder everything;
 	TopUI topUI;
-	
+	TextureRegion cash, time, units;
 	float screenX, screenY;
 	
 	ParticleEffect tempPart;
@@ -44,19 +45,19 @@ public class GameUI
 				new TextureRegion(icons, 0, 1071, 152, 153));	// Sword //new TextureRegion(icons, 0, 1224, 152, 153));	// Pet
 		buttons[1] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY, buttonRadius,				
 				new TextureRegion(icons, 0, 918, 152, 153));	// Archer
-		buttons[2] = new RoundButton(stackTopX, stackTopY - spaceY * 2, buttonRadius, 			
+		buttons[2] = new RoundButton(stackTopX, stackTopY - spaceY * 2 + 4, buttonRadius, 			
 				new TextureRegion(icons, 0, 765, 152, 153));	// Ninja
-		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 3, buttonRadius, 			
+		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 3 + 4, buttonRadius, 			
 				new TextureRegion(icons, 0, 612, 152, 153));	// Mage
-		buttons[4] = new RoundButton(stackTopX, stackTopY - spaceY * 4, buttonRadius, 			
+		buttons[4] = new RoundButton(stackTopX, stackTopY - spaceY * 4 + 9, buttonRadius, 			
 				new TextureRegion(icons, 0, 459, 152, 153));	// Monk
-		buttons[5] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5, buttonRadius, 			
+		buttons[5] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9, buttonRadius, 			
 				new TextureRegion(icons, 0, 1224, 152, 153));	// Pet
-		buttons[6] = new RoundButton(40, 143, (int) (buttonRadius * .9f), 			
+		buttons[6] = new RoundButton(36, 137, (int) (buttonRadius * .9f), 			
 				new TextureRegion(icons, 0, 0, 152, 153));		// Attack
-		buttons[7] = new RoundButton(106, 102, (int) (buttonRadius * .9f), 			
+		buttons[7] = new RoundButton(99, 99, (int) (buttonRadius * .9f), 			
 				new TextureRegion(icons, 0, 153, 152, 153));	// Defend
-		buttons[8] = new RoundButton(145, 38, (int) (buttonRadius * .9f), 			
+		buttons[8] = new RoundButton(137, 35, (int) (buttonRadius * .9f), 			
 				new TextureRegion(icons, 0, 306, 152, 153));	// Retreat
 		buttons[9] = new RectangularButton(0, 0, (int)(buttonRadius * 2.75f), (int)(buttonRadius * 2.75f), 				
 				new TextureRegion(icons, 152, 0, 215, 209)) {	// Skill
@@ -72,10 +73,16 @@ public class GameUI
 				return true;
 			}
 		};
-		font = new BitmapFont();
 		screenX = Gdx.graphics.getWidth() / 2;
 		screenY = Gdx.graphics.getHeight() / 2;
-
+		
+		buttonFrame = new TextureRegion(icons, 519, 422, 361, 792);
+		
+		// Side Stats
+		cash = new TextureRegion(icons, 152, 209, 33, 31);
+		time = new TextureRegion(icons, 185, 209, 33, 31);
+		units = new TextureRegion(icons, 218, 209, 33, 31);
+		
 		topUI = new TopUI(icons);
 	}
 	
@@ -96,8 +103,21 @@ public class GameUI
 	
 	public void render()
 	{
+		// Buttons
+		batch.draw(buttonFrame, stackTopX - 46, stackTopY - 355, buttonFrame.getRegionWidth() * .95f * 80 / 146, buttonFrame.getRegionHeight() * .95f * 80 / 146);
 		for (int i = 0; i < buttons.length; i++)
 			buttons[i].draw(batch);
+		
+		// Side Stats
+		batch.draw(cash, 1, 380);
+		batch.draw(time, 1, 345);
+		batch.draw(units, 1, 310);
+
+		everything.font.draw(batch, "" + everything.funds(), 35, 404);
+		everything.font.draw(batch, "" + everything.totalTime(), 35, 369);
+		everything.font.draw(batch, "" + everything.teamSize(), 35, 334);
+		
+		// Top UI
 		topUI.draw();
 //		font.draw(batch, "Next wave: " + everything.timeLeft(), screenX - 150, screenY - 20);
 //		font.draw(batch, "Time: " + everything.totalTime(), screenX - 150, screenY - 45);

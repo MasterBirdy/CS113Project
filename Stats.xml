@@ -119,7 +119,7 @@
 		<animation> 		1		1		1		1			</animation>
 		<ranged> 			true 								</ranged>
 		<soundpack>			heroarcher							</soundpack>
-		<activeskill>		teststun							</activeskill>
+		<activeskill>		testfireball						</activeskill>
 		<passiveskill>		empty								</passiveskill>
 	</hero>
 	<hero type = "mrwizard">
@@ -168,11 +168,12 @@
 		<effectamount>		1000								</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
-		<traveltime>		150									</traveltime>
+		<cooldown>			10									</cooldown>
+		<traveltime>		30									</traveltime>
 		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>
 		<continuous>		true								</continuous>
-		<speed>				5									</speed>
+		<speed>				6									</speed>
 		<sprite>			cannonprojectile.png				</sprite>
 		<cast>				fire								</cast>
 		<travel>			largefireball						</travel>
@@ -186,6 +187,7 @@
 		<effectamount>		1000								</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
+		<cooldown>			10									</cooldown>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>
@@ -204,6 +206,7 @@
 		<effectamount>		200									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
+		<cooldown>			10									</cooldown>
 		<traveltime>		10									</traveltime>
 		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>
@@ -222,6 +225,7 @@
 		<effectamount>		100									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
+		<cooldown>			10									</cooldown>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>
@@ -240,6 +244,7 @@
 		<effectamount>		5									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		40									</effecttick>
+		<cooldown>			10									</cooldown>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>

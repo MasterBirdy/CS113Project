@@ -12,7 +12,8 @@ import com.awesomeincorporated.unknowndefense.skill.TargetedSkill;
 public class Hero extends Unit 
 {
 	//int stance = 1, previousStance = 1;
-	int respawnTime = 100, respawnCounter = 0;
+	int respawnTime = 100, respawnCounter = 0,
+		activeCooldown = 0, activeCooldownCounter = 0;
 	boolean changedDirection = false;
 	SkillStructure activeSkill;
 	
@@ -39,6 +40,12 @@ public class Hero extends Unit
 		stance = 1;
 		alive = false;
 		activeSkill = everything.getSkill(struct.activeSkill(level));
+		if (activeSkill != null)
+		{
+			activeCooldown = activeSkill.cooldown.get(0);
+			activeCooldownCounter = activeCooldown;
+		}
+		
 //		if (!struct.passiveSkill(level).equals("empty"))
 //			this.loadPassiveSkill(everything.getSkill(struct.passiveSkill(level)));
 //		if (!struct.attackSound(level).equals("empty"))

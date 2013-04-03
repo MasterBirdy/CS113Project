@@ -17,6 +17,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -49,7 +50,7 @@ public class EverythingHolder
 	Audio tempMusic = Gdx.audio;
 	private Music music;
 	static float musicVolume = 1f;
-	byte team;
+	byte team = 1;
 	boolean running = false;
 	int turn = 0;
 	float stepTime = 0.02f;
@@ -66,6 +67,8 @@ public class EverythingHolder
 	HashMap<String, SkillStructure> skillStats = new HashMap<String, SkillStructure>();
 	HashMap<String, Sound> sounds = new HashMap<String, Sound>();
 	HashMap<String, SoundPack> unitSounds = new HashMap<String, SoundPack>();
+	
+	public BitmapFont font, font2;
 		
 	public EverythingHolder()
 	{
@@ -87,8 +90,8 @@ public class EverythingHolder
 		Entity.loadStatics(effects);
 		// Wave control
 //		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
-		waveInterval = 	(int) (1 / stepTime); 	// Turns (15 seconds)
-		waveTime = 		(int) (2 / stepTime);	// Turns (2 seconds)
+		waveInterval = 	(int) (10 / stepTime); 	// Turns (15 seconds)
+		waveTime = 		(int) (3 / stepTime);	// Turns (2 seconds)
 				
 		spawning = false;
 //		previousTime = System.nanoTime() / 1000000;
@@ -96,6 +99,9 @@ public class EverythingHolder
 		Entity.linkHolder(this);
 		loadEffects();
 		loadSounds();
+		font = new BitmapFont();
+		font2 = new BitmapFont();
+		font2.scale(2);
 //		music = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
 //		music.setLooping(true);
 	}
@@ -117,7 +123,12 @@ public class EverythingHolder
 	
 	public float heroHealthRatio()
 	{
-		return playerHeroes[0].getHealthRatio();
+		return playerHeroes[team - 1].getHealthRatio();
+	}
+	
+	public float baseHealthRatio()
+	{
+		return playerBases[team - 1].getHealthRatio();
 	}
 	
 	public void loadSounds()
@@ -437,18 +448,23 @@ public class EverythingHolder
 	{
 		ArrayList<Actor> temp = new ArrayList<Actor>();
 		for (Entity a : entities)
-		{
-			if (a instanceof Actor)
-			{
-				if (t == 0 || ((Actor)a).team() == t)
+			if (a instanceof Actor && a.isAlive() && (t == 0 || ((Actor)a).team() == t))
 					temp.add((Actor)a);
-			}
-		}
 		return temp;
 //		if (t == 0)
 //		if (t == 1)
 //			return teams[0];
 //		return teams[1];
+	}
+	
+	public int teamSize()
+	{
+		int temp = 0;
+		for (Entity a : entities)
+			if (a instanceof Actor && a.isAlive() && !(a instanceof Stronghold) && a.team() == team)
+//			if (a instanceof Actor && a.isAlive() && (t == 0 || ((Actor)a).team() == t))
+				temp++;
+		return temp;
 	}
 	
 	public void render()
