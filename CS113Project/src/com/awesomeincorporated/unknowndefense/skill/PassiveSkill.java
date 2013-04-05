@@ -47,11 +47,8 @@ public class PassiveSkill extends Skill
 		
 		if (--cooldownCounter >= 0)
 			return;
-//		if (--tickCounter >= 0)
-//			return;
-//		tickCounter = effectTick;
-			cooldownCounter = cooldown;
-		System.out.println("Applying Effect");
+		cooldownCounter = cooldown;
+//		System.out.println("Applying Effect");
 		applyToTargets();
 	}
 }

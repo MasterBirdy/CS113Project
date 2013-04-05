@@ -157,8 +157,11 @@ public class MyInputProcessor implements InputProcessor
 			game.buyUnit(h);
 		else if (h < 9)
 			game.setHeroStance(7 - h);
-		else
+		else if (h == 9)
 			game.castHeroActive();
+		else if (h == 11)
+			game.toggleFollowing();
+//			game.centerOnHero();
 		return true;
 	}
 
@@ -234,14 +237,15 @@ public class MyInputProcessor implements InputProcessor
 		this.x = x;
 		this.y = y;
 		camera.translate(deltaX, deltaY);
+		game.diasbleFollowing();
 		return false;
 	}
 
-	@Override
-	public boolean touchMoved(int x, int y) {
-		
-		return false;
-	}
+//	@Override
+//	public boolean touchMoved(int x, int y) {
+//		
+//		return false;
+//	}
 
 	@Override
 	public boolean scrolled(int amount) {
@@ -265,5 +269,11 @@ public class MyInputProcessor implements InputProcessor
 	{
 		game = g;
 		gameUI3 = ui;
+	}
+
+	@Override
+	public boolean mouseMoved(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

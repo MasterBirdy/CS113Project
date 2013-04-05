@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CS113Project"/>
+	<classpathentry kind="src" path="assets"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CS113Project"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/CS113Project/libs/gdx.jar" sourcepath="/CS113Project/libs/gdx-sources.jar"/>

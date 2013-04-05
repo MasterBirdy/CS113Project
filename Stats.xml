@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stats>
+
+	<!-- MINIONS -->
 	<minion type = "swordsman">
 		<maxhealth>			300		31		311		3111		</maxhealth>
 		<damage>			7		31		311		3111		</damage>
@@ -11,6 +13,7 @@
 		<ranged> 			false 								</ranged>
 		<soundpack>			minionwarrior						</soundpack>
 		<passiveskill>		empty								</passiveskill>
+		<procskill>			empty								</procskill>
 	</minion>
 	<minion type = "archer">
 		<maxhealth>			50		11		111		1111		</maxhealth>
@@ -23,6 +26,7 @@
 		<ranged> 			true 								</ranged>
 		<soundpack>			minionarcher						</soundpack>
 		<passiveskill>		empty								</passiveskill>
+		<procskill>			empty								</procskill>
 	</minion>
 	<minion type = "monk">
 		<maxhealth>			150		21		211		2111		</maxhealth>
@@ -35,6 +39,7 @@
 		<ranged> 			false 								</ranged>
 		<soundpack>			minionmonk							</soundpack>
 		<passiveskill>		passiveheal							</passiveskill>
+		<procskill>			empty								</procskill>
 	</minion>
 	<minion type = "mage">
 		<maxhealth>			65		41		411		4111		</maxhealth>
@@ -47,6 +52,7 @@
 		<ranged> 			true 								</ranged>
 		<soundpack>			minionwizard						</soundpack>
 		<passiveskill>		empty								</passiveskill>
+		<procskill>			empty								</procskill>
 	</minion>
 	<minion type = "ninja">
 		<maxhealth>			85		51		511		5111		</maxhealth>
@@ -59,6 +65,7 @@
 		<ranged> 			false 								</ranged>
 		<soundpack>			minionninja							</soundpack>
 		<passiveskill>		empty								</passiveskill>
+		<procskill>			testninjacloak						</procskill>
 	</minion>
 	<minion type = "wolf">
 		<maxhealth>			80		51		511		5111		</maxhealth>
@@ -71,6 +78,7 @@
 		<ranged> 			false 								</ranged>
 		<soundpack>			minionwolf							</soundpack>
 		<passiveskill>		empty								</passiveskill>
+		<procskill>			empty								</procskill>
 	</minion> 
 	<minion type = "eagle">
 		<maxhealth>			40		51		511		5111		</maxhealth>
@@ -83,6 +91,7 @@
 		<ranged> 			false 								</ranged>
 		<soundpack>			minioneagle							</soundpack>
 		<passiveskill>		empty								</passiveskill>
+		<procskill>			empty								</procskill>
 	</minion>
 	<minion type = "elemental">
 		<maxhealth>			150		51		511		5111		</maxhealth>
@@ -95,7 +104,10 @@
 		<ranged> 			false 								</ranged>
 		<soundpack>			minionelemental						</soundpack>
 		<passiveskill>		empty								</passiveskill>
+		<procskill>			empty								</procskill>
 	</minion>
+	
+	<!-- HEROES -->
 	<hero type = "swordface">
 		<maxhealth>			400		51		511		5111		</maxhealth>
 		<damage>			15		51		511		5111		</damage>
@@ -106,8 +118,10 @@
 		<animation> 		0		0		0		0			</animation>
 		<ranged> 			false 								</ranged>
 		<soundpack>			herowarrior							</soundpack>
-		<activeskill>		testfireball						</activeskill>
+		<activeskill>		teststun							</activeskill>
 		<passiveskill>		empty								</passiveskill>
+		<procskill>			empty								</procskill>
+		<pet>				wolf								</pet>
 	</hero>
 	<hero type = "arroweyes">
 		<maxhealth>			75		51		511		5111		</maxhealth>
@@ -119,8 +133,10 @@
 		<animation> 		1		1		1		1			</animation>
 		<ranged> 			true 								</ranged>
 		<soundpack>			heroarcher							</soundpack>
-		<activeskill>		testfireball						</activeskill>
+		<activeskill>		testattackspeed						</activeskill>
 		<passiveskill>		empty								</passiveskill>
+		<procskill>			empty								</procskill>
+		<pet>				eagle								</pet>
 	</hero>
 	<hero type = "mrwizard">
 		<maxhealth>			65		51		511		5111		</maxhealth>
@@ -134,41 +150,19 @@
 		<soundpack>			herowizard							</soundpack>
 		<activeskill>		testfireball						</activeskill>
 		<passiveskill>		empty								</passiveskill>
+		<procskill>			empty								</procskill>
+		<pet>				elemental							</pet>
 	</hero> 
-	<building type = "tower">
-		<maxhealth>			400		61		611		6111		</maxhealth>
-		<damage>			12		61		611		6111		</damage>
-		<attackspeed>		25		61		611		6111		</attackspeed>
-		<attackrange>		170		61		611		6111		</attackrange>
-		<attacksound>		thwp								</attacksound>
-		<cost> 				100		61		611		6111		</cost>
-		<animation> 		1		1		1		1			</animation>
-		<ranged> 			true 								</ranged>
-		<soundpack>			towertower							</soundpack>
-		<passiveskill>		empty								</passiveskill>
-		<base>				false								</base>
-	</building>
-	<building type = "base">
-		<maxhealth>			250		71		711		7111		</maxhealth>
-		<damage>			11		71		711		7111		</damage>
-		<attackspeed>		30		71		711		7111		</attackspeed>
-		<attackrange>		160		71		711		7111		</attackrange>
-		<attacksound>		thwp								</attacksound>
-		<cost> 				50		71		711		7111		</cost>
-		<animation> 		1		1		1		1			</animation>
-		<ranged> 			true 								</ranged>
-		<soundpack>			towerbase							</soundpack>
-		<passiveskill>		empty								</passiveskill>
-		<base>				true								</base>
-	</building>
+	
+	<!-- SKILLZ -->
 	<skill type = "testfireball">
 		<aoe> 				50									</aoe>
 		<targetteam> 		1									</targetteam>
 		<effect>			0									</effect>
-		<effectamount>		1000								</effectamount>
+		<effectamount>		100									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
-		<cooldown>			10									</cooldown>
+		<cooldown>			100									</cooldown>
 		<traveltime>		30									</traveltime>
 		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>
@@ -180,11 +174,30 @@
 		<detonateeffect>	largefireballexplosion				</detonateeffect>
 		<affected>			fire								</affected>
 	</skill>
+	<skill type = "testattackspeed">
+		<aoe> 				100									</aoe>
+		<targetteam> 		-1									</targetteam>
+		<effect>			3									</effect>
+		<effectamount>		30									</effectamount>
+		<duration>			200									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			10									</cooldown>
+		<traveltime>		0									</traveltime>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<speed>				0									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			heal								</travel>
+		<detonateeffect>	heal								</detonateeffect>
+		<affected>			fire								</affected>
+	</skill>
 	<skill type = "testheal">
 		<aoe> 				80									</aoe>
 		<targetteam> 		-1									</targetteam>
 		<effect>			1									</effect>
-		<effectamount>		1000								</effectamount>
+		<effectamount>		100								</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			10									</cooldown>
@@ -200,22 +213,22 @@
 		<affected>			fire								</affected>
 	</skill>
 	<skill type = "teststun">
-		<aoe> 				150									</aoe>
+		<aoe> 				100									</aoe>
 		<targetteam> 		1									</targetteam>
 		<effect>			2									</effect>
 		<effectamount>		200									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
-		<cooldown>			10									</cooldown>
-		<traveltime>		10									</traveltime>
+		<cooldown>			100									</cooldown>
+		<traveltime>		0									</traveltime>
 		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>
 		<continuous>		true								</continuous>
-		<speed>				3									</speed>
+		<speed>				0									</speed>
 		<sprite>			cannonprojectile.png				</sprite>
 		<cast>				fire								</cast>
 		<travel>			heal								</travel>
-		<detonateeffect>	smokebomb							</detonateeffect>
+		<detonateeffect>	stunattack							</detonateeffect>
 		<affected>			fire								</affected>
 	</skill>
 	<skill type = "passivefire">
@@ -240,14 +253,33 @@
 	<skill type = "passiveheal">
 		<aoe> 				80									</aoe>
 		<targetteam> 		-1									</targetteam>
-		<effect>			20									</effect>
-		<effectamount>		5									</effectamount>
+		<effect>			1									</effect>
+		<effectamount>		20									</effectamount>
 		<duration>			1									</duration>
-		<effecttick>		40									</effecttick>
-		<cooldown>			10									</cooldown>
+		<effecttick>		0									</effecttick>
+		<cooldown>			300									</cooldown>
 		<traveltime>		0									</traveltime>
-		<damagesplit>		false								</damagesplit>
-		<additive>			true								</additive>
+		<damagesplit>		true								</damagesplit>
+		<additive>			false								</additive>
+		<continuous>		true								</continuous>
+		<speed>				0									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			heal								</travel>
+		<detonateeffect>	heal								</detonateeffect>
+		<affected>			fire								</affected>
+	</skill>
+	<skill type = "testninjacloak">
+		<aoe> 				1									</aoe>
+		<targetteam> 		-1									</targetteam>
+		<effect>			0									</effect>
+		<effectamount>		60									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			600									</cooldown>
+		<traveltime>		0									</traveltime>
+		<damagesplit>		true								</damagesplit>
+		<additive>			false								</additive>
 		<continuous>		true								</continuous>
 		<speed>				0									</speed>
 		<sprite>			cannonprojectile.png				</sprite>
@@ -255,5 +287,35 @@
 		<travel>			heal								</travel>
 		<detonateeffect>	smokebomb							</detonateeffect>
 		<affected>			fire								</affected>
-	</skill>	
+	</skill>
+	
+	<!-- BUILDINGS -->
+	<building type = "tower">
+		<maxhealth>			400		61		611		6111		</maxhealth>
+		<damage>			12		61		611		6111		</damage>
+		<attackspeed>		25		61		611		6111		</attackspeed>
+		<attackrange>		170		61		611		6111		</attackrange>
+		<attacksound>		thwp								</attacksound>
+		<cost> 				100		61		611		6111		</cost>
+		<animation> 		1		1		1		1			</animation>
+		<ranged> 			true 								</ranged>
+		<soundpack>			towertower							</soundpack>
+		<passiveskill>		empty								</passiveskill>
+		<procskill>			empty								</procskill>
+		<base>				false								</base>
+	</building>
+	<building type = "base">
+		<maxhealth>			250		71		711		7111		</maxhealth>
+		<damage>			11		71		711		7111		</damage>
+		<attackspeed>		30		71		711		7111		</attackspeed>
+		<attackrange>		160		71		711		7111		</attackrange>
+		<attacksound>		thwp								</attacksound>
+		<cost> 				50		71		711		7111		</cost>
+		<animation> 		1		1		1		1			</animation>
+		<ranged> 			true 								</ranged>
+		<soundpack>			towerbase							</soundpack>
+		<passiveskill>		empty								</passiveskill>
+		<procskill>			empty								</procskill>
+		<base>				true								</base>
+	</building>
 </stats>

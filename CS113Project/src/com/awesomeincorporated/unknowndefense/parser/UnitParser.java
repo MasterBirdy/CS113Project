@@ -95,8 +95,7 @@ public class UnitParser
 					if (node.getNodeType() == Node.ELEMENT_NODE) 
 					{
 						element = (Element) node;
-//						if (entity.equals("minion"))
-//						if (parsed[i].equals("minion"))
+						
 						if (node.getNodeName().equals("minion"))
 						{
 							MinionStructure minion = new MinionStructure();
@@ -110,11 +109,10 @@ public class UnitParser
 							minion.ranged = tokenizeBool(getElement("ranged"));
 							minion.soundPack = tokenizeString(getElement("soundpack"));
 							minion.passiveSkill = tokenizeString(getElement("passiveskill"));
+							minion.procSkill = tokenizeString(getElement("procskill"));
 							minionStatsMap.put(element.getAttribute("type"), minion);
 						}
 						else if (node.getNodeName().equals("hero"))
-//						else if (parsed[i].equals("hero"))
-//						else if (entity.equals("hero"))
 						{
 							HeroStructure hero = new HeroStructure();
 							hero.maxHealth = tokenizeInt(getElement("maxhealth"));
@@ -128,11 +126,11 @@ public class UnitParser
 							hero.soundPack = tokenizeString(getElement("soundpack"));
 							hero.activeSkill = tokenizeString(getElement("activeskill"));
 							hero.passiveSkill = tokenizeString(getElement("passiveskill"));
+							hero.procSkill = tokenizeString(getElement("procskill"));
+							hero.pet = tokenizeString(getElement("pet"));
 							heroStatsMap.put(element.getAttribute("type"), hero);
 						}
 						else if (node.getNodeName().equals("building"))
-//						else if (parsed[i].equals("building"))
-//						else if (entity.equals("building"))
 						{
 							BuildingStructure building = new BuildingStructure();
 							building.maxHealth = tokenizeInt(getElement("maxhealth"));
@@ -143,6 +141,7 @@ public class UnitParser
 							building.animation = tokenizeInt(getElement("animation"));
 							building.ranged = tokenizeBool(getElement("ranged"));
 							building.passiveSkill = tokenizeString(getElement("passiveskill"));
+							building.procSkill = tokenizeString(getElement("procskill"));
 							buildingStatsMap.put(element.getAttribute("type"), building);
 						}
 						else if (node.getNodeName().equals("skill"))

@@ -8,6 +8,7 @@ import com.awesomeincorporated.unknowndefense.SoundPack;
 import com.awesomeincorporated.unknowndefense.parser.ActorStructure;
 import com.awesomeincorporated.unknowndefense.parser.SkillStructure;
 import com.awesomeincorporated.unknowndefense.skill.PassiveSkill;
+import com.awesomeincorporated.unknowndefense.skill.ProcSkill;
 import com.awesomeincorporated.unknowndefense.skill.SkillEffect;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
@@ -19,15 +20,20 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public abstract class Actor extends Entity
 {
 	int currentHealth, maxHealth, damage,
-		damageBoost = 0;								// For buffs
+		damageBoost = 0,								// For buffs
+		invis = -1;										// Ticks left of invis
+	
 	float attackSpeed, attackCooldown, attackRange,
 		  attackSpeedBoost = 0, attackRangeBoost = 0;	// For buffs
+	
 	boolean attacking, ranged;
+	
 	Actor target;
 	ArrayList<SkillEffect> skillEffects;// = new ArrayList<SkillEffect>(5);
 //	ArrayList<ParticleEffect> peEffect = new ArrayList<ParticleEffect>(5);
 	static SkillEffect nullSkillEffect = new SkillEffect();
 	static ParticleEffect nullParticleEffect = new ParticleEffect();
+	ParticleEffect temp = new ParticleEffect();
 //	static LinkedList<Actor> team1;
 //	static LinkedList<Actor> team2;
 	static ParticleEffect fire = new ParticleEffect();
@@ -35,6 +41,7 @@ public abstract class Actor extends Entity
 	int firstEmpty;
 	static TextureRegion[] rangeIndicator;
 	PassiveSkill passiveSkill;
+	ProcSkill procSkill;
 	Sound attackSound;
 	SoundPack soundPack;
 	
@@ -55,11 +62,25 @@ public abstract class Actor extends Entity
 		{
 			if (!a.passiveSkill(level).equals("empty"))
 				this.loadPassiveSkill(everything.getSkill(a.passiveSkill(level)));
+			if (!a.procSkill(level).equals("empty"))
+				this.loadProcSkill(everything.getSkill(a.procSkill(level)));
 			if (!a.soundPack(level).equals("empty"))
 				this.soundPack = everything.getUnitSounds(a.soundPack(level));
 //			if (!a.attackSound(level).equals("empty"))
 //				this.attackSound = everything.getSound(a.attackSound(level));
 		}
+	}
+	
+	public void invis(int i)
+	{
+		System.out.println("Going invis");
+		invis = i;
+		
+		this.attacking = false;
+		this.target = null;
+		
+		if (i > 0)
+			particleOnSelf("smokebomb");
 	}
 	
 	public void stun(int stun)
@@ -73,9 +94,21 @@ public abstract class Actor extends Entity
 //		}
 	}
 	
+	public void attackSpeedBoost(int boost)
+	{
+		attackSpeedBoost += boost;
+		if (attackSpeedBoost >= attackSpeed)
+			attackSpeedBoost = attackSpeed - 2;
+	}
+	
 	public void loadPassiveSkill(SkillStructure pSkill)
 	{
 		passiveSkill = new PassiveSkill(pSkill, this);
+	}
+	
+	public void loadProcSkill(SkillStructure pSkill)
+	{
+		procSkill = new ProcSkill(pSkill, this);
 	}
 	
 	public float getHealthRatio()
@@ -86,8 +119,8 @@ public abstract class Actor extends Entity
 	static public void loadRange()
 	{
 		rangeIndicator = new TextureRegion[2];
-		rangeIndicator[0] = new TextureRegion(spriteSheet, 472, 40, 40, 40);
-		rangeIndicator[1] = new TextureRegion(spriteSheet, 472, 0, 40, 40);
+		rangeIndicator[0] = new TextureRegion(spriteSheet[0], 472, 40, 40, 40);
+		rangeIndicator[1] = new TextureRegion(spriteSheet[0], 472, 0, 40, 40);
 		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 		fire.setPosition(50, 50);
 		fire.start();
@@ -112,8 +145,14 @@ public abstract class Actor extends Entity
 	
 	public void update()
 	{
+		attackSpeedBoost = 0;
+		attackRangeBoost = 0;
+		
 		if (passiveSkill != null)
 			passiveSkill.update();
+		
+		if(procSkill != null)
+			procSkill.update();
 		
 		for (SkillEffect skill : skillEffects)
 		{
@@ -153,6 +192,8 @@ public abstract class Actor extends Entity
 //					peEffect.add(skill.affected);
 //			}
 		}
+		
+		--invis;
 	}
 	
 //	public void draw(SpriteBatch batch)
@@ -213,6 +254,32 @@ public abstract class Actor extends Entity
 		return e;
 	}
 	
+	public void particleOnSelf(String s)
+	{
+//		ParticleEffect p = new ParticleEffect();
+//		if (!(Gdx.app.getType() == ApplicationType.Android))
+//		{
+			//p.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/sparkeffect.p")), Gdx.files.internal("images"));
+		ParticleEffect p = everything.getEffect(s);
+		p.setPosition(xCoord + 20, yCoord + 20);
+		p.start();
+//		}
+		effects.add(p);
+//		ParticleEffect p = new ParticleEffect();// = everything.getEffect(s);
+//		p.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/sparkeffect.p")), Gdx.files.internal("images"));
+//		p.setPosition(xCoord, xCoord);
+//		p.start();
+//		effects.add(p);
+//		effects.add(spark());
+	}
+	
+	public void particleOnSelf(ParticleEffect p)
+	{
+		p.setPosition(xCoord + 20, xCoord + 20);
+		p.start();
+		effects.add(p);
+	}
+	
 	
 	public void rangeIndicator(SpriteBatch batch)
 	{
@@ -224,15 +291,27 @@ public abstract class Actor extends Entity
 	public void takeDamage(int damage)
 	{
 		currentHealth -= damage;
-		if (currentHealth > maxHealth)
-			currentHealth = maxHealth;
 		if (currentHealth < 0)
 			currentHealth = 0;
+		
+		System.out.println("Hit me!");
+		if (procSkill != null)
+		{
+			System.out.println("TRIP!");
+			procSkill.trip(0);
+		}
 	}
 	
 	public void takeDamage(int damage, int type)
 	{
 		takeDamage(damage);
+		
+		System.out.println("Hit me!");
+		if (procSkill != null)
+		{
+			System.out.println("TRIP!");
+			procSkill.trip(0);
+		}
 //		if (effects.isEmpty())
 //			effects.add(this.fire());
 //		if (type == 0)
@@ -242,6 +321,13 @@ public abstract class Actor extends Entity
 //		else if (type == 2)
 //			effects.add(this.blood());
 		System.out.println("Effects");
+	}
+	
+	public void heal(int heal)
+	{
+		currentHealth += heal;
+		if (currentHealth > maxHealth)
+			currentHealth = maxHealth;
 	}
 	
 	public void checkAlive()
@@ -269,7 +355,7 @@ public abstract class Actor extends Entity
 	public void targetSelector()
 	{
 		float currentDistance;
-		if (target != null && target.isAlive())
+		if (target != null && target.isAlive() && target.invis < 0)
 		{
 			currentDistance = getDistanceSquared(target);
 			if (target instanceof ArrowTower)
@@ -290,7 +376,7 @@ public abstract class Actor extends Entity
 		{
 			Actor e = actorIter.next();
 			
-			if (e.isAlive())
+			if (e.isAlive() && e.invis < 0)
 			{
 				currentDistance = this.getDistanceSquared(e);
 				if (e instanceof ArrowTower)

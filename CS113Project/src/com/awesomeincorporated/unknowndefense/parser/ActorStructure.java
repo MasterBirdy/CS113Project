@@ -14,11 +14,21 @@ public abstract class ActorStructure
 	ArrayList<Integer> animation;
 	ArrayList<String> attackSound;
 	ArrayList<String> passiveSkill;
+	ArrayList<String> procSkill;
 	ArrayList<String> soundPack;
+	
+	public String procSkill(int level)
+	{
+		if (procSkill.size() > level)
+			return procSkill.get(level);
+		return procSkill.get(procSkill.size());
+	}
 	
 	public String soundPack(int level)
 	{
-		return soundPack.get(level);
+		if (soundPack.size() > level)
+			return soundPack.get(level);
+		return soundPack.get(soundPack.size());
 	}
 	
 	public String passiveSkill(int level)

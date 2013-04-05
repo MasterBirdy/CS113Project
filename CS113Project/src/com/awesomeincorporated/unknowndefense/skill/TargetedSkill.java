@@ -24,17 +24,18 @@ public class TargetedSkill extends Skill
 			targetX,
 			targetY;
 	Actor 	target;
-	static TextureRegion spellImage;
+	TextureRegion spellImage;
 //	ParticleEffect part;
 	
 	public TargetedSkill(SkillStructure s, Actor c, Actor t)
 	{
 		super(s, c);
-		if (spellImage == null)
-		{
-			spellImage = new TextureRegion(new Texture(Gdx.files.internal("images/"+s.sprite.get(0))), 0, 0, 16, 16);
+		spellImage = everything.getObjectTexture("cannonball");
+//		if (spellImage == null)
+//		{
+//			spellImage = new TextureRegion(new Texture(Gdx.files.internal("images/"+s.sprite.get(0))), 0, 0, 16, 16);
 //			spellImage = new TextureRegion(new Texture(Gdx.files.internal("images/cannonprojectile.png")), 0, 0, 16, 16);
-		}
+//		}
 		target = t;
 		duration = s.duration.get(0);
 		speed = s.speed.get(0);
@@ -165,12 +166,16 @@ public class TargetedSkill extends Skill
 		if (aoe == 0)
 		{
 			if (target != null && target.isAlive())
-				target.takeSkillEffect(new SkillEffect(this, target));
+				target.takeSkillEffect(new SkillEffect(this, target, 1));
 			return;
 		}
-		for (Actor a : inRange())
+		tempActor = inRange();
+		
+//		for (Actor a : inRange())
+		for(int i = 0; i < tempActor.size(); i++)
 		{
-			a.takeSkillEffect(new SkillEffect(this, a));
+			tempActor.get(i).takeSkillEffect(new SkillEffect(this, tempActor.get(i), tempActor.size()));
+//			a.takeSkillEffect(new SkillEffect(this, a));
 		}
 	}
 }

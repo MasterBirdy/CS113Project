@@ -17,7 +17,7 @@ public abstract class Entity
 	float xCoord;
 	float yCoord;
 	protected boolean alive;
-	static Texture spriteSheet;
+	static Texture spriteSheet[] = new Texture[2];
 //	static HashMap<String, Sound> sounds = new HashMap<String, Sound>(); 
 	static float volume = 1;
 	protected static EverythingHolder everything;
@@ -61,9 +61,10 @@ public abstract class Entity
 		effects.add(pe);
 	}
 	
-	public static void loadStatics(Texture sheet)
+	public static void loadStatics(Texture sheetR, Texture sheetB)
 	{
-		spriteSheet = sheet;
+		spriteSheet[0] = sheetR;
+		spriteSheet[1] = sheetB;
 //		Audio tempAudio = Gdx.audio;
 //		sounds.put("thwp", tempAudio.newSound(Gdx.files.internal("audio/Thwp.wav")));
 	}

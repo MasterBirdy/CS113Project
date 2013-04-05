@@ -51,10 +51,13 @@ public class MainMenuScreen implements Screen
 	static ParticleEffect fire = new ParticleEffect();
 	static ParticleEffect spark = new ParticleEffect();
 	static ParticleEffect blood = new ParticleEffect();
+	static ParticleEffect rainbow = new ParticleEffect();
 	boolean newGameStarted;
 	TextureRegion gameLogo, buttonFrame;
+	
+	EverythingHolder everything;
 
-	public MainMenuScreen(UnknownDefense game)
+	public MainMenuScreen(UnknownDefense game, EverythingHolder everything)
 	{
 		this.game = game;
 		Settings.getInstance();
@@ -62,6 +65,7 @@ public class MainMenuScreen implements Screen
 //		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/523938_--MB---The-Black-Wi.mp3"));
 //		startMusic.setLooping(true);
 //		startMusic.play();
+		this.everything = everything;
 		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/460436_trapped_in_dreams.mp3"));
 		startMusic.setLooping(true);
 		startMusic.setVolume(.5f);
@@ -86,7 +90,8 @@ public class MainMenuScreen implements Screen
 //		TextureRegion textRegionContinue = new TextureRegion(textTexture, 7, 508, 225, 34);
 //		TextureRegion textRegionFadedContinue = new TextureRegion(textTexture, 256, 508, 225, 34);
 		Texture icons = new Texture(Gdx.files.internal("images/buttons_sheet.png"));
-		gameLogo = new TextureRegion(icons, 1319, 0, 382, 175);
+//		gameLogo = new TextureRegion(icons, 1319, 0, 382, 175);
+		gameLogo = new TextureRegion(icons, 0, 1514, 842, 467);
 		buttonFrame = new TextureRegion(icons, 880, 422, 361, 572);
 		
 		int stackTopX = 680; //658;
@@ -97,12 +102,11 @@ public class MainMenuScreen implements Screen
 		buttons[0] = new RoundButton(stackTopX, stackTopY - spaceY * 2 + 4, buttonRadius, 			
 				new TextureRegion(icons, 367, 459, 152, 153));	// Sinlge-player
 		buttons[1] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 3 + 4, buttonRadius, 			
-				new TextureRegion(icons, 367, 765, 152, 153));	// Settings
-		buttons[2] = new RoundButton(stackTopX, stackTopY - spaceY * 4 + 9, buttonRadius, 			
 				new TextureRegion(icons, 367, 612, 152, 153));	// Multi-player
+		buttons[2] = new RoundButton(stackTopX, stackTopY - spaceY * 4 + 9, buttonRadius, 			
+				new TextureRegion(icons, 367, 765, 152, 153));	// Settings
 		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9, buttonRadius, 			
-				new TextureRegion(icons, 367, 153, 152, 153));	// Quit
-		
+				new TextureRegion(icons, 367, 153, 152, 153));	// Quit		
 		
 		
 //		sprite = new Sprite(region);
@@ -136,11 +140,11 @@ public class MainMenuScreen implements Screen
 //		settingsRectangle = new Rectangle(width / 2 - settingsSprite.getWidth() / 2 - 5 - width / 2,  continueSprite.getY() - 30 - continueSprite.getHeight() - 5 - height / 2, settingsSprite.getWidth() + 10, settingsSprite.getHeight() + 10);
 	
 		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
-		fire.setPosition(400, 10);
+		fire.setPosition(610, 260);
 		fire.start();
 		
 		//spark.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/SparkEffect.p")), Gdx.files.internal("images"));
-		spark.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/HeroRegenAura.p" : "data/MinionRegenAura.p")), Gdx.files.internal("images"));
+//		spark.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/HeroRegenAura.p" : "data/MinionRegenAura.p")), Gdx.files.internal("images"));
 		spark.setPosition(400, 300);
 		spark.start();
 		
@@ -148,17 +152,15 @@ public class MainMenuScreen implements Screen
 		blood.setPosition(400, 300);
 		for (ParticleEmitter pe : blood.getEmitters())
 			pe.setContinuous(true);
-		
 		blood.start();
 		
 		
+		rainbow = everything.getEffect("rainbowtrailsparkle");
+		rainbow.setPosition(332, 423);
+		rainbow.start();
+		
 		Gdx.graphics.setVSync(true);
 		//Gdx.input.setCursorCatched(false);
-	}
-	
-	public void setEverything(EverythingHolder everything)
-	{
-		
 	}
 
 	@Override
@@ -184,7 +186,8 @@ public class MainMenuScreen implements Screen
 		//spark.draw(batch, delta);
 //		titleSprite.draw(batch);
 		//680 - 46, 335 - 355
-		batch.draw(gameLogo, 155, 300);//, buttonFrame.getRegionWidth() * .95f * 80 / 146, buttonFrame.getRegionHeight() * .95f * 80 / 146);
+		batch.draw(gameLogo, 155, 262, 382, 212);
+//		batch.draw(gameLogo, 155, 300);//, buttonFrame.getRegionWidth() * .95f * 80 / 146, buttonFrame.getRegionHeight() * .95f * 80 / 146);
 		batch.draw(buttonFrame, 634, -20, buttonFrame.getRegionWidth() * .95f * 80 / 146, buttonFrame.getRegionHeight() * .95f * 80 / 146);
 //		
 //		newGameSprite.draw(batch);
@@ -204,10 +207,13 @@ public class MainMenuScreen implements Screen
 			spark.start();
 		if (blood.isComplete())
 			blood.start();
+		if (rainbow.isComplete())
+			rainbow.start();
 		
-		fire.draw(batch);//, delta);
+//		fire.draw(batch, .01f);//, delta);
 		blood.setPosition(x, height - y);
 		blood.draw(batch, .01f);
+		rainbow.draw(batch, 0.01f);
 		
 		batch.end();
 	}
@@ -252,29 +258,29 @@ public class MainMenuScreen implements Screen
 	{
 		if (h == 0) // Single-player
 		{
+//			startMusic.stop();
 			game.gameScreen = new GameScreen(game, false);
 			newGameStarted = true;
-			startMusic.stop();
 			game.setScreen(game.gameScreen);
 			return;
 		}
-		else if (h == 1) // Settings
+		else if (h == 1) // Multi-player
 		{
-			startMusic.stop();
-			game.setScreen(game.settingsScreen);
-			return;
-		}
-		else if (h == 2) // Multi-player
-		{
+//			startMusic.stop();
 			game.gameScreen = new GameScreen(game, true);
 			newGameStarted = true;
-			startMusic.stop();
 			game.setScreen(game.gameScreen);
+			return;
+		}
+		else if (h == 2) // Settings
+		{
+//			startMusic.stop();
+			game.setScreen(game.settingsScreen);
 			return;
 		}
 		else if (h == 3) // Quit
 		{
-			startMusic.stop();
+//			startMusic.stop();
 			System.exit(0);
 		}
 			
@@ -290,6 +296,7 @@ public class MainMenuScreen implements Screen
 	@Override
 	public void show() 
 	{
+		startMusic.play();
 		// TODO Auto-generated method stub
 	//	if (Settings.getInstance().getSound() == SoundEnum.ON)
 	//		startMusic.play();
@@ -298,6 +305,7 @@ public class MainMenuScreen implements Screen
 	@Override
 	public void hide() 
 	{
+		startMusic.stop();
 		// TODO Auto-generated method stub
 	
 	}

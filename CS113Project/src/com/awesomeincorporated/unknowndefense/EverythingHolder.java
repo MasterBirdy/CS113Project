@@ -17,46 +17,57 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 public class EverythingHolder 
 {
 	@SuppressWarnings("unchecked")
-//	LinkedList<Actor>[] teams = new LinkedList[2];				// Soon to be depricated
-	LinkedList<Integer>[] pools = new LinkedList[4];			// Pools for spawning
 	EntityComparator eCompare = new EntityComparator();
-	ArrayList<Entity> entities = new ArrayList<Entity>(50);		// Holds all units, towers, projectiles, and spells
-//	PriorityQueue<Entity> entityDraw = new PriorityQueue<Entity>(50, eCompare);
-//	ArrayList<Entity> changedEntity;
 	static private SpriteBatch batch;
-	static boolean showRange;
 	static Map map;
-	Hero playerHeroes[] = new Hero[2];
-	Building playerBases[] = new Building[2];
-	//Hero hero1, hero2;
-//	long waveTimer, spawnTimer1, spawnTimer2, spawnInterval1, spawnInterval2;
-//	long waveTime, waveInterval;
-	int waveInterval, waveTime, waveTimer, previousTime, spawnTimer1, spawnTimer2, spawnInterval1, spawnInterval2;
-//	int waveTime, waveInterval;
-//	long totalTime = 0, previousTime;
-	boolean spawning;
+	
+	int waveInterval, waveTime, waveTimer, 
+		previousTime, 
+		spawnTimer1, spawnTimer2, 
+		spawnInterval1, spawnInterval2;
+	
 	int nano = 1000000000;
 	int income = 100;
-	int funds1 = 200, funds2 = 200;
-	static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
-	private ArrayList<ParticleEffect> effects = new ArrayList<ParticleEffect>();
-	Audio tempMusic = Gdx.audio;
-	private Music music;
-	static float musicVolume = 1f;
-	byte team = 1;
-	boolean running = false;
-	int turn = 0;
-	float stepTime = 0.02f;
-	
+	int funds1, funds2;
+	int turn;
 	int petType = 0;
 	
+	float stepTime = 0.02f;
+	byte team = 1;
+
+	private Music music;
+	Audio tempMusic = Gdx.audio;
+
+	static float musicVolume = 1f;
+	
+	static boolean showRange;
+	boolean spawning;
+	boolean running;
+	
+	String[] heroNames = {"mrwizard", "arroweyes"};
+	
+//	heroNames[0] = "mrwizard";
+//	heroNames[1] = "arroweyes";
+	
+	Hero playerHeroes[];
+	Building playerBases[];
+	
+	LinkedList<Integer>[] pools;			// Pools for spawning
+	ArrayList<Entity> entities;		// Holds all units, towers, projectiles, and spells
+	static ArrayList<Projectile> projectiles;
+	private ArrayList<ParticleEffect> effects;
+	
+
 	MinionStructure[][] playerUnits;// = new String[2][6]; 
 	HeroStructure[] heroUnits;
 	
@@ -67,17 +78,20 @@ public class EverythingHolder
 	HashMap<String, SkillStructure> skillStats = new HashMap<String, SkillStructure>();
 	HashMap<String, Sound> sounds = new HashMap<String, Sound>();
 	HashMap<String, SoundPack> unitSounds = new HashMap<String, SoundPack>();
+	HashMap<String, TextureRegion> objectTextures = new HashMap<String, TextureRegion>();
 	
-	public BitmapFont font, font2;
+	public BitmapFont[] font = new BitmapFont[3]; //, font2;
+	
+	boolean finished = false;
 		
 	public EverythingHolder()
 	{
-//		teams[0] = new LinkedList<Actor>();
-//		teams[1] = new LinkedList<Actor>();
-		pools[0] = new LinkedList<Integer>();
-		pools[1] = new LinkedList<Integer>();
-		pools[2] = new LinkedList<Integer>();
-		pools[3] = new LinkedList<Integer>();
+		reset();
+		
+//		pools[0] = new LinkedList<Integer>();
+//		pools[1] = new LinkedList<Integer>();
+//		pools[2] = new LinkedList<Integer>();
+//		pools[3] = new LinkedList<Integer>();
 		
 		UnitParser unitParser = new UnitParser();
 		minionStats = unitParser.getMinionStats();
@@ -87,7 +101,7 @@ public class EverythingHolder
 		
 //		initializeHeroes();
 		
-		Entity.loadStatics(effects);
+//		Entity.loadStatics(effects);
 		// Wave control
 //		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
 		waveInterval = 	(int) (10 / stepTime); 	// Turns (15 seconds)
@@ -95,15 +109,38 @@ public class EverythingHolder
 				
 		spawning = false;
 //		previousTime = System.nanoTime() / 1000000;
-		Actor.loadProjectiles(projectiles);
+//		Actor.loadProjectiles(projectiles);
 		Entity.linkHolder(this);
+		
+		// Load all assets
 		loadEffects();
 		loadSounds();
-		font = new BitmapFont();
-		font2 = new BitmapFont();
-		font2.scale(2);
+		loadTextures();
+		
+//		font = new BitmapFont();
+//		font2 = new BitmapFont();
+//		font2.scale(2);
+		finished = true;
 //		music = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
 //		music.setLooping(true);
+	}
+	
+	public String getHeroName()
+	{
+		return heroNames[team - 1];
+	}
+	
+	public BitmapFont getFont(int f)
+	{
+		if (font[f] == null)
+			font[f] = new BitmapFont();
+		
+		return font[f];
+	}
+	
+	public boolean finished()
+	{
+		return finished;
 	}
 	
 	public SoundPack getUnitSounds(String name)
@@ -129,6 +166,20 @@ public class EverythingHolder
 	public float baseHealthRatio()
 	{
 		return playerBases[team - 1].getHealthRatio();
+	}
+	
+	public TextureRegion getObjectTexture(String name)
+	{
+		return objectTextures.get(name);
+	}
+	
+	public void loadTextures()
+	{
+		objectTextures.put("cannonball", new TextureRegion(new Texture(Gdx.files.internal("images/cannonprojectile.png")), 0, 0, 16, 16));
+		Texture icons = new Texture(Gdx.files.internal("images/buttons_sheet.png"));
+		objectTextures.put("swordfacebutton", new TextureRegion(icons, 0, 1377, 192, 137));
+		objectTextures.put("arroweyesbutton", new TextureRegion(icons, 192, 1377, 192, 137));
+		objectTextures.put("mrwizardbutton", new TextureRegion(icons, 384, 1377, 192, 137));
 	}
 	
 	public void loadSounds()
@@ -166,8 +217,12 @@ public class EverythingHolder
 				"smallfireball", "smallfireballexplosion",
 				"smokebomb",
 				"stunattack",
+				"attackspeedbuff",
+				"increasearrowspeed",
 				"fire",
-				"blood"};
+				"spark",
+				"blood",
+				"rainbowtrailsparkle"};
 		
 		ParticleEffect temp;
 		for (String name : particleNames)
@@ -198,6 +253,7 @@ public class EverythingHolder
 	{
 		if (particleEffects.containsKey(e))
 			return new ParticleEffect(particleEffects.get(e));
+		System.out.println("Missing Effect");
 		return null;
 	}
 	
@@ -212,18 +268,22 @@ public class EverythingHolder
 	
 	public void initializeHeroes()
 	{
-		playerUnits = new MinionStructure[][]{
-				{minionStats.get("swordsman"), minionStats.get("archer"), minionStats.get("ninja"), minionStats.get("mage"), minionStats.get("monk"), minionStats.get("eagle")}
-			   ,{minionStats.get("swordsman"), minionStats.get("archer"), minionStats.get("ninja"), minionStats.get("mage"), minionStats.get("monk"), minionStats.get("elemental")}};
-		heroUnits = new HeroStructure[]{heroStats.get("arroweyes"), heroStats.get("mrwizard")};
-
+		playerHeroes = new Hero[2];
+		
+		heroUnits = new HeroStructure[]{heroStats.get(heroNames[0]), heroStats.get(heroNames[1])};
 		playerHeroes[0] = new Hero(map.start1().x(), map.start1().y(), 1, map().getPath().listIterator(), heroUnits[0]);
 		playerHeroes[1] = new Hero(map.start2().x(), map.start2().y(), 2, map().getReversePath().listIterator(), heroUnits[1]);
+		add(playerHeroes[0], 1);
+		add(playerHeroes[1], 2);
+		System.out.println("PET " + playerHeroes[0].pet());
+		System.out.println("PET " + playerHeroes[1].pet());
+		playerUnits = new MinionStructure[][]{
+				{minionStats.get("swordsman"), minionStats.get("archer"), minionStats.get("ninja"), minionStats.get("mage"), minionStats.get("monk"), minionStats.get(playerHeroes[0].pet())}
+			   ,{minionStats.get("swordsman"), minionStats.get("archer"), minionStats.get("ninja"), minionStats.get("mage"), minionStats.get("monk"), minionStats.get(playerHeroes[1].pet())}};
+
 //		playerHeroes[1] = new Hero(map.start2().x(), map.start2().y(), 2, map().getPath().listIterator(map().getPath().size() - 1), heroUnits[1]);
 //		add(playerHeroes[0], true, 1);
 //		add(playerHeroes[1], true, 2);		
-		add(playerHeroes[0], 1);
-		add(playerHeroes[1], 2);
 	}
 	
 	public void setHeroStance(int team, int s)
@@ -282,6 +342,11 @@ public class EverythingHolder
 	static public void setMusicVolume(float v)
 	{
 		musicVolume = v;
+	}
+	
+	public Hero getHero()
+	{
+		return playerHeroes[team - 1];
 	}
 	
 	public Actor atPoint(float x, float y)
@@ -698,10 +763,10 @@ public class EverythingHolder
 			spawnTimer1 = waveTimer;
 			
 //			spawnInterval1 = (!pools[0].isEmpty() ? waveTime / pools[0].size() : waveInterval);
-			spawnInterval1 = 4;	
+			spawnInterval1 = 20;	
 			spawnTimer2 = waveTimer;
 //			spawnInterval2 = (!pools[1].isEmpty() ? waveTime / pools[1].size() : waveInterval);
-			spawnInterval2 = 4;
+			spawnInterval2 = 20;
 			pools[2] = pools[0];
 			pools[3] = pools[1];
 			pools[0] = new LinkedList<Integer>();
@@ -772,5 +837,40 @@ public class EverythingHolder
 		batch = b;
 		map = m;
 //		initializeHeroes();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void reset()
+	{
+		pools = new LinkedList[4];
+		pools[0] = new LinkedList<Integer>();
+		pools[1] = new LinkedList<Integer>();
+		pools[2] = new LinkedList<Integer>();
+		pools[3] = new LinkedList<Integer>();
+		
+//		playerHeroes = new Hero[2];
+		playerBases = new Building[2];
+		
+		spawning = false;
+		running = false;
+		
+		entities = new ArrayList<Entity>(50);
+		projectiles = new ArrayList<Projectile>();
+		effects = new ArrayList<ParticleEffect>();
+		Actor.loadProjectiles(projectiles);
+		
+		Entity.loadStatics(effects);
+		funds1 = 200;
+		funds2 = 200;
+		turn = 0;
+		
+		font[0] = new BitmapFont();
+		font[1] = new BitmapFont();
+		font[1].scale(2);
+		
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/BaroqueScript.ttf"));
+		font[2] = generator.generateFont(36);
+		font[2].setColor(1, 1, 1, 1);
+//		font[2] = 
 	}
 }

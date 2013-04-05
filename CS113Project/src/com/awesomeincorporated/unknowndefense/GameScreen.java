@@ -29,6 +29,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
+import com.esotericsoftware.minlog.Log;
 import com.awesomeincorporated.unknowndefense.networking.Network.*;
 import com.awesomeincorporated.unknowndefense.networking.Network;
 import com.awesomeincorporated.unknowndefense.networking.User;
@@ -53,17 +54,6 @@ public class GameScreen implements Screen
 	GameUI gameUI3;
 	Hero[] heroes = new Hero[2];
 	UnknownDefense game;
-//	Rectangle pauseRectangle;
-//	Rectangle pauseRectangle2;
-//	Rectangle swordRectangle;
-//	Rectangle bowRectangle;
-//	Rectangle monkRectangle;
-//	Rectangle magicRectangle;
-//	Rectangle petRectangle;
-//	Rectangle spiralRectangle;
-//	Rectangle attackRectangle;
-//	Rectangle defendRectangle;
-//	Rectangle retreatRectangle;
 	Vector3 touchPoint;
 	Vector3 gameTouchPoint;
 	Difficulty difficulty;
@@ -76,36 +66,39 @@ public class GameScreen implements Screen
 	
 	float timeAccumulator = 0;
 	float volume = .2f;
+	boolean following = false;
 	boolean multiplayer = false; 	// True with multiplayer
 	boolean running = false;		// False with Multiplayer
 	boolean connected = false;
 	byte team;						// Team 1 is top and Team 2 is bottom
 	Client client;
-	String serverIp = "localhost"; 	// Local Host
+//	String serverIp = "localhost"; 	// Local Host
 //	String serverIp = "evil-monkey.ics.uci.edu";//"128.195.6.172";
 //	String serverIp = "ernie-the-giant-chicken.ics.uci.edu";//"128.195.6.172";
 //	String serverIp = "169.234.242.202"; 	// My desktop
 	
-//	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
+	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
 	float stepTime = 0.02f;
 	Comparator<CommandIn> comparator = new MessageCompare();
 	PriorityQueue<CommandIn> commandQueue = new PriorityQueue<CommandIn>(20, comparator);
+	
+	boolean ready = false;
 
 	public GameScreen(UnknownDefense game, boolean multiplayer)
 	{
 		this.game = game;
 		this.multiplayer = multiplayer;
+		everything.reset();
 		Texture.setEnforcePotImages(true);
 		isPaused = false;
 		
-		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
-		startMusic.setLooping(true);
-		startMusic.setVolume(volume);
-		startMusic.play();
+//		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
+//		startMusic.setLooping(true);
+//		startMusic.setVolume(volume);
+//		startMusic.play();
 //		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
 //		startMusic.setLooping(true);
 
-		//Gdx.graphics.setDisplayMode(800, 480, false);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
@@ -166,38 +159,25 @@ public class GameScreen implements Screen
 		}
 		
 		everything.load(batch, maps[level]);
-//		EverythingHolder.load(batch, maps[level]);
-		
-//		heroes[0] = new Hero(maps[level].start1().x(), maps[level].start1().y(), 1, everything.map().getPath().listIterator(), HeroStructure struct);
-//		heroes[0] = new SwordFace(maps[level].start1().x(), maps[level].start1().y(), 1, everything.map().getPath().listIterator());
-//		heroes[1] = new ArrowEyes(maps[level].start2().x(), maps[level].start2().y(), 2, everything.map().getPath().listIterator(everything.map().getPath().size() - 1));
-		Texture sheet = new Texture(Gdx.files.internal("images/sprite_sheet.png"));
+		Texture sheetR = new Texture(Gdx.files.internal("images/sprite_sheet_red.png"));
+		Texture sheetB = new Texture(Gdx.files.internal("images/sprite_sheet_blue.png"));
 
-//		Actor.linkActors(everything.team(1), everything.team(2));
 		//<<<<<<< HEAD
-		Entity.loadStatics(sheet);
+		Entity.loadStatics(sheetR, sheetB);
 		Actor.loadRange();
 		Unit.loadAnimations();
 		Projectile.loadProjectiles();
 		Building.loadSprites();
 		sprite.setSize(1600, 1200);
-		//=======
-		//		Actor.loadRange();
-		//		Entity.loadSheet(new Texture(Gdx.files.internal("images/sprite_sheet.png")));
-		//		Unit.loadAnimations();
-		//		Projectile.loadProjectiles();
-		//		sprite.setSize(1600, 1200);
-		//>>>>>>> Jason-Split-Branch
 		font = new BitmapFont();
 		EverythingHolder.showRange = true;
 		inputProcessor = new MyInputProcessor();
 
 		Gdx.input.setInputProcessor(inputProcessor);
-		gameUI3 = new GameUI();
 		GameUI.load(batch, everything);
+		gameUI3 = new GameUI();
 		
 		MyInputProcessor.loadCamera(camera, uiCamera);
-//		MyInputProcessor.loadHero(heroes[0]);
 		MyInputProcessor.loadGame(this, gameUI3);
 		
 		Building.loadAnimations();
@@ -215,6 +195,7 @@ public class GameScreen implements Screen
 		for (Coordinate c : everything.map().buildSites(1))
 		{
 			tower = new ArrowTower(c.x(), c.y(), 1, towerNumber++);
+			tower.upgrade();
 			everything.add(tower, 1);
 //			everything.add(tower, true, 1);
 		}
@@ -223,35 +204,26 @@ public class GameScreen implements Screen
 		for (Coordinate c : everything.map().buildSites(2))
 		{
 			tower = new ArrowTower(c.x(), c.y(), 2, towerNumber++);
-//			tower.upgrade();
+			tower.upgrade();
 			everything.add(tower, 2);
 //			everything.add(tower, true, 2);
 		}
 		
 		everything.initializeHeroes();
-		
-		//hero.takeDamage(1000);
-//		everything.add(heroes[0], true, 1);
-//		
-//		//nemesis.takeDamage(1000);
-//		everything.add(heroes[1], true, 2);
-		
-//		pauseRectangle   = new Rectangle(-68, -32, 133, 33);
-//		pauseRectangle2  = new Rectangle(-76, -76, 156, 27);
-//		swordRectangle   = new Rectangle(221, -29, 69, 80);
-//		bowRectangle     = new Rectangle(311, -29, 69, 80);
-//		monkRectangle    = new Rectangle(221, -127, 69, 80);
-//		magicRectangle   = new Rectangle(311, -127, 69, 80);
-//		petRectangle     = new Rectangle(221, -227, 69, 80);
-//		spiralRectangle  = new Rectangle(311, -227, 69, 80);
-//
-//		attackRectangle  = new Rectangle(-50, -200, 40, 40);
-//		defendRectangle  = new Rectangle(-100, -200, 40, 40);
-//		retreatRectangle = new Rectangle(-150, -200, 40, 40);
 
 		touchPoint = new Vector3();
 		gameTouchPoint = new Vector3();
 		
+		
+		width = everything.map().width();
+		height = everything.map().height();
+		screenH = Gdx.graphics.getHeight() / 2;
+		
+		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
+		startMusic.setLooping(true);
+		startMusic.setVolume(volume);
+		startMusic.play();	
+
 		if (!connected && multiplayer)
 			networkSetup();
 		if (!multiplayer)
@@ -262,9 +234,17 @@ public class GameScreen implements Screen
 			everything.setTeam((byte)1);
 		}
 		
-		width = everything.map().width();
-		height = everything.map().height();
-		screenH = Gdx.graphics.getHeight() / 2;
+//		ready = true;
+	}
+	
+	public void toggleFollowing()
+	{
+		following = !following;
+	}
+	
+	public void diasbleFollowing()
+	{
+		following = false;
 	}
 	
 	static public void setEverything(EverythingHolder e)
@@ -289,12 +269,19 @@ public class GameScreen implements Screen
 	{
 		boundCamera();
 		
-		timeAccumulator += delta;
+		if (ready)
+			timeAccumulator += delta;
 		
 		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClearColor(1, 1, 1, 1);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+//		if (gl.glGetError() != 0)
+//			Log.debug("GL ERROR " + gl.glGetError());
+//			System.out.println("GL ERROR " + gl.glGetError());
+		
+		if (following)
+			centerOnHero();
+		
 		camera.update();
 		camera.apply(gl);
 		boundCamera();
@@ -405,10 +392,6 @@ public class GameScreen implements Screen
 		if (!multiplayer)
 			randomSpawner();
 		endGame(everything.winCondition());
-//		if (!everything.team(1).getLast().isAlive())
-//			endGame(1);
-//		else if (!everything.team(2).getLast().isAlive())
-//			endGame(2);
 	}
 
 	public void randomSpawner()
@@ -449,7 +432,6 @@ public class GameScreen implements Screen
 	
 	public void buyUnit(int unit)
 	{
-//		everything.add(unit, 1);
 		if (multiplayer)
 		{
 			System.out.println("Trying to send unit " + unit + " from team " + team);
@@ -467,7 +449,6 @@ public class GameScreen implements Screen
 		else
 		{
 			System.out.println("Trying to send unit " + unit + " from team " + team);
-			//everything.add(unit, 1);
 			everything.add(unit, 1);
 		}
 	}
@@ -485,7 +466,6 @@ public class GameScreen implements Screen
 		}
 		else
 			everything.setHeroStance(1, stance);
-//			heroes[0].stance(stance);
 	}
 	
 	public void castHeroActive()
@@ -568,75 +548,18 @@ public class GameScreen implements Screen
 			
 //			System.out.println("X: " + touchPoint.x + " Y: " + touchPoint.y);
 //			System.out.println("X1: " + gameTouchPoint.x + " Y1: " + gameTouchPoint.y);
-			
-			// Swordsman
-//			if (OverlapTester.pointInRectangle(swordRectangle, touchPoint.x, touchPoint.y))
-//			{
-//				buyUnit(0);
-//			}
-//			// Archer
-//			if (OverlapTester.pointInRectangle(bowRectangle, touchPoint.x, touchPoint.y))
-//			{
-//				buyUnit(1);
-//			}
-//			// Monk
-//			if (OverlapTester.pointInRectangle(monkRectangle, touchPoint.x, touchPoint.y))
-//			{
-//				buyUnit(2);
-//			}
-//			// Mage
-//			if (OverlapTester.pointInRectangle(magicRectangle, touchPoint.x, touchPoint.y))
-//			{
-//				buyUnit(3);
-//			}
-//			// Ninja
-//			if (OverlapTester.pointInRectangle(petRectangle, touchPoint.x, touchPoint.y))
-//			{
-//				buyUnit(4);
-//			}
-//			// Eagle
-//			if (OverlapTester.pointInRectangle(spiralRectangle, touchPoint.x, touchPoint.y))
-//			{
-//				buyUnit(5);
-//			}
-//			if (OverlapTester.pointInRectangle(attackRectangle, touchPoint.x, touchPoint.y))
-//			{
-//				setHeroStance(1);
-//				//heroes.stance(1);
-//				Gdx.input.vibrate(50);
-//			}
-//			if (OverlapTester.pointInRectangle(defendRectangle, touchPoint.x, touchPoint.y))
-//			{
-//				setHeroStance(0);
-////				heroes.stance(0);
-//				Gdx.input.vibrate(50);
-//			}
-//			if (OverlapTester.pointInRectangle(retreatRectangle, touchPoint.x, touchPoint.y))
-//			{
-//				setHeroStance(-1);
-////				heroes.stance(-1);
-//				Gdx.input.vibrate(50);
-//			}
-//			Actor a = everything.team(1).getLast();
-//			if (OverlapTester.pointInRectangle(new Rectangle(a.xCoord(), a.yCoord(), 40, 40), touchPoint.x, touchPoint.y))
-//			{
-//				hero.stance(0);
-//			}
-//			if (isPaused){
-//				//System.out.println(touchPoint.x + " " + touchPoint.y);
-//				if (OverlapTester.pointInRectangle(pauseRectangle, touchPoint.x, touchPoint.y)) {
-//					//System.out.println(true);
-//					game.setScreen(game.mainMenuScreen);
-//					return;
-//				}
-//				
-//				if (OverlapTester.pointInRectangle(pauseRectangle2, touchPoint.x, touchPoint.y)) {
-//					//System.out.println(true);
-//					game.setScreen(game.settingsScreen);
-//					return;
-//				}
-//			}
 		}
+	}
+	
+	public void centerOnHero()
+	{
+		System.out.println("CENTERING");
+		if (!everything.getHero().isAlive())
+			return;
+		
+		camera.position.x = everything.getHero().xCoord() + 40;
+		camera.position.y = everything.getHero().yCoord();
+//		boundCamera();
 	}
 
 	public void boundCamera()
@@ -777,7 +700,7 @@ public class GameScreen implements Screen
 	@Override
 	public void pause() 
 	{
-		startMusic.stop();
+//		startMusic.stop();
 //		client.close();
 //		client.stop();
 	}
@@ -785,14 +708,16 @@ public class GameScreen implements Screen
 	@Override
 	public void resume() 
 	{
+//		startMusic.play();
 	}
 
 
 	@Override
-	public void show() {
+	public void show() 
+	{
 		if (Settings.getInstance().getSound() == SoundEnum.ON)
 			everything.musicPlay();
-
+		ready = true;
 	}
 
 	@Override

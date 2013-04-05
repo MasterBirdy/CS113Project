@@ -15,7 +15,7 @@ public class GameUI
 	static SpriteBatch batch;
 	private Texture icons;
 	TextureRegion buttonFrame;
-	Button[] buttons = new Button[10];
+	Button[] buttons = new Button[12];
 	int width = Gdx.graphics.getWidth();
 	int height = Gdx.graphics.getHeight();
 	int buttonRadius = (int) (width * .95f / 20);
@@ -53,11 +53,11 @@ public class GameUI
 				new TextureRegion(icons, 0, 459, 152, 153));	// Monk
 		buttons[5] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9, buttonRadius, 			
 				new TextureRegion(icons, 0, 1224, 152, 153));	// Pet
-		buttons[6] = new RoundButton(36, 137, (int) (buttonRadius * .9f), 			
+		buttons[6] = new RoundButton(35, 132, (int) (buttonRadius * .9f), 			
 				new TextureRegion(icons, 0, 0, 152, 153));		// Attack
-		buttons[7] = new RoundButton(99, 99, (int) (buttonRadius * .9f), 			
+		buttons[7] = new RoundButton(96, 96, (int) (buttonRadius * .9f), 			
 				new TextureRegion(icons, 0, 153, 152, 153));	// Defend
-		buttons[8] = new RoundButton(137, 35, (int) (buttonRadius * .9f), 			
+		buttons[8] = new RoundButton(133, 35, (int) (buttonRadius * .9f), 			
 				new TextureRegion(icons, 0, 306, 152, 153));	// Retreat
 		buttons[9] = new RectangularButton(0, 0, (int)(buttonRadius * 2.75f), (int)(buttonRadius * 2.75f), 				
 				new TextureRegion(icons, 152, 0, 215, 209)) {	// Skill
@@ -73,6 +73,12 @@ public class GameUI
 				return true;
 			}
 		};
+		buttons[10] = new RectangularButton(0, 250, (int)(143 * .55f), (int)(109 * .55f),
+				new TextureRegion(icons, 1905, 0, 143, 109));
+		buttons[11] = new RectangularButton(580, 0, (int)(192 * .55f), (int)(137 * .55f),
+				everything.getObjectTexture(everything.getHeroName() + "button"));
+//				everything.getObjectTexture("swordfacebutton"));
+//				new TextureRegion(icons, 191, 137, 26, 167));	// Hero
 		screenX = Gdx.graphics.getWidth() / 2;
 		screenY = Gdx.graphics.getHeight() / 2;
 		
@@ -113,9 +119,11 @@ public class GameUI
 		batch.draw(time, 1, 345);
 		batch.draw(units, 1, 310);
 
-		everything.font.draw(batch, "" + everything.funds(), 35, 404);
-		everything.font.draw(batch, "" + everything.totalTime(), 35, 369);
-		everything.font.draw(batch, "" + everything.teamSize(), 35, 334);
+		everything.getFont(0).draw(batch, "" + everything.funds(), 35, 404);
+		everything.getFont(0).draw(batch, "" + everything.totalTime(), 35, 369);
+		everything.getFont(0).draw(batch, "" + everything.teamSize(), 35, 334);
+//		everything.font.draw(batch, "" + everything.totalTime(), 35, 369);
+//		everything.font.draw(batch, "" + everything.teamSize(), 35, 334);
 		
 		// Top UI
 		topUI.draw();

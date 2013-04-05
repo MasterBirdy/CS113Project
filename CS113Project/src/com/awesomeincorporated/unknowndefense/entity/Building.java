@@ -17,7 +17,7 @@ public abstract class Building extends Actor
 {
 	Coordinate destination;
 	static ArrayList<Sprite> sprites;
-	static ArrayList<ArrayList<Animation>> animations;
+	static ArrayList<ArrayList<Animation>> animationsR, animationsB;
 	Sprite currentSprite;
 	int level = 0, towerNumber = 0;
 	ArrayList<Projectile> projectiles;
@@ -72,7 +72,7 @@ public abstract class Building extends Actor
 		{
 			unitType = 0;
 		}
-		current = animations.get(unitType).get(0).getKeyFrame(stateTime, true);
+		current = (team == 1 ? animationsR : animationsB).get(unitType).get(0).getKeyFrame(stateTime, true);
 //		batch.draw(current, xCoord + (team == 1 ? 20 : -20), yCoord - (debug ? Math.abs(current.getRegionHeight() / 3f) : 0), Math.abs(current.getRegionWidth() / 4), Math.abs(current.getRegionHeight() / 2f), Math.abs(current.getRegionWidth()), Math.abs(current.getRegionHeight()), (team == 1 ? -1f : 1f), 1f, 0f);
 		batch.draw(current, xCoord, yCoord);
 		//batch.draw(currentSprite, xCoord, yCoord);
@@ -80,36 +80,58 @@ public abstract class Building extends Actor
 	
 	public static void loadAnimations()
 	{
-		animations = new ArrayList<ArrayList<Animation>>();
+		// RED TEAM
+		
+		animationsR = new ArrayList<ArrayList<Animation>>();
 		ArrayList<Animation> unitAnimation = new ArrayList<Animation>();
 		
-		unitAnimation.add(loadAnimation(0, 515, 47, 65, 3, false, false));
-		animations.add(unitAnimation);
+		unitAnimation.add(loadAnimation(0, 515, 47, 65, 3, false, 0));
+		animationsR.add(unitAnimation);
 		
 		
 		unitAnimation = new ArrayList<Animation>();
 		
-		unitAnimation.add(loadAnimation(0, 580, 56, 90, 3, false, false));
-		animations.add(unitAnimation);
+		unitAnimation.add(loadAnimation(0, 580, 56, 90, 3, false, 0));
+		animationsR.add(unitAnimation);
 		
 		unitAnimation = new ArrayList<Animation>();
 		
-		unitAnimation.add(loadAnimation(0, 670, 72, 128, 1, false, false));
-		animations.add(unitAnimation);
+		unitAnimation.add(loadAnimation(0, 670, 72, 128, 1, false, 0));
+		animationsR.add(unitAnimation);
+		
+		
+		// BLUE TEAM
+		
+		animationsB = new ArrayList<ArrayList<Animation>>();
+		unitAnimation = new ArrayList<Animation>();
+		
+		unitAnimation.add(loadAnimation(0, 515, 47, 65, 3, false, 1));
+		animationsB.add(unitAnimation);
+		
+		
+		unitAnimation = new ArrayList<Animation>();
+		
+		unitAnimation.add(loadAnimation(0, 580, 56, 90, 3, false, 1));
+		animationsB.add(unitAnimation);
+		
+		unitAnimation = new ArrayList<Animation>();
+		
+		unitAnimation.add(loadAnimation(0, 670, 72, 128, 1, false, 1));
+		animationsB.add(unitAnimation);
 	}
 	
-	private static Animation loadAnimation(int x, int y, int w, int h, int count, boolean flipX, boolean flipY)
+	private static Animation loadAnimation(int x, int y, int w, int h, int count, boolean flipX, int team)
 	{
 		TextureRegion[] frames = new TextureRegion[count];
 		
-		TextureRegion temp = new TextureRegion(spriteSheet, x, y, w * count, h);
+		TextureRegion temp = new TextureRegion(spriteSheet[team], x, y, w * count, h);
 		TextureRegion[][] tmp = temp.split(w, h);
 		
 		for (int i = 0; i < count; i++)
 		{
 			frames[i] = tmp[0][i];
-			if (flipX || flipY)
-				frames[i].flip(flipX, flipY);
+			if (flipX)// || flipY)
+				frames[i].flip(flipX, false); //flipY);
 		}
 		
 		Animation tempAnimation = new Animation(.1f, frames);
@@ -130,17 +152,17 @@ public abstract class Building extends Actor
 	{
 		sprites = new ArrayList<Sprite>();
 		//ArrayList<Sprite> unitAnimation = new ArrayList<Animation>();
-		sprites.add(loadSprite(424, 0, 47, 96, false, false));
+		sprites.add(loadSprite(424, 0, 47, 96, false, 0));//, false));
 	}
 	
-	private static Sprite loadSprite(int x, int y, int w, int h, boolean flipX, boolean flipY)
+	private static Sprite loadSprite(int x, int y, int w, int h, boolean flipX, int team) //boolean flipY)
 	{
-		TextureRegion region = new TextureRegion(spriteSheet, x, y, w, h);
+		TextureRegion region = new TextureRegion(spriteSheet[team], x, y, w, h);
 		
 		Sprite temp = new Sprite(region); 
 		
-		if (flipX || flipY)
-			temp.flip(flipX, flipY);
+		if (flipX)// || flipY)
+			temp.flip(flipX, false);//flipY);
 		
 		return temp;
 	}

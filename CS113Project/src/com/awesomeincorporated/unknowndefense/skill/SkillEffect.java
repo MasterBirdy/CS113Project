@@ -33,12 +33,12 @@ public class SkillEffect
 	{
 	}
 	
-	public SkillEffect(Skill s, Actor a)
+	public SkillEffect(Skill s, Actor a, int count)
 	{
 		target = a;
 		effect = s.effect;
 		if (s.damageSplit == true)
-			effectAmount = s.effectAmount / s.totalAffected();
+			effectAmount = s.effectAmount / count;
 		else
 			effectAmount = s.effectAmount;
 		effectTick = s.effectTick;
@@ -63,7 +63,7 @@ public class SkillEffect
 	{
 		if (!alive)
 			return;
-		System.out.println("Updating Skill Effect");
+//		System.out.println("Updating Skill Effect");
 		if (!target.isAlive() || --ticksLeft < 0)
 		{
 			kill();
@@ -84,7 +84,7 @@ public class SkillEffect
 			return;
 //		if (!alive || affected.isComplete())
 //			return;
-		System.out.println("Drawing Skill Effect");
+//		System.out.println("Drawing Skill Effect");
 		if (affected.isComplete())
 			affected.start();
 		affected.draw(batch);
@@ -98,10 +98,13 @@ public class SkillEffect
 				target.takeDamage(effectAmount);
 				break;
 			case 1:
-				target.takeDamage(-effectAmount);
+				target.heal(effectAmount);
 				break;
 			case 2:
 				target.stun(effectAmount);
+				break;
+			case 3:
+				target.attackSpeedBoost(effectAmount);
 				break;
 //			case 3:
 //				damageBoost += skill.effectAmount;

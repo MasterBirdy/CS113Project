@@ -16,6 +16,7 @@ public class Hero extends Unit
 		activeCooldown = 0, activeCooldownCounter = 0;
 	boolean changedDirection = false;
 	SkillStructure activeSkill;
+	String pet;
 	
 //	public Hero(int x, int y, boolean ranged, int team, ListIterator<Coordinate> p) 
 //	{
@@ -45,6 +46,7 @@ public class Hero extends Unit
 			activeCooldown = activeSkill.cooldown.get(0);
 			activeCooldownCounter = activeCooldown;
 		}
+		pet = struct.pet(level);
 		
 //		if (!struct.passiveSkill(level).equals("empty"))
 //			this.loadPassiveSkill(everything.getSkill(struct.passiveSkill(level)));
@@ -52,10 +54,18 @@ public class Hero extends Unit
 //			this.attackSound = everything.getSound(struct.attackSound(level));
 	}
 	
+	public String pet()
+	{
+		return pet;
+	}
+	
 	public void activeSkill()
 	{
-		if (activeSkill != null && this.isAlive())
+		if (activeSkill != null && this.isAlive() && activeCooldownCounter < 0)
+		{
+			activeCooldownCounter = activeCooldown;
 			everything.add(new TargetedSkill(activeSkill, this, target), team);
+		}
 	}
 	
 	public void stance(int s)
@@ -67,7 +77,7 @@ public class Hero extends Unit
 	{
 		targetSelector();
 		
-		if (attacking && attackCooldown <= 0)
+		if (attacking && attackCooldown - attackSpeedBoost <= 0)
 		{
 			attack();
 			attackCooldown = attackSpeed;
@@ -92,7 +102,7 @@ public class Hero extends Unit
 			return;
 		}
 		attackCooldown--;
-		
+		activeCooldownCounter--;
 		if (stance == -1)
 		{
 			retreat();
@@ -102,7 +112,7 @@ public class Hero extends Unit
 		{
 			hold();
 		}
-		else if (attacking && attackCooldown <= 0)
+		else if (attacking && attackCooldown - attackSpeedBoost <= 0)
 		{
 			attack();
 			attackCooldown = attackSpeed;

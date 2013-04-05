@@ -30,6 +30,8 @@ public abstract class Skill extends Entity
 	Actor 			caster;
 	String 			name;
 	
+	ArrayList<Actor> tempActor = new ArrayList<Actor>();
+	
 	public Skill(SkillStructure s, Actor c)
 	{
 		int level = 0;
@@ -120,8 +122,12 @@ public abstract class Skill extends Entity
 	
 	public void applyToTargets()
 	{
-		for (Actor a : inRange())
-			if (a.isAlive())
-				a.takeSkillEffect(new SkillEffect(this, a));
+		tempActor = inRange();
+		if (tempActor == null)
+			return;
+//		for (Actor a : inRange())
+		for (int i = 0; i < tempActor.size(); i++)
+			if (tempActor.get(i).isAlive())
+				tempActor.get(i).takeSkillEffect(new SkillEffect(this, tempActor.get(i), tempActor.size()));
 	}
 }
