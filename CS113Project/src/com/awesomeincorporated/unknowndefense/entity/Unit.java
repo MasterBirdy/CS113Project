@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 import com.awesomeincorporated.unknowndefense.map.Coordinate;
+import com.awesomeincorporated.unknowndefense.parser.UnitAnimation;
 import com.awesomeincorporated.unknowndefense.parser.UnitStructure;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class Unit extends Actor
 {
@@ -20,8 +22,7 @@ public abstract class Unit extends Actor
 	int randX, randY;
 	Coordinate destination;
 	ListIterator<Coordinate> pathIter;
-	static ArrayList<ArrayList<Animation>> animationsR;
-	static ArrayList<ArrayList<Animation>> animationsB;
+	UnitAnimation unitAnimation;
 	TextureRegion currentFrame;
 	boolean walking, changedDirection;
 	float stateTime;
@@ -29,18 +30,23 @@ public abstract class Unit extends Actor
 	int animationDir = 0;
 	ParticleEffect spark, fire, heal;
 	
+	boolean standing = false;
+	
+	int targetX, targetY;
+	
 	public Unit(int x, int y, boolean ranged, int team, ListIterator<Coordinate> pathIter, UnitStructure u)//int rX, int rY)
 	{
 		super(x, y, ranged, team, u);
-		//this.speed = speed;
 		this.pathIter = pathIter;
 		destination = pathIter.next();
-//		destination = (team == 1 ? pathIter.next() : pathIter.previous());
+		speed = u.speed(level);
 		stateTime = 0f;
 		changedDirection = true;
-		spark = this.spark();
+		spark = everything.getEffect("spark");
 		fire = everything.getEffect("fireball");
 		heal = everything.getEffect("heal");
+		unitAnimation = everything.getUnitAnimation(u.animation(0) + team);
+		int i = 0;
 //		randX = rX;
 //		randY = rY;
 	}
@@ -52,47 +58,83 @@ public abstract class Unit extends Actor
 	}
 
 	@Override
-	public void draw(SpriteBatch batch)
+	public void draw(SpriteBatch batch, float delta)
 	{
 //		super.draw(batch);
 		stateTime += Gdx.graphics.getDeltaTime();
 		TextureRegion current;
 		
-		if (xSpeed > 0.6)
-			animationDir = (attacking ? 6 : 2);
-		else if (xSpeed < -0.6)
-			animationDir = (attacking ? 5 : 1);
-		else if (ySpeed > 0.6)
-			animationDir = (attacking ? 7 : 3);
-		else if (ySpeed < -0.6)
-			animationDir = (attacking ? 4 : 0);
-		else if (attacking && animationDir < 4)
-			animationDir += 4;
-		else if (!attacking && animationDir > 3)
-			animationDir -= 4;
-		current = (team == 1 ? animationsR : animationsB).get(animation).get(animationDir).getKeyFrame(stateTime, true);
-//		current = animations.get(animation).get(animationDir).getKeyFrame(stateTime, true);
-//		current = animations.get(unitType).get(animationDir).getKeyFrame(stateTime, true);
+		standing = false;
 		
-		//float wi = Math.abs(current.getRegionWidth() * 1.5f);
-		//float he = Math.abs(current.getRegionHeight() * 1.5f);
+		if (target != null && attacking)
+		{
+			targetX = (int) (target.xCoord - xCoord);
+			targetY = (int) (target.yCoord - yCoord);
+			
+			if (targetX * targetX > targetY * targetY)
+			{
+				if (targetX > 0)
+					animationDir = 6;
+				else
+					animationDir = 5;
+			}
+			else if (targetY > 0)
+				animationDir = 7;
+			else
+				animationDir = 4;
+		}
+		else
+		{
+			if (xSpeed > 0.6)
+				animationDir = 2;
+			else if (xSpeed < -0.6)
+				animationDir = 1;
+			else if (ySpeed > 0.6)
+				animationDir = 3;
+			else if (ySpeed < -0.6)
+				animationDir = 0;
+			else
+				stateTime = .08f;
+		}
+		
+		current = unitAnimation.getAnimation(animationDir).getKeyFrame(stateTime, true);		
+		Vector2 point = unitAnimation.getFeet(animationDir);
+		
 		if (this.invis > 0)
-			batch.setColor(Color.GRAY);
+		{
+			if (this.team != everything.team())
+				batch.setColor(.8f, .8f, .8f, 0f);
+			else
+				batch.setColor(.8f, .8f, .8f, .7f);
+		}
+		
 		
 		if (this instanceof Hero)
-			batch.draw(current, xCoord, yCoord, Math.abs(current.getRegionWidth() / 2), Math.abs(current.getRegionHeight() / 2f), Math.abs(current.getRegionWidth()), Math.abs(current.getRegionHeight()), 1.5f, 1.5f, 0f);
-			//batch.draw(current, xCoord - 8, yCoord, wi, he);
+			batch.draw(current, xCoord - point.x * 1.5f - 3, yCoord - point.y * 1.5f - 3, current.getRegionWidth() * 1.5f, current.getRegionHeight() * 1.5f);
 		else
-			batch.draw(current, xCoord, yCoord);
+			batch.draw(current, xCoord - point.x, yCoord - point.y);
 		batch.setColor(Color.WHITE);
-		drawParticleEffects(batch);
+		drawParticleEffects(batch, delta);
+	}
+	
+	@Override
+	public void particleOnSelf(String s)
+	{
+		ParticleEffect p = everything.getEffect(s);
+		p.setPosition(xCoord - unitAnimation.getFeet(animationDir).x + 10, yCoord + 20);
+		p.start();
+		effects.add(p);
+	}
+	public void particleOnSelf(ParticleEffect p)
+	{
+		p.setPosition(xCoord - unitAnimation.getFeet(animationDir).x, xCoord);
+		p.start();
+		effects.add(p);
 	}
 	
 	public void takeDamage(int damage)
 	{
 		super.takeDamage(damage);
-		//if (Gdx.app.getType() == Application.ApplicationType.Desktop)
-//		effects.add(everything.getEffect("spark"));//this.spark());
 		particleOnSelf("spark");
 	}
 	
@@ -100,11 +142,14 @@ public abstract class Unit extends Actor
 	{
 		super.takeDamage(damage);
 		if (type == 0)
-			effects.add(this.fire());
+			this.particleOnSelf("fire");
+//			effects.add(this.fire());
 		else if (type == 1)
-			effects.add(this.blood());
+			this.particleOnSelf("blood");
+//			effects.add(this.blood());
 		else if (type == 2)
-			effects.add(this.blood());
+			this.particleOnSelf("blood");
+//			effects.add(this.blood());
 	}
 	
 	@Override
@@ -116,231 +161,6 @@ public abstract class Unit extends Actor
 			return;
 		
 		particleOnSelf("heal");
-//		temp = new ParticleEffect(everything.getEffect("heal"));
-//		temp.setPosition(xCoord, yCoord + 20);
-//		temp.start();
-//		effects.add(temp);
-	}
-	
-	public static void loadAnimations()
-	{
-		animationsR = new ArrayList<ArrayList<Animation>>();
-		animationsB = new ArrayList<ArrayList<Animation>>();
-		
-		// Swordsman
-		ArrayList<Animation> unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(0, 0, 29, 46, 5, false, 0));	// Down walk
-		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, false, 0));	// Left walk
-		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, true, 0));	// Right walk
-		unitAnimation.add(loadAnimation(0, 90, 31, 43, 5, false, 0));	// Up walk
-		unitAnimation.add(loadAnimation(0, 134, 40, 46, 3, false, 0));	// Down attack
-		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, false, 0));	// Left attack
-		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, true, 0));	// Right attack
-		unitAnimation.add(loadAnimation(0, 225, 46, 43, 3, false, 0));	// Up attack
-		animationsR.add(unitAnimation);
-		
-		// Archer
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(169, 0, 35, 46, 5, false, 0));
-		unitAnimation.add(loadAnimation(169, 46, 35, 42, 5, false, 0));
-		unitAnimation.add(loadAnimation(169, 46, 35, 42, 5, true, 0));
-		unitAnimation.add(loadAnimation(169, 88, 41, 46, 5, false, 0));
-		unitAnimation.add(loadAnimation(169, 134, 33, 44, 4, false, 0));
-		unitAnimation.add(loadAnimation(169, 178, 39, 46, 4, false, 0));
-		unitAnimation.add(loadAnimation(169, 178, 39, 46, 4, true, 0));
-		unitAnimation.add(loadAnimation(169, 224, 40, 45, 4, false, 0));
-		animationsR.add(unitAnimation);
-		
-		// Monk
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(0, 267, 30, 41, 5, false, 0));
-		unitAnimation.add(loadAnimation(0, 308, 27, 42, 5, false, 0));
-		unitAnimation.add(loadAnimation(0, 308, 27, 42, 5, true, 0));
-		unitAnimation.add(loadAnimation(0, 350, 30, 42, 5, false, 0));
-		unitAnimation.add(loadAnimation(0, 391, 30, 42, 4, false, 0));
-		unitAnimation.add(loadAnimation(0, 433, 27, 41, 4, false, 0));
-		unitAnimation.add(loadAnimation(0, 433, 27, 41, 4, true, 0));
-		unitAnimation.add(loadAnimation(0, 474, 39, 41, 4, false, 0));
-		animationsR.add(unitAnimation);
-		
-		// Mage
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(169, 269, 33, 48, 5, false, 0));
-		unitAnimation.add(loadAnimation(169, 317, 30, 43, 5, false, 0));
-		unitAnimation.add(loadAnimation(169, 317, 30, 43, 5, true, 0));
-		unitAnimation.add(loadAnimation(169, 360, 33, 45, 5, false, 0));
-		unitAnimation.add(loadAnimation(169, 405, 45, 46, 4, false, 0));
-		unitAnimation.add(loadAnimation(169, 451, 36, 43, 4, false, 0));
-		unitAnimation.add(loadAnimation(169, 451, 36, 43, 4, true, 0));
-		unitAnimation.add(loadAnimation(169, 494, 40, 45, 4, false, 0));
-		animationsR.add(unitAnimation);
-		
-		// Ninja
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(374, 0, 31, 42, 5, false, 0));
-		unitAnimation.add(loadAnimation(374, 42, 29, 41, 5, false, 0));
-		unitAnimation.add(loadAnimation(374, 42, 29, 41, 5, true, 0));
-		unitAnimation.add(loadAnimation(374, 83, 31, 41, 5, false, 0));
-		unitAnimation.add(loadAnimation(374, 124, 45, 41, 4, false, 0));
-		unitAnimation.add(loadAnimation(374, 165, 30, 41, 4, false, 0));
-		unitAnimation.add(loadAnimation(374, 165, 30, 41, 4, true, 0));
-		unitAnimation.add(loadAnimation(374, 206, 42, 40, 4, false, 0));
-		animationsR.add(unitAnimation);
-		
-		// Eagle
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(374, 246, 44, 84, 4, false, 0));
-		unitAnimation.add(loadAnimation(374, 330, 45, 84, 4, false, 0));
-		unitAnimation.add(loadAnimation(374, 330, 45, 84, 4, true, 0));
-		unitAnimation.add(loadAnimation(374, 414, 43, 78, 4, false, 0));
-		unitAnimation.add(loadAnimation(374, 492, 44, 59, 4, false, 0));
-		unitAnimation.add(loadAnimation(374, 551, 44, 59, 4, false, 0));
-		unitAnimation.add(loadAnimation(374, 551, 44, 59, 4, true, 0));
-		unitAnimation.add(loadAnimation(374, 610, 43, 57, 4, false, 0));
-		animationsR.add(unitAnimation);
-		
-		// Wolf
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(554, 0, 18, 53, 4, false, 0));
-		unitAnimation.add(loadAnimation(554, 53, 56, 31, 4, false, 0));
-		unitAnimation.add(loadAnimation(554, 53, 56, 31, 4, true, 0));
-		unitAnimation.add(loadAnimation(554, 84, 20, 50, 4, false, 0));
-		unitAnimation.add(loadAnimation(554, 134, 24, 55, 4, false, 0));
-		unitAnimation.add(loadAnimation(554, 189, 56, 35, 4, false, 0));
-		unitAnimation.add(loadAnimation(554, 189, 56, 35, 4, true, 0));
-		unitAnimation.add(loadAnimation(554, 224, 22, 48, 4, false, 0));
-		animationsR.add(unitAnimation);
-
-		// Elemental
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(554, 272, 51, 38, 5, false, 0));
-		unitAnimation.add(loadAnimation(554, 310, 32, 38, 5, false, 0));
-		unitAnimation.add(loadAnimation(554, 310, 32, 38, 5, true, 0));
-		unitAnimation.add(loadAnimation(554, 348, 50, 39, 5, false, 0));
-		unitAnimation.add(loadAnimation(554, 387, 51, 38, 4, false, 0));
-		unitAnimation.add(loadAnimation(554, 425, 32, 37, 4, false, 0));
-		unitAnimation.add(loadAnimation(554, 425, 32, 37, 4, true, 0));
-		unitAnimation.add(loadAnimation(554, 462, 56, 39, 4, false, 0));
-		animationsR.add(unitAnimation);
-		
-		
-		
-		/// BLUE TEAM
-		
-		// Swordsman
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(0, 0, 29, 46, 5, false, 1));	// Down walk
-		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, false, 1));	// Left walk
-		unitAnimation.add(loadAnimation(0, 47, 34, 43, 5, true, 1));	// Right walk
-		unitAnimation.add(loadAnimation(0, 90, 31, 43, 5, false, 1));	// Up walk
-		unitAnimation.add(loadAnimation(0, 134, 40, 46, 3, false, 1));	// Down attack
-		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, false, 1));	// Left attack
-		unitAnimation.add(loadAnimation(0, 180, 38, 45, 3, true, 1));	// Right attack
-		unitAnimation.add(loadAnimation(0, 225, 46, 43, 3, false, 1));	// Up attack
-		animationsB.add(unitAnimation);
-		
-		// Archer
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(169, 0, 35, 46, 5, false, 1));
-		unitAnimation.add(loadAnimation(169, 46, 35, 42, 5, false, 1));
-		unitAnimation.add(loadAnimation(169, 46, 35, 42, 5, true, 1));
-		unitAnimation.add(loadAnimation(169, 88, 41, 46, 5, false, 1));
-		unitAnimation.add(loadAnimation(169, 134, 33, 44, 4, false, 1));
-		unitAnimation.add(loadAnimation(169, 178, 39, 46, 4, false, 1));
-		unitAnimation.add(loadAnimation(169, 178, 39, 46, 4, true, 1));
-		unitAnimation.add(loadAnimation(169, 224, 40, 45, 4, false, 1));
-		animationsB.add(unitAnimation);
-		
-		// Monk
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(0, 267, 30, 41, 5, false, 1));
-		unitAnimation.add(loadAnimation(0, 308, 27, 42, 5, false, 1));
-		unitAnimation.add(loadAnimation(0, 308, 27, 42, 5, true, 1));
-		unitAnimation.add(loadAnimation(0, 350, 30, 42, 5, false, 1));
-		unitAnimation.add(loadAnimation(0, 391, 30, 42, 4, false, 1));
-		unitAnimation.add(loadAnimation(0, 433, 27, 41, 4, false, 1));
-		unitAnimation.add(loadAnimation(0, 433, 27, 41, 4, true, 1));
-		unitAnimation.add(loadAnimation(0, 474, 39, 41, 4, false, 1));
-		animationsB.add(unitAnimation);
-		
-		// Mage
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(169, 269, 33, 48, 5, false, 1));
-		unitAnimation.add(loadAnimation(169, 317, 30, 43, 5, false, 1));
-		unitAnimation.add(loadAnimation(169, 317, 30, 43, 5, true, 1));
-		unitAnimation.add(loadAnimation(169, 360, 33, 45, 5, false, 1));
-		unitAnimation.add(loadAnimation(169, 405, 45, 46, 4, false, 1));
-		unitAnimation.add(loadAnimation(169, 451, 36, 43, 4, false, 1));
-		unitAnimation.add(loadAnimation(169, 451, 36, 43, 4, true, 1));
-		unitAnimation.add(loadAnimation(169, 494, 40, 45, 4, false, 1));
-		animationsB.add(unitAnimation);
-		
-		// Ninja
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(374, 0, 31, 42, 5, false, 1));
-		unitAnimation.add(loadAnimation(374, 42, 29, 41, 5, false, 1));
-		unitAnimation.add(loadAnimation(374, 42, 29, 41, 5, true, 1));
-		unitAnimation.add(loadAnimation(374, 83, 31, 41, 5, false, 1));
-		unitAnimation.add(loadAnimation(374, 124, 45, 41, 4, false, 1));
-		unitAnimation.add(loadAnimation(374, 165, 30, 41, 4, false, 1));
-		unitAnimation.add(loadAnimation(374, 165, 30, 41, 4, true, 1));
-		unitAnimation.add(loadAnimation(374, 206, 42, 40, 4, false, 1));
-		animationsB.add(unitAnimation);
-		
-		// Eagle
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(374, 246, 44, 84, 4, false, 1));
-		unitAnimation.add(loadAnimation(374, 330, 45, 84, 4, false, 1));
-		unitAnimation.add(loadAnimation(374, 330, 45, 84, 4, true, 1));
-		unitAnimation.add(loadAnimation(374, 414, 43, 78, 4, false, 1));
-		unitAnimation.add(loadAnimation(374, 492, 44, 59, 4, false, 1));
-		unitAnimation.add(loadAnimation(374, 551, 44, 59, 4, false, 1));
-		unitAnimation.add(loadAnimation(374, 551, 44, 59, 4, true, 1));
-		unitAnimation.add(loadAnimation(374, 610, 43, 57, 4, false, 1));
-		animationsB.add(unitAnimation);
-		
-		// Wolf
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(554, 0, 18, 53, 4, false, 1));
-		unitAnimation.add(loadAnimation(554, 53, 56, 31, 4, false, 1));
-		unitAnimation.add(loadAnimation(554, 53, 56, 31, 4, true, 1));
-		unitAnimation.add(loadAnimation(554, 84, 20, 50, 4, false, 1));
-		unitAnimation.add(loadAnimation(554, 134, 24, 55, 4, false, 1));
-		unitAnimation.add(loadAnimation(554, 189, 56, 35, 4, false, 1));
-		unitAnimation.add(loadAnimation(554, 189, 56, 35, 4, true, 1));
-		unitAnimation.add(loadAnimation(554, 224, 22, 48, 4, false, 1));
-		animationsB.add(unitAnimation);
-
-		// Elemental
-		unitAnimation = new ArrayList<Animation>();
-		unitAnimation.add(loadAnimation(554, 272, 51, 38, 5, false, 1));
-		unitAnimation.add(loadAnimation(554, 310, 32, 38, 5, false, 1));
-		unitAnimation.add(loadAnimation(554, 310, 32, 38, 5, true, 1));
-		unitAnimation.add(loadAnimation(554, 348, 50, 39, 5, false, 1));
-		unitAnimation.add(loadAnimation(554, 387, 51, 38, 4, false, 1));
-		unitAnimation.add(loadAnimation(554, 425, 32, 37, 4, false, 1));
-		unitAnimation.add(loadAnimation(554, 425, 32, 37, 4, true, 1));
-		unitAnimation.add(loadAnimation(554, 462, 56, 39, 4, false, 1));
-		animationsB.add(unitAnimation);
-	}
-	
-	private static Animation loadAnimation(int x, int y, int w, int h, int count, boolean flipX, int team) // team0 = red, team1 = blue
-	{
-		TextureRegion[] frames = new TextureRegion[count];
-		
-		TextureRegion temp = new TextureRegion(spriteSheet[team], x, y, w * count, h);
-		TextureRegion[][] tmp = temp.split(w, h);
-		
-		for (int i = 0; i < count; i++)
-		{
-			frames[i] = tmp[0][i];
-			if (flipX)// || flipY)
-				frames[i].flip(flipX, false);//flipY);
-		}
-		
-		Animation tempAnimation = new Animation(.05f, frames);
-		tempAnimation.setPlayMode(Animation.LOOP_PINGPONG);
-		return tempAnimation;
 	}
 	
 	public void advance()

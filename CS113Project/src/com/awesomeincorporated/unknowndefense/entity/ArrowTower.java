@@ -8,7 +8,8 @@ public class ArrowTower extends Building
 {
 	public ArrowTower(int x, int y, int team, int towerNumber)
 	{
-		super(x, y, true, team, towerNumber, null);
+//		super(x, y, true, team, towerNumber, null);
+		super(x, y, team, null);
 		maxHealth = 250;
 		currentHealth = maxHealth;
 		damage = 11;
@@ -65,12 +66,12 @@ public class ArrowTower extends Building
 	}
 
 	@Override
-	public void draw(SpriteBatch batch)
+	public void draw(SpriteBatch batch, float delta)
 	{
-		super.draw(batch);
+		super.draw(batch, delta);
 		for (Projectile p : projectiles)
 		{
-			p.draw(batch);
+			p.draw(batch, delta);
 		}
 		if (this.isAlive() == false)
 		{

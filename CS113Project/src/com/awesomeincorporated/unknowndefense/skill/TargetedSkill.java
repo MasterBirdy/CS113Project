@@ -30,7 +30,7 @@ public class TargetedSkill extends Skill
 	public TargetedSkill(SkillStructure s, Actor c, Actor t)
 	{
 		super(s, c);
-		spellImage = everything.getObjectTexture("cannonball");
+		spellImage = everything.getObjectTexture("fireball");
 //		if (spellImage == null)
 //		{
 //			spellImage = new TextureRegion(new Texture(Gdx.files.internal("images/"+s.sprite.get(0))), 0, 0, 16, 16);
@@ -137,16 +137,16 @@ public class TargetedSkill extends Skill
 		}
 	}
 	
-	public void draw(SpriteBatch batch)
+	public void draw(SpriteBatch batch, float delta)
 	{
 		if (!alive)
 			return;
 //		System.out.println("Drawing Targeted SKill");
-		batch.draw(spellImage, xCoord(), yCoord());
+		batch.draw(spellImage, xCoord(), yCoord(), 15, 15);
 		if (travelEffect.isComplete())
 			travelEffect.start();
-		travelEffect.setPosition(xCoord(), yCoord());
-		travelEffect.draw(batch, 0.01f);
+		travelEffect.setPosition(xCoord() + 10, yCoord() + 10);
+		travelEffect.draw(batch, delta * 0.5f);
 //		if (part.isComplete())
 //			part.start();
 //		part.setPosition(xCoord(), yCoord());

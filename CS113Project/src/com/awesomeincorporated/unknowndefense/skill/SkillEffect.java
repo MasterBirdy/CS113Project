@@ -78,7 +78,7 @@ public class SkillEffect
 		}
 	}
 	
-	public void draw(SpriteBatch batch)
+	public void draw(SpriteBatch batch, float delta)
 	{
 		if (!alive)
 			return;
@@ -87,7 +87,7 @@ public class SkillEffect
 //		System.out.println("Drawing Skill Effect");
 		if (affected.isComplete())
 			affected.start();
-		affected.draw(batch);
+		affected.draw(batch, delta);
 	}
 	
 	public void causeEffect()

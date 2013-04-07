@@ -18,7 +18,7 @@ public class ProcSkill extends Skill
 	}
 
 	@Override
-	public void draw(SpriteBatch batch) 
+	public void draw(SpriteBatch batch, float delta) 
 	{
 		
 	}
@@ -38,11 +38,11 @@ public class ProcSkill extends Skill
 	
 	public void trip(int hit)
 	{
-		System.out.println("Tripped");
+//		System.out.println("Tripped");
 		if (!caster.isAlive() || cooldownCounter >=0)
 			return;
 		cooldownCounter = cooldown;
-		System.out.println("INVISIBLE!");
+//		System.out.println("INVISIBLE!");
 		if (effect == 0)
 			caster.invis(effectAmount);
 	}

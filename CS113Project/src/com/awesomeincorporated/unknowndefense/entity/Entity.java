@@ -17,7 +17,7 @@ public abstract class Entity
 	float xCoord;
 	float yCoord;
 	protected boolean alive;
-	static Texture spriteSheet[] = new Texture[2];
+//	static Texture spriteSheet[] = new Texture[2];
 //	static HashMap<String, Sound> sounds = new HashMap<String, Sound>(); 
 	static float volume = 1;
 	protected static EverythingHolder everything;
@@ -61,20 +61,20 @@ public abstract class Entity
 		effects.add(pe);
 	}
 	
-	public static void loadStatics(Texture sheetR, Texture sheetB)
-	{
-		spriteSheet[0] = sheetR;
-		spriteSheet[1] = sheetB;
-//		Audio tempAudio = Gdx.audio;
-//		sounds.put("thwp", tempAudio.newSound(Gdx.files.internal("audio/Thwp.wav")));
-	}
+//	public static void loadStatics(Texture sheetR, Texture sheetB)
+//	{
+//		spriteSheet[0] = sheetR;
+//		spriteSheet[1] = sheetB;
+////		Audio tempAudio = Gdx.audio;
+////		sounds.put("thwp", tempAudio.newSound(Gdx.files.internal("audio/Thwp.wav")));
+//	}
 	
 	public static void loadStatics(ArrayList<ParticleEffect> e)
 	{
 		effects = e;
 	}
 	
-	public abstract void draw(SpriteBatch batch);
+	public abstract void draw(SpriteBatch batch, float delta);
 	
 	public abstract void update();
 	
@@ -115,6 +115,8 @@ public abstract class Entity
 	
 	public float yCoord()
 	{
+//		if (this instanceof Hero)
+//			return yCoord - 3;
 		return yCoord;
 	}
 	

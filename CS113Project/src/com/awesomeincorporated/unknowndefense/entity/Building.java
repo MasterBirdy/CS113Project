@@ -3,8 +3,10 @@ package com.awesomeincorporated.unknowndefense.entity;
 import java.util.ArrayList;
 
 import com.awesomeincorporated.unknowndefense.map.Coordinate;
+import com.awesomeincorporated.unknowndefense.parser.BuildingAnimation;
 import com.awesomeincorporated.unknowndefense.parser.BuildingStructure;
 import com.awesomeincorporated.unknowndefense.parser.MinionStructure;
+import com.awesomeincorporated.unknowndefense.skill.SkillEffect;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -12,30 +14,43 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
-public abstract class Building extends Actor
+public class Building extends Actor
 {
-	Coordinate destination;
+//	Coordinate destination;
 	static ArrayList<Sprite> sprites;
-	static ArrayList<ArrayList<Animation>> animationsR, animationsB;
-	Sprite currentSprite;
-	int level = 0, towerNumber = 0;
+	BuildingAnimation buildingAnimation;
+	int towerNumber = 0;
 	ArrayList<Projectile> projectiles;
 	float stateTime;
 	ParticleEffect fire = new ParticleEffect();
 	boolean debug = false;
+	BuildingStructure buildingStructure;
 	
-	public Building(int x, int y, boolean ranged, int team, int towerNumber, BuildingStructure struct)
+	public Building(int x, int y, int team, BuildingStructure struct)
 	{
-		super(x, y, ranged, team, null); // Will add structure
-		currentSprite = sprites.get(0);
+		super(x, y, struct.ranged(0), team, struct);
 		if (Gdx.app.getType() != ApplicationType.Android)
 		{
 			fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 			fire.setPosition(this.xCoord() + 15, this.yCoord() + 15);
 		}
-		this.towerNumber = towerNumber;
-		//fire.start();
+//		this.towerNumber = towerNumber;
+		buildingAnimation = everything.getBuildingAnimation(struct.animation(0) + team);
+		alive = false;
+		buildingStructure = struct;
+	}
+	
+	@Override
+	public void checkAlive()
+	{
+		if (level != 0 && alive && currentHealth <= 0)
+		{
+			currentHealth = 0;
+			alive = false;
+			changeToLevel(0);
+		}
 	}
 	
 	public int towerNumber()
@@ -44,127 +59,85 @@ public abstract class Building extends Actor
 	}
 	
 	@Override
-	public void draw(SpriteBatch batch)
+	public void draw(SpriteBatch batch, float delta)
 	{
 //		super.draw(batch);
 		if (this.isAlive() && currentHealth < maxHealth / 2 && Gdx.app.getType() != ApplicationType.Android)
 		{
-			fire.draw(batch, 0.01f);
+			fire.draw(batch, delta * 0.5f);
 			if  (fire.isComplete())
 				fire.start();
 		}
 		
 		TextureRegion current;
 		stateTime += Gdx.graphics.getDeltaTime();
-		int unitType;
-		if (this instanceof ArrowTower)
-		{
-			if (level == 0)
-				unitType = 0;
-			else
-				unitType = 1;
-		}
-		else if (this instanceof Stronghold)
-		{
-			unitType = 2;
-		}
-		else
-		{
-			unitType = 0;
-		}
-		current = (team == 1 ? animationsR : animationsB).get(unitType).get(0).getKeyFrame(stateTime, true);
-//		batch.draw(current, xCoord + (team == 1 ? 20 : -20), yCoord - (debug ? Math.abs(current.getRegionHeight() / 3f) : 0), Math.abs(current.getRegionWidth() / 4), Math.abs(current.getRegionHeight() / 2f), Math.abs(current.getRegionWidth()), Math.abs(current.getRegionHeight()), (team == 1 ? -1f : 1f), 1f, 0f);
-		batch.draw(current, xCoord, yCoord);
-		//batch.draw(currentSprite, xCoord, yCoord);
+		current = buildingAnimation.getAnimation(0).getKeyFrame(stateTime * 0.5f, true);
+		Vector2 point = buildingAnimation.getFeet(0);
+		
+		batch.draw(current, xCoord - point.x, yCoord - point.y);
 	}
 	
-	public static void loadAnimations()
-	{
-		// RED TEAM
-		
-		animationsR = new ArrayList<ArrayList<Animation>>();
-		ArrayList<Animation> unitAnimation = new ArrayList<Animation>();
-		
-		unitAnimation.add(loadAnimation(0, 515, 47, 65, 3, false, 0));
-		animationsR.add(unitAnimation);
-		
-		
-		unitAnimation = new ArrayList<Animation>();
-		
-		unitAnimation.add(loadAnimation(0, 580, 56, 90, 3, false, 0));
-		animationsR.add(unitAnimation);
-		
-		unitAnimation = new ArrayList<Animation>();
-		
-		unitAnimation.add(loadAnimation(0, 670, 72, 128, 1, false, 0));
-		animationsR.add(unitAnimation);
-		
-		
-		// BLUE TEAM
-		
-		animationsB = new ArrayList<ArrayList<Animation>>();
-		unitAnimation = new ArrayList<Animation>();
-		
-		unitAnimation.add(loadAnimation(0, 515, 47, 65, 3, false, 1));
-		animationsB.add(unitAnimation);
-		
-		
-		unitAnimation = new ArrayList<Animation>();
-		
-		unitAnimation.add(loadAnimation(0, 580, 56, 90, 3, false, 1));
-		animationsB.add(unitAnimation);
-		
-		unitAnimation = new ArrayList<Animation>();
-		
-		unitAnimation.add(loadAnimation(0, 670, 72, 128, 1, false, 1));
-		animationsB.add(unitAnimation);
-	}
-	
-	private static Animation loadAnimation(int x, int y, int w, int h, int count, boolean flipX, int team)
-	{
-		TextureRegion[] frames = new TextureRegion[count];
-		
-		TextureRegion temp = new TextureRegion(spriteSheet[team], x, y, w * count, h);
-		TextureRegion[][] tmp = temp.split(w, h);
-		
-		for (int i = 0; i < count; i++)
-		{
-			frames[i] = tmp[0][i];
-			if (flipX)// || flipY)
-				frames[i].flip(flipX, false); //flipY);
-		}
-		
-		Animation tempAnimation = new Animation(.1f, frames);
-		tempAnimation.setPlayMode(Animation.LOOP_PINGPONG);
-		return tempAnimation;
-	}
+//	private static Animation loadAnimation(int x, int y, int w, int h, int count, boolean flipX, int team)
+//	{
+//		TextureRegion[] frames = new TextureRegion[count];
+//		
+//		TextureRegion temp = new TextureRegion(spriteSheet[team], x, y, w * count, h);
+//		TextureRegion[][] tmp = temp.split(w, h);
+//		
+//		for (int i = 0; i < count; i++)
+//		{
+//			frames[i] = tmp[0][i];
+//			if (flipX)// || flipY)
+//				frames[i].flip(flipX, false); //flipY);
+//		}
+//		
+//		Animation tempAnimation = new Animation(.1f, frames);
+//		tempAnimation.setPlayMode(Animation.LOOP_PINGPONG);
+//		return tempAnimation;
+//	}
 	
 	public void upgrade()
 	{
-		level++;
+		changeToLevel(++level);
 		alive = true;
+//		buildingAnimation = everything.getBuildingAnimation(buildingStructure.animation(level) + team);
+//		alive = true;
+//		currentHealth = maxHealth;
+//		currentSprite = sprites.get(0);
+//		currentSprite.setSize(150, 150);//(float)(currentSprite.getWidth() * (1 + level * .5)), (float)(currentSprite.getHeight() * (1 + level * .5)));
+	}
+	
+	private void changeToLevel(int level)
+	{
+		this.level = level;
+		buildingAnimation = everything.getBuildingAnimation(buildingStructure.animation(level) + team);
+		super.changeToLevel(level, buildingStructure);
 		currentHealth = maxHealth;
-		currentSprite = sprites.get(0);
-		currentSprite.setSize(150, 150);//(float)(currentSprite.getWidth() * (1 + level * .5)), (float)(currentSprite.getHeight() * (1 + level * .5)));
 	}
 	
-	public static void loadSprites()
-	{
-		sprites = new ArrayList<Sprite>();
-		//ArrayList<Sprite> unitAnimation = new ArrayList<Animation>();
-		sprites.add(loadSprite(424, 0, 47, 96, false, 0));//, false));
-	}
+//	public static void loadSprites()
+//	{
+//		sprites = new ArrayList<Sprite>();
+//		//ArrayList<Sprite> unitAnimation = new ArrayList<Animation>();
+//		sprites.add(loadSprite(424, 0, 47, 96, false, 0));//, false));
+//	}
 	
-	private static Sprite loadSprite(int x, int y, int w, int h, boolean flipX, int team) //boolean flipY)
-	{
-		TextureRegion region = new TextureRegion(spriteSheet[team], x, y, w, h);
+//	private static Sprite loadSprite(int x, int y, int w, int h, boolean flipX, int team) //boolean flipY)
+//	{
+//		TextureRegion region = new TextureRegion(spriteSheet[team], x, y, w, h);
+//		
+//		Sprite temp = new Sprite(region); 
+//		
+//		if (flipX)// || flipY)
+//			temp.flip(flipX, false);//flipY);
+//		
+//		return temp;
+//	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
 		
-		Sprite temp = new Sprite(region); 
-		
-		if (flipX)// || flipY)
-			temp.flip(flipX, false);//flipY);
-		
-		return temp;
 	}
 	
 //	protected abstract void attack();

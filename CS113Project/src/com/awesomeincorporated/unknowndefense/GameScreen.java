@@ -83,9 +83,12 @@ public class GameScreen implements Screen
 	PriorityQueue<CommandIn> commandQueue = new PriorityQueue<CommandIn>(20, comparator);
 	
 	boolean ready = false;
+	
+	GL10 gl;
 
 	public GameScreen(UnknownDefense game, boolean multiplayer)
 	{
+		gl = Gdx.graphics.getGL10();
 		this.game = game;
 		this.multiplayer = multiplayer;
 		everything.reset();
@@ -159,15 +162,15 @@ public class GameScreen implements Screen
 		}
 		
 		everything.load(batch, maps[level]);
-		Texture sheetR = new Texture(Gdx.files.internal("images/sprite_sheet_red.png"));
-		Texture sheetB = new Texture(Gdx.files.internal("images/sprite_sheet_blue.png"));
+//		Texture sheetR = new Texture(Gdx.files.internal("images/sprite_sheet_red.png"));
+//		Texture sheetB = new Texture(Gdx.files.internal("images/sprite_sheet_blue.png"));
 
 		//<<<<<<< HEAD
-		Entity.loadStatics(sheetR, sheetB);
-		Actor.loadRange();
-		Unit.loadAnimations();
+//		Entity.loadStatics(sheetR, sheetB);
+//		Actor.loadRange();
+//		Unit.loadAnimations();
 		Projectile.loadProjectiles();
-		Building.loadSprites();
+//		Building.loadSprites();
 		sprite.setSize(1600, 1200);
 		font = new BitmapFont();
 		EverythingHolder.showRange = true;
@@ -180,13 +183,16 @@ public class GameScreen implements Screen
 		MyInputProcessor.loadCamera(camera, uiCamera);
 		MyInputProcessor.loadGame(this, gameUI3);
 		
-		Building.loadAnimations();
+//		Building.loadAnimations();
 
-		Building tower = new Stronghold(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
+		Building tower = new Building(maps[level].start1().x() + 20, maps[level].start1().y(), 1, 
+									everything.buildingStats.get("stronghold"));//new Stronghold(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
 		tower.upgrade();
 		everything.add(tower, 1);
 //		everything.add(tower, true, 1);
-		tower = new Stronghold(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
+//		tower = new Stronghold(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
+		tower = new Building(maps[level].start2().x() - 20, maps[level].start2().y(), 2, 
+				everything.buildingStats.get("stronghold"));
 		tower.upgrade();
 		everything.add(tower, 2);
 //		everything.add(tower, true, 2);
@@ -194,7 +200,8 @@ public class GameScreen implements Screen
 		int towerNumber = 1;
 		for (Coordinate c : everything.map().buildSites(1))
 		{
-			tower = new ArrowTower(c.x(), c.y(), 1, towerNumber++);
+			tower = new Building(c.x(), c.y(), 1, everything.buildingStats.get("arrowtower"));
+//			tower = new ArrowTower(c.x(), c.y(), 1, towerNumber++);
 			tower.upgrade();
 			everything.add(tower, 1);
 //			everything.add(tower, true, 1);
@@ -203,7 +210,8 @@ public class GameScreen implements Screen
 		towerNumber = 1;
 		for (Coordinate c : everything.map().buildSites(2))
 		{
-			tower = new ArrowTower(c.x(), c.y(), 2, towerNumber++);
+			tower = new Building(c.x(), c.y(), 2, everything.buildingStats.get("arrowtower"));
+//			tower = new ArrowTower(c.x(), c.y(), 2, towerNumber++);
 			tower.upgrade();
 			everything.add(tower, 2);
 //			everything.add(tower, true, 2);
@@ -272,7 +280,7 @@ public class GameScreen implements Screen
 		if (ready)
 			timeAccumulator += delta;
 		
-		GL10 gl = Gdx.graphics.getGL10();
+//		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClearColor(1, 1, 1, 1);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 //		if (gl.glGetError() != 0)
@@ -291,7 +299,7 @@ public class GameScreen implements Screen
 		uiCamera.update();
 		uiCamera.apply(gl);
 
-		if (!isPaused && timeAccumulator > stepTime && running)
+		if (!isPaused && timeAccumulator > stepTime && running && ready)
 		{
 			while (timeAccumulator > stepTime)
 			{
@@ -304,7 +312,7 @@ public class GameScreen implements Screen
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		everything.map().background().draw(batch);
-		everything.render();
+		everything.render(delta);
 		//font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
 		//font.draw(batch, "delta: " + delta, 800, 555);
 //		font.draw(batch, "fps: " + (1 / delta), 800, 555);
@@ -313,7 +321,7 @@ public class GameScreen implements Screen
 		batch.end();
 		batch.setProjectionMatrix(uiCamera.combined);
 		batch.begin();
-		gameUI3.render();
+		gameUI3.render(delta);
 		pauseCooldown++;
 		if (isPaused)
 			batch.draw(pauseRegion, 400 - pauseRegion.getRegionWidth() / 2 , 240 - pauseRegion.getRegionHeight() / 2);
@@ -558,7 +566,7 @@ public class GameScreen implements Screen
 			return;
 		
 		camera.position.x = everything.getHero().xCoord() + 40;
-		camera.position.y = everything.getHero().yCoord();
+		camera.position.y = everything.getHero().yCoord() + 40;
 //		boundCamera();
 	}
 

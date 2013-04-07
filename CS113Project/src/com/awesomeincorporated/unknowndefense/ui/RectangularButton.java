@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.awesomeincorporated.unknowndefense.entity.Entity;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -32,9 +33,12 @@ public class RectangularButton extends Button
 	
 
 	@Override
-	public void draw(SpriteBatch batch)
+	public void draw(SpriteBatch batch, float delta)
 	{
+		if (!clickable)
+			batch.setColor(.5f, .5f, .5f, 1f);
 		batch.draw(upButton, xCoord(), yCoord(), width, height);
+		batch.setColor(Color.WHITE);
 	}
 
 	@Override

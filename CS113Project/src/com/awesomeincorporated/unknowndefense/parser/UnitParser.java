@@ -105,7 +105,7 @@ public class UnitParser
 							minion.attackRange = tokenizeInt(getElement("attackrange"));
 							minion.speed = tokenizeFloat(getElement("speed"));
 							minion.cost = tokenizeInt(getElement("cost"));
-							minion.animation = tokenizeInt(getElement("animation"));
+							minion.animation = tokenizeString(getElement("animation"));
 							minion.ranged = tokenizeBool(getElement("ranged"));
 							minion.soundPack = tokenizeString(getElement("soundpack"));
 							minion.passiveSkill = tokenizeString(getElement("passiveskill"));
@@ -121,7 +121,7 @@ public class UnitParser
 							hero.attackRange = tokenizeInt(getElement("attackrange"));
 							hero.speed = tokenizeFloat(getElement("speed"));
 							hero.cost = tokenizeInt(getElement("cost"));
-							hero.animation = tokenizeInt(getElement("animation"));
+							hero.animation = tokenizeString(getElement("animation"));
 							hero.ranged = tokenizeBool(getElement("ranged"));
 							hero.soundPack = tokenizeString(getElement("soundpack"));
 							hero.activeSkill = tokenizeString(getElement("activeskill"));
@@ -138,8 +138,9 @@ public class UnitParser
 							building.attackSpeed = tokenizeInt(getElement("attackspeed"));
 							building.attackRange = tokenizeInt(getElement("attackrange"));
 							building.cost = tokenizeInt(getElement("cost"));
-							building.animation = tokenizeInt(getElement("animation"));
+							building.animation = tokenizeString(getElement("animation"));
 							building.ranged = tokenizeBool(getElement("ranged"));
+							building.soundPack = tokenizeString(getElement("soundpack"));
 							building.passiveSkill = tokenizeString(getElement("passiveskill"));
 							building.procSkill = tokenizeString(getElement("procskill"));
 							buildingStatsMap.put(element.getAttribute("type"), building);

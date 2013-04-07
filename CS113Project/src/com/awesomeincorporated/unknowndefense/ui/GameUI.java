@@ -15,7 +15,7 @@ public class GameUI
 	static SpriteBatch batch;
 	private Texture icons;
 	TextureRegion buttonFrame;
-	Button[] buttons = new Button[12];
+	Button[] buttons = new Button[13];
 	int width = Gdx.graphics.getWidth();
 	int height = Gdx.graphics.getHeight();
 	int buttonRadius = (int) (width * .95f / 20);
@@ -73,12 +73,12 @@ public class GameUI
 				return true;
 			}
 		};
-		buttons[10] = new RectangularButton(0, 250, (int)(143 * .55f), (int)(109 * .55f),
-				new TextureRegion(icons, 1905, 0, 143, 109));
+		buttons[10] = new RectangularButton(0, 245, (int)(143 * .55f), (int)(109 * .55f),
+				new TextureRegion(icons, 1905, 0, 143, 109));								// Item Shop
 		buttons[11] = new RectangularButton(580, 0, (int)(192 * .55f), (int)(137 * .55f),
 				everything.getObjectTexture(everything.getHeroName() + "button"));
-//				everything.getObjectTexture("swordfacebutton"));
-//				new TextureRegion(icons, 191, 137, 26, 167));	// Hero
+		buttons[12] = new RectangularButton(0, 180, (int)(143 * .55f), (int)(109 * .55f),
+				everything.getObjectTexture("upgradebutton"));								// Upgrades
 		screenX = Gdx.graphics.getWidth() / 2;
 		screenY = Gdx.graphics.getHeight() / 2;
 		
@@ -107,12 +107,13 @@ public class GameUI
 		TopUI.load(batch, everything);		
 	}
 	
-	public void render()
+	public void render(float delta)
 	{
+		update();
 		// Buttons
 		batch.draw(buttonFrame, stackTopX - 46, stackTopY - 355, buttonFrame.getRegionWidth() * .95f * 80 / 146, buttonFrame.getRegionHeight() * .95f * 80 / 146);
 		for (int i = 0; i < buttons.length; i++)
-			buttons[i].draw(batch);
+			buttons[i].draw(batch, delta);
 		
 		// Side Stats
 		batch.draw(cash, 1, 380);
@@ -130,5 +131,10 @@ public class GameUI
 //		font.draw(batch, "Next wave: " + everything.timeLeft(), screenX - 150, screenY - 20);
 //		font.draw(batch, "Time: " + everything.totalTime(), screenX - 150, screenY - 45);
 //		font.draw(batch, "Funds: " + everything.funds(), screenX - 150, screenY - 70);
+	}
+	
+	private void update()
+	{
+		buttons[9].setClickable(everything.activeCooldown() < 0);
 	}
 }

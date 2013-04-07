@@ -18,26 +18,11 @@ public class Hero extends Unit
 	SkillStructure activeSkill;
 	String pet;
 	
-//	public Hero(int x, int y, boolean ranged, int team, ListIterator<Coordinate> p) 
-//	{
-//		super(x, y, ranged, team, p);
-//		stance = 1;
-//		alive = false;
-//		activeSkill = everything.getSkill("testfireball");
-////		activeSkill = new TestFireBall();
-//	}
-	
 	public Hero(int x, int y, int team, ListIterator<Coordinate> p, HeroStructure struct)
 	{
 		super(x, y, struct.ranged(0), team, p, struct);
 		this.level = 0;
-		maxHealth = struct.maxHealth(level);
-		currentHealth = maxHealth;
-		damage = struct.damage(level);
-		attackSpeed = struct.attackSpeed(level);
-		attackRange = struct.attackRange(level);
-		speed = struct.speed(level);
-		animation = struct.animation(level);
+//		animation = struct.animation(level);
 		stance = 1;
 		alive = false;
 		activeSkill = everything.getSkill(struct.activeSkill(level));
@@ -46,12 +31,12 @@ public class Hero extends Unit
 			activeCooldown = activeSkill.cooldown.get(0);
 			activeCooldownCounter = activeCooldown;
 		}
-		pet = struct.pet(level);
-		
-//		if (!struct.passiveSkill(level).equals("empty"))
-//			this.loadPassiveSkill(everything.getSkill(struct.passiveSkill(level)));
-//		if (!struct.attackSound(level).equals("empty"))
-//			this.attackSound = everything.getSound(struct.attackSound(level));
+		pet = struct.pet(level);		
+	}
+	
+	public int activeCooldown()
+	{
+		return activeCooldownCounter;
 	}
 	
 	public String pet()
@@ -152,7 +137,10 @@ public class Hero extends Unit
 		ySpeed = 0;
 		stance = 1;
 		previousStance = 1;
+		target = null;
+		attackCooldown = 0;
 		respawnCounter = respawnTime;
+		this.advance();
 	}
 	
 	public int stance()

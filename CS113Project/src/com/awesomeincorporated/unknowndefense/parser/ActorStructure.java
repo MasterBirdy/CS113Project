@@ -11,53 +11,52 @@ public abstract class ActorStructure
 	ArrayList<Integer> attackRange;
 	ArrayList<Integer> cost;
 	ArrayList<Boolean> ranged;
-	ArrayList<Integer> animation;
-	ArrayList<String> attackSound;
+//	ArrayList<Integer> animation;
+	ArrayList<String> animation;
 	ArrayList<String> passiveSkill;
 	ArrayList<String> procSkill;
 	ArrayList<String> soundPack;
 	
 	public String procSkill(int level)
 	{
-		if (procSkill.size() > level)
+		if (level < procSkill.size())
 			return procSkill.get(level);
-		return procSkill.get(procSkill.size());
+		return procSkill.get(procSkill.size() - 1);
 	}
 	
 	public String soundPack(int level)
 	{
-		if (soundPack.size() > level)
+		if (level < soundPack.size())
 			return soundPack.get(level);
-		return soundPack.get(soundPack.size());
+		return soundPack.get(soundPack.size() - 1);
 	}
 	
 	public String passiveSkill(int level)
 	{
-		return passiveSkill.get(level);
-	}
-	
-	public String attackSound(int level)
-	{
-		if (attackSound.size() > level)
-			return attackSound.get(level);
-		return attackSound.get(attackSound.size());
+		if (level < passiveSkill.size())
+			return passiveSkill.get(level);
+		return passiveSkill.get(passiveSkill.size() - 1);
 	}
 	
 	public int maxHealth(int level)
 	{
-		if (maxHealth.size() > level)
+		if (level < maxHealth.size())
 			return maxHealth.get(level);
-		return maxHealth.get(maxHealth.size());
+		return maxHealth.get(maxHealth.size() - 1);
 	}
 	
 	public int damage(int level)
 	{
-		return damage.get(level);
+		if (level < damage.size())
+			return damage.get(level);
+		return damage.get(damage.size() - 1);
 	}
 	
 	public int attackSpeed(int level)
 	{
-		return attackSpeed.get(level);
+		if (level < attackSpeed.size())
+			return attackSpeed.get(level);
+		return attackSpeed.get(attackSpeed.size() - 1);
 	}
 	
 //	public int attackCoolDown(int level)
@@ -67,21 +66,29 @@ public abstract class ActorStructure
 	
 	public int attackRange(int level)
 	{
-		return attackRange.get(level);
+		if (level < attackRange.size())
+			return attackRange.get(level);
+		return attackRange.get(attackRange.size() - 1);
 	}
 	
 	public int cost(int level)
 	{
-		return cost.get(level);
+		if (level < cost.size())
+			return cost.get(level);
+		return cost.get(cost.size() - 1);
 	}
 	
 	public boolean ranged(int level)
 	{
-		return ranged.get(level);
+		if (level < ranged.size())
+			return ranged.get(level);
+		return ranged.get(ranged.size() - 1);
 	}
 	
-	public int animation(int level)
+	public String animation(int level)
 	{
-		return animation.get(level);
+		if (level < animation.size())
+			return animation.get(level);
+		return animation.get(animation.size() - 1);
 	}
 }

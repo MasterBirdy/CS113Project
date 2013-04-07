@@ -9,7 +9,7 @@ public class HeroPortrait extends Sprite
 	int startX = 0, startY = 0,
 		endX = 0, endY = 0,
 		speedX, speedY,
-		hold = 200;
+		hold = 0;
 	public HeroPortrait(TextureRegion t)
 	{
 		super(t);

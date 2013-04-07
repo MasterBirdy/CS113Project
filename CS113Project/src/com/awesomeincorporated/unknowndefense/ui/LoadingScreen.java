@@ -19,17 +19,15 @@ public class LoadingScreen implements Screen
 	static SpriteBatch batch;
 	int i = 300;
 	int gettingready = 0;
-	float fade = 0;
+	float fade = 0, fade2 = 1.1f;
 	UnknownDefense game;
 	boolean start = false, loaded = false;
 	TextureRegion loading;
 	GL10 gl = Gdx.graphics.getGL10();
+	
 	public LoadingScreen(UnknownDefense game)
 	{
 		loading = new TextureRegion(new Texture(Gdx.files.internal("images/teamlogo.png")), 0, 0, 800, 480);
-//		GL10 gl = Gdx.graphics.getGL10();
-//		gl.glClearColor(1, 1, 1, 1);
-//		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		this.game = game;
 		batch = new SpriteBatch();
 	}
@@ -44,7 +42,12 @@ public class LoadingScreen implements Screen
 	{
 		if (--gettingready > 0)
 			return;
-		gl.glClearColor(fade, fade, fade, 1);
+		
+		if (fade2 > 1)
+			gl.glClearColor(fade, fade, fade, 1);
+		else
+			gl.glClearColor(fade2, fade2, fade2, 1);
+		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		fade += 0.01;
@@ -61,7 +64,7 @@ public class LoadingScreen implements Screen
 //	//		gameScreen = new GameScreen(this);
 //			game.settingsScreen = new SettingsScreen(game);
 //		}
-		if (start && !loaded)
+		if (start && !loaded && i < 0)
 		{
 			everything = new EverythingHolder();
 //			game.mainMenuScreen = new MainMenuScreen(game);
@@ -82,9 +85,13 @@ public class LoadingScreen implements Screen
 		
 		if (--i < 0 && loaded && everything != null && everything.finished())
 		{
-			GameScreen.setEverything(everything);
-			game.mainMenuScreen = new MainMenuScreen(game, everything);
-			game.setScreen(game.mainMenuScreen);
+			fade2 -= 0.05f;
+			if (fade2 < -.1)
+			{
+				GameScreen.setEverything(everything);
+				game.mainMenuScreen = new MainMenuScreen(game, everything);
+				game.setScreen(game.mainMenuScreen);
+			}
 		}
 		
 	}

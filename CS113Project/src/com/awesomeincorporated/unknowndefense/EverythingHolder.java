@@ -18,11 +18,14 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class EverythingHolder 
 {
@@ -54,7 +57,8 @@ public class EverythingHolder
 	boolean spawning;
 	boolean running;
 	
-	String[] heroNames = {"mrwizard", "arroweyes"};
+	//	mrwizard swordface arroweyes
+	String[] heroNames = {"mrwizard", "swordface"};
 	
 //	heroNames[0] = "mrwizard";
 //	heroNames[1] = "arroweyes";
@@ -79,8 +83,13 @@ public class EverythingHolder
 	HashMap<String, Sound> sounds = new HashMap<String, Sound>();
 	HashMap<String, SoundPack> unitSounds = new HashMap<String, SoundPack>();
 	HashMap<String, TextureRegion> objectTextures = new HashMap<String, TextureRegion>();
+	HashMap<String, UnitAnimation> unitAnimations = new HashMap<String, UnitAnimation>();
+	public HashMap<String, BuildingAnimation> buildingAnimations = new HashMap<String, BuildingAnimation>();
 	
 	public BitmapFont[] font = new BitmapFont[3]; //, font2;
+	private Texture teamTextures[] = new Texture[2];
+	
+	String[] color = {"blue", "red"};
 	
 	boolean finished = false;
 		
@@ -116,6 +125,8 @@ public class EverythingHolder
 		loadEffects();
 		loadSounds();
 		loadTextures();
+//		loadTeams(color[0], color[1]);
+//		loadUnitAnimations();
 		
 //		font = new BitmapFont();
 //		font2 = new BitmapFont();
@@ -123,6 +134,297 @@ public class EverythingHolder
 		finished = true;
 //		music = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
 //		music.setLooping(true);
+	}
+	
+	public int activeCooldown()
+	{
+		return playerHeroes[team - 1].activeCooldown();
+	}
+	
+	public void loadTeams(String one, String two, String hone, String htwo)
+	{
+		teamTextures[0] = new Texture(Gdx.files.internal("images/sprite_sheet_" + one + ".png"));
+		teamTextures[1] = new Texture(Gdx.files.internal("images/sprite_sheet_" + two + ".png"));
+		loadUnitAnimations();
+		heroNames[0] = hone;
+		heroNames[1] = htwo;
+//		initializeHeroes()
+		
+	}
+	
+	public UnitAnimation getUnitAnimation(String name)
+	{
+		return unitAnimations.get(name);
+	}
+	
+	public BuildingAnimation getBuildingAnimation(String name)
+	{
+		return buildingAnimations.get(name);
+	}
+	
+//	public Animation getUnitAnimation(String name, int direction)
+//	{
+//		System.out.println("Name " + name);
+//		return unitAnimations.get(name).getAnimation(direction);
+//	}
+	
+	public Vector2 getUnitFeet(String name, int direction)
+	{
+		return unitAnimations.get(name).getFeet(direction);
+	}
+	
+	public void loadUnitAnimations()
+	{
+		System.out.println("Loading unit animations");
+//		String[] color = {"blue", "red"};
+//		ArrayList<Animation> unitAnimation;
+		Animation[] animation = new Animation[8];
+//		UnitAnimation unitAnimation = new UnitAnimation();
+		Vector2[] points = new Vector2[8];
+		for (int i = 0; i < color.length; i++)
+		{
+			// Swordsman
+			animation = new Animation[8];
+			points = new Vector2[8];
+			
+			animation[0] = loadAnimation(0, 0, 29, 47, 5, false, i);	// Down walk
+			animation[1] = loadAnimation(0, 47, 34, 43, 5, false, i);	// Left walk
+			animation[2] = loadAnimation(0, 47, 34, 43, 5, true, i);	// Right walk
+			animation[3] = loadAnimation(0, 90, 31, 44, 5, false, i);	// Up walk
+			animation[4] = loadAnimation(0, 134, 40, 46, 3, false, i);	// Down attack
+			animation[5] = loadAnimation(0, 180, 38, 45, 3, false, i);	// Left attack
+			animation[6] = loadAnimation(0, 180, 38, 45, 3, true, i);	// Right attack
+			animation[7] = loadAnimation(0, 225, 46, 42, 3, false, i);	// Up attack
+			
+			points[0] = new Vector2(15, 5);
+			points[1] = new Vector2(19, 2);
+			points[2] = new Vector2(16, 2);
+			points[3] = new Vector2(16, 2);
+			points[4] = new Vector2(26, 8);
+			points[5] = new Vector2(24, 4);
+			points[6] = new Vector2(15, 4);
+			points[7] = new Vector2(16, 1);
+			
+			unitAnimations.put("swordsman" + (i + 1), new UnitAnimation(animation, points));
+			System.out.println("Puting: swordsman" + i + 1);
+//			animationsR.add(unitAnimation);
+			
+			// Archer			
+			animation = new Animation[8];
+			points = new Vector2[8];
+			
+			animation[0] = loadAnimation(169, 0, 35, 46, 5, false, i);		// Down walk
+			animation[1] = loadAnimation(169, 46, 35, 42, 5, false, i);		// Left walk
+			animation[2] = loadAnimation(169, 46, 35, 42, 5, true, i);		// Right walk
+			animation[3] = loadAnimation(169, 88, 41, 46, 5, false, i);		// Up walk
+			animation[4] = loadAnimation(169, 134, 33, 44, 4, false, i);	// Down attack
+			animation[5] = loadAnimation(169, 178, 39, 46, 4, false, i);	// Left attack
+			animation[6] = loadAnimation(169, 178, 39, 46, 4, true, i);		// Right attack
+			animation[7] = loadAnimation(169, 224, 40, 45, 4, false, i);	// Up attack
+			
+			points[0] = new Vector2(15, 2);
+			points[1] = new Vector2(17, 1);
+			points[2] = new Vector2(19, 1);
+			points[3] = new Vector2(22, 2);
+			points[4] = new Vector2(15, 1);
+			points[5] = new Vector2(20, 5);
+			points[6] = new Vector2(19, 5);
+			points[7] = new Vector2(18, 1);
+			
+			unitAnimations.put("archer" + (i + 1), new UnitAnimation(animation, points));
+			
+			// Monk
+			animation = new Animation[8];
+			points = new Vector2[8];
+			
+			animation[0] = loadAnimation(0, 267, 30, 41, 5, false, i);
+			animation[1] = loadAnimation(0, 308, 27, 42, 5, false, i);
+			animation[2] = loadAnimation(0, 308, 27, 42, 5, true, i);
+			animation[3] = loadAnimation(0, 350, 30, 41, 5, false, i);
+			animation[4] = loadAnimation(0, 391, 30, 41, 4, false, i);
+			animation[5] = loadAnimation(0, 432, 27, 41, 4, false, i);
+			animation[6] = loadAnimation(0, 432, 27, 41, 4, true, i);
+			animation[7] = loadAnimation(0, 474, 39, 41, 4, false, i);
+			
+			points[0] = new Vector2(16, 2);
+			points[1] = new Vector2(12, 2);
+			points[2] = new Vector2(16, 2);
+			points[3] = new Vector2(16, 2);
+			points[4] = new Vector2(16, 2);
+			points[5] = new Vector2(12, 1);
+			points[6] = new Vector2(16, 1);
+			points[7] = new Vector2(19, 2);
+			
+			unitAnimations.put("monk" + (i + 1), new UnitAnimation(animation, points));
+			
+			// Mage
+			animation = new Animation[8];
+			points = new Vector2[8];
+			
+			animation[0] = loadAnimation(169, 269, 33, 48, 5, false, i);
+			animation[1] = loadAnimation(169, 317, 30, 43, 5, false, i);
+			animation[2] = loadAnimation(169, 317, 30, 43, 5, true, i);
+			animation[3] = loadAnimation(169, 360, 33, 45, 5, false, i);
+			animation[4] = loadAnimation(169, 405, 45, 46, 4, false, i);
+			animation[5] = loadAnimation(169, 451, 36, 43, 4, false, i);
+			animation[6] = loadAnimation(169, 451, 36, 43, 4, true, i);
+			animation[7] = loadAnimation(169, 494, 40, 45, 4, false, i);
+			
+			points[0] = new Vector2(16, 5);
+			points[1] = new Vector2(14, 1);
+			points[2] = new Vector2(17, 1);
+			points[3] = new Vector2(16, 5);
+			points[4] = new Vector2(28, 4);
+			points[5] = new Vector2(20, 1);
+			points[6] = new Vector2(17, 1);
+			points[7] = new Vector2(16, 3);
+			
+			unitAnimations.put("mage" + (i + 1), new UnitAnimation(animation, points));
+			
+			/////////////////////////// STIL NEED TO DO POINTS FOR NINJA TO ELEMENTAL ////////////////
+			// Ninja
+			animation = new Animation[8];
+			points = new Vector2[8];
+			
+			animation[0] = loadAnimation(374, 0, 31, 42, 5, false, i);
+			animation[1] = loadAnimation(374, 42, 29, 41, 5, false, i);
+			animation[2] = loadAnimation(374, 42, 29, 41, 5, true, i);
+			animation[3] = loadAnimation(374, 83, 31, 41, 5, false, i);
+			animation[4] = loadAnimation(374, 124, 45, 41, 4, false, i);
+			animation[5] = loadAnimation(374, 165, 30, 41, 4, false, i);
+			animation[6] = loadAnimation(374, 165, 30, 41, 4, true, i);
+			animation[7] = loadAnimation(374, 206, 42, 40, 4, false, i);
+			
+			points[0] = new Vector2(15, 5);
+			points[1] = new Vector2(19, 2);
+			points[2] = new Vector2(16, 2);
+			points[3] = new Vector2(16, 2);
+			points[4] = new Vector2(26, 8);
+			points[5] = new Vector2(24, 4);
+			points[6] = new Vector2(15, 4);
+			points[7] = new Vector2(16, 1);
+			
+			unitAnimations.put("ninja" + (i + 1), new UnitAnimation(animation, points));
+			
+			// Eagle
+			animation = new Animation[8];
+			points = new Vector2[8];
+			
+			animation[0] = loadAnimation(374, 246, 44, 84, 4, false, i);
+			animation[1] = loadAnimation(374, 330, 45, 84, 4, false, i);
+			animation[2] = loadAnimation(374, 330, 45, 84, 4, true, i);
+			animation[3] = loadAnimation(374, 414, 43, 78, 4, false, i);
+			animation[4] = loadAnimation(374, 492, 44, 59, 4, false, i);
+			animation[5] = loadAnimation(374, 551, 44, 59, 4, false, i);
+			animation[6] = loadAnimation(374, 551, 44, 59, 4, true, i);
+			animation[7] = loadAnimation(374, 610, 43, 57, 4, false, i);
+			
+			points[0] = new Vector2(15, 5);
+			points[1] = new Vector2(19, 2);
+			points[2] = new Vector2(16, 2);
+			points[3] = new Vector2(16, 2);
+			points[4] = new Vector2(26, 8);
+			points[5] = new Vector2(24, 4);
+			points[6] = new Vector2(15, 4);
+			points[7] = new Vector2(16, 1);
+			
+			unitAnimations.put("eagle" + (i + 1), new UnitAnimation(animation, points));
+			
+			// Wolf
+			animation = new Animation[8];
+			points = new Vector2[8];
+			
+			animation[0] = loadAnimation(554, 0, 18, 53, 4, false, i);
+			animation[1] = loadAnimation(554, 53, 56, 31, 4, false, i);
+			animation[2] = loadAnimation(554, 53, 56, 31, 4, true, i);
+			animation[3] = loadAnimation(554, 84, 20, 50, 4, false, i);
+			animation[4] = loadAnimation(554, 134, 24, 55, 4, false, i);
+			animation[5] = loadAnimation(554, 189, 56, 35, 4, false, i);
+			animation[6] = loadAnimation(554, 189, 56, 35, 4, true, i);
+			animation[7] = loadAnimation(554, 224, 22, 48, 4, false, i);
+			
+			points[0] = new Vector2(15, 5);
+			points[1] = new Vector2(19, 2);
+			points[2] = new Vector2(16, 2);
+			points[3] = new Vector2(16, 2);
+			points[4] = new Vector2(26, 8);
+			points[5] = new Vector2(24, 4);
+			points[6] = new Vector2(15, 4);
+			points[7] = new Vector2(16, 1);
+			
+			unitAnimations.put("wolf" + (i + 1), new UnitAnimation(animation, points));
+	
+			// Elemental
+			animation = new Animation[8];
+			points = new Vector2[8];
+			
+			animation[0] = loadAnimation(554, 272, 51, 38, 5, false, i);
+			animation[1] = loadAnimation(554, 310, 32, 38, 5, false, i);
+			animation[2] = loadAnimation(554, 310, 32, 38, 5, true, i);
+			animation[3] = loadAnimation(554, 348, 50, 39, 5, false, i);
+			animation[4] = loadAnimation(554, 387, 51, 38, 4, false, i);
+			animation[5] = loadAnimation(554, 425, 32, 37, 4, false, i);
+			animation[6] = loadAnimation(554, 425, 32, 37, 4, true, i);
+			animation[7] = loadAnimation(554, 462, 56, 39, 4, false, i);
+			
+			points[0] = new Vector2(15, 5);
+			points[1] = new Vector2(19, 2);
+			points[2] = new Vector2(16, 2);
+			points[3] = new Vector2(16, 2);
+			points[4] = new Vector2(26, 8);
+			points[5] = new Vector2(24, 4);
+			points[6] = new Vector2(15, 4);
+			points[7] = new Vector2(16, 1);
+			
+			unitAnimations.put("elemental" + (i + 1), new UnitAnimation(animation, points));
+			
+			// Stronghold
+			animation = new Animation[1];
+			points = new Vector2[1];
+			
+			animation[0] = loadAnimation(0, 670, 72, 128, 1, false, i);
+			points[0] = new Vector2(42, 8);
+			
+			buildingAnimations.put("stronghold" + (i + 1), new BuildingAnimation(animation, points));
+			
+			// Arrowtower
+			animation = new Animation[1];
+			points = new Vector2[1];
+			
+			animation[0] = loadAnimation(0, 580, 56, 90, 3, false, i);
+			points[0] = new Vector2(28, 2);
+			
+			buildingAnimations.put("arrowtower" + (i + 1), new BuildingAnimation(animation, points));
+			
+			// Rubble
+			animation = new Animation[1];
+			points = new Vector2[1];
+			
+			animation[0] = loadAnimation(0, 515, 47, 65, 3, false, i);
+			points[0] = new Vector2(23, 7);
+			
+			buildingAnimations.put("rubble" + (i + 1), new BuildingAnimation(animation, points));
+		}
+		System.out.println("Loaded unit animations");
+	}
+	
+	private Animation loadAnimation(int x, int y, int w, int h, int count, boolean flipX, int team) // team0 = red, team1 = blue
+	{
+		TextureRegion[] frames = new TextureRegion[count];
+		
+		TextureRegion temp = new TextureRegion(teamTextures[team], x, y, w * count, h);
+		TextureRegion[][] tmp = temp.split(w, h);
+		
+		for (int i = 0; i < count; i++)
+		{
+			frames[i] = tmp[0][i];
+			if (flipX)// || flipY)
+				frames[i].flip(flipX, false);//flipY);
+		}
+		
+		Animation tempAnimation = new Animation(.05f, frames);
+		tempAnimation.setPlayMode(Animation.LOOP_PINGPONG);
+		return tempAnimation;
 	}
 	
 	public String getHeroName()
@@ -177,9 +479,15 @@ public class EverythingHolder
 	{
 		objectTextures.put("cannonball", new TextureRegion(new Texture(Gdx.files.internal("images/cannonprojectile.png")), 0, 0, 16, 16));
 		Texture icons = new Texture(Gdx.files.internal("images/buttons_sheet.png"));
+		objectTextures.put("fireball", new TextureRegion(icons, 1814, 0, 90, 90));
+		objectTextures.put("fireattack", new TextureRegion(icons, 1814, 90, 73, 73));
 		objectTextures.put("swordfacebutton", new TextureRegion(icons, 0, 1377, 192, 137));
 		objectTextures.put("arroweyesbutton", new TextureRegion(icons, 192, 1377, 192, 137));
 		objectTextures.put("mrwizardbutton", new TextureRegion(icons, 384, 1377, 192, 137));
+		objectTextures.put("upgradebutton", new TextureRegion(icons, 1905, 109, 143, 109));
+		objectTextures.put("confirmbutton", new TextureRegion(icons, 367, 0, 152, 153));
+		objectTextures.put("cancelbutton", new TextureRegion(icons, 367, 153, 152, 153));
+		objectTextures.put("backbutton", new TextureRegion(icons, 367, 306, 152, 153));
 	}
 	
 	public void loadSounds()
@@ -251,10 +559,18 @@ public class EverythingHolder
 	
 	public ParticleEffect getEffect(String e)
 	{
+//		System.out.println("Get");
+//		if (Gdx.app.getType() == ApplicationType.Android)
+//			return null;
 		if (particleEffects.containsKey(e))
 			return new ParticleEffect(particleEffects.get(e));
 		System.out.println("Missing Effect");
 		return null;
+	}
+	
+	public int team()
+	{
+		return team;
 	}
 	
 	public int winCondition()
@@ -429,7 +745,7 @@ public class EverythingHolder
 	
 	public void add(int unit, int team)
 	{
-		System.out.println("Trying to add " + unit + " on team " + team);
+//		System.out.println("Trying to add " + unit + " on team " + team);
 //		if (team == this.team)//(team == 0)
 //		{
 			if ((team == 1 ? funds1 : funds2) < 20)
@@ -532,7 +848,7 @@ public class EverythingHolder
 		return temp;
 	}
 	
-	public void render()
+	public void render(float delta)
 	{
 //		for (Actor a : teams[0])
 //		{
@@ -545,7 +861,7 @@ public class EverythingHolder
 //				a.draw(batch);
 //		}
 		for (Projectile p : projectiles)
-			p.draw(batch);
+			p.draw(batch, delta);
 		
 		// Reordering changed entities for proper depth rendering
 //		Iterator<Entity> entityIter = entities.iterator();
@@ -573,7 +889,7 @@ public class EverythingHolder
 		{
 			e = entities.get(i);
 			if (e instanceof Building || (e instanceof Actor && ((Entity)e).isAlive()) || (e instanceof Skill && ((Entity)e).isAlive()))
-				e.draw(batch);
+				e.draw(batch, delta);
 			else if (!(e instanceof Hero))
 			{
 //				System.out.println("DEAD");
@@ -644,7 +960,7 @@ public class EverythingHolder
 //		}
 		for (ParticleEffect pe : effects)
 		{
-			pe.draw(batch, 0.01f);
+			pe.draw(batch, delta * 0.5f);
 		}
 		Iterator<ParticleEffect> iter = effects.iterator();
 //		ParticleEffect e = new ParticleEffect();

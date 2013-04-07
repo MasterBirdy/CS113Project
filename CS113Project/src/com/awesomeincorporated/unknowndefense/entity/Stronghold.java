@@ -8,7 +8,8 @@ public class Stronghold extends Building
 {
 	public Stronghold(int x, int y, int team)
 	{
-		super(x, y, true, team, 0, null);
+//		super(x, y, true, team, 0, null);
+		super(x, y, team, null);
 		maxHealth = 400;
 		currentHealth = maxHealth;
 		damage = 12;
@@ -65,12 +66,12 @@ public class Stronghold extends Building
 	}
 
 	@Override
-	public void draw(SpriteBatch batch)
+	public void draw(SpriteBatch batch, float delta)
 	{
-		super.draw(batch);
+		super.draw(batch, delta);
 		for (Projectile p : projectiles)
 		{
-			p.draw(batch);
+			p.draw(batch, delta);
 		}
 		if (this.isAlive() == false)
 		{

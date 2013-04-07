@@ -1,6 +1,7 @@
 package com.awesomeincorporated.unknowndefense;
 
 import com.awesomeincorporated.unknowndefense.ui.Button;
+import com.awesomeincorporated.unknowndefense.ui.HeroSelectScreen;
 import com.awesomeincorporated.unknowndefense.ui.RoundButton;
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
@@ -54,6 +55,8 @@ public class MainMenuScreen implements Screen
 	static ParticleEffect rainbow = new ParticleEffect();
 	boolean newGameStarted;
 	TextureRegion gameLogo, buttonFrame;
+	
+	HeroSelectScreen selectScreen;
 	
 	EverythingHolder everything;
 
@@ -156,9 +159,11 @@ public class MainMenuScreen implements Screen
 		
 		
 		rainbow = everything.getEffect("rainbowtrailsparkle");
+		System.out.println("Trying");
 		rainbow.setPosition(332, 423);
 		rainbow.start();
 		
+//		selectScreen.loadEverything(everything, batch);
 		Gdx.graphics.setVSync(true);
 		//Gdx.input.setCursorCatched(false);
 	}
@@ -194,7 +199,7 @@ public class MainMenuScreen implements Screen
 //		settingsSprite.draw(batch);
 		
 		for (Button button : buttons)
-			button.draw(batch);
+			button.draw(batch, delta);
 		
 //		if (newGameStarted)
 //			continueSprite.draw(batch);
@@ -210,10 +215,10 @@ public class MainMenuScreen implements Screen
 		if (rainbow.isComplete())
 			rainbow.start();
 		
-//		fire.draw(batch, .01f);//, delta);
+		fire.draw(batch, delta * .5f);//, delta);
 		blood.setPosition(x, height - y);
-		blood.draw(batch, .01f);
-		rainbow.draw(batch, 0.01f);
+		blood.draw(batch, delta * .5f);
+		rainbow.draw(batch, delta * .5f);
 		
 		batch.end();
 	}
@@ -258,15 +263,20 @@ public class MainMenuScreen implements Screen
 	{
 		if (h == 0) // Single-player
 		{
-//			startMusic.stop();
-			game.gameScreen = new GameScreen(game, false);
+			selectScreen = new HeroSelectScreen(everything, game);
+			game.setScreen(selectScreen);
 			newGameStarted = true;
-			game.setScreen(game.gameScreen);
+//			startMusic.stop();
+//			everything.loadTeams("red", "blue", "mrwizard", "swordface");
+//			game.gameScreen = new GameScreen(game, false);
+//			newGameStarted = true;
+//			game.setScreen(game.gameScreen);
 			return;
 		}
 		else if (h == 1) // Multi-player
 		{
 //			startMusic.stop();
+			everything.loadTeams("blue", "red", "mrwizard", "swordface");
 			game.gameScreen = new GameScreen(game, true);
 			newGameStarted = true;
 			game.setScreen(game.gameScreen);
@@ -280,6 +290,8 @@ public class MainMenuScreen implements Screen
 		}
 		else if (h == 3) // Quit
 		{
+//			selectScreen = new HeroSelectScreen(everything, game);
+//			game.setScreen(selectScreen);
 //			startMusic.stop();
 			System.exit(0);
 		}

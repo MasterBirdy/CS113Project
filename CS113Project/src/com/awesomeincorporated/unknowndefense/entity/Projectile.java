@@ -53,7 +53,7 @@ public abstract class Projectile extends Entity {
 	}
 
 	@Override
-	public abstract void draw(SpriteBatch batch);
+	public abstract void draw(SpriteBatch batch, float delta);
 
 //	@Override
 //	public abstract void update();

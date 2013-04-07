@@ -11,7 +11,8 @@ public class CannonProjectile extends Projectile {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(SpriteBatch batch, float delta) 
+	{
 		// TODO Auto-generated method stub
 		batch.draw(projectileIndicator[4], xCoord, yCoord);
 	}

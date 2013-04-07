@@ -15,7 +15,7 @@ public class ArrowProjectile extends Projectile {
 		//speed = 3f;
 	}
 	@Override
-	public void draw(SpriteBatch batch) 
+	public void draw(SpriteBatch batch, float delta) 
 	{
 		batch.draw(projectileIndicator[3], xCoord, yCoord, projectileIndicator[0].getRegionWidth() / 2, projectileIndicator[0].getRegionHeight() / 2, projectileIndicator[0].getRegionWidth(), projectileIndicator[0].getRegionWidth(), 1, 1, (float)angle);
 //		if (this.xSpeed < 0)

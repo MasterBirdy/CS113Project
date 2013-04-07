@@ -6,8 +6,10 @@ public abstract class UnitStructure extends ActorStructure
 {
 	ArrayList<Float> speed;
 	
-	public float speed(int i)
+	public float speed(int level)
 	{
-		return speed.get(i);
+		if (level < speed.size())
+			return speed.get(level);
+		return speed.get(speed.size() - 1);
 	}
 }

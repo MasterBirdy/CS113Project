@@ -6,22 +6,18 @@ public class HeroStructure extends UnitStructure
 {
 	ArrayList<String> activeSkill;
 	ArrayList<String> pet;
-//	ArrayList<Integer> maxHealth;
-//	ArrayList<Integer> damage;
-//	ArrayList<Integer> attackSpeed;
-//	ArrayList<Integer> attackCoolDown;
-//	ArrayList<Integer> attackRange;
-//	ArrayList<Integer> cost;
-//	ArrayList<Boolean> ranged;	
-//	ArrayList<Float> speed;
 	
 	public String activeSkill(int level)
 	{
-		return activeSkill.get(level);
+		if (level < activeSkill.size())
+			return activeSkill.get(level);
+		return activeSkill.get(activeSkill.size() - 1);
 	}
 	
 	public String pet(int level)
 	{
-		return pet.get(level);
+		if (level < pet.size())
+			return pet.get(level);
+		return pet.get(pet.size() - 1);
 	}
 }

@@ -45,21 +45,26 @@ public abstract class Actor extends Entity
 	Sound attackSound;
 	SoundPack soundPack;
 	
-	int animation = 0, level = 0;
+	int level = 0;
 
 	public Actor(int x, int y, boolean ranged, int team, ActorStructure a)
 	{
 		super(x, y, team);
 		alive = true;
+		maxHealth = a.maxHealth(level);
+		currentHealth = maxHealth;
+		damage = a.damage(level);
+		attackSpeed = a.attackSpeed(level);
+		attackRange = a.attackRange(level);
 		this.ranged = ranged;
 		skillEffects = new ArrayList<SkillEffect>(5);
-		if (this instanceof Building)
-		{
-			this.attackSound = everything.getSound("thwp");
-			this.soundPack = everything.getUnitSounds("minionarcher");
-		}
-		else
-		{
+//		if (this instanceof Building)
+//		{
+////			this.attackSound = everything.getSound("thwp");
+//			this.soundPack = everything.getUnitSounds("minionarcher");
+//		}
+//		else
+//		{
 			if (!a.passiveSkill(level).equals("empty"))
 				this.loadPassiveSkill(everything.getSkill(a.passiveSkill(level)));
 			if (!a.procSkill(level).equals("empty"))
@@ -68,12 +73,12 @@ public abstract class Actor extends Entity
 				this.soundPack = everything.getUnitSounds(a.soundPack(level));
 //			if (!a.attackSound(level).equals("empty"))
 //				this.attackSound = everything.getSound(a.attackSound(level));
-		}
+//		}
 	}
 	
 	public void invis(int i)
 	{
-		System.out.println("Going invis");
+//		System.out.println("Going invis");
 		invis = i;
 		
 		this.attacking = false;
@@ -85,8 +90,9 @@ public abstract class Actor extends Entity
 	
 	public void stun(int stun)
 	{
-		System.out.println("Stun");
+//		System.out.println("Stun");
 		attackCooldown = stun;
+		particleOnSelf("attackspeedbuff");
 //		if (isAlive())
 //		{
 //			if (attackCooldown < stun)
@@ -116,19 +122,19 @@ public abstract class Actor extends Entity
 		return (float)currentHealth / maxHealth;
 	}
 	
-	static public void loadRange()
-	{
-		rangeIndicator = new TextureRegion[2];
-		rangeIndicator[0] = new TextureRegion(spriteSheet[0], 472, 40, 40, 40);
-		rangeIndicator[1] = new TextureRegion(spriteSheet[0], 472, 0, 40, 40);
-		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
-		fire.setPosition(50, 50);
-		fire.start();
-	}
+//	static public void loadRange()
+//	{
+//		rangeIndicator = new TextureRegion[2];
+//		rangeIndicator[0] = new TextureRegion(spriteSheet[0], 472, 40, 40, 40);
+//		rangeIndicator[1] = new TextureRegion(spriteSheet[0], 472, 0, 40, 40);
+//		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
+//		fire.setPosition(50, 50);
+//		fire.start();
+//	}
 	
 	public void takeSkillEffect(SkillEffect skill)
 	{
-		System.out.println("Taking SKILL");
+//		System.out.println("Taking SKILL");
 		firstEmpty = skillEffects.indexOf(nullSkillEffect);
 		skill.affected.start();
 		if (firstEmpty >= 0)
@@ -206,11 +212,11 @@ public abstract class Actor extends Entity
 //		}
 //	}
 	
-	public void drawParticleEffects(SpriteBatch batch)
+	public void drawParticleEffects(SpriteBatch batch, float delta)
 	{
 		for (SkillEffect skill : skillEffects)
 		{
-			skill.draw(batch);
+			skill.draw(batch, delta);
 		}
 //		for (ParticleEffect effect : peEffect)
 //		{
@@ -224,58 +230,47 @@ public abstract class Actor extends Entity
 		projectiles = p;
 	}
 	
-	public ParticleEffect fire()
-	{
-		ParticleEffect e = new ParticleEffect();
-		e.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
-		e.setPosition(xCoord, yCoord);
-		e.start();
-		return e;
-	}
-	
-	public ParticleEffect blood()
-	{
-		ParticleEffect e = new ParticleEffect();
-		e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
-		e.setPosition(xCoord + 20, yCoord + 20);
-		e.start();
-		return e;
-	}
-	
-	public ParticleEffect spark()
-	{
-		ParticleEffect e = new ParticleEffect();
-		if (!(Gdx.app.getType() == ApplicationType.Android))
-		{
-			e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/sparkeffect.p")), Gdx.files.internal("images"));
-			e.setPosition(xCoord + 20, yCoord + 20);
-			e.start();
-		}
-		return e;
-	}
+//	public ParticleEffect fire()
+//	{
+//		ParticleEffect e = new ParticleEffect();
+//		e.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
+//		e.setPosition(xCoord, yCoord);
+//		e.start();
+//		return e;
+//	}
+//	
+//	public ParticleEffect blood()
+//	{
+//		ParticleEffect e = new ParticleEffect();
+//		e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
+//		e.setPosition(xCoord + 20, yCoord + 20);
+//		e.start();
+//		return e;
+//	}
+//	
+//	public ParticleEffect spark()
+//	{
+//		ParticleEffect e = new ParticleEffect();
+//		if (!(Gdx.app.getType() == ApplicationType.Android))
+//		{
+//			e.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/sparkeffect.p")), Gdx.files.internal("images"));
+//			e.setPosition(xCoord + 20, yCoord + 20);
+//			e.start();
+//		}
+//		return e;
+//	}
 	
 	public void particleOnSelf(String s)
 	{
-//		ParticleEffect p = new ParticleEffect();
-//		if (!(Gdx.app.getType() == ApplicationType.Android))
-//		{
-			//p.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/sparkeffect.p")), Gdx.files.internal("images"));
 		ParticleEffect p = everything.getEffect(s);
-		p.setPosition(xCoord + 20, yCoord + 20);
+		p.setPosition(xCoord + 30, yCoord + 20);
 		p.start();
-//		}
 		effects.add(p);
-//		ParticleEffect p = new ParticleEffect();// = everything.getEffect(s);
-//		p.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/SparkEffectAndroid.p" : "data/sparkeffect.p")), Gdx.files.internal("images"));
-//		p.setPosition(xCoord, xCoord);
-//		p.start();
-//		effects.add(p);
-//		effects.add(spark());
 	}
 	
 	public void particleOnSelf(ParticleEffect p)
 	{
-		p.setPosition(xCoord + 20, xCoord + 20);
+		p.setPosition(xCoord + 20, yCoord + 20);
 		p.start();
 		effects.add(p);
 	}
@@ -294,10 +289,10 @@ public abstract class Actor extends Entity
 		if (currentHealth < 0)
 			currentHealth = 0;
 		
-		System.out.println("Hit me!");
+//		System.out.println("Hit me!");
 		if (procSkill != null)
 		{
-			System.out.println("TRIP!");
+//			System.out.println("TRIP!");
 			procSkill.trip(0);
 		}
 	}
@@ -306,10 +301,10 @@ public abstract class Actor extends Entity
 	{
 		takeDamage(damage);
 		
-		System.out.println("Hit me!");
+//		System.out.println("Hit me!");
 		if (procSkill != null)
 		{
-			System.out.println("TRIP!");
+//			System.out.println("TRIP!");
 			procSkill.trip(0);
 		}
 //		if (effects.isEmpty())
@@ -320,7 +315,7 @@ public abstract class Actor extends Entity
 //			effects.add(this.fire());
 //		else if (type == 2)
 //			effects.add(this.blood());
-		System.out.println("Effects");
+//		System.out.println("Effects");
 	}
 	
 	public void heal(int heal)
@@ -339,7 +334,8 @@ public abstract class Actor extends Entity
 //				effects.add(this.fire());
 				for (SkillEffect skill : skillEffects)
 					skill.kill();
-				effects.add(this.blood());
+				this.particleOnSelf("blood");
+//				effects.add(this.blood());
 				soundPack.playDie();
 				alive = false;
 			}
@@ -413,7 +409,10 @@ public abstract class Actor extends Entity
 	{
 		if (!(this instanceof Stronghold))
 		{
-			projectiles.add(new ArrowProjectile(this.xCoord + (this instanceof ArrowTower ? 10 : 0), this.yCoord + (this instanceof ArrowTower ? 40 : 0), this.team, 3, target));
+			if (this.maxHealth == 65)
+				projectiles.add(new MageProjectile(this.xCoord, this.yCoord, this.team, 3, target));
+			else
+				projectiles.add(new ArrowProjectile(this.xCoord + (this instanceof ArrowTower ? 10 : 0), this.yCoord + (this instanceof ArrowTower ? 40 : 0), this.team, 3, target));
 		}
 		else
 		{
@@ -451,5 +450,22 @@ public abstract class Actor extends Entity
 //		if (target == null || !target.isAlive())
 //			return;
 		target.takeDamage(damage);
+	}
+
+	public void changeToLevel(int level, ActorStructure a) 
+	{
+		maxHealth = a.maxHealth(level);
+		damage = a.damage(level);
+		attackSpeed = a.attackSpeed(level);
+		attackRange = a.attackRange(level);
+		ranged = a.ranged(level);
+		if (!a.soundPack(level).equals("empty"))
+			this.attackSound = everything.getSound(a.soundPack(level));
+		if (!a.passiveSkill(level).equals("empty"))
+			this.loadPassiveSkill(everything.getSkill(a.passiveSkill(level)));
+		if (!a.procSkill(level).equals("empty"))
+			this.loadProcSkill(everything.getSkill(a.procSkill(level)));
+//		cost = a.cost(level);
+		
 	}
 }
