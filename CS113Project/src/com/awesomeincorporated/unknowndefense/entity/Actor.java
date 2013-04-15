@@ -117,6 +117,11 @@ public abstract class Actor extends Entity
 		procSkill = new ProcSkill(pSkill, this);
 	}
 	
+	public Actor getTarget()
+	{
+		return target;
+	}
+	
 	public float getHealthRatio()
 	{
 		return (float)currentHealth / maxHealth;

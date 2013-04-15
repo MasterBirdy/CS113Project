@@ -45,7 +45,11 @@ public class MyInputProcessor implements InputProcessor
 			Entity.setVolume(0);
 		}
 		if (keycode == Keys.NUM_2)
-			Entity.setVolume(0.1f);
+		{
+			game.sendMessage("Suck it, nub");
+			game.toggleIsPaused();
+//			Entity.setVolume(0.1f);
+		}
 		if (keycode == Keys.NUM_3)
 			Entity.setVolume(0.2f);
 		if (keycode == Keys.NUM_4)

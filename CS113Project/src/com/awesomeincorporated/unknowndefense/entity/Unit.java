@@ -61,7 +61,7 @@ public abstract class Unit extends Actor
 	public void draw(SpriteBatch batch, float delta)
 	{
 //		super.draw(batch);
-		stateTime += Gdx.graphics.getDeltaTime();
+		stateTime += delta;//Gdx.graphics.getDeltaTime();
 		TextureRegion current;
 		
 		standing = false;

@@ -163,6 +163,7 @@
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			100									</cooldown>
+		<trigger>			0									</trigger>
 		<traveltime>		30									</traveltime>
 		<damagesplit>		true								</damagesplit>
 		<additive>			true								</additive>
@@ -182,6 +183,7 @@
 		<duration>			200									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			10									</cooldown>
+		<trigger>			0									</trigger>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>
@@ -201,6 +203,7 @@
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			10									</cooldown>
+		<trigger>			0									</trigger>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>
@@ -220,6 +223,7 @@
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			100									</cooldown>
+		<trigger>			0									</trigger>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>
@@ -239,6 +243,7 @@
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			10									</cooldown>
+		<trigger>			0									</trigger>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>
@@ -258,6 +263,7 @@
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			300									</cooldown>
+		<trigger>			0									</trigger>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		true								</damagesplit>
 		<additive>			false								</additive>
@@ -277,6 +283,7 @@
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			600									</cooldown>
+		<trigger>			0									</trigger>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		true								</damagesplit>
 		<additive>			false								</additive>
@@ -291,13 +298,13 @@
 	
 	<!-- BUILDINGS -->
 	<building type = "arrowtower">
-		<maxhealth>			400		61		611		6111		</maxhealth>
-		<damage>			12		61		611		6111		</damage>
-		<attackspeed>		25		61		611		6111		</attackspeed>
-		<attackrange>		170		61		611		6111		</attackrange>
-		<cost> 				100		61		611		6111		</cost>
+		<maxhealth>			0		61		611		6111		</maxhealth>
+		<damage>			0		61		611		6111		</damage>
+		<attackspeed>		0		61		611		6111		</attackspeed>
+		<attackrange>		0		61		611		6111		</attackrange>
+		<cost> 				0		61		611		6111		</cost>
 		<animation> 		rubble 	arrowtower					</animation>
-		<ranged> 			true 								</ranged>
+		<ranged> 			false	true 						</ranged>
 		<soundpack>			arrowtower							</soundpack>
 		<passiveskill>		empty								</passiveskill>
 		<procskill>			empty								</procskill>

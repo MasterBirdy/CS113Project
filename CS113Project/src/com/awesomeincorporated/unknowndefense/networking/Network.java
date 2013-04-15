@@ -27,6 +27,7 @@ public class Network
         kryo.register(GameStatus.class);
         kryo.register(ServerMessage.class);
         kryo.register(AccountInfo.class);
+        kryo.register(UserMessage.class);
 	}
 	
 	// From client
@@ -132,5 +133,12 @@ public class Network
 	{
 		byte field;
 		String parameter;
+	}
+	
+	static public class UserMessage
+	{
+		public String message;
+		public byte team;
+		public int turn;
 	}
 }

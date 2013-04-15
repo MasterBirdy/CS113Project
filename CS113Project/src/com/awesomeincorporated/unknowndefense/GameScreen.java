@@ -241,8 +241,13 @@ public class GameScreen implements Screen
 			team = 1;
 			everything.setTeam((byte)1);
 		}
-		
+		timeAccumulator = 0;
 //		ready = true;
+	}
+	
+	public void toggleIsPaused()
+	{
+		isPaused = !isPaused;
 	}
 	
 	public void toggleFollowing()
@@ -277,7 +282,7 @@ public class GameScreen implements Screen
 	{
 		boundCamera();
 		
-		if (ready)
+		if (ready && !isPaused)
 			timeAccumulator += delta;
 		
 //		GL10 gl = Gdx.graphics.getGL10();
@@ -312,7 +317,7 @@ public class GameScreen implements Screen
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		everything.map().background().draw(batch);
-		everything.render(delta);
+		everything.render((isPaused ? 0 : delta));
 		//font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
 		//font.draw(batch, "delta: " + delta, 800, 555);
 //		font.draw(batch, "fps: " + (1 / delta), 800, 555);
@@ -376,17 +381,23 @@ public class GameScreen implements Screen
 	//				heroes[1].stance(command.command - 8);
 					return;
 				}
-				if (command.command > 9 && command.command < 13)
+				if (command.command == 10)
 				{
-					System.out.println("Pulled tower command.");
-					everything.upgradeTower(command.command - 10, team);
-//					everything.funds -= 40;
-					System.out.println("Trying to upgrade tower " + (command.command - 10) + " from team " + team);
-	//				heroes[command.team].stance(command.command - 8);
-	//				heroes[0].stance(command.command - 8);
-	//				heroes[1].stance(command.command - 8);
+					System.out.println("Pulled active cast command.");
+					everything.activeHeroSkill(command.team);
 					return;
 				}
+//				if (command.command > 9 && command.command < 13)
+//				{
+//					System.out.println("Pulled tower command.");
+//					everything.upgradeTower(command.command - 10, team);
+////					everything.funds -= 40;
+//					System.out.println("Trying to upgrade tower " + (command.command - 10) + " from team " + team);
+//	//				heroes[command.team].stance(command.command - 8);
+//	//				heroes[0].stance(command.command - 8);
+//	//				heroes[1].stance(command.command - 8);
+//					return;
+//				}
 			}
 		}
 	}
@@ -438,6 +449,19 @@ public class GameScreen implements Screen
 		}
 	}
 	
+	public void sendMessage(String message)
+	{
+		if (multiplayer)
+		{
+			System.out.println("Trying to send message \"" + message + "\"");
+			UserMessage msg = new UserMessage();
+			msg.message = message;
+			msg.team = team;
+			msg.turn = everything.turn();
+			client.sendTCP(msg);
+		}
+	}
+	
 	public void buyUnit(int unit)
 	{
 		if (multiplayer)
@@ -480,7 +504,12 @@ public class GameScreen implements Screen
 	{
 		if (multiplayer)
 		{
-			
+			Command cmd = new Command();
+			cmd.type = 10;
+			cmd.team = team;
+			cmd.turn = everything.turn();
+			System.out.println("Hero " + cmd.team + " casting active");
+			client.sendTCP(cmd);
 		}
 		else
 		{
@@ -669,12 +698,17 @@ public class GameScreen implements Screen
         			}
         			return;
         		}
+        		
+        		if (object instanceof UserMessage)
+        		{
+        			gameUI3.setMessage(((UserMessage)object).message);
+        		}
         	}
         	
         	public void disconnected (Connection connection) 
         	{
         		System.out.println("Disconnected");
-        		System.exit(0);
+//        		System.exit(0);
         	}
         }));
         

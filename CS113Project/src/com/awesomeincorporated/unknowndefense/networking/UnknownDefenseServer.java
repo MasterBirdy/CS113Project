@@ -129,49 +129,14 @@ public class UnknownDefenseServer
                 	Command cmd = (Command)object;
                 	if (user.room >= 0)
                 		games.get(user.room).messageCommand(cmd);
-                	
-//                	System.out.println("Recevied command " + ((Command)object).type);
-//                	if (cmd.type > 0 && cmd.type < 7)
-//                	{
-//                		AddUnit add = new AddUnit();
-//                		add.team = cmd.team;
-//                		add.unit = cmd.type;
-//                		add.turn = currentTurn;
-//                		System.out.println("Sending unit " + cmd.type + " from player " + cmd.team);
-//                		
-//                		server.sendToTCP(userConnection.get(0).getID(), add);
-//                		server.sendToTCP(userConnection.get(1).getID(), add);
-////                		server.sendToAllTCP(add);
-//                	}
-//                	if (cmd.type > 6 && cmd.type < 10) // 7-9 is retreat, guard, and attack.
-//                	{
-//                		System.out.println("Sending command out (Hero)");
-//                		CommandIn cmdIn = new CommandIn();
-//                		cmdIn.command = cmd.type;
-//                		cmdIn.team = cmd.team;
-//                		server.sendToTCP(userConnection.get(0).getID(), cmdIn);
-//                		server.sendToTCP(userConnection.get(1).getID(), cmdIn);
-////                		server.sendToAllTCP(cmdIn);
-//                	}
-//                	if (cmd.type > 9 && cmd.type < 13) // 10-12 is upgrade towers 1, 2, and 3.
-//                	{
-//                		System.out.println("Sending command out (tower)");
-//                		CommandIn cmdIn = new CommandIn();
-//                		cmdIn.command = cmd.type;
-//                		cmdIn.team = cmd.team;
-//                		server.sendToTCP(userConnection.get(0).getID(), cmdIn);
-//                		server.sendToTCP(userConnection.get(1).getID(), cmdIn);
-////                		server.sendToAllTCP(cmdIn);
-//                	}
-//                	if (cmd.type > 9 && cmd.type < 13)
-//                	{
-//                		System.out.println("Upgrading tower");
-//                		CommandIn cmdIn = new CommandIn();
-//                		cmdIn.command = (byte) (cmd.type - 10);
-//                		cmdIn.team = cmd.team;
-//                		
-//                	}
                 	return;
+                }
+                
+                if (object instanceof UserMessage)
+                {
+                	UserMessage msg = (UserMessage)object;
+                	if (user.room >= 0)
+                		games.get(user.room).userMessage(msg);
                 }
                 
                 if (object instanceof ClientMessage)

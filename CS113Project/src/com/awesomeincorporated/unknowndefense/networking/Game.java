@@ -5,6 +5,7 @@ import com.awesomeincorporated.unknowndefense.networking.Network.Command;
 import com.awesomeincorporated.unknowndefense.networking.Network.CommandIn;
 import com.awesomeincorporated.unknowndefense.networking.Network.LoginStatus;
 import com.awesomeincorporated.unknowndefense.networking.Network.ServerMessage;
+import com.awesomeincorporated.unknowndefense.networking.Network.UserMessage;
 import com.awesomeincorporated.unknowndefense.networking.UnknownDefenseServer.UserConnection;
 import com.esotericsoftware.kryonet.Server;
 
@@ -15,7 +16,7 @@ public class Game
 	int gameID, gameType;
 	int currentTurn = 0;
 	float stepTime = 0.02f;
-	int turnBuffer = 30;
+	int turnBuffer = 35;
 	
 	public Game(UserConnection p1, UserConnection p2, Server s, int ID)//Server s, int ID)
 	{
@@ -42,6 +43,13 @@ public class Game
 	public int ID()
 	{
 		return gameID;
+	}
+	
+	public void userMessage(UserMessage msg)
+	{
+		int team = (msg.team == 1 ? 1 : 0);
+		
+		server.sendToTCP(players[team].getID(), msg);
 	}
 	
 	public void messageCommand(Command cmd)
@@ -75,9 +83,9 @@ public class Game
     		server.sendToTCP(players[1].getID(), cmdIn);
 //        		server.sendToAllTCP(cmdIn);
     	}
-    	else if (cmd.type > 9 && cmd.type < 13) // 10-12 is upgrade towers 1, 2, and 3.
+    	else if (cmd.type == 10)
     	{
-    		System.out.println("(Game)Sending command out (tower)");
+    		System.out.println("(Game)Sending active skill");
     		CommandIn cmdIn = new CommandIn();
     		cmdIn.command = cmd.type;
     		cmdIn.team = cmd.team;
@@ -85,5 +93,16 @@ public class Game
     		server.sendToTCP(players[0].getID(), cmdIn);
     		server.sendToTCP(players[1].getID(), cmdIn);
     	}
+    	
+//    	else if (cmd.type > 9 && cmd.type < 13) // 10-12 is upgrade towers 1, 2, and 3.
+//    	{
+//    		System.out.println("(Game)Sending command out (tower)");
+//    		CommandIn cmdIn = new CommandIn();
+//    		cmdIn.command = cmd.type;
+//    		cmdIn.team = cmd.team;
+//    		cmdIn.turn = cmd.turn + turnBuffer;
+//    		server.sendToTCP(players[0].getID(), cmdIn);
+//    		server.sendToTCP(players[1].getID(), cmdIn);
+//    	}
     }
 }

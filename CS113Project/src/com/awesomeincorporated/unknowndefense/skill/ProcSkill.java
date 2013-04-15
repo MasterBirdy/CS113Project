@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ProcSkill extends Skill
 {
-	int cooldown, cooldownCounter;
+	int cooldown, cooldownCounter, trigger;
 	
 	public ProcSkill(SkillStructure s, Actor c)
 	{
@@ -39,12 +39,14 @@ public class ProcSkill extends Skill
 	public void trip(int hit)
 	{
 //		System.out.println("Tripped");
-		if (!caster.isAlive() || cooldownCounter >=0)
+		if (!caster.isAlive() || cooldownCounter >=0 && hit == trigger)
 			return;
 		cooldownCounter = cooldown;
 //		System.out.println("INVISIBLE!");
 		if (effect == 0)
 			caster.invis(effectAmount);
+//		if (effect == 1)
+//			everything.add(new TargetedSkill(this, this.caster, this.caster.getTarget()), team);
 	}
 
 	@Override

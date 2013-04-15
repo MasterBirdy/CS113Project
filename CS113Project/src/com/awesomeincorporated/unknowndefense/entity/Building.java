@@ -70,7 +70,7 @@ public class Building extends Actor
 		}
 		
 		TextureRegion current;
-		stateTime += Gdx.graphics.getDeltaTime();
+		stateTime += delta;//Gdx.graphics.getDeltaTime();
 		current = buildingAnimation.getAnimation(0).getKeyFrame(stateTime * 0.5f, true);
 		Vector2 point = buildingAnimation.getFeet(0);
 		

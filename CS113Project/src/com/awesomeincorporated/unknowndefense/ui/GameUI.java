@@ -37,6 +37,9 @@ public class GameUI
 	
 	ParticleEffect tempPart;
 	
+	String message = "";
+	int messageTurnsLeft = 0;
+	
 	public GameUI()
 	{		
 		icons = new Texture(Gdx.files.internal("images/buttons_sheet.png"));
@@ -126,6 +129,7 @@ public class GameUI
 //		everything.font.draw(batch, "" + everything.totalTime(), 35, 369);
 //		everything.font.draw(batch, "" + everything.teamSize(), 35, 334);
 		
+		everything.getFont(0).draw(batch, message, 200, 20);
 		// Top UI
 		topUI.draw();
 //		font.draw(batch, "Next wave: " + everything.timeLeft(), screenX - 150, screenY - 20);
@@ -133,8 +137,16 @@ public class GameUI
 //		font.draw(batch, "Funds: " + everything.funds(), screenX - 150, screenY - 70);
 	}
 	
+	public void setMessage(String m)
+	{
+		message = m;
+		messageTurnsLeft = 500;
+	}
+	
 	private void update()
 	{
 		buttons[9].setClickable(everything.activeCooldown() < 0);
+		if (--messageTurnsLeft < 0 && !message.equals(""))
+			message = "";
 	}
 }

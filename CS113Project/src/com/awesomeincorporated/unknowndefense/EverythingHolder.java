@@ -481,13 +481,24 @@ public class EverythingHolder
 		Texture icons = new Texture(Gdx.files.internal("images/buttons_sheet.png"));
 		objectTextures.put("fireball", new TextureRegion(icons, 1814, 0, 90, 90));
 		objectTextures.put("fireattack", new TextureRegion(icons, 1814, 90, 73, 73));
+		
 		objectTextures.put("swordfacebutton", new TextureRegion(icons, 0, 1377, 192, 137));
 		objectTextures.put("arroweyesbutton", new TextureRegion(icons, 192, 1377, 192, 137));
 		objectTextures.put("mrwizardbutton", new TextureRegion(icons, 384, 1377, 192, 137));
+		
 		objectTextures.put("upgradebutton", new TextureRegion(icons, 1905, 109, 143, 109));
 		objectTextures.put("confirmbutton", new TextureRegion(icons, 367, 0, 152, 153));
 		objectTextures.put("cancelbutton", new TextureRegion(icons, 367, 153, 152, 153));
 		objectTextures.put("backbutton", new TextureRegion(icons, 367, 306, 152, 153));
+		objectTextures.put("forwardbutton", new TextureRegion(icons, 367, 459, 152, 153));
+		objectTextures.put("singlebutton", new TextureRegion(icons, 367, 612, 152, 153));
+		objectTextures.put("multibutton", new TextureRegion(icons, 367, 765, 152, 153));
+		objectTextures.put("settingsbutton", new TextureRegion(icons, 367, 918, 152, 153));
+		objectTextures.put("quitbutton", new TextureRegion(icons, 367, 1071, 152, 153));
+		
+		objectTextures.put("gamelogo", new TextureRegion(icons, 0, 1514, 842, 467));
+		objectTextures.put("mainbuttonframe", new TextureRegion(icons, 880, 422, 361, 572));
+		
 	}
 	
 	public void loadSounds()
