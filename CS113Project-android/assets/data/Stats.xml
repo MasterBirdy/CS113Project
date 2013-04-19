@@ -17,9 +17,9 @@
 	</minion>
 	<minion type = "archer">
 		<maxhealth>			50		11		111		1111		</maxhealth>
-		<damage>			20		11		111		1111		</damage>
+		<damage>			16		11		111		1111		</damage>
 		<attackspeed>		50		11		111		1111		</attackspeed>
-		<attackrange>		110		11		111		1111		</attackrange>
+		<attackrange>		90		11		111		1111		</attackrange>
 		<speed>				1.3f	11f		111f	1111f		</speed>
 		<cost> 				20		11		111		1111		</cost>
 		<animation> 		archer								</animation>
@@ -56,9 +56,9 @@
 	</minion>
 	<minion type = "ninja">
 		<maxhealth>			85		51		511		5111		</maxhealth>
-		<damage>			15		51		511		5111		</damage>
+		<damage>			13		51		511		5111		</damage>
 		<attackspeed>		50		51		511		5111		</attackspeed>
-		<attackrange>		50		51		511		5111		</attackrange>
+		<attackrange>		40		51		511		5111		</attackrange>
 		<speed>				1.3f	51f		511f	5111f		</speed>
 		<cost> 				20		51		511		5111		</cost>
 		<animation> 		ninja								</animation>
@@ -68,12 +68,12 @@
 		<procskill>			testninjacloak						</procskill>
 	</minion>
 	<minion type = "wolf">
-		<maxhealth>			80		51		511		5111		</maxhealth>
-		<damage>			12		51		511		5111		</damage>
-		<attackspeed>		40		51		511		5111		</attackspeed>
+		<maxhealth>			450		51		511		5111		</maxhealth>
+		<damage>			20		51		511		5111		</damage>
+		<attackspeed>		50		51		511		5111		</attackspeed>
 		<attackrange>		35		51		511		5111		</attackrange>
 		<speed>				1.3f	51f		511f	5111f		</speed>
-		<cost> 				20		51		511		5111		</cost>
+		<cost> 				40		51		511		5111		</cost>
 		<animation> 		wolf								</animation>
 		<ranged> 			false 								</ranged>
 		<soundpack>			minionwolf							</soundpack>
@@ -81,12 +81,12 @@
 		<procskill>			empty								</procskill>
 	</minion> 
 	<minion type = "eagle">
-		<maxhealth>			40		51		511		5111		</maxhealth>
-		<damage>			15		51		511		5111		</damage>
-		<attackspeed>		40		51		511		5111		</attackspeed>
+		<maxhealth>			450		51		511		5111		</maxhealth>
+		<damage>			20		51		511		5111		</damage>
+		<attackspeed>		50		51		511		5111		</attackspeed>
 		<attackrange>		35		51		511		5111		</attackrange>
 		<speed>				1.3f	51f		511f	5111f		</speed>
-		<cost> 				20		51		511		5111		</cost>
+		<cost> 				40		51		511		5111		</cost>
 		<animation> 		eagle								</animation>
 		<ranged> 			false 								</ranged>
 		<soundpack>			minioneagle							</soundpack>
@@ -94,12 +94,12 @@
 		<procskill>			empty								</procskill>
 	</minion>
 	<minion type = "elemental">
-		<maxhealth>			150		51		511		5111		</maxhealth>
-		<damage>			9		51		511		5111		</damage>
-		<attackspeed>		40		51		511		5111		</attackspeed>
+		<maxhealth>			450		51		511		5111		</maxhealth>
+		<damage>			15		51		511		5111		</damage>
+		<attackspeed>		50		51		511		5111		</attackspeed>
 		<attackrange>		35		51		511		5111		</attackrange>
 		<speed>				1.3f	51f		511f	5111f		</speed>
-		<cost> 				20		51		511		5111		</cost>
+		<cost> 				40		51		511		5111		</cost>
 		<animation> 		elemental							</animation>
 		<ranged> 			false 								</ranged>
 		<soundpack>			minionelemental						</soundpack>
@@ -109,52 +109,112 @@
 	
 	<!-- HEROES -->
 	<hero type = "swordface">
-		<maxhealth>			400		51		511		5111		</maxhealth>
-		<damage>			15		51		511		5111		</damage>
-		<attackspeed>		70		51		511		5111		</attackspeed>
+		<maxhealth>			1000	51		511		5111		</maxhealth>
+		<damage>			22		51		511		5111		</damage>
+		<attackspeed>		50		51		511		5111		</attackspeed>
 		<attackrange>		45		51		511		5111		</attackrange>
 		<speed>				1.34f	51f		511f	5111f		</speed>
 		<cost> 				20		51		511		5111		</cost>
 		<animation> 		swordsman							</animation>
 		<ranged> 			false 								</ranged>
 		<soundpack>			herowarrior							</soundpack>
-		<activeskill>		teststun							</activeskill>
+		<activeskill>		herostun							</activeskill>
 		<passiveskill>		empty								</passiveskill>
 		<procskill>			empty								</procskill>
 		<pet>				wolf								</pet>
 	</hero>
 	<hero type = "arroweyes">
-		<maxhealth>			75		51		511		5111		</maxhealth>
-		<damage>			11		51		511		5111		</damage>
-		<attackspeed>		30		51		511		5111		</attackspeed>
-		<attackrange>		130		51		511		5111		</attackrange>
+		<maxhealth>			350		51		511		5111		</maxhealth>
+		<damage>			34		51		511		5111		</damage>
+		<attackspeed>		50		51		511		5111		</attackspeed>
+		<attackrange>		100		51		511		5111		</attackrange>
 		<speed>				1.34f	51f		511f	5111f		</speed>
 		<cost> 				20		51		511		5111		</cost>
 		<animation> 		archer								</animation>
 		<ranged> 			true 								</ranged>
 		<soundpack>			heroarcher							</soundpack>
-		<activeskill>		testattackspeed						</activeskill>
+		<activeskill>		herorapidfire						</activeskill>
 		<passiveskill>		empty								</passiveskill>
 		<procskill>			empty								</procskill>
 		<pet>				eagle								</pet>
 	</hero>
 	<hero type = "mrwizard">
-		<maxhealth>			65		51		511		5111		</maxhealth>
-		<damage>			18		51		511		5111		</damage>
+		<maxhealth>			450		51		511		5111		</maxhealth>
+		<damage>			28		51		511		5111		</damage>
 		<attackspeed>		50		51		511		5111		</attackspeed>
 		<attackrange>		90		51		511		5111		</attackrange>
 		<speed>				1.34f	51f		511f	5111f		</speed>
 		<cost> 				20		51		511		5111		</cost>
-		<animation> 		mage							</animation>
+		<animation> 		mage								</animation>
 		<ranged> 			true 								</ranged>
 		<soundpack>			herowizard							</soundpack>
-		<activeskill>		testfireball						</activeskill>
+		<activeskill>		herofireball						</activeskill>
 		<passiveskill>		empty								</passiveskill>
 		<procskill>			empty								</procskill>
 		<pet>				elemental							</pet>
 	</hero> 
 	
-	<!-- SKILLZ -->
+	<!-- ACTIVE SKILLZ -->
+	<skill type = "herofireball">
+		<aoe> 				50									</aoe>
+		<targetteam> 		1									</targetteam>
+		<effect>			0									</effect>
+		<effectamount>		30									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			500									</cooldown>
+		<trigger>			0									</trigger>
+		<traveltime>		30									</traveltime>
+		<damagesplit>		true								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<speed>				6									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			largefireball						</travel>
+		<detonateeffect>	largefireballexplosion				</detonateeffect>
+		<affected>			fire								</affected>
+	</skill>
+	<skill type = "herostun">
+		<aoe> 				100									</aoe>
+		<targetteam> 		1									</targetteam>
+		<effect>			2									</effect>
+		<effectamount>		200									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			1000								</cooldown>
+		<trigger>			0									</trigger>
+		<traveltime>		0									</traveltime>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<speed>				0									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			heal								</travel>
+		<detonateeffect>	stunattack							</detonateeffect>
+		<affected>			fire								</affected>
+	</skill>
+	<skill type = "herorapidfire">
+		<aoe> 				1									</aoe>
+		<targetteam> 		-1									</targetteam>
+		<effect>			3									</effect>
+		<effectamount>		27									</effectamount>
+		<duration>			250									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			750									</cooldown>
+		<trigger>			0									</trigger>
+		<traveltime>		0									</traveltime>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<speed>				0									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			heal								</travel>
+		<detonateeffect>	heal								</detonateeffect>
+		<affected>			fire								</affected>
+	</skill>
 	<skill type = "testfireball">
 		<aoe> 				50									</aoe>
 		<targetteam> 		1									</targetteam>
@@ -235,6 +295,112 @@
 		<detonateeffect>	stunattack							</detonateeffect>
 		<affected>			fire								</affected>
 	</skill>
+	
+	<!-- PROC ON ATTACK SKILLZ -->
+	
+	<!-- PROC ON HIT SKILLZ -->
+	<skill type = "testninjacloak">
+		<aoe> 				1									</aoe>
+		<targetteam> 		-1									</targetteam>
+		<effect>			0									</effect>
+		<effectamount>		60									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			1000								</cooldown>
+		<trigger>			0									</trigger>
+		<traveltime>		0									</traveltime>
+		<damagesplit>		true								</damagesplit>
+		<additive>			false								</additive>
+		<continuous>		true								</continuous>
+		<speed>				0									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			heal								</travel>
+		<detonateeffect>	smokebomb							</detonateeffect>
+		<affected>			fire								</affected>
+	</skill>
+	<skill type = "testheal">
+		<aoe> 				80									</aoe>
+		<targetteam> 		-1									</targetteam>
+		<effect>			1									</effect>
+		<effectamount>		100								</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			10									</cooldown>
+		<trigger>			0									</trigger>
+		<traveltime>		0									</traveltime>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<speed>				0									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			heal								</travel>
+		<detonateeffect>	smokebomb							</detonateeffect>
+		<affected>			fire								</affected>
+	</skill>
+	<skill type = "testninjacloak">
+		<aoe> 				1									</aoe>
+		<targetteam> 		-1									</targetteam>
+		<effect>			0									</effect>
+		<effectamount>		60									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			600									</cooldown>
+		<trigger>			0									</trigger>
+		<traveltime>		0									</traveltime>
+		<damagesplit>		true								</damagesplit>
+		<additive>			false								</additive>
+		<continuous>		true								</continuous>
+		<speed>				0									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			heal								</travel>
+		<detonateeffect>	smokebomb							</detonateeffect>
+		<affected>			fire								</affected>
+	</skill>
+	
+	<!-- PASSIVE SKILLZ -->
+	<skill type = "passivefire">
+		<aoe> 				2									</aoe>
+		<targetteam> 		1									</targetteam>
+		<effect>			0									</effect>
+		<effectamount>		8									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			250									</cooldown>
+		<trigger>			0									</trigger>
+		<traveltime>		30									</traveltime>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<speed>				6									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			heal								</travel>
+		<detonateeffect>	smokebomb							</detonateeffect>
+		<affected>			fire								</affected>
+	</skill>
+	<skill type = "passiveheal">
+		<aoe> 				0									</aoe>
+		<targetteam> 		-1									</targetteam>
+		<effect>			1									</effect>
+		<effectamount>		15									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			250									</cooldown>
+		<trigger>			0									</trigger>
+		<traveltime>		0									</traveltime>
+		<damagesplit>		true								</damagesplit>
+		<additive>			false								</additive>
+		<continuous>		true								</continuous>
+		<speed>				0									</speed>
+		<sprite>			cannonprojectile.png				</sprite>
+		<cast>				fire								</cast>
+		<travel>			heal								</travel>
+		<detonateeffect>	heal								</detonateeffect>
+		<affected>			fire								</affected>
+	</skill>
 	<skill type = "passivefire">
 		<aoe> 				100									</aoe>
 		<targetteam> 		1									</targetteam>
@@ -273,26 +439,6 @@
 		<cast>				fire								</cast>
 		<travel>			heal								</travel>
 		<detonateeffect>	heal								</detonateeffect>
-		<affected>			fire								</affected>
-	</skill>
-	<skill type = "testninjacloak">
-		<aoe> 				1									</aoe>
-		<targetteam> 		-1									</targetteam>
-		<effect>			0									</effect>
-		<effectamount>		60									</effectamount>
-		<duration>			1									</duration>
-		<effecttick>		0									</effecttick>
-		<cooldown>			600									</cooldown>
-		<trigger>			0									</trigger>
-		<traveltime>		0									</traveltime>
-		<damagesplit>		true								</damagesplit>
-		<additive>			false								</additive>
-		<continuous>		true								</continuous>
-		<speed>				0									</speed>
-		<sprite>			cannonprojectile.png				</sprite>
-		<cast>				fire								</cast>
-		<travel>			heal								</travel>
-		<detonateeffect>	smokebomb							</detonateeffect>
 		<affected>			fire								</affected>
 	</skill>
 	
