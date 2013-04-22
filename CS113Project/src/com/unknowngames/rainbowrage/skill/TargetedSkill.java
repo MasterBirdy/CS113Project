@@ -30,7 +30,10 @@ public class TargetedSkill extends Skill
 	public TargetedSkill(SkillStructure s, Actor c, Actor t)
 	{
 		super(s, c);
-		spellImage = everything.getObjectTexture("fireball");
+		if (s.sprite.equals("empty"))
+			spellImage = everything.getObjectTexture("cannonball");
+		else
+			spellImage = everything.getObjectTexture(s.sprite.get(0));
 //		if (spellImage == null)
 //		{
 //			spellImage = new TextureRegion(new Texture(Gdx.files.internal("images/"+s.sprite.get(0))), 0, 0, 16, 16);
@@ -97,7 +100,12 @@ public class TargetedSkill extends Skill
 	{
 		ArrayList<Actor> temp = new ArrayList<Actor>();
 		if (aoe == 0)
-			temp.add(target);
+		{
+			if (targetTeam == target.team())
+				temp.add(target);
+			else
+				temp.add(caster);
+		}
 		else
 			for (Actor a : everything.team(targetTeam))
 				if (this.getDistanceSquared(a) < aoe * aoe)
@@ -165,7 +173,9 @@ public class TargetedSkill extends Skill
 	{
 		if (aoe == 0)
 		{
-			if (target != null && target.isAlive())
+			if (targetTeam == caster.team())
+				caster.takeSkillEffect(new SkillEffect(this, caster, 1));
+			else if (target != null && target.isAlive())
 				target.takeSkillEffect(new SkillEffect(this, target, 1));
 			return;
 		}

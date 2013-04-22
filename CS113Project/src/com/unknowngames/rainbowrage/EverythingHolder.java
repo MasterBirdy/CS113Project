@@ -138,6 +138,11 @@ public class EverythingHolder
 //		music.setLooping(true);
 	}
 	
+	public float getMusicLevel()
+	{
+		return settings.getMusicSound();
+	}
+	
 	public int activeCooldown()
 	{
 		return playerHeroes[team - 1].activeCooldown();
@@ -184,7 +189,7 @@ public class EverythingHolder
 	
 	public void loadUnitAnimations()
 	{
-		System.out.println("Loading unit animations");
+//		System.out.println("Loading unit animations");
 //		String[] color = {"blue", "red"};
 //		ArrayList<Animation> unitAnimation;
 		Animation[] animation = new Animation[8];
@@ -215,7 +220,7 @@ public class EverythingHolder
 			points[7] = new Vector2(16, 1);
 			
 			unitAnimations.put("swordsman" + (i + 1), new UnitAnimation(animation, points));
-			System.out.println("Puting: swordsman" + i + 1);
+//			System.out.println("Puting: swordsman" + i + 1);
 //			animationsR.add(unitAnimation);
 			
 			// Archer			
@@ -414,7 +419,7 @@ public class EverythingHolder
 			
 			buildingAnimations.put("rubble" + (i + 1), new BuildingAnimation(animation, points));
 		}
-		System.out.println("Loaded unit animations");
+//		System.out.println("Loaded unit animations");
 	}
 	
 	private Animation loadAnimation(int x, int y, int w, int h, int count, boolean flipX, boolean attacking, int team) // team0 = red, team1 = blue
@@ -598,7 +603,7 @@ public class EverythingHolder
 //			return null;
 		if (particleEffects.containsKey(e))
 			return new ParticleEffect(particleEffects.get(e));
-		System.out.println("Missing Effect");
+		System.out.println("Missing Effect: " + e);
 		return null;
 	}
 	
@@ -625,8 +630,8 @@ public class EverythingHolder
 		playerHeroes[1] = new Hero(map.start2().x(), map.start2().y(), 2, map().getReversePath().listIterator(), heroUnits[1]);
 		add(playerHeroes[0], 1);
 		add(playerHeroes[1], 2);
-		System.out.println("PET " + playerHeroes[0].pet());
-		System.out.println("PET " + playerHeroes[1].pet());
+//		System.out.println("PET " + playerHeroes[0].pet());
+//		System.out.println("PET " + playerHeroes[1].pet());
 		playerUnits = new MinionStructure[][]{
 				{minionStats.get("swordsman"), minionStats.get("archer"), minionStats.get("ninja"), minionStats.get("mage"), minionStats.get("monk"), minionStats.get(playerHeroes[0].pet())}
 			   ,{minionStats.get("swordsman"), minionStats.get("archer"), minionStats.get("ninja"), minionStats.get("mage"), minionStats.get("monk"), minionStats.get(playerHeroes[1].pet())}};
@@ -653,7 +658,7 @@ public class EverythingHolder
 	
 	public void setTeam(byte team)
 	{
-		System.out.println("Team: " + team);
+//		System.out.println("Team: " + team);
 		this.team = team;
 	}
 	
@@ -1093,8 +1098,9 @@ public class EverythingHolder
 			hero2.update();*/
 		
 //		music.setVolume(musicVolume);
-		if (++turn % 10 == 0)
-			System.out.println("Turn: " + turn);
+		++turn;
+//		if (++turn % 10 == 0)
+//			System.out.println("Turn: " + turn);
 		spawnTimers();
 		if (!playerHeroes[0].isAlive() && playerHeroes[0].canRespawn())
 			playerHeroes[0].respawn(map.start1().x(), map.start1().y(), map.getPath().listIterator());
@@ -1219,6 +1225,7 @@ public class EverythingHolder
 		funds1 = 200;
 		funds2 = 200;
 		turn = 0;
+		highestTurn = 10;
 		
 		font[0] = new BitmapFont();
 		font[1] = new BitmapFont();

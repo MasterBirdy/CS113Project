@@ -13,7 +13,7 @@ public class MageProjectile extends Projectile {
 	@Override
 	public void draw(SpriteBatch batch, float delta) 
 	{
-		System.out.println("MAGE ATTACK");
+//		System.out.println("MAGE ATTACK");
 		batch.draw(everything.getObjectTexture("fireattack"), xCoord, yCoord, 12, 12);
 	}
 

@@ -20,7 +20,7 @@ public class GameUI
 	int height = Gdx.graphics.getHeight();
 	int buttonRadius = (int) (width * .95f / 20);
 	int stackTopX = 680; //658;
-	int stackTopY = 335;//355;
+	int stackTopY = 345;//355;
 	int spaceX = 75;
 	int spaceY = 54;
 	
@@ -76,11 +76,11 @@ public class GameUI
 				return true;
 			}
 		};
-		buttons[10] = new RectangularButton(0, 245, (int)(143 * .55f), (int)(109 * .55f),
+		buttons[10] = new RectangularButton(0, 255, (int)(143 * .55f), (int)(109 * .55f),
 				new TextureRegion(icons, 1905, 0, 143, 109));								// Item Shop
 		buttons[11] = new RectangularButton(580, 0, (int)(192 * .55f), (int)(137 * .55f),
 				everything.getObjectTexture(everything.getHeroName() + "button"));
-		buttons[12] = new RectangularButton(0, 180, (int)(143 * .55f), (int)(109 * .55f),
+		buttons[12] = new RectangularButton(0, 190, (int)(143 * .55f), (int)(109 * .55f),
 				everything.getObjectTexture("upgradebutton"));								// Upgrades
 		screenX = Gdx.graphics.getWidth() / 2;
 		screenY = Gdx.graphics.getHeight() / 2;
@@ -119,13 +119,13 @@ public class GameUI
 			buttons[i].draw(batch, delta);
 		
 		// Side Stats
-		batch.draw(cash, 1, 380);
-		batch.draw(time, 1, 345);
-		batch.draw(units, 1, 310);
+		batch.draw(cash, 1, 395);
+		batch.draw(time, 1, 360);
+		batch.draw(units, 1, 325);
 
-		everything.getFont(0).draw(batch, "" + everything.funds(), 35, 404);
-		everything.getFont(0).draw(batch, "" + everything.totalTime(), 35, 369);
-		everything.getFont(0).draw(batch, "" + everything.teamSize(), 35, 334);
+		everything.getFont(0).draw(batch, "" + everything.funds(), 35, 419);
+		everything.getFont(0).draw(batch, "" + everything.totalTime(), 35, 384);
+		everything.getFont(0).draw(batch, "" + everything.teamSize(), 35, 349);
 //		everything.font.draw(batch, "" + everything.totalTime(), 35, 369);
 //		everything.font.draw(batch, "" + everything.teamSize(), 35, 334);
 		

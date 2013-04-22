@@ -39,12 +39,21 @@ public class ProcSkill extends Skill
 	public void trip(int hit)
 	{
 //		System.out.println("Tripped");
-		if (!caster.isAlive() || cooldownCounter >=0 && hit == trigger)
+		if (!caster.isAlive() || cooldownCounter >=0 || hit != trigger)
 			return;
 		cooldownCounter = cooldown;
 //		System.out.println("INVISIBLE!");
-		if (effect == 0)
-			caster.invis(effectAmount);
+		if (hit == 0)
+		{
+			if (effect == 0)
+				caster.invis(effectAmount);
+		}
+		else
+		{
+			
+		}
+		
+				
 //		if (effect == 1)
 //			everything.add(new TargetedSkill(this, this.caster, this.caster.getTarget()), team);
 	}

@@ -11,9 +11,14 @@ public class RainbowRageDesktop {
 		cfg.useGL20 = false;
 		cfg.width = 800;
 		cfg.height = 480;
+		
+//		cfg.width = 1920;
+//		cfg.height = 1080;
+		
 //		cfg.width = 1280;
 //		cfg.height = 720;
 		cfg.resizable = false;
+		cfg.fullscreen = true;
 		
 		new LwjglApplication(new RainbowRage(), cfg);
 	}

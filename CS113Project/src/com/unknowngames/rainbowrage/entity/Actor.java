@@ -365,34 +365,53 @@ public abstract class Actor extends Entity
 			{
 				return;
 			}
-		}		
+		}
 		
-		ArrayList<Actor> enemy = (team == 1 ? everything.team(2) : everything.team(1));
-//		LinkedList<Actor> enemy = (team == 1 ? team2 : team1);
-		Iterator<Actor> actorIter = enemy.iterator();
 		Actor newTarget = null;
 		float newDistance = 1000000;
 		currentDistance = 0;
-		while(actorIter.hasNext())
-		{
-			Actor e = actorIter.next();
-			
-			if (e.isAlive() && e.invis < 0)
+		for (Actor a : (team == 1 ? everything.team(2) : everything.team(1)))
+		{			
+			if (a.isAlive() && a.invis < 0)
 			{
-				currentDistance = this.getDistanceSquared(e);
-				if (e instanceof ArrowTower)
-					currentDistance -= 3600;
+				currentDistance = this.getDistanceSquared(a);
+				if (a instanceof Building)
+					currentDistance -= 6400;
 				if (currentDistance < newDistance && currentDistance < attackRange * attackRange)
 				{
 					newDistance = currentDistance;
-					newTarget = e;
+					newTarget = a;
 				}
 			}
 		}
 		
+		
+//		ArrayList<Actor> enemy = (team == 1 ? everything.team(2) : everything.team(1));
+////		LinkedList<Actor> enemy = (team == 1 ? team2 : team1);
+//		Iterator<Actor> actorIter = enemy.iterator();
+//		Actor newTarget = null;
+//		float newDistance = 1000000;
+//		currentDistance = 0;
+//		while(actorIter.hasNext())
+//		{
+//			Actor e = actorIter.next();
+//			
+//			if (e.isAlive() && e.invis < 0)
+//			{
+//				currentDistance = this.getDistanceSquared(e);
+//				if (e instanceof ArrowTower)
+//					currentDistance -= 3600;
+//				if (currentDistance < newDistance && currentDistance < attackRange * attackRange)
+//				{
+//					newDistance = currentDistance;
+//					newTarget = e;
+//				}
+//			}
+//		}
+//		
 		target = newTarget;
 		
-		attacking = (target == null) ? false : true; 
+		attacking = !(target == null); 
 	}
 
 	public abstract void destroy();
@@ -401,9 +420,15 @@ public abstract class Actor extends Entity
 	{
 		if (target == null || !target.isAlive())
 			return;
-		soundPack.playAttack();
+		if (soundPack != null)
+			soundPack.playAttack();
 //		if (attackSound != null)
 //			attackSound.play(volume);
+		if (procSkill != null)
+		{
+//			System.out.println("TRIP!");
+			procSkill.trip(1);
+		}
 		if (ranged)
 			rangeAttack();
 		else
@@ -417,7 +442,7 @@ public abstract class Actor extends Entity
 			if (this.maxHealth == 65)
 				projectiles.add(new MageProjectile(this.xCoord, this.yCoord, this.team, 3, target));
 			else
-				projectiles.add(new ArrowProjectile(this.xCoord + (this instanceof ArrowTower ? 10 : 0), this.yCoord + (this instanceof ArrowTower ? 40 : 0), this.team, 3, target));
+				projectiles.add(new ArrowProjectile(this.xCoord + (this instanceof Building ? 10 : 0), this.yCoord + (this instanceof Building ? 40 : 0), this.team, 3, target));
 		}
 		else
 		{

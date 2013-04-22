@@ -22,7 +22,7 @@ public class Building extends Actor
 	static ArrayList<Sprite> sprites;
 	BuildingAnimation buildingAnimation;
 	int towerNumber = 0;
-	ArrayList<Projectile> projectiles;
+//	ArrayList<Projectile> projectiles;
 	float stateTime;
 	ParticleEffect fire = new ParticleEffect();
 	boolean debug = false;
@@ -33,13 +33,41 @@ public class Building extends Actor
 		super(x, y, struct.ranged(0), team, struct);
 		if (Gdx.app.getType() != ApplicationType.Android)
 		{
-			fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
-			fire.setPosition(this.xCoord() + 15, this.yCoord() + 15);
+//			fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
+			fire = everything.getEffect("fire");
+			fire.setPosition(this.xCoord(), this.yCoord() + 20);
 		}
 //		this.towerNumber = towerNumber;
 		buildingAnimation = everything.getBuildingAnimation(struct.animation(0) + team);
 		alive = false;
 		buildingStructure = struct;
+	}
+	
+	@Override
+	public void update() 
+	{
+		if (attacking && attackCooldown <= 0)
+		{
+			System.out.println("Tower attacking");
+			attack();
+			attackCooldown = attackSpeed;
+		}
+		else
+		{
+			attackCooldown--;
+			targetSelector();
+		}
+//		ArrayList<Projectile> removeList = new ArrayList<Projectile>();
+//		for (Projectile p : projectiles)
+//		{
+//				//if (p.xCoord == this.target.xCoord() || )
+//			p.update();
+//			if (Math.abs(p.target.xCoord() - p.xCoord) < 2)
+//				removeList.add(p);
+//			else if (Math.abs(p.target.yCoord() - p.yCoord) < 2)
+//				removeList.add(p);
+//		}
+//		projectiles.removeAll(removeList);
 	}
 	
 	@Override

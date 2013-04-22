@@ -35,6 +35,7 @@ import com.unknowngames.rainbowrage.networking.User;
 import com.unknowngames.rainbowrage.networking.Network.*;
 import com.unknowngames.rainbowrage.parser.HeroStructure;
 import com.unknowngames.rainbowrage.ui.GameUI;
+import com.unknowngames.rainbowrage.ui.ScoreBoard;
 
 public class GameScreen implements Screen 
 {
@@ -74,6 +75,7 @@ public class GameScreen implements Screen
 	boolean connected = false;
 	byte team;						// Team 1 is top and Team 2 is bottom
 	Client client;
+	ScoreBoard scoreBoard;
 	
 	
 	String serverIp = "localhost"; 	// Local Host
@@ -359,28 +361,51 @@ public class GameScreen implements Screen
 		
 //		handleInput();
 
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		everything.map().background().draw(batch);
-		everything.render((isPaused ? 0 : delta));
-		//font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
-		//font.draw(batch, "delta: " + delta, 800, 555);
-//		font.draw(batch, "fps: " + (1 / delta), 800, 555);
-//		font.draw(batch, "team: " + team, 800, 555);
-
-		batch.end();
+		if (scoreBoard == null)
+		{
+			batch.setProjectionMatrix(camera.combined);
+			batch.begin();
+			everything.map().background().draw(batch);
+			everything.render((isPaused ? 0 : delta));
+			//font.draw(batch, "Total Units: " + (everything.team(1).size() + everything.team(2).size()), 800, 555);
+			//font.draw(batch, "delta: " + delta, 800, 555);
+	//		font.draw(batch, "fps: " + (1 / delta), 800, 555);
+	//		font.draw(batch, "team: " + team, 800, 555);
+	
+			batch.end();
+		}
 		batch.setProjectionMatrix(uiCamera.combined);
 		batch.begin();
-		gameUI3.render(delta);
-		pauseCooldown++;
+		if (scoreBoard == null)
+		{
+			gameUI3.render(delta);
+			pauseCooldown++;
+		}
+		else
+			scoreBoard.draw(batch);
 //		if (isPaused)
 //			batch.draw(pauseRegion, 400 - pauseRegion.getRegionWidth() / 2 , 240 - pauseRegion.getRegionHeight() / 2);
 		batch.end();
 	}
 	
-	private void endGame(int t)
+	private void scoreBoards(int t)
 	{
 		if (t == 0) return;
+		Gdx.input.setInputProcessor(null);
+		if (t == team)
+			scoreBoard = new ScoreBoard(0, everything, this);
+		else
+			scoreBoard = new ScoreBoard(1, everything, this);
+		startMusic.stop();
+		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/526296_In-My-Final-Hours.mp3"));
+		startMusic.setLooping(true);
+		startMusic.setVolume(everything.settings.getMusicSound());
+		startMusic.play();	
+		isPaused = true;
+	}
+	
+	public void endGame()
+	{
 		everything.end();
 		startMusic.stop();
 		game.mainMenuScreen.gameWon();
@@ -455,7 +480,7 @@ public class GameScreen implements Screen
 		everything.update();
 		if (!multiplayer)
 			randomSpawner();
-		endGame(everything.winCondition());
+		scoreBoards(everything.winCondition());
 	}
 
 	public void randomSpawner()
@@ -649,7 +674,7 @@ public class GameScreen implements Screen
 	
 	public void centerOnHero()
 	{
-		System.out.println("CENTERING");
+//		System.out.println("CENTERING");
 		if (!everything.getHero().isAlive())
 			return;
 		
