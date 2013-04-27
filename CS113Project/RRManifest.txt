@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Sealed: true
+Main-Class: com.unknowngames.rainbowrage.networking.RainbowRageServer
+Class-Path: libs/kryonet-2.18-all.jar libs/gdx.jar

@@ -8,7 +8,8 @@ import com.unknowngames.rainbowrage.parser.SkillStructure;
 
 public class ProcSkill extends Skill
 {
-	int cooldown, cooldownCounter, trigger;
+	int cooldown, cooldownCounter;
+	public int trigger;
 	
 	public ProcSkill(SkillStructure s, Actor c)
 	{
@@ -48,7 +49,7 @@ public class ProcSkill extends Skill
 			if (effect == 0)
 				caster.invis(effectAmount);
 		}
-		else
+		else if (hit == 1)
 		{
 			
 		}

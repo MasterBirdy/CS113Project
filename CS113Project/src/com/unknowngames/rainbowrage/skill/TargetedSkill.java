@@ -30,7 +30,7 @@ public class TargetedSkill extends Skill
 	public TargetedSkill(SkillStructure s, Actor c, Actor t)
 	{
 		super(s, c);
-		if (s.sprite.equals("empty"))
+		if (s.sprite.get(0).equals("empty"))
 			spellImage = everything.getObjectTexture("cannonball");
 		else
 			spellImage = everything.getObjectTexture(s.sprite.get(0));

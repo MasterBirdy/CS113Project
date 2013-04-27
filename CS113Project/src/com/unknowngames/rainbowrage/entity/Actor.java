@@ -16,12 +16,14 @@ import com.unknowngames.rainbowrage.parser.SkillStructure;
 import com.unknowngames.rainbowrage.skill.PassiveSkill;
 import com.unknowngames.rainbowrage.skill.ProcSkill;
 import com.unknowngames.rainbowrage.skill.SkillEffect;
+import com.unknowngames.rainbowrage.skill.TargetedSkill;
 
 public abstract class Actor extends Entity
 {
 	int currentHealth, maxHealth, damage,
 		damageBoost = 0,								// For buffs
-		invis = -1;										// Ticks left of invis
+		invis = -1,										// Ticks left of invis
+		procCooldown, procCooldownCounter;
 	
 	float attackSpeed, attackCooldown, attackRange,
 		  attackSpeedBoost = 0, attackRangeBoost = 0;	// For buffs
@@ -42,8 +44,10 @@ public abstract class Actor extends Entity
 	static TextureRegion[] rangeIndicator;
 	PassiveSkill passiveSkill;
 	ProcSkill procSkill;
+	SkillStructure procStruct;
 	Sound attackSound;
 	SoundPack soundPack;
+	TextureRegion projectileSprite;
 	
 	int level = 0;
 
@@ -58,6 +62,22 @@ public abstract class Actor extends Entity
 		attackRange = a.attackRange(level);
 		this.ranged = ranged;
 		skillEffects = new ArrayList<SkillEffect>(5);
+		
+		if (!a.projectile(level).equals("empty"))
+			projectileSprite = everything.getObjectTexture(a.projectile(level));
+		
+		if (!a.passiveSkill(level).equals("empty"))
+			this.loadPassiveSkill(everything.getSkill(a.passiveSkill(level)));
+		if (!a.procSkill(level).equals("empty"))
+		{
+			this.loadProcSkill(everything.getSkill(a.procSkill(level)));
+			procStruct = everything.getSkill(a.procSkill(level));
+			procCooldown = procStruct.cooldown.get(0);
+			procCooldownCounter = procCooldown;
+		}
+		if (!a.soundPack(level).equals("empty"))
+			this.soundPack = everything.getUnitSounds(a.soundPack(level));
+		
 //		if (this instanceof Building)
 //		{
 ////			this.attackSound = everything.getSound("thwp");
@@ -65,12 +85,12 @@ public abstract class Actor extends Entity
 //		}
 //		else
 //		{
-			if (!a.passiveSkill(level).equals("empty"))
-				this.loadPassiveSkill(everything.getSkill(a.passiveSkill(level)));
-			if (!a.procSkill(level).equals("empty"))
-				this.loadProcSkill(everything.getSkill(a.procSkill(level)));
-			if (!a.soundPack(level).equals("empty"))
-				this.soundPack = everything.getUnitSounds(a.soundPack(level));
+//			if (!a.passiveSkill(level).equals("empty"))
+//				this.loadPassiveSkill(everything.getSkill(a.passiveSkill(level)));
+//			if (!a.procSkill(level).equals("empty"))
+//				this.loadProcSkill(everything.getSkill(a.procSkill(level)));
+//			if (!a.soundPack(level).equals("empty"))
+//				this.soundPack = everything.getUnitSounds(a.soundPack(level));
 //			if (!a.attackSound(level).equals("empty"))
 //				this.attackSound = everything.getSound(a.attackSound(level));
 //		}
@@ -161,6 +181,8 @@ public abstract class Actor extends Entity
 		
 		if (passiveSkill != null)
 			passiveSkill.update();
+		
+		procCooldownCounter--;
 		
 		if(procSkill != null)
 			procSkill.update();
@@ -295,7 +317,7 @@ public abstract class Actor extends Entity
 			currentHealth = 0;
 		
 //		System.out.println("Hit me!");
-		if (procSkill != null)
+		if (procSkill != null && procStruct.trigger.get(0) == 0)
 		{
 //			System.out.println("TRIP!");
 			procSkill.trip(0);
@@ -343,6 +365,17 @@ public abstract class Actor extends Entity
 //				effects.add(this.blood());
 				soundPack.playDie();
 				alive = false;
+				
+				if (this instanceof Minion)
+				{
+//					System.out.println("DEAD");
+					everything.minionDeath(this.team);
+				}
+				
+				else if (this instanceof Hero)
+				{
+					everything.heroDeath(this.team());
+				}
 			}
 		}
 	}
@@ -359,7 +392,7 @@ public abstract class Actor extends Entity
 		if (target != null && target.isAlive() && target.invis < 0)
 		{
 			currentDistance = getDistanceSquared(target);
-			if (target instanceof ArrowTower)
+			if (target instanceof Building)
 				currentDistance -= 3600;
 			if (currentDistance < attackRange * attackRange)
 			{
@@ -424,30 +457,51 @@ public abstract class Actor extends Entity
 			soundPack.playAttack();
 //		if (attackSound != null)
 //			attackSound.play(volume);
-		if (procSkill != null)
+//		if (procSkill != null)
+//		{
+////			System.out.println("TRIP!");
+//			if (procSkill.trigger == 1)
+//				castProc();
+////			procSkill.trip(1);
+//		}
+		if (!castProc())
 		{
-//			System.out.println("TRIP!");
-			procSkill.trip(1);
+			if (ranged)
+				rangeAttack();
+			else
+				meleeAttack();
 		}
-		if (ranged)
-			rangeAttack();
-		else
-			meleeAttack();
+	}
+	
+	protected boolean castProc()
+	{
+//		System.out.println("attemptProcCast");
+		if (procStruct != null && this.isAlive() && procCooldownCounter < 0 && procStruct.trigger.get(0) == 1)
+		{
+			System.out.println("procCast");
+			procCooldownCounter = procCooldown;
+			everything.add(new TargetedSkill(procStruct, this, target), team);
+			return true;
+		}
+		return false;
 	}
 	
 	protected void rangeAttack() 
 	{
-		if (!(this instanceof Stronghold))
-		{
-			if (this.maxHealth == 65)
-				projectiles.add(new MageProjectile(this.xCoord, this.yCoord, this.team, 3, target));
-			else
-				projectiles.add(new ArrowProjectile(this.xCoord + (this instanceof Building ? 10 : 0), this.yCoord + (this instanceof Building ? 40 : 0), this.team, 3, target));
-		}
-		else
-		{
-			projectiles.add(new CannonProjectile(this.xCoord, this.yCoord + 50, this.team, 3, target));
-		}
+//		if (!(this instanceof Stronghold))
+//		{
+//			if (this.maxHealth == 65)
+//				projectiles.add(new MageProjectile(this.xCoord, this.yCoord, this.team, 3, target));
+//			else
+//				projectiles.add(new ArrowProjectile(this.xCoord + (this instanceof Building ? 10 : 0), this.yCoord + (this instanceof Building ? 40 : 0), this.team, 3, target));
+//		}
+//		else
+//		{
+//			projectiles.add(new CannonProjectile(this.xCoord, this.yCoord + 50, this.team, 3, target));
+//		}
+		
+		projectiles.add(new Projectile(this.xCoord, this.yCoord + (this instanceof Building ? 50 : 0), this.team, 3, target, projectileSprite));
+		
 		target.takeDamage(damage);
 //		if (target == null || !target.isAlive())
 //			return;

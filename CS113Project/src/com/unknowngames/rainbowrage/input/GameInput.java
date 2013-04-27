@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
@@ -13,8 +14,10 @@ import com.unknowngames.rainbowrage.entity.Entity;
 import com.unknowngames.rainbowrage.entity.Hero;
 import com.unknowngames.rainbowrage.ui.GameUI;
 
-public class MyInputProcessor implements InputProcessor
+public class GameInput implements InputProcessor
 {
+	boolean readyToLeave = false;
+	
 	boolean down = false;
 	int x, y;
 	int deltaX, deltaY;
@@ -37,6 +40,8 @@ public class MyInputProcessor implements InputProcessor
 	@Override
 	public boolean keyDown(int keycode) 
 	{
+		if (keycode > 0)
+			System.out.println(keycode);
 		if (keycode == Keys.TAB)
 			EverythingHolder.toggleShowRange();
 		if (keycode == Keys.NUM_1)
@@ -69,6 +74,22 @@ public class MyInputProcessor implements InputProcessor
 			EverythingHolder.setMusicVolume(1f);
 			Entity.setVolume(1f);
 		}
+		if (keycode == Keys.BACKSLASH && readyToLeave == true)
+		{
+			System.out.println("Sending kill");
+			game.sendMessage("kill");
+		}
+		if (keycode == Keys.L)
+		{
+//			System.out.println("Ready");
+			readyToLeave = true;
+		}
+		else if (keycode > 0)
+		{
+//			System.out.println(keycode + " End Ready");
+			readyToLeave = false;
+		}
+		
 		if (keycode == 84)
 		{
 			int temp = 5;
@@ -252,7 +273,8 @@ public class MyInputProcessor implements InputProcessor
 //	}
 
 	@Override
-	public boolean scrolled(int amount) {
+	public boolean scrolled(int amount) 
+	{
 		camera.zoom += amount * 0.06;
 		game.boundCamera();
 		return false;
@@ -276,7 +298,8 @@ public class MyInputProcessor implements InputProcessor
 	}
 
 	@Override
-	public boolean mouseMoved(int arg0, int arg1) {
+	public boolean mouseMoved(int arg0, int arg1) 
+	{
 		// TODO Auto-generated method stub
 		return false;
 	}

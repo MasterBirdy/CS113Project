@@ -27,7 +27,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 import com.esotericsoftware.minlog.Log;
 import com.unknowngames.rainbowrage.entity.*;
-import com.unknowngames.rainbowrage.input.MyInputProcessor;
+import com.unknowngames.rainbowrage.input.GameInput;
 import com.unknowngames.rainbowrage.map.Coordinate;
 import com.unknowngames.rainbowrage.map.Map;
 import com.unknowngames.rainbowrage.networking.Network;
@@ -48,11 +48,11 @@ public class GameScreen implements Screen
 	private boolean isPaused;
 	BitmapFont font;
 	static boolean showRange;
-	MyInputProcessor inputProcessor;
+	GameInput inputProcessor;
 	static EverythingHolder everything;// = new EverythingHolder();
 	TextureRegion pauseRegion;
 	int pauseCooldown;
-	GameUI gameUI3;
+	GameUI gameUI;
 	Hero[] heroes = new Hero[2];
 	RainbowRage game;
 	Vector3 touchPoint;
@@ -78,8 +78,8 @@ public class GameScreen implements Screen
 	ScoreBoard scoreBoard;
 	
 	
-	String serverIp = "localhost"; 	// Local Host
-//	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
+//	String serverIp = "localhost"; 	// Local Host
+	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";//"10.170.103.156"; 	// EC2 Server
 	
 	
 //	String serverIp = "evil-monkey.ics.uci.edu";//"128.195.6.172";
@@ -149,7 +149,7 @@ public class GameScreen implements Screen
 			region = new TextureRegion(texture, 0, 0, 1200, 960);
 			sprite = new Sprite(region);
 			
-			maps[1] = new Map(new Coordinate(280, 870), sprite, 1200, 960, 270, 870, 1210, 480);
+			maps[1] = new Map(new Coordinate(320, 870), sprite, 1200, 960, 310, 870, 1210, 480);
 			maps[1].add(new Coordinate(1205, 870));
 			maps[1].add(new Coordinate(1205, 665));
 			maps[1].add(new Coordinate(380, 665));
@@ -203,29 +203,29 @@ public class GameScreen implements Screen
 //		Entity.loadStatics(sheetR, sheetB);
 //		Actor.loadRange();
 //		Unit.loadAnimations();
-		Projectile.loadProjectiles();
+//		Projectile.loadProjectiles();
 //		Building.loadSprites();
 		sprite.setSize(1600, 1200);
 		font = new BitmapFont();
 		EverythingHolder.showRange = true;
-		inputProcessor = new MyInputProcessor();
+		inputProcessor = new GameInput();
 
 		Gdx.input.setInputProcessor(inputProcessor);
 		GameUI.load(batch, everything);
-		gameUI3 = new GameUI();
+		gameUI = new GameUI();
 		
-		MyInputProcessor.loadCamera(camera, uiCamera);
-		MyInputProcessor.loadGame(this, gameUI3);
+		GameInput.loadCamera(camera, uiCamera);
+		GameInput.loadGame(this, gameUI);
 		
 //		Building.loadAnimations();
 
-		Building tower = new Building(maps[level].start1().x() + 20, maps[level].start1().y(), 1, 
+		Building tower = new Building(maps[level].start1().x(), maps[level].start1().y() - 2, 1, 
 									everything.buildingStats.get("stronghold"));//new Stronghold(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
 		tower.upgrade();
 		everything.add(tower, 1);
 //		everything.add(tower, true, 1);
 //		tower = new Stronghold(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
-		tower = new Building(maps[level].start2().x() - 20, maps[level].start2().y(), 2, 
+		tower = new Building(maps[level].start2().x(), maps[level].start2().y() - 2, 2, 
 				everything.buildingStats.get("stronghold"));
 		tower.upgrade();
 		everything.add(tower, 2);
@@ -378,8 +378,11 @@ public class GameScreen implements Screen
 		batch.begin();
 		if (scoreBoard == null)
 		{
-			gameUI3.render(delta);
+			gameUI.render(delta);
 			pauseCooldown++;
+			
+			if (multiplayer == true && connected == false)
+				everything.getFont(2).draw(batch, "Waiting for a challenger...", 100, 300);
 		}
 		else
 			scoreBoard.draw(batch);
@@ -750,7 +753,7 @@ public class GameScreen implements Screen
         			{
         				team = (byte)status.status;
         				everything.setTeam(team);
-        				
+        				gameUI.setup();
         				System.out.println("Entering as player " + team);
         				connected = true;
         				return;
@@ -795,7 +798,7 @@ public class GameScreen implements Screen
         		
         		if (object instanceof UserMessage)
         		{
-        			gameUI3.setMessage(((UserMessage)object).message);
+        			gameUI.setMessage(((UserMessage)object).message);
         		}
         	}
         	

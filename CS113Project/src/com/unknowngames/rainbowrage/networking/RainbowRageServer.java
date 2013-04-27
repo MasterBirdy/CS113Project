@@ -31,7 +31,7 @@ public class RainbowRageServer
     int totalUsers = 0;
     int currentTurn = 0;
     long timeLastUsed;
-    int allowedUptime = 7200000;
+    int allowedUptime = 14400000;
     NetworkClock networkClock = new NetworkClock(this, allowedUptime);
     
     public RainbowRageServer() throws IOException 
@@ -134,6 +134,8 @@ public class RainbowRageServer
                 
                 if (object instanceof UserMessage)
                 {
+                	if (((UserMessage)object).message.equals("kill"))
+            			server.stop();
                 	UserMessage msg = (UserMessage)object;
                 	if (user.room >= 0)
                 		games.get(user.room).userMessage(msg);

@@ -23,6 +23,7 @@ public class LoadingScreen implements Screen
 	boolean start = false, loaded = false;
 	TextureRegion loading;
 	GL10 gl = Gdx.graphics.getGL10();
+	int width = Gdx.graphics.getWidth(), height = Gdx.graphics.getHeight();
 	
 	public LoadingScreen(RainbowRage game)
 	{
@@ -52,7 +53,7 @@ public class LoadingScreen implements Screen
 		fade += 0.01;
 		
 		batch.begin();
-		batch.draw(loading, 0, 0);
+		batch.draw(loading, 0, 0, width, height);
 		batch.end();
 		
 //		if (!start)

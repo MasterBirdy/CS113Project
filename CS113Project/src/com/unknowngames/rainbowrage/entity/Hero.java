@@ -11,7 +11,7 @@ import com.unknowngames.rainbowrage.skill.TargetedSkill;
 public class Hero extends Unit 
 {
 	//int stance = 1, previousStance = 1;
-	int respawnTime = 100, respawnCounter = 0,
+	int respawnTime = 250, respawnCounter = 0,
 		activeCooldown = 0, activeCooldownCounter = 0;
 	boolean changedDirection = false;
 	SkillStructure activeSkill;
@@ -43,13 +43,16 @@ public class Hero extends Unit
 		return pet;
 	}
 	
-	public void activeSkill()
+	public boolean activeSkill()
 	{
 		if (activeSkill != null && this.isAlive() && activeCooldownCounter < 0)
 		{
 			activeCooldownCounter = activeCooldown;
 			everything.add(new TargetedSkill(activeSkill, this, target), team);
+			return true;
 		}
+		
+		return false;
 	}
 	
 	public void stance(int s)

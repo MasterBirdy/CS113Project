@@ -10,7 +10,11 @@ public abstract class ActorStructure
 	ArrayList<Integer> attackCoolDown;
 	ArrayList<Integer> attackRange;
 	ArrayList<Integer> cost;
+	ArrayList<Integer> physicalResist;
+	ArrayList<Integer> rangedResist;
+	ArrayList<Integer> magicResist;
 	ArrayList<Boolean> ranged;
+	ArrayList<String> projectile;
 //	ArrayList<Integer> animation;
 	ArrayList<String> animation;
 	ArrayList<String> passiveSkill;
@@ -78,6 +82,27 @@ public abstract class ActorStructure
 		return cost.get(cost.size() - 1);
 	}
 	
+	public int physicalResist(int level)
+	{
+		if (level < physicalResist.size())
+			return physicalResist.get(level);
+		return physicalResist.get(physicalResist.size() - 1);
+	}
+	
+	public int rangedResist(int level)
+	{
+		if (level < rangedResist.size())
+			return rangedResist.get(level);
+		return rangedResist.get(rangedResist.size() - 1);
+	}
+	
+	public int magicResist(int level)
+	{
+		if (level < magicResist.size())
+			return magicResist.get(level);
+		return magicResist.get(magicResist.size() - 1);
+	}
+	
 	public boolean ranged(int level)
 	{
 		if (level < ranged.size())
@@ -90,5 +115,12 @@ public abstract class ActorStructure
 		if (level < animation.size())
 			return animation.get(level);
 		return animation.get(animation.size() - 1);
+	}
+	
+	public String projectile(int level)
+	{
+		if (level < projectile.size())
+			return projectile.get(level);
+		return projectile.get(projectile.size() - 1);
 	}
 }

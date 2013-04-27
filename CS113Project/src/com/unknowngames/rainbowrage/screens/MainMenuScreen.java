@@ -68,6 +68,7 @@ public class MainMenuScreen implements Screen
 		height = Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(width, height);
+		camera.setToOrtho(false);
 		texture = new TextureRegion(new Texture(Gdx.files.internal("images/mainmenubackground.jpg")), 0, 0, 800, 480);
 //		Texture textTexture = new Texture(Gdx.files.internal("images/textmenuscreen.png"));
 //		TextureRegion textRegion = new TextureRegion(textTexture, 0, 0, 451, 49);
@@ -77,11 +78,11 @@ public class MainMenuScreen implements Screen
 		gameLogo = everything.getObjectTexture("gamelogo");
 		buttonFrame = everything.getObjectTexture("mainbuttonframe");
 		
-		int stackTopX = 680; //658;
+		int stackTopX = width - 120; //680; //658;
 		int stackTopY = 345; //355;
 		int spaceX = 75;
 		int spaceY = 54;
-		int buttonRadius = (int) (width * .95f / 20);
+		int buttonRadius = 38; //(int) (width * .95f / 20);
 //		buttons[0] = new RoundButton(stackTopX, stackTopY - spaceY * 2 + 4, buttonRadius, 			
 //				new TextureRegion(icons, 367, 459, 152, 153));	// Sinlge-player
 //		buttons[1] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 3 + 4, buttonRadius, 			
@@ -138,11 +139,11 @@ public class MainMenuScreen implements Screen
 		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClearColor(1, 1, 1, 1);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		//batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(texture, 0, 0, width, height);
 		batch.draw(gameLogo, 155, 262, 382, 212);
-		batch.draw(buttonFrame, 634, -10, buttonFrame.getRegionWidth() * .95f * 80 / 146, buttonFrame.getRegionHeight() * .95f * 80 / 146);
+		batch.draw(buttonFrame, width - 166, -10, buttonFrame.getRegionWidth() * .95f * 80 / 146, buttonFrame.getRegionHeight() * .95f * 80 / 146);
 //		
 //		newGameSprite.draw(batch);
 //		settingsSprite.draw(batch);
@@ -177,7 +178,8 @@ public class MainMenuScreen implements Screen
 		if (Gdx.input.justTouched()) {
 //			camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 			
-			touchPoint.set(Gdx.input.getX(), 480 - Gdx.input.getY(), 0);
+//			touchPoint.set(Gdx.input.getX(), 480 - Gdx.input.getY(), 0);
+			camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));		
 			System.out.println(touchPoint.x + " " + touchPoint.y);
 			for (int i = 0; i < buttons.length; i++)
 				if (buttons[i].hit(touchPoint.x, touchPoint.y))

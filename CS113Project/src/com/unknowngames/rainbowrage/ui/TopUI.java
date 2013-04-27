@@ -52,7 +52,7 @@ public class TopUI
 		
 		// Wave Timer
 		batch.draw(nextWave, 320, adTopY, 166 * .95f, 74 * .95f);
-		everything.getFont(1).draw(batch, String.format("%02d", everything.timeLeft()), 374, adTopY + 58);
+		everything.getFont(2).draw(batch, String.format("%02d", everything.timeLeft()), 378, adTopY + 55);
 //		everything.font2.draw(batch, String.format("%02d", everything.timeLeft()), 374, adTopY + 58);
 	}
 	

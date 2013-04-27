@@ -97,7 +97,10 @@ public abstract class Unit extends Actor
 				stateTime = .08f;
 		}
 		
-		current = unitAnimation.getAnimation(animationDir).getKeyFrame(stateTime / (attacking ? 2 : 1), !attacking);	
+		if (attacking && unitAnimation.getAnimation(animationDir).animationDuration < stateTime / 2)
+			current = unitAnimation.getAnimation(animationDir).getKeyFrame(0);
+		else
+			current = unitAnimation.getAnimation(animationDir).getKeyFrame(stateTime / (attacking ? 2 : 1), !attacking);	
 		Vector2 point = unitAnimation.getFeet(animationDir);
 		
 		if (this.invis > 0)

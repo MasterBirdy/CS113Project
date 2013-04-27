@@ -40,7 +40,7 @@ public class EverythingHolder
 		spawnInterval1, spawnInterval2;
 	
 	int nano = 1000000000;
-	int income = 100;
+	int income1 = 100, income2 = 100;
 	int funds1, funds2;
 	int turn, highestTurn = 10;
 	int petType = 0;
@@ -48,20 +48,14 @@ public class EverythingHolder
 	float stepTime = 0.02f;
 	byte team = 1;
 
-	private Music music;
-	Audio tempMusic = Gdx.audio;
-
 	static float musicVolume = 1f;
 	
 	static boolean showRange;
 	boolean spawning;
 	boolean running;
 	
-	//	mrwizard swordface arroweyes
+	//	You can call: mrwizard, swordface, or arroweyes
 	String[] heroNames = {"mrwizard", "swordface"};
-	
-//	heroNames[0] = "mrwizard";
-//	heroNames[1] = "arroweyes";
 	
 	Hero playerHeroes[];
 	Building playerBases[];
@@ -86,33 +80,27 @@ public class EverythingHolder
 	HashMap<String, UnitAnimation> unitAnimations = new HashMap<String, UnitAnimation>();
 	public HashMap<String, BuildingAnimation> buildingAnimations = new HashMap<String, BuildingAnimation>();
 	
-	public BitmapFont[] font = new BitmapFont[3]; //, font2;
+	public BitmapFont[] font = new BitmapFont[4]; //, font2;
 	private Texture teamTextures[] = new Texture[2];
 	
 	String[] color = {"blue", "red"};
 	
 	boolean finished = false;
 	
+	Stats stats;
+	
 	Settings settings = new Settings();
 		
 	public EverythingHolder()
 	{
 		reset();
-		
-//		pools[0] = new LinkedList<Integer>();
-//		pools[1] = new LinkedList<Integer>();
-//		pools[2] = new LinkedList<Integer>();
-//		pools[3] = new LinkedList<Integer>();
-		
+				
 		UnitParser unitParser = new UnitParser();
 		minionStats = unitParser.getMinionStats();
 		buildingStats = unitParser.getBuildingStats();
 		heroStats = unitParser.getHeroStats();
 		skillStats = unitParser.getSkillStats();
 		
-//		initializeHeroes();
-		
-//		Entity.loadStatics(effects);
 		// Wave control
 //		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
 		waveInterval = 	(int) (10 / stepTime); 	// Turns (15 seconds)
@@ -127,15 +115,12 @@ public class EverythingHolder
 		loadEffects();
 		loadSounds();
 		loadTextures();
-//		loadTeams(color[0], color[1]);
-//		loadUnitAnimations();
-		
-//		font = new BitmapFont();
-//		font2 = new BitmapFont();
-//		font2.scale(2);
 		finished = true;
-//		music = tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
-//		music.setLooping(true);
+	}
+	
+	public Stats Stats()
+	{
+		return stats;
 	}
 	
 	public float getMusicLevel()
@@ -494,7 +479,12 @@ public class EverythingHolder
 	
 	public void loadTextures()
 	{
-		objectTextures.put("cannonball", new TextureRegion(new Texture(Gdx.files.internal("images/cannonprojectile.png")), 0, 0, 16, 16));
+//		objectTextures.put("cannonball", new TextureRegion(new Texture(Gdx.files.internal("images/cannonprojectile.png")), 0, 0, 16, 16));
+//		objectTextures.put("arrow", new TextureRegion(new Texture(Gdx.files.internal("images/arrowprojectile.png")), 16, 0, 16, 16));
+		Texture proj = new Texture(Gdx.files.internal("images/projectile_sheet.png"));
+		objectTextures.put("arrow", new TextureRegion(proj, 0, 0, 16, 16));
+		objectTextures.put("cannonball", new TextureRegion(proj, 16, 0, 16, 16));
+		
 		Texture icons = new Texture(Gdx.files.internal("images/buttons_sheet.png"));
 		objectTextures.put("fireball", new TextureRegion(icons, 1814, 0, 90, 90));
 		objectTextures.put("fireattack", new TextureRegion(icons, 1814, 90, 73, 73));
@@ -519,6 +509,18 @@ public class EverythingHolder
 		objectTextures.put("gamelogo", new TextureRegion(icons, 0, 1514, 842, 467));
 		objectTextures.put("mainbuttonframe", new TextureRegion(icons, 880, 422, 361, 572));
 		
+		objectTextures.put("heroselectsword", new TextureRegion(icons, 1896, 328, 152, 153));
+		objectTextures.put("heroselectwizard", new TextureRegion(icons, 1896, 481, 152, 153));
+		objectTextures.put("heroselectarrow", new TextureRegion(icons, 1896, 634, 152, 153));
+		objectTextures.put("heroselection", new TextureRegion(icons, 1722, 327, 174, 187));
+		
+		objectTextures.put("heronamesword", new TextureRegion(icons, 1333, 1939, 302, 109));
+		objectTextures.put("heronamewizard", new TextureRegion(icons, 1333, 1830, 302, 109));
+		objectTextures.put("heronamearrow", new TextureRegion(icons, 1333, 1721, 302, 109));
+		
+		objectTextures.put("endstatsbox", new TextureRegion(icons, 1635, 1824, 413, 224));
+		objectTextures.put("endvictory", new TextureRegion(icons, 1687, 1711, 361, 62));
+		objectTextures.put("enddefeat", new TextureRegion(icons, 1687, 1773, 360, 51));
 	}
 	
 	public void loadSounds()
@@ -574,6 +576,8 @@ public class EverythingHolder
 			catch (Exception e)
 			{
 				System.out.println("Don't have " + name + settings.getParticleEffects() + ".p");
+				if (name.equals("spark"))
+					System.out.println(e);
 				temp.load(Gdx.files.internal("data/" + name + ".p"), Gdx.files.internal("images"));
 			}
 			particleEffects.put(name, temp);
@@ -644,11 +648,16 @@ public class EverythingHolder
 	public void setHeroStance(int team, int s)
 	{
 		playerHeroes[team-1].stance(s);
+		
+		if (team == this.team)
+			Gdx.input.vibrate(50);
 	}
 	
 	public void activeHeroSkill(int team)
 	{
-		playerHeroes[team-1].activeSkill();
+		if (playerHeroes[team-1].activeSkill())
+			if (team == this.team)
+				Gdx.input.vibrate(50);
 	}
 	
 	public int turn()
@@ -774,39 +783,22 @@ public class EverythingHolder
 			entities.add(a);
 	}
 	
-	/*public void addHero(Hero h, int team)
-	{
-		if (team == 1)
-			hero1 = h;
-		else
-			hero2 = h;
-	}*/
-	
 	public void add(int unit, int team)
 	{
-//		System.out.println("Trying to add " + unit + " on team " + team);
-//		if (team == this.team)//(team == 0)
-//		{
 		int cost = playerUnits[team - 1][unit].cost(0);
-			if ((team == 1 ? funds1 : funds2) < cost)
-				return;
-			if (team == 1)
-				funds1 -= cost;
-			else
-				funds2 -= cost;
-			
-			if (team == this.team)
-				Gdx.input.vibrate(50);
-//		}
-//		else
-//		{
-//			if ((team == 1 ? funds2 : funds) < 20)
-//				return;
-//			if (team == 1)
-//				funds1 -= 20;
-//			else
-//				funds2 -= 20;
-//		}
+		
+		if ((team == 1 ? funds1 : funds2) < cost)
+			return;
+		if (team == 1)
+			funds1 -= cost;
+		else
+			funds2 -= cost;
+		
+		stats.minionSent[team - 1]++;
+		
+		if (team == this.team)
+			Gdx.input.vibrate(50);
+		
 		pools[team - 1].add(unit);
 	}
 	
@@ -882,7 +874,7 @@ public class EverythingHolder
 	{
 		int temp = 0;
 		for (Entity a : entities)
-			if (a instanceof Actor && a.isAlive() && !(a instanceof Stronghold) && a.team() == team)
+			if (a instanceof Actor && a.isAlive() && !(a instanceof Building) && a.team() == team)
 //			if (a instanceof Actor && a.isAlive() && (t == 0 || ((Actor)a).team() == t))
 				temp++;
 		return temp;
@@ -900,117 +892,60 @@ public class EverythingHolder
 //			if (a instanceof Stronghold)
 //				a.draw(batch);
 //		}
-		for (Projectile p : projectiles)
-			p.draw(batch, delta);
 		
-		// Reordering changed entities for proper depth rendering
-//		Iterator<Entity> entityIter = entities.iterator();
-//		changedEntity = new ArrayList<Entity>();
-//		for (Entity e : entities)
-//			if (e.yCoordChanged())
-//				changedEntity.add(e);
-//		for (Entity e : changedEntity)
-//		{
-//			entities.remove(e);
-//			entities.add(e);
-//		}
 		
-		/*entityDraw.clear();
-		for (Entity e : entities)
-			entityDraw.add(e);
-		
-		while (entityDraw.peek() != null)
-		{
-			Entity e = entityDraw.remove();*/
 		Collections.sort(entities, eCompare);
 		
 		Entity e;
 		for (int i = 0; i < entities.size(); i++)
 		{
 			e = entities.get(i);
+			if (e == null)
+				continue;
 			if (e instanceof Building || (e instanceof Actor && ((Entity)e).isAlive()) || (e instanceof Skill && ((Entity)e).isAlive()))
 				e.draw(batch, delta);
 			else if (!(e instanceof Hero))
 			{
 //				System.out.println("DEAD");
+//				if (e instanceof Minion)
+//				{
+//					System.out.println("Minion " + e.team());
+//					stats.minionDeaths[e.team() - 1]++;
+//					stats.minionKills[(e.team() == 1 ? 1 : 0)]++;
+//				}
 				entities.set(i, null);
+			}
+//			else if (e instanceof Hero)
+//			{
+//				
+//				System.out.println("Hero " + e.team());
+//				stats.heroDeaths[e.team() - 1]++;
+//				stats.heroKills[(e.team() == 1 ? 1 : 0)]++;
+//			}
+		}
+		
+		for (Projectile p : projectiles)
+		{
+			try
+			{
+				p.draw(batch, delta);
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
 			}
 		}
 		
-//		while (entityIter.hasNext())
-//		{
-//			e = entityIter.next();
-//			if (e instanceof Building || (e instanceof Actor && ((Actor)e).isAlive()))
-//			{
-//				e.draw(batch);
-//			}
-//		}
-		
-		
-		
-//		for (Entity e : entities)
-//		{
-////			if (e instanceof Actor && ((Actor)e).isAlive())
-//			if (e instanceof Building || (e instanceof Actor && ((Actor)e).isAlive()))
-//			{
-//				e.draw(batch);
-//			}
-//			else if (!(e instanceof Hero))
-//			{
-//				
-//			}
-//		}
-		
-//		Iterator<Actor> actorIter = teams[0].iterator();
-//		Actor a;
-//		while (actorIter.hasNext())
-//		{
-//			a = actorIter.next();
-//			if (a instanceof Stronghold)
-//				continue;
-//			if (a.isAlive() || (a instanceof ArrowTower))
-//				a.draw(batch);
-//			else if (!(a instanceof Hero))
-//			{
-//				//effects.add(a.blood());
-//				a.destroy();
-//				actorIter.remove();
-//			}
-//		}
-		
-		/*if (hero1 != null && hero1.isAlive())
-			hero1.draw(batch);*/
-		
-//		actorIter = teams[1].iterator();
-//		while (actorIter.hasNext())
-//		{
-//			a = actorIter.next();
-//			if (a instanceof Stronghold)
-//				continue;
-//			if (a.isAlive() || (a instanceof ArrowTower))
-//			{
-//				a.draw(batch);
-//			}
-//			else if (!(a instanceof Hero))
-//			{
-//				//effects.add(a.blood());
-//				a.destroy();
-//				actorIter.remove();
-//			}
-//		}
 		for (ParticleEffect pe : effects)
 		{
 			pe.draw(batch, delta * 0.5f);
 		}
 		Iterator<ParticleEffect> iter = effects.iterator();
-//		ParticleEffect e = new ParticleEffect();
+
 		while (iter.hasNext())
 		{
 			if ((iter.next()).isComplete())
 				iter.remove();
-//			e = (ParticleEffect) iter.next();
-//			if (e.isComplete())
-//				iter.remove();
 		}
 		if (false)//showRange)
 		{
@@ -1023,13 +958,20 @@ public class EverythingHolder
 				}
 			}
 		}
-//			for (Actor ac : teams[0])
-//				if (ac.isAlive())
-//					ac.rangeIndicator(batch);
-//			for (Actor ac : teams[1])
-//				if (ac.isAlive())
-//					ac.rangeIndicator(batch);
-//		}
+	}
+	
+	public void heroDeath(int team)
+	{
+		System.out.println("Hero " + team);
+		stats.heroDeaths[team - 1]++;
+		stats.heroKills[(team == 1 ? 1 : 0)]++;
+	}
+	
+	public void minionDeath(int team)
+	{
+		System.out.println("Minion " + team);
+		stats.minionDeaths[team - 1]++;
+		stats.minionKills[(team == 1 ? 1 : 0)]++;
 	}
 	
 	public int unitCost(int unit, int team)
@@ -1066,17 +1008,6 @@ public class EverythingHolder
 		
 		projectiles.removeAll(removeList);
 		
-		/*if (hero1 != null)
-			hero1.isAlive();
-		if (hero2 != null)
-			hero2.isAlive();*/
-		
-//		for (Actor a : teams[0])
-//			if (a.isAlive())
-//				a.update();
-//		for (Actor a : teams[1])
-//			if (a.isAlive())
-//				a.update();
 		for (int i = 0; i < entities.size(); i++)
 		{
 			if (entities.get(i) != null && (entities.get(i).isAlive() || entities.get(i) instanceof Hero))
@@ -1129,8 +1060,8 @@ public class EverythingHolder
 			spawnTimer2 = waveTimer;
 //			spawnInterval2 = (!pools[1].isEmpty() ? waveTime / pools[1].size() : waveInterval);
 			spawnInterval2 = 20;
-			pools[2] = pools[0];
-			pools[3] = pools[1];
+			pools[2].addAll(pools[0]);
+			pools[3].addAll(pools[1]);
 			pools[0] = new LinkedList<Integer>();
 			pools[1] = new LinkedList<Integer>();
 			if (pools[2] == null)
@@ -1155,28 +1086,21 @@ public class EverythingHolder
 //			else if (Settings.getInstance().getDifficulty() == Difficulty.HARD)
 //				funds += income * .75;
 			
-			funds1 += income;
-			funds2 += income;
-			//Gdx.input.vibrate(1000);
+			funds1 += income1;
+			funds2 += income2;
+		}
+
+		if (!pools[2].isEmpty() && turn - spawnTimer1 > spawnInterval1)
+		{
+			spawnPool(1);
+			spawnTimer1 = turn;
 		}
 		
-		/*if (spawning && pools[2].isEmpty() && pools[3].isEmpty())
-			spawning = false;
-		
-		if (spawning)
-		{*/
-			if (!pools[2].isEmpty() && turn - spawnTimer1 > spawnInterval1)
-			{
-				spawnPool(1);
-				spawnTimer1 = turn;
-			}
-			
-			if (!pools[3].isEmpty() && turn - spawnTimer2 > spawnInterval2)
-			{
-				spawnPool(2);
-				spawnTimer2 = turn;
-			}
-		//}
+		if (!pools[3].isEmpty() && turn - spawnTimer2 > spawnInterval2)
+		{
+			spawnPool(2);
+			spawnTimer2 = turn;
+		}
 	}
 	
 	public Map map()
@@ -1222,18 +1146,26 @@ public class EverythingHolder
 		Actor.loadProjectiles(projectiles);
 		
 		Entity.loadStatics(effects);
-		funds1 = 200;
-		funds2 = 200;
+		funds1 = 100;
+		funds2 = 100;
 		turn = 0;
 		highestTurn = 10;
 		
-		font[0] = new BitmapFont();
-		font[1] = new BitmapFont();
-		font[1].scale(2);
+//		font[0] = new BitmapFont();
+//		font[1] = new BitmapFont();
+//		font[1].scale(2);
 		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/BaroqueScript.ttf"));
-		font[2] = generator.generateFont(36);
+//		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/BaroqueScript.ttf"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
+//		font[2] = generator.generateFont(36);
+		font[0] = generator.generateFont(18);
+		font[1] = generator.generateFont(32);
+		font[2] = generator.generateFont(45);
 		font[2].setColor(1, 1, 1, 1);
+		
+//		font[3] = generator.generateFont(36);
+		
+		stats = new Stats();
 //		font[2] = 
 	}
 }

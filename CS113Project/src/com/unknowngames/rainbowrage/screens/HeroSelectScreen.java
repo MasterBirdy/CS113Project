@@ -20,17 +20,19 @@ public class HeroSelectScreen implements Screen
 	EverythingHolder everything;
 	SpriteBatch batch;// = new SpriteBatch();
 	OrthographicCamera camera;
-	TextureRegion background;
-	Button[] buttons = new Button[6];
-	int diameter = 20;
+	TextureRegion background, selection;
+	TextureRegion[] heroNames = new TextureRegion[3];
+	Button[] buttons = new Button[7];
+	int diameter = 40;
 	int width = Gdx.graphics.getWidth();
 	int height = Gdx.graphics.getHeight();
+	int selected = 0;
 	
 	String hero[] = {"swordface", "mrwizard"};
 	String color[] = {"red", "blue"};
 	
 	GL10 gl = Gdx.graphics.getGL10();
-	Vector2 touchPoint = new Vector2();
+	Vector3 touchPoint = new Vector3();
 	RainbowRage game;
 	
 	
@@ -39,22 +41,29 @@ public class HeroSelectScreen implements Screen
 		this.everything = everything;
 		this.game = game;
 		camera = new OrthographicCamera(width, height);
+		camera.setToOrtho(false);
 		batch = new SpriteBatch();
 //		batch.setProjectionMatrix(camera.combined);
 //		this.batch = batch;
 		background = new TextureRegion(new Texture(Gdx.files.internal("images/mainmenubackground.jpg")), 0, 0, 800, 480);
 		
-		buttons[0] = new RoundButton(100, 350, diameter * 2 , everything.getObjectTexture("swordfacebutton"));
-		buttons[1] = new RoundButton(200, 350, diameter * 2, everything.getObjectTexture("arroweyesbutton"));
-		buttons[2] = new RoundButton(300, 350, diameter * 2, everything.getObjectTexture("mrwizardbutton"));
-		buttons[3] = new RoundButton(500, 100, (int)(diameter * 1.5f), everything.getObjectTexture("confirmbutton"));
-		buttons[4] = new RoundButton(230, 200, (int)(diameter * 1.5f), everything.getObjectTexture("redbutton"));
-		buttons[5] = new RoundButton(300, 200, (int)(diameter * 1.5f), everything.getObjectTexture("bluebutton"));
+		selection = everything.getObjectTexture("heroselection");
+		
+		buttons[0] = new RoundButton(100, 320, 74 , everything.getObjectTexture("heroselectsword"));
+		buttons[1] = new RoundButton(300, 320, 74, everything.getObjectTexture("heroselectarrow"));
+		buttons[2] = new RoundButton(500, 320, 74, everything.getObjectTexture("heroselectwizard"));
+		buttons[3] = new RoundButton(width - 130, 45, (int)(diameter), everything.getObjectTexture("confirmbutton"));
+		buttons[4] = new RoundButton(230, 110, (int)(diameter), everything.getObjectTexture("redbutton"));
+		buttons[5] = new RoundButton(320, 110, (int)(diameter), everything.getObjectTexture("bluebutton"));
+		buttons[6] = new RoundButton(width - 45, 45, (int)(diameter), everything.getObjectTexture("backbutton"));
 		
 		buttons[1].setClickable(false);
 		buttons[2].setClickable(false);
 		buttons[5].setClickable(false);
 		
+		heroNames[0] = everything.getObjectTexture("heronamesword");
+		heroNames[1] = everything.getObjectTexture("heronamewizard");
+		heroNames[2] = everything.getObjectTexture("heronamearrow");
 	}
 	
 	public void loadEverything(EverythingHolder e, SpriteBatch b)
@@ -71,11 +80,19 @@ public class HeroSelectScreen implements Screen
 		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-//		batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		
-		batch.draw(background, 0, 0);
-		for (int i = 0; i < 6; i++)
+		batch.draw(background, 0, 0, width, height);
+		everything.font[2].draw(batch, "Choose your hero and team color!", 100, 450);
+		for (int i = 0; i < 3; i++)
+			batch.draw(heroNames[i], buttons[i].xCoord() - 70, 180, 151, 55);
+//		batch.draw(heroNames[0], 30, 180, 151, 55);
+//		batch.draw(heroNames[1], 230, 180, 151, 55);
+//		batch.draw(heroNames[2], 430, 180, 151, 55);
+		
+		batch.draw(selection, buttons[selected].xCoord() - 86, buttons[selected].yCoord() - 95);//, 90, 98);
+		for (int i = 0; i < 7; i++)
 			buttons[i].draw(batch, delta);
 		
 		batch.end();
@@ -84,8 +101,8 @@ public class HeroSelectScreen implements Screen
 	public void update(float delta)
 	{
 		if (Gdx.input.justTouched()) {
-//			camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-			touchPoint.set(Gdx.input.getX(), 480 - Gdx.input.getY());
+			camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0f));
+//			touchPoint.set(Gdx.input.getX(), Gdx.input.getY());
 			System.out.println(touchPoint.x + " " + touchPoint.y);
 			for (int i = 0; i < buttons.length; i++)
 				if (buttons[i].hit(touchPoint.x, touchPoint.y))
@@ -127,6 +144,8 @@ public class HeroSelectScreen implements Screen
 			buttons[0].setClickable(true);
 			buttons[1].setClickable(false);
 			buttons[2].setClickable(false);
+			
+			selected = 0;
 //			everything.loadTeams("red", "blue", "swordface", "mrwizard");
 //			game.gameScreen = new GameScreen(game, false);
 //			game.setScreen(game.gameScreen);
@@ -140,6 +159,8 @@ public class HeroSelectScreen implements Screen
 			buttons[0].setClickable(false);
 			buttons[1].setClickable(true);
 			buttons[2].setClickable(false);
+			
+			selected = 1;
 //			everything.loadTeams("blue", "red", "arroweyes", "swordface");
 //			game.gameScreen = new GameScreen(game, false);
 //			game.setScreen(game.gameScreen);
@@ -152,6 +173,8 @@ public class HeroSelectScreen implements Screen
 			buttons[0].setClickable(false);
 			buttons[1].setClickable(false);
 			buttons[2].setClickable(true);
+			
+			selected = 2;
 //			everything.loadTeams("blue", "red", "mrwizard", "arroweyes");
 //			game.gameScreen = new GameScreen(game, false);
 //			game.setScreen(game.gameScreen);
@@ -186,7 +209,13 @@ public class HeroSelectScreen implements Screen
 			buttons[4].setClickable(false);
 			buttons[5].setClickable(true);
 		}
-			
+		else if (h == 6) // Start
+		{
+//			everything.loadTeams(color[0], color[1], hero[0], hero[1]);
+//			game.mainMenuScreen = new MainMenuScreen(game, everything);
+			game.setScreen(game.mainMenuScreen);
+			return;
+		}			
 	}
 
 	@Override
