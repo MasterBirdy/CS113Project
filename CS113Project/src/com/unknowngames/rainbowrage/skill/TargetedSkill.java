@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.entity.Actor;
 import com.unknowngames.rainbowrage.entity.Hero;
 import com.unknowngames.rainbowrage.parser.SkillStructure;
@@ -23,6 +24,7 @@ public class TargetedSkill extends Skill
 			speedY = 0,
 			targetX,
 			targetY;
+	double angle;
 	Actor 	target;
 	TextureRegion spellImage;
 //	ParticleEffect part;
@@ -31,9 +33,11 @@ public class TargetedSkill extends Skill
 	{
 		super(s, c);
 		if (s.sprite.get(0).equals("empty"))
-			spellImage = everything.getObjectTexture("cannonball");
+			spellImage = EverythingHolder.getObjectTexture("cannonball");
+		if (s.sprite.get(0).equals("fireball"))
+			spellImage = EverythingHolder.getObjectTexture(s.sprite.get(0) + everything.teamColor(c.team()));
 		else
-			spellImage = everything.getObjectTexture(s.sprite.get(0));
+			spellImage = EverythingHolder.getObjectTexture(s.sprite.get(0));
 //		if (spellImage == null)
 //		{
 //			spellImage = new TextureRegion(new Texture(Gdx.files.internal("images/"+s.sprite.get(0))), 0, 0, 16, 16);
@@ -47,6 +51,7 @@ public class TargetedSkill extends Skill
 		{
 			targetX = t.xCoord();
 			targetY = t.yCoord();
+			this.angle = getAngleToEntity(t);
 		}
 		else
 		{
@@ -150,7 +155,9 @@ public class TargetedSkill extends Skill
 		if (!alive)
 			return;
 //		System.out.println("Drawing Targeted SKill");
-		batch.draw(spellImage, xCoord(), yCoord(), 15, 15);
+		if (spellImage != null)
+			batch.draw(spellImage, xCoord(), yCoord(), 8, 8, 16, 16, 1, 1, (float)angle);
+//			batch.draw(spellImage, xCoord(), yCoord(), 15, 15);
 		if (travelEffect.isComplete())
 			travelEffect.start();
 		travelEffect.setPosition(xCoord() + 10, yCoord() + 10);

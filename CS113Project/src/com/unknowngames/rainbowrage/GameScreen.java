@@ -526,7 +526,7 @@ public class GameScreen implements Screen
 	{
 		if (multiplayer)
 		{
-			System.out.println("Trying to send message \"" + message + "\"");
+//			System.out.println("Trying to send message \"" + message + "\"");
 			UserMessage msg = new UserMessage();
 			msg.message = message;
 			msg.team = team;
@@ -539,7 +539,7 @@ public class GameScreen implements Screen
 	{
 		if (multiplayer && sentTurn == false && everything.turn == everything.highestTurn - 9)
 		{
-			System.out.println("Sending turn");
+//			System.out.println("Sending turn");
 			Command cmd = new Command();
 			cmd.team = team;
 			cmd.type = -2;
@@ -553,10 +553,10 @@ public class GameScreen implements Screen
 	{
 		if (multiplayer)
 		{
-			System.out.println("Trying to send unit " + unit + " from team " + team);
+//			System.out.println("Trying to send unit " + unit + " from team " + team);
 			if (everything.funds() < everything.unitCost(unit, team))
 			{
-				System.out.println("Out of money.");
+//				System.out.println("Out of money.");
 				return;
 			}
 			Command cmd = new Command();
@@ -567,7 +567,7 @@ public class GameScreen implements Screen
 		}
 		else
 		{
-			System.out.println("Trying to send unit " + unit + " from team " + team);
+//			System.out.println("Trying to send unit " + unit + " from team " + team);
 			everything.add(unit, 1);
 		}
 	}
@@ -580,7 +580,7 @@ public class GameScreen implements Screen
 			cmd.type = (byte)(stance + 8);
 			cmd.team = team;
 			cmd.turn = everything.turn();
-			System.out.println("Setting hero " + cmd.team + " to stance " + (cmd.type - 8));
+//			System.out.println("Setting hero " + cmd.team + " to stance " + (cmd.type - 8));
 			client.sendTCP(cmd);
 		}
 		else
@@ -595,12 +595,12 @@ public class GameScreen implements Screen
 			cmd.type = 10;
 			cmd.team = team;
 			cmd.turn = everything.turn();
-			System.out.println("Hero " + cmd.team + " casting active");
+//			System.out.println("Hero " + cmd.team + " casting active");
 			client.sendTCP(cmd);
 		}
 		else
 		{
-			System.out.println("CASTING SPELL");
+//			System.out.println("CASTING SPELL");
 			everything.activeHeroSkill(1);
 		}
 	}
@@ -660,10 +660,10 @@ public class GameScreen implements Screen
 			Actor selected = everything.atPoint(gameTouchPoint.x, gameTouchPoint.y);
 			if (selected instanceof Building)
 			{
-				System.out.println(selected.team() + " Tower number: " + ((Building)selected).towerNumber() + " by team " + team);
+//				System.out.println(selected.team() + " Tower number: " + ((Building)selected).towerNumber() + " by team " + team);
 				if (selected.team() == team && !selected.isAlive() && everything.funds() >= 40)
 				{
-					System.out.println("Tower number: " + ((Building)selected).towerNumber() + " by team " + team);
+//					System.out.println("Tower number: " + ((Building)selected).towerNumber() + " by team " + team);
 					upgradeTower(((Building)selected).towerNumber());
 //					((Building) selected).upgrade();
 //					everything.funds -= 40;
@@ -754,13 +754,13 @@ public class GameScreen implements Screen
         				team = (byte)status.status;
         				everything.setTeam(team);
         				gameUI.setup();
-        				System.out.println("Entering as player " + team);
+//        				System.out.println("Entering as player " + team);
         				connected = true;
         				return;
         			}
         			else if (status.status == -1)
         			{
-        				System.out.println("Server is full.");
+//        				System.out.println("Server is full.");
         				System.exit(-1);
         			}
         			return;
@@ -768,10 +768,10 @@ public class GameScreen implements Screen
         		
         		if (object instanceof CommandIn)
         		{
-        			System.out.println("CommandIn");
+//        			System.out.println("CommandIn");
         			if (((CommandIn)object).command == -2)
         			{
-        				System.out.println("Highest now " + ((CommandIn)object).turn);
+//        				System.out.println("Highest now " + ((CommandIn)object).turn);
         				everything.highestTurn = ((CommandIn)object).turn;
         			}
         			else
@@ -784,7 +784,7 @@ public class GameScreen implements Screen
         			
         			if (((ServerMessage)object).message == 1)
         			{
-        				System.out.println("Game is starting!");
+//        				System.out.println("Game is starting!");
         				running = true;
         				timeAccumulator = 0;
         				everything.setRunning(true);
@@ -804,7 +804,8 @@ public class GameScreen implements Screen
         	
         	public void disconnected (Connection connection) 
         	{
-        		System.out.println("Disconnected");
+        		endGame();
+//        		System.out.println("Disconnected");
 //        		System.exit(0);
         	}
         }));

@@ -297,7 +297,7 @@
 		<sprite>			empty								</sprite>
 		<cast>				fire								</cast>
 		<travel>			heal								</travel>
-		<detonateeffect>	smokebomb							</detonateeffect>
+		<detonateeffect>	heal								</detonateeffect>
 		<affected>			fire								</affected>
 	</skill>
 	<skill type = "magefire">
@@ -343,6 +343,28 @@
 		<affected>			fire								</affected>
 	</skill>
 	
+	<!-- BLANK -->
+	<skill type = "blank">
+		<aoe> 				0									</aoe>
+		<targetteam> 		0									</targetteam>
+		<effect>			0									</effect>
+		<effectamount>		0									</effectamount>
+		<duration>			0									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			0									</cooldown>
+		<trigger>			0									</trigger>
+		<traveltime>		0									</traveltime>
+		<damagesplit>		false								</damagesplit>
+		<additive>			false								</additive>
+		<continuous>		false								</continuous>
+		<speed>				0									</speed>
+		<sprite>			empty								</sprite>
+		<cast>				empty								</cast>
+		<travel>			empty								</travel>
+		<detonateeffect>	empty								</detonateeffect>
+		<affected>			empty								</affected>
+	</skill>
+	
 	<!-- PASSIVE SKILLZ -->
 	<skill type = "passivedmgaoe">
 		<aoe> 				5									</aoe>
@@ -367,7 +389,7 @@
 		
 	<!-- BUILDINGS -->
 	<building type = "arrowtower">
-		<maxhealth>			0		1000		611		6111		</maxhealth>
+		<maxhealth>			0		1000	611		6111		</maxhealth>
 		<damage>			0		11		611		6111		</damage>
 		<attackspeed>		0		30		611		6111		</attackspeed>
 		<attackrange>		0		160		611		6111		</attackrange>
@@ -384,13 +406,13 @@
 		<base>				false								</base>
 	</building>
 	<building type = "stronghold">
-		<maxhealth>			2000	71		711		7111		</maxhealth>
-		<damage>			11		71		711		7111		</damage>
-		<attackspeed>		30		71		711		7111		</attackspeed>
-		<attackrange>		160		71		711		7111		</attackrange>
-		<cost> 				50		71		711		7111		</cost>
-		<animation> 		stronghold							</animation>
-		<ranged> 			true 								</ranged>
+		<maxhealth>			0		2000						</maxhealth>
+		<damage>			0		11							</damage>
+		<attackspeed>		0		30							</attackspeed>
+		<attackrange>		0		160							</attackrange>
+		<cost> 				0		50							</cost>
+		<animation> 		rubble	stronghold					</animation>
+		<ranged> 			false	true 						</ranged>
 		<projectile>		cannonball							</projectile>
 		<physicalresist>	0									</physicalresist>
 		<rangedresist>		0									</rangedresist>

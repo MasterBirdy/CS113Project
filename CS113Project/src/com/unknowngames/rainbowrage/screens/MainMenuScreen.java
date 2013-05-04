@@ -101,6 +101,8 @@ public class MainMenuScreen implements Screen
 		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9, buttonRadius, 			
 				everything.getObjectTexture("quitbutton"));	// Quit
 		
+		buttons[2].setClickable(false);
+		
 		touchPoint = new Vector3();
 	
 		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));

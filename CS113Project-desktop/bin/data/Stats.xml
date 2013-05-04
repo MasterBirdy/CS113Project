@@ -202,7 +202,7 @@
 		<aoe> 				50									</aoe>
 		<targetteam> 		1									</targetteam>
 		<effect>			0									</effect>
-		<effectamount>		60									</effectamount>
+		<effectamount>		80									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			1000								</cooldown>
@@ -281,7 +281,7 @@
 		<affected>			fire								</affected>
 	</skill>
 	<skill type = "procheal">
-		<aoe> 				0									</aoe>
+		<aoe> 				5									</aoe>
 		<targetteam> 		-1									</targetteam>
 		<effect>			1									</effect>
 		<effectamount>		30									</effectamount>
@@ -290,14 +290,14 @@
 		<cooldown>			250									</cooldown>
 		<trigger>			1									</trigger>
 		<traveltime>		0									</traveltime>
-		<damagesplit>		false								</damagesplit>
+		<damagesplit>		true								</damagesplit>
 		<additive>			true								</additive>
 		<continuous>		true								</continuous>
 		<speed>				0									</speed>
 		<sprite>			empty								</sprite>
 		<cast>				fire								</cast>
 		<travel>			heal								</travel>
-		<detonateeffect>	smokebomb							</detonateeffect>
+		<detonateeffect>	heal								</detonateeffect>
 		<affected>			fire								</affected>
 	</skill>
 	<skill type = "magefire">
@@ -341,6 +341,28 @@
 		<travel>			heal								</travel>
 		<detonateeffect>	smokebomb							</detonateeffect>
 		<affected>			fire								</affected>
+	</skill>
+	
+	<!-- BLANK -->
+	<skill type = "blank">
+		<aoe> 				0									</aoe>
+		<targetteam> 		0									</targetteam>
+		<effect>			0									</effect>
+		<effectamount>		0									</effectamount>
+		<duration>			0									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			0									</cooldown>
+		<trigger>			0									</trigger>
+		<traveltime>		0									</traveltime>
+		<damagesplit>		false								</damagesplit>
+		<additive>			false								</additive>
+		<continuous>		false								</continuous>
+		<speed>				0									</speed>
+		<sprite>			empty								</sprite>
+		<cast>				empty								</cast>
+		<travel>			empty								</travel>
+		<detonateeffect>	empty								</detonateeffect>
+		<affected>			empty								</affected>
 	</skill>
 	
 	<!-- PASSIVE SKILLZ -->

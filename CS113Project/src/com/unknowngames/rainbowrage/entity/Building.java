@@ -46,6 +46,7 @@ public class Building extends Actor
 	@Override
 	public void update() 
 	{
+		super.update();
 		if (attacking && attackCooldown <= 0)
 		{
 			System.out.println("Tower attacking");

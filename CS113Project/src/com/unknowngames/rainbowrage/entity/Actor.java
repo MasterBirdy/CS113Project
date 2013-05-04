@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.SoundPack;
 import com.unknowngames.rainbowrage.parser.ActorStructure;
 import com.unknowngames.rainbowrage.parser.SkillStructure;
@@ -39,14 +40,15 @@ public abstract class Actor extends Entity
 //	static LinkedList<Actor> team1;
 //	static LinkedList<Actor> team2;
 	static ParticleEffect fire = new ParticleEffect();
-	static ArrayList<Projectile> projectiles;
+//	static ArrayList<Projectile> projectiles;
 	int firstEmpty;
 	static TextureRegion[] rangeIndicator;
 	PassiveSkill passiveSkill;
 	ProcSkill procSkill;
-	SkillStructure procStruct;
+	SkillStructure procStruct, projectileStruct;
 	Sound attackSound;
-	SoundPack soundPack;
+//	SoundPack soundPack;
+	String sounds;
 	TextureRegion projectileSprite;
 	
 	int level = 0;
@@ -63,8 +65,13 @@ public abstract class Actor extends Entity
 		this.ranged = ranged;
 		skillEffects = new ArrayList<SkillEffect>(5);
 		
-		if (!a.projectile(level).equals("empty"))
-			projectileSprite = everything.getObjectTexture(a.projectile(level));
+//		if (!a.projectile(level).equals("empty"))
+//		{
+//			if (a.projectile(level).equals("arrow") || a.projectile(level).equals("fireattack"))
+//				projectileSprite = EverythingHolder.getObjectTexture(a.projectile(level) + everything.teamColor(this.team));
+//			else
+//				projectileSprite = EverythingHolder.getObjectTexture(a.projectile(level));
+//		}
 		
 		if (!a.passiveSkill(level).equals("empty"))
 			this.loadPassiveSkill(everything.getSkill(a.passiveSkill(level)));
@@ -75,8 +82,10 @@ public abstract class Actor extends Entity
 			procCooldown = procStruct.cooldown.get(0);
 			procCooldownCounter = procCooldown;
 		}
-		if (!a.soundPack(level).equals("empty"))
-			this.soundPack = everything.getUnitSounds(a.soundPack(level));
+//		if (!a.soundPack(level).equals("empty"))
+//			this.soundPack = everything.getUnitSounds(a.soundPack(level));
+		this.sounds = a.soundPack(level);
+		loadProjectile(a);
 		
 //		if (this instanceof Building)
 //		{
@@ -252,10 +261,10 @@ public abstract class Actor extends Entity
 //		}
 	}
 	
-	static public void loadProjectiles(ArrayList<Projectile> p)
-	{
-		projectiles = p;
-	}
+//	static public void loadProjectiles(ArrayList<Projectile> p)
+//	{
+//		projectiles = p;
+//	}
 	
 //	public ParticleEffect fire()
 //	{
@@ -363,7 +372,18 @@ public abstract class Actor extends Entity
 					skill.kill();
 				this.particleOnSelf("blood");
 //				effects.add(this.blood());
-				soundPack.playDie();
+//				soundPack.playDie();
+				if (!sounds.equals("empty"))
+				{
+					try
+					{
+						EverythingHolder.getUnitSounds(sounds).playDie();
+					}
+					catch (NullPointerException npe)
+					{
+						
+					}
+				}
 				alive = false;
 				
 				if (this instanceof Minion)
@@ -453,8 +473,19 @@ public abstract class Actor extends Entity
 	{
 		if (target == null || !target.isAlive())
 			return;
-		if (soundPack != null)
-			soundPack.playAttack();
+//		if (soundPack != null)
+//			soundPack.playAttack();
+		if (sounds != null && !sounds.equals("empty"))
+		{
+			try
+			{
+				EverythingHolder.getUnitSounds(sounds).playAttack();
+			}
+			catch (NullPointerException npe)
+			{
+				
+			}
+		}
 //		if (attackSound != null)
 //			attackSound.play(volume);
 //		if (procSkill != null)
@@ -486,6 +517,27 @@ public abstract class Actor extends Entity
 		return false;
 	}
 	
+	protected void loadProjectile(ActorStructure a)
+	{
+		//SkillStructure s = everything.getSkill("blank");
+		projectileStruct = new SkillStructure(everything.getSkill("blank"));
+		projectileStruct.targetTeam.set(0, 1);
+		projectileStruct.effect.set(0, 0);
+		projectileStruct.effectAmount.set(0, a.damage(level));
+		projectileStruct.duration.set(0, 1);
+		projectileStruct.travelTime.set(0, 70);
+		projectileStruct.additive.set(0, true);
+		projectileStruct.speed.set(0, 3f);
+		if (!a.projectile(level).equals("empty"))
+		{
+			if (a.projectile(level).equals("arrow") || a.projectile(level).equals("fireattack"))
+				projectileStruct.sprite.set(0, a.projectile(level) + everything.teamColor(this.team));
+			else
+				projectileStruct.sprite.set(0, a.projectile(level));
+		}
+//		projectileStruct.travel.set(0, "fireball");
+	}
+	
 	protected void rangeAttack() 
 	{
 //		if (!(this instanceof Stronghold))
@@ -499,10 +551,11 @@ public abstract class Actor extends Entity
 //		{
 //			projectiles.add(new CannonProjectile(this.xCoord, this.yCoord + 50, this.team, 3, target));
 //		}
+		everything.add(new TargetedSkill(projectileStruct, this, target), team);
+//		everything.add(new TargetedSkill(procStruct, this, target), team);f
+//		projectiles.add(new Projectile(this.xCoord, this.yCoord + (this instanceof Building ? 50 : 0), this.team, 3, target, projectileSprite));
 		
-		projectiles.add(new Projectile(this.xCoord, this.yCoord + (this instanceof Building ? 50 : 0), this.team, 3, target, projectileSprite));
-		
-		target.takeDamage(damage);
+//		target.takeDamage(damage);
 //		if (target == null || !target.isAlive())
 //			return;
 		

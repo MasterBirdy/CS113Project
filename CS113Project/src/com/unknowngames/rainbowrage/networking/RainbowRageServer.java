@@ -1,15 +1,21 @@
 package com.unknowngames.rainbowrage.networking;
 
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Date;
 
 import javax.swing.Timer;
 
@@ -31,12 +37,21 @@ public class RainbowRageServer
     int totalUsers = 0;
     int currentTurn = 0;
     long timeLastUsed;
-    int allowedUptime = 14400000;
-    NetworkClock networkClock = new NetworkClock(this, allowedUptime);
+//    int allowedUptime = 14400000; // 4 hours
+    int allowedUptime = -1; // infinite
+    NetworkClock networkClock; // = new NetworkClock(this, allowedUptime);
+    
+    DateFormat df = DateFormat.getDateTimeInstance (DateFormat.SHORT, DateFormat.SHORT, new Locale("en", "EN"));
+    
     
     public RainbowRageServer() throws IOException 
     {
-    	System.out.println("Clock");
+    	if (allowedUptime > 0)
+    	{
+	    	System.out.println("Clock");
+	    	networkClock = new NetworkClock(this, allowedUptime);
+    	}
+    	
 //    	waitingUsers.get(0).
     	server = new Server() 
     	{
@@ -135,7 +150,7 @@ public class RainbowRageServer
                 if (object instanceof UserMessage)
                 {
                 	if (((UserMessage)object).message.equals("kill"))
-            			server.stop();
+            			kill();
                 	UserMessage msg = (UserMessage)object;
                 	if (user.room >= 0)
                 		games.get(user.room).userMessage(msg);
@@ -175,6 +190,19 @@ public class RainbowRageServer
         			System.out.println("Player removed");
         			userConnection.remove(c);
         		}
+        		
+        		writeToLog(df.format(new Date()) + ": Player " + c.getID() + userConnection.size() + " logged out.");
+        		
+//        		try 
+//            	{
+//            	    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("TestLog.txt", true)));
+//            	    out.println(df.format(new Date()) + ": Player " + c.getID() + userConnection.size() + " logged out.");
+//            	    out.close();
+//            	}
+//            	catch (IOException e) 
+//            	{
+//            	    System.out.println(e);
+//            	}
         		//waitingUsers.remove(waitingUsers.indexOf(c));
         		//for ()
         		totalUsers--;
@@ -184,10 +212,29 @@ public class RainbowRageServer
         server.bind(Network.port);
         server.start();
         System.out.println("Server started");
+        writeToLog("-------------------------------");
+        writeToLog(df.format(new Date()) + ": Server Started!");
+        writeToLog("-------------------------------");
+        
+    }
+    
+    public void writeToLog(String txt)
+    {
+    	try 
+    	{
+    	    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("TestLog.txt", true)));
+    	    out.println(txt);
+    	    out.close();
+    	}
+    	catch (IOException e) 
+    	{
+    	    System.out.println(e);
+    	}
     }
     
     public void kill()
     {
+    	writeToLog(df.format(new Date()) + ": Server Killed =(");
     	this.server.stop();
     }
     
@@ -214,6 +261,18 @@ public class RainbowRageServer
 //        }
         System.out.println("Player " + user.name + userConnection.size() + " just joined.");
         
+        writeToLog(df.format(new Date()) + ": " + user.name + " joined.");
+        /*try 
+    	{
+    	    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("TestLog.txt", true)));
+    	    out.println(df.format(new Date()) + ": " + user.name + " joined.");
+    	    out.close();
+    	}
+    	catch (IOException e) 
+    	{
+    	    System.out.println(e);
+    	}*/
+    	
         LoginStatus status = new LoginStatus();
 //        status.status = (byte)userConnection.size();//waitingUsers.size();
         
@@ -241,6 +300,20 @@ public class RainbowRageServer
         	
         	Game game = new Game(p1, p2, server, gameCount);
         	games.put(gameCount++, game);
+        	
+        	writeToLog(df.format(new Date()) + ": " + p1.user.name + userConnection.size() + " and " + p1.user.name + userConnection.size() + 
+	    			" started.");
+        	/*try 
+        	{
+        	    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("TestLog.txt", true)));
+        	    out.println(df.format(new Date()) + ": " + p1.user.name + userConnection.size() + " and " + p1.user.name + userConnection.size() + 
+        	    			" started.");
+        	    out.close();
+        	}
+        	catch (IOException e) 
+        	{
+        	    System.out.println(e);
+        	}*/
         }
     }
     

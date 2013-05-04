@@ -106,7 +106,7 @@ public abstract class Entity
 		if (toActor < 0)
 			toActor += 360;
 		return toActor;
-	}
+	} 
 	
 	public float xCoord()
 	{
@@ -115,8 +115,8 @@ public abstract class Entity
 	
 	public float yCoord()
 	{
-//		if (this instanceof Hero)
-//			return yCoord - 3;
+		if (this instanceof Hero)
+			return yCoord - 3;
 		return yCoord;
 	}
 	

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.entity.Actor;
+import com.unknowngames.rainbowrage.entity.Building;
 import com.unknowngames.rainbowrage.entity.Entity;
 import com.unknowngames.rainbowrage.parser.SkillStructure;
 
@@ -35,8 +36,8 @@ public abstract class Skill extends Entity
 	public Skill(SkillStructure s, Actor c)
 	{
 		int level = 0;
-		xCoord(c.xCoord());
-		yCoord(c.yCoord());
+		xCoord(c.xCoord() - 8);
+		yCoord(c.yCoord() + (c instanceof Building ? 50 : 0));
 		aoe = s.aoe.get(0);
 		if (s.targetTeam.get(0) == 0)
 		{

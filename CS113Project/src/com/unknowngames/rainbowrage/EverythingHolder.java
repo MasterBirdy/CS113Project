@@ -14,6 +14,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -62,7 +63,7 @@ public class EverythingHolder
 	
 	LinkedList<Integer>[] pools;			// Pools for spawning
 	ArrayList<Entity> entities;		// Holds all units, towers, projectiles, and spells
-	static ArrayList<Projectile> projectiles;
+//	static ArrayList<Projectile> projectiles;
 	private ArrayList<ParticleEffect> effects;
 	
 
@@ -72,18 +73,18 @@ public class EverythingHolder
 	HashMap<String, MinionStructure> minionStats = new HashMap<String, MinionStructure>();
 	HashMap<String, BuildingStructure> buildingStats = new HashMap<String, BuildingStructure>();
 	HashMap<String, HeroStructure> heroStats = new HashMap<String, HeroStructure>();
-	HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>();
+	static HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>();
 	HashMap<String, SkillStructure> skillStats = new HashMap<String, SkillStructure>();
-	HashMap<String, Sound> sounds = new HashMap<String, Sound>();
-	HashMap<String, SoundPack> unitSounds = new HashMap<String, SoundPack>();
-	HashMap<String, TextureRegion> objectTextures = new HashMap<String, TextureRegion>();
-	HashMap<String, UnitAnimation> unitAnimations = new HashMap<String, UnitAnimation>();
-	public HashMap<String, BuildingAnimation> buildingAnimations = new HashMap<String, BuildingAnimation>();
+	static HashMap<String, Sound> sounds = new HashMap<String, Sound>();
+	static HashMap<String, SoundPack> unitSounds = new HashMap<String, SoundPack>();
+	static HashMap<String, TextureRegion> objectTextures = new HashMap<String, TextureRegion>();
+	static HashMap<String, UnitAnimation> unitAnimations = new HashMap<String, UnitAnimation>();
+	static HashMap<String, BuildingAnimation> buildingAnimations = new HashMap<String, BuildingAnimation>();
 	
 	public BitmapFont[] font = new BitmapFont[4]; //, font2;
 	private Texture teamTextures[] = new Texture[2];
 	
-	String[] color = {"blue", "red"};
+	public String[] color = {"blue", "red"};
 	
 	boolean finished = false;
 	
@@ -144,6 +145,10 @@ public class EverythingHolder
 	{
 		teamTextures[0] = new Texture(Gdx.files.internal("images/sprite_sheet_" + one + ".png"));
 		teamTextures[1] = new Texture(Gdx.files.internal("images/sprite_sheet_" + two + ".png"));
+		teamTextures[0].setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		teamTextures[1].setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		color[0] = one;
+		color[1] = two;
 		loadUnitAnimations();
 		heroNames[0] = hone;
 		heroNames[1] = htwo;
@@ -151,12 +156,17 @@ public class EverythingHolder
 		
 	}
 	
-	public UnitAnimation getUnitAnimation(String name)
+	public String teamColor(int team)
+	{
+		return color[team - 1];
+	}
+	
+	public static UnitAnimation getUnitAnimation(String name)
 	{
 		return unitAnimations.get(name);
 	}
 	
-	public BuildingAnimation getBuildingAnimation(String name)
+	public static BuildingAnimation getBuildingAnimation(String name)
 	{
 		return buildingAnimations.get(name);
 	}
@@ -412,7 +422,7 @@ public class EverythingHolder
 		TextureRegion[] frames = new TextureRegion[count];
 		
 		TextureRegion temp = new TextureRegion(teamTextures[team], x, y, w * count, h);
-		TextureRegion[][] tmp = temp.split(w, h);
+		TextureRegion[][] tmp = temp.split(w, h);		
 		
 		for (int i = 0; i < count; i++)
 		{
@@ -447,12 +457,12 @@ public class EverythingHolder
 		return finished;
 	}
 	
-	public SoundPack getUnitSounds(String name)
+	public static SoundPack getUnitSounds(String name)
 	{
 		return unitSounds.get(name);
 	}
 	
-	public Sound getSound(String sound)
+	public static Sound getSound(String sound)
 	{
 		return sounds.get(sound);
 	}
@@ -472,7 +482,7 @@ public class EverythingHolder
 		return playerBases[team - 1].getHealthRatio();
 	}
 	
-	public TextureRegion getObjectTexture(String name)
+	public static TextureRegion getObjectTexture(String name)
 	{
 		return objectTextures.get(name);
 	}
@@ -482,10 +492,21 @@ public class EverythingHolder
 //		objectTextures.put("cannonball", new TextureRegion(new Texture(Gdx.files.internal("images/cannonprojectile.png")), 0, 0, 16, 16));
 //		objectTextures.put("arrow", new TextureRegion(new Texture(Gdx.files.internal("images/arrowprojectile.png")), 16, 0, 16, 16));
 		Texture proj = new Texture(Gdx.files.internal("images/projectile_sheet.png"));
+		proj.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
 		objectTextures.put("arrow", new TextureRegion(proj, 0, 0, 16, 16));
+		objectTextures.put("arrowblue", new TextureRegion(proj, 0, 16, 16, 16));
+		objectTextures.put("arrowred", new TextureRegion(proj, 16, 16, 16, 16));
 		objectTextures.put("cannonball", new TextureRegion(proj, 16, 0, 16, 16));
 		
+		objectTextures.put("fireballred", new TextureRegion(proj, 0, 32, 16, 16));
+		objectTextures.put("fireattackred", new TextureRegion(proj, 0, 48, 16, 16));
+		objectTextures.put("fireballblue", new TextureRegion(proj, 16, 32, 16, 16));
+		objectTextures.put("fireattackblue", new TextureRegion(proj, 16, 48, 16, 16));
+		
 		Texture icons = new Texture(Gdx.files.internal("images/buttons_sheet.png"));
+		icons.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
 		objectTextures.put("fireball", new TextureRegion(icons, 1814, 0, 90, 90));
 		objectTextures.put("fireattack", new TextureRegion(icons, 1814, 90, 73, 73));
 		
@@ -575,9 +596,9 @@ public class EverythingHolder
 			}
 			catch (Exception e)
 			{
-				System.out.println("Don't have " + name + settings.getParticleEffects() + ".p");
-				if (name.equals("spark"))
-					System.out.println(e);
+//				System.out.println("Don't have " + name + settings.getParticleEffects() + ".p");
+//				if (name.equals("spark"))
+//					System.out.println(e);
 				temp.load(Gdx.files.internal("data/" + name + ".p"), Gdx.files.internal("images"));
 			}
 			particleEffects.put(name, temp);
@@ -600,15 +621,19 @@ public class EverythingHolder
 //		particleEffects.put("fireballexplosion", temp);
 	}
 	
-	public ParticleEffect getEffect(String e)
+	public static ParticleEffect getEffect(String e)
 	{
 //		System.out.println("Get");
 //		if (Gdx.app.getType() == ApplicationType.Android)
 //			return null;
+		
+//		return new ParticleEffect();
+		
+		
 		if (particleEffects.containsKey(e))
 			return new ParticleEffect(particleEffects.get(e));
-		System.out.println("Missing Effect: " + e);
-		return null;
+//		System.out.println("Missing Effect: " + e);
+		return new ParticleEffect();
 	}
 	
 	public int team()
@@ -924,17 +949,17 @@ public class EverythingHolder
 //			}
 		}
 		
-		for (Projectile p : projectiles)
-		{
-			try
-			{
-				p.draw(batch, delta);
-			}
-			catch (Exception ex)
-			{
-				ex.printStackTrace();
-			}
-		}
+//		for (Projectile p : projectiles)
+//		{
+//			try
+//			{
+//				p.draw(batch, delta);
+//			}
+//			catch (Exception ex)
+//			{
+//				ex.printStackTrace();
+//			}
+//		}
 		
 		for (ParticleEffect pe : effects)
 		{
@@ -962,14 +987,14 @@ public class EverythingHolder
 	
 	public void heroDeath(int team)
 	{
-		System.out.println("Hero " + team);
+//		System.out.println("Hero " + team);
 		stats.heroDeaths[team - 1]++;
 		stats.heroKills[(team == 1 ? 1 : 0)]++;
 	}
 	
 	public void minionDeath(int team)
 	{
-		System.out.println("Minion " + team);
+//		System.out.println("Minion " + team);
 		stats.minionDeaths[team - 1]++;
 		stats.minionKills[(team == 1 ? 1 : 0)]++;
 	}
@@ -991,22 +1016,22 @@ public class EverythingHolder
 				((Actor)e).checkAlive();
 		}
 		
-		ArrayList<Projectile> removeList = new ArrayList<Projectile>();
-		for (Projectile p : projectiles)
-		{
-				//if (p.xCoord == this.target.xCoord() || )
-			p.update();
-			if (p.getxSpeed() > 0 && p.xCoord() > p.target().xCoord())
-				removeList.add(p);
-			else if (p.getxSpeed() < 0 && p.xCoord() < p.target().xCoord())
-				removeList.add(p);
-			else if (p.getySpeed() > 0 && p.yCoord() > p.target().yCoord())
-				removeList.add(p);
-			else if (p.getySpeed() < 0 && p.yCoord() < p.target().yCoord())
-				removeList.add(p);
-		}
+//		ArrayList<Projectile> removeList = new ArrayList<Projectile>();
+//		for (Projectile p : projectiles)
+//		{
+//				//if (p.xCoord == this.target.xCoord() || )
+//			p.update();
+//			if (p.getxSpeed() > 0 && p.xCoord() > p.target().xCoord())
+//				removeList.add(p);
+//			else if (p.getxSpeed() < 0 && p.xCoord() < p.target().xCoord())
+//				removeList.add(p);
+//			else if (p.getySpeed() > 0 && p.yCoord() > p.target().yCoord())
+//				removeList.add(p);
+//			else if (p.getySpeed() < 0 && p.yCoord() < p.target().yCoord())
+//				removeList.add(p);
+//		}
 		
-		projectiles.removeAll(removeList);
+//		projectiles.removeAll(removeList);
 		
 		for (int i = 0; i < entities.size(); i++)
 		{
@@ -1141,9 +1166,9 @@ public class EverythingHolder
 		running = false;
 		
 		entities = new ArrayList<Entity>(50);
-		projectiles = new ArrayList<Projectile>();
+//		projectiles = new ArrayList<Projectile>();
 		effects = new ArrayList<ParticleEffect>();
-		Actor.loadProjectiles(projectiles);
+//		Actor.loadProjectiles(projectiles);
 		
 		Entity.loadStatics(effects);
 		funds1 = 100;

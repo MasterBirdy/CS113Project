@@ -32,6 +32,8 @@ public abstract class Unit extends Actor
 	
 	boolean standing = false;
 	
+	TextureRegion current;
+	
 	int targetX, targetY;
 	
 	public Unit(int x, int y, boolean ranged, int team, ListIterator<Coordinate> pathIter, UnitStructure u)//int rX, int rY)
@@ -62,7 +64,7 @@ public abstract class Unit extends Actor
 	{
 //		super.draw(batch);
 		stateTime += delta;//Gdx.graphics.getDeltaTime();
-		TextureRegion current;
+//		TextureRegion current;
 		
 		standing = false;
 		

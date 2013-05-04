@@ -1,0 +1,17 @@
+-------------------------------
+5/2/13 7:48 PM: Server Started!
+-------------------------------
+5/2/13 7:48 PM: Player joined.
+5/2/13 7:48 PM: Player joined.
+5/2/13 7:48 PM: Player0 and Player0 started.
+5/2/13 7:49 PM: Player 10 logged out.
+5/2/13 7:49 PM: Player 20 logged out.
+5/2/13 7:49 PM: Player joined.
+5/2/13 7:49 PM: Player 30 logged out.
+-------------------------------
+5/2/13 7:55 PM: Server Started!
+-------------------------------
+5/2/13 7:55 PM: Player joined.
+5/2/13 7:55 PM: Player joined.
+5/2/13 7:55 PM: Player0 and Player0 started.
+5/2/13 7:55 PM: Player 20 logged out.
