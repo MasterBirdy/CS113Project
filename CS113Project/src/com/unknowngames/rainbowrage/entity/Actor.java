@@ -51,12 +51,15 @@ public abstract class Actor extends Entity
 	String sounds;
 	TextureRegion projectileSprite;
 	
+	int attackers = 0;
+	
 	int level = 0;
 
 	public Actor(int x, int y, boolean ranged, int team, ActorStructure a)
 	{
 		super(x, y, team);
 		alive = true;
+		remove = false;
 		maxHealth = a.maxHealth(level);
 		currentHealth = maxHealth;
 		damage = a.damage(level);
@@ -105,16 +108,41 @@ public abstract class Actor extends Entity
 //		}
 	}
 	
+	public void addAttacker()
+	{
+		attackers++;
+	}
+	
+	public void subAttacker()
+	{
+		attackers--;
+		if (attackers < 0)
+			attackers = 0;
+	}
+	
+	public int getAttacker()
+	{
+		return attackers;
+	}
+	
 	public void invis(int i)
 	{
 //		System.out.println("Going invis");
 		invis = i;
 		
 		this.attacking = false;
-		this.target = null;
-		
+//		this.target = null;
+//		loseTarget();
 		if (i > 0)
 			particleOnSelf("smokebomb");
+	}
+	
+	public void loseTarget()
+	{
+		if (target == null)
+			return;
+		target.subAttacker();
+		target = null;
 	}
 	
 	public void stun(int stun)
@@ -301,14 +329,16 @@ public abstract class Actor extends Entity
 		ParticleEffect p = everything.getEffect(s);
 		p.setPosition(xCoord + 30, yCoord + 20);
 		p.start();
-		effects.add(p);
+		addParticle(p);
+//		effects.add(p);
 	}
 	
 	public void particleOnSelf(ParticleEffect p)
 	{
 		p.setPosition(xCoord + 20, yCoord + 20);
 		p.start();
-		effects.add(p);
+		addParticle(p);
+//		effects.add(p);
 	}
 	
 	
@@ -396,6 +426,7 @@ public abstract class Actor extends Entity
 				{
 					everything.heroDeath(this.team());
 				}
+				loseTarget();
 			}
 		}
 	}
@@ -418,10 +449,15 @@ public abstract class Actor extends Entity
 			{
 				return;
 			}
+//			loseTarget();
 		}
 		
-		Actor newTarget = null;
-		float newDistance = 1000000;
+		loseTarget();
+		
+//		Actor newTarget = null;
+//		float newDistance = 1000000;
+		float newDistance = attackRange * attackRange + 1;
+		int lowest = 1000;
 		currentDistance = 0;
 		for (Actor a : (team == 1 ? everything.team(2) : everything.team(1)))
 		{			
@@ -430,11 +466,19 @@ public abstract class Actor extends Entity
 				currentDistance = this.getDistanceSquared(a);
 				if (a instanceof Building)
 					currentDistance -= 6400;
-				if (currentDistance < newDistance && currentDistance < attackRange * attackRange)
+				if ((a.getAttacker() < lowest && currentDistance < attackRange * attackRange + 1) ||
+						(currentDistance < newDistance))
 				{
 					newDistance = currentDistance;
-					newTarget = a;
+					lowest = a.getAttacker();
+					target = a;
 				}
+//				else if (currentDistance < newDistance)
+//				{
+//					newDistance = currentDistance;
+//					lowest = a.getAttacker();
+//					target = a;
+//				}
 			}
 		}
 		
@@ -462,9 +506,16 @@ public abstract class Actor extends Entity
 //			}
 //		}
 //		
-		target = newTarget;
+//		target = newTarget;
 		
-		attacking = !(target == null); 
+		if (target != null)
+		{
+			attacking = true;
+			target.addAttacker();
+		}
+		else
+			attacking = false;
+		
 	}
 
 	public abstract void destroy();
@@ -509,7 +560,7 @@ public abstract class Actor extends Entity
 //		System.out.println("attemptProcCast");
 		if (procStruct != null && this.isAlive() && procCooldownCounter < 0 && procStruct.trigger.get(0) == 1)
 		{
-			System.out.println("procCast");
+//			System.out.println("procCast");
 			procCooldownCounter = procCooldown;
 			everything.add(new TargetedSkill(procStruct, this, target), team);
 			return true;

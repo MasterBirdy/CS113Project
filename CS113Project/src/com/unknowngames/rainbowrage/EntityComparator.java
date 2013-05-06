@@ -13,11 +13,11 @@ public class EntityComparator implements Comparator<Entity>
 		if (arg0 == null)
 		{
 			if (arg1 != null)
-				return -1;
+				return 1;
 			return 0;
 		}
-		if (arg1 == null)
-			return 1;
+		else if (arg1 == null)
+			return -1;
 		
 		int y1 = (int)arg0.yCoord();
 		int y2 = (int)arg1.yCoord();

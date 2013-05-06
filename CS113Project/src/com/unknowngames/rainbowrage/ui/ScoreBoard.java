@@ -11,6 +11,7 @@ import com.unknowngames.rainbowrage.GameScreen;
 public class ScoreBoard //implements Screen
 {
 	TextureRegion board, statBox, winloss;
+	int result;
 	RoundButton exit;
 	EverythingHolder everything;
 	GameScreen screen;
@@ -33,6 +34,7 @@ public class ScoreBoard //implements Screen
 		statBox = everything.getObjectTexture("endstatsbox");
 		
 		exit = new RoundButton(700, 50, 40, everything.getObjectTexture("confirmbutton"));
+		this.result = result;
 	}
 	
 	public void draw(SpriteBatch batch)
@@ -52,7 +54,7 @@ public class ScoreBoard //implements Screen
 		batch.draw(board, 0, 0);
 		batch.setColor(1, 1, 1, .85f);
 		batch.draw(statBox, 370, 200);
-		batch.draw(winloss, 400, 410);
+		batch.draw(winloss, 400, (result == 0 ? 410 : 422));
 		everything.getFont(0).draw(batch, (everything.team() == 1 ? "You" : "Enemy"), 410, 388);
 		everything.getFont(0).draw(batch, "Hero Kills:   " + everything.Stats().heroKills[0], 410, 366);
 		everything.getFont(0).draw(batch, "Hero Deaths:  " + everything.Stats().heroDeaths[0], 410, 350);

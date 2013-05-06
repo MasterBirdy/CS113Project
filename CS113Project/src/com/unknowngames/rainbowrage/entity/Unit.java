@@ -120,6 +120,7 @@ public abstract class Unit extends Actor
 			batch.draw(current, xCoord - point.x, yCoord - point.y);
 		batch.setColor(Color.WHITE);
 		drawParticleEffects(batch, delta);
+//		everything.getFont(1).draw(batch, "" + getAttacker(), xCoord(), yCoord());
 	}
 	
 	protected void attack()
@@ -136,18 +137,21 @@ public abstract class Unit extends Actor
 		ParticleEffect p = everything.getEffect(s);
 		p.setPosition(xCoord - unitAnimation.getFeet(animationDir).x + 10, yCoord + 20);
 		p.start();
-		effects.add(p);
+		addParticle(p);
+//		effects.add(p);
 	}
 	public void particleOnSelf(ParticleEffect p)
 	{
 		p.setPosition(xCoord - unitAnimation.getFeet(animationDir).x, xCoord);
 		p.start();
-		effects.add(p);
+		addParticle(p);
+//		effects.add(p);
 	}
 	
 	public void takeDamage(int damage)
 	{
 		super.takeDamage(damage);
+//		particleOnSelf("heal");
 		particleOnSelf("spark");
 	}
 	
@@ -197,7 +201,8 @@ public abstract class Unit extends Actor
 		else
 		{
 			attackCooldown = 0;
-			target = null;
+			loseTarget();
+//			target = null;
 		}
 		
 		if ((target == null || !target.isAlive()) && attackCooldown - attackSpeedBoost <= 0)
@@ -231,9 +236,8 @@ public abstract class Unit extends Actor
 	
 	protected void retreat()
 	{
-
 		float distance;
-		target = null;
+		loseTarget();
 		attacking = false;
 		
 		if (previousStance != -1)

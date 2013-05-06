@@ -2,7 +2,8 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit trunk//EN" "http://google-web-toolkit.googlecode.com/svn/trunk/distro-source/core/src/gwt-module.dtd">
 <module>
 	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
-	<inherits name='MyGdxGame' />
-	<entry-point class='com.me.mygdxgame.client.GwtLauncher' />
+	<inherits name='com.unknowngames.RainbowRage' />
+	<!-- <entry-point class='com.me.mygdxgame.client.GwtLauncher' /> -->
+	<entry-point class='com.unknowngames.rainbowrage.client.RainbowRageGwt' />
 	<set-configuration-property name="gdx.assetpath" value="../CS113Project-android/assets" />
 </module>

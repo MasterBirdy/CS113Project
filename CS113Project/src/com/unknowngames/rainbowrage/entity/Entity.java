@@ -21,7 +21,9 @@ public abstract class Entity
 //	static HashMap<String, Sound> sounds = new HashMap<String, Sound>(); 
 	static float volume = 1;
 	protected static EverythingHolder everything;
-	static ArrayList<ParticleEffect> effects;
+//	static ArrayList<ParticleEffect> effects;
+	
+	boolean remove;
 	
 	public Entity()
 	{
@@ -35,6 +37,11 @@ public abstract class Entity
 		xCoord = x;
 		yCoord = y;
 		this.team = team;
+	}
+	
+	public void setRemove()
+	{
+		remove = true;
 	}
 	
 	static public void linkHolder(EverythingHolder e)
@@ -58,7 +65,8 @@ public abstract class Entity
 	
 	public void addParticle(ParticleEffect pe)
 	{
-		effects.add(pe);
+		everything.addEffect(pe);
+//		effects.add(pe);
 	}
 	
 //	public static void loadStatics(Texture sheetR, Texture sheetB)
@@ -69,10 +77,10 @@ public abstract class Entity
 ////		sounds.put("thwp", tempAudio.newSound(Gdx.files.internal("audio/Thwp.wav")));
 //	}
 	
-	public static void loadStatics(ArrayList<ParticleEffect> e)
-	{
-		effects = e;
-	}
+//	public static void loadStatics(ArrayList<ParticleEffect> e)
+//	{
+//		effects = e;
+//	}
 	
 	public abstract void draw(SpriteBatch batch, float delta);
 	

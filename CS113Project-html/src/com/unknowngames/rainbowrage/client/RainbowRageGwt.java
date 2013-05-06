@@ -9,7 +9,7 @@ import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.badlogic.gdx.utils.Clipboard;
 import com.unknowngames.rainbowrage.RainbowRage;
 
-public class GwtLauncher extends GwtApplication 
+public class RainbowRageGwt extends GwtApplication 
 {
 	@Override
 	public GwtApplicationConfiguration getConfig () 

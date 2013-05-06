@@ -49,7 +49,7 @@ public class Building extends Actor
 		super.update();
 		if (attacking && attackCooldown <= 0)
 		{
-			System.out.println("Tower attacking");
+//			System.out.println("Tower attacking");
 			attack();
 			attackCooldown = attackSpeed;
 		}

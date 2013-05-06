@@ -370,7 +370,7 @@
 		<aoe> 				5									</aoe>
 		<targetteam> 		1									</targetteam>
 		<effect>			0									</effect>
-		<effectamount>		1									</effectamount>
+		<effectamount>		5									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			50									</cooldown>

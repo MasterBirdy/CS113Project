@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -91,6 +92,12 @@ public class EverythingHolder
 	Stats stats;
 	
 	Settings settings = new Settings();
+	
+	private Map[] maps = new Map[2];
+	
+	private Music mainMusic, gameMusic, endMusic;
+	
+	Entity tempEnt = null;
 		
 	public EverythingHolder()
 	{
@@ -104,7 +111,7 @@ public class EverythingHolder
 		
 		// Wave control
 //		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
-		waveInterval = 	(int) (10 / stepTime); 	// Turns (15 seconds)
+		waveInterval = 	(int) (15 / stepTime); 	// Turns (15 seconds)
 		waveTime = 		(int) (3 / stepTime);	// Turns (2 seconds)
 				
 		spawning = false;
@@ -117,6 +124,94 @@ public class EverythingHolder
 		loadSounds();
 		loadTextures();
 		finished = true;
+		Texture.setEnforcePotImages(true);
+//		Entity.loadStatics(effects);
+		
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
+		font[0] = generator.generateFont(18);
+		font[1] = generator.generateFont(32);
+		font[2] = generator.generateFont(45);
+		font[2].setColor(1, 1, 1, 1);
+
+		loadMusic();
+	}
+	
+	public void loadMusic()
+	{
+		Audio tempMusic = Gdx.audio;
+		gameMusic = tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
+		gameMusic.setLooping(true);
+	}
+	
+	public void playGameMusic()
+	{
+		gameMusic.play();
+	}
+	
+	public void pauseGameMusic()
+	{
+		gameMusic.pause();
+	}
+	
+	public void stopGameMusic()
+	{
+		gameMusic.stop();
+	}
+	
+	public void setGameMusic()
+	{
+		gameMusic.setVolume(settings.musicSound);
+	}
+	
+	public void loadMap(int level)
+	{
+		Texture texture;
+		TextureRegion region;
+		Sprite sprite;
+		
+		if (level == 0)
+		{
+			texture = new Texture(Gdx.files.internal("data/mockupmap.png"));
+			region = new TextureRegion(texture, 0, 0, 800, 600);
+			sprite = new Sprite(region);
+	
+			map = new Map(new Coordinate(100, 1030), sprite, 1600, 1200, 100, 1030, 1300, 170);
+			map.add(new Coordinate(1300, 1030));
+			map.add(new Coordinate(1300, 600));
+			map.add(new Coordinate(300, 600));
+			map.add(new Coordinate(300, 170));
+			map.add(new Coordinate(1300, 170));
+		}
+		else
+		{
+//			texture = new Texture(Gdx.files.internal("images/map1.png"));
+			texture = new Texture(Gdx.files.internal("images/map1.jpg"));
+			region = new TextureRegion(texture, 0, 0, 1200, 960);
+			sprite = new Sprite(region);
+			
+			map = new Map(new Coordinate(320, 870), sprite, 1200, 960, 310, 870, 1210, 480);
+			map.add(new Coordinate(1205, 870));
+			map.add(new Coordinate(1205, 665));
+			map.add(new Coordinate(380, 665));
+			map.add(new Coordinate(380, 480));
+			map.add(new Coordinate(1200, 480));
+			
+			Coordinate[] sites = new Coordinate[3];
+			sites[0] = new Coordinate(600, 910);
+			sites[1] = new Coordinate(900, 910);
+			sites[2] = new Coordinate(1270, 750);
+			map.buildSites(sites, 1);
+			
+			sites = new Coordinate[3];
+			sites[0] = new Coordinate(900, 445);
+			sites[1] = new Coordinate(600, 445);
+			sites[2] = new Coordinate(300, 550);
+			map.buildSites(sites, 2);
+		}
+		
+		sprite.setSize(1600, 1200);
+		
+		buildMap();
 	}
 	
 	public Stats Stats()
@@ -514,7 +609,21 @@ public class EverythingHolder
 		objectTextures.put("arroweyesbutton", new TextureRegion(icons, 192, 1377, 192, 137));
 		objectTextures.put("mrwizardbutton", new TextureRegion(icons, 384, 1377, 192, 137));
 		
+		objectTextures.put("swordbutton", new TextureRegion(icons, 0, 1071, 152, 153));
+		objectTextures.put("archerbutton", new TextureRegion(icons, 0, 918, 152, 153));
+		objectTextures.put("ninjabutton", new TextureRegion(icons, 0, 765, 152, 153));
+		objectTextures.put("magebutton", new TextureRegion(icons, 0, 612, 152, 153));
+		objectTextures.put("monkbutton", new TextureRegion(icons, 0, 459, 152, 153));
+		objectTextures.put("petbutton", new TextureRegion(icons, 0, 1224, 152, 153));
+		
+		objectTextures.put("attackbutton", new TextureRegion(icons, 0, 0, 152, 153));
+		objectTextures.put("defendbutton", new TextureRegion(icons, 0, 153, 152, 153));
+		objectTextures.put("retreatbutton", new TextureRegion(icons, 0, 306, 152, 153));
+		objectTextures.put("skillbutton", new TextureRegion(icons, 152, 0, 215, 209));
+		
 		objectTextures.put("upgradebutton", new TextureRegion(icons, 1905, 109, 143, 109));
+		objectTextures.put("storebutton", new TextureRegion(icons, 1905, 0, 143, 109));
+		
 		objectTextures.put("confirmbutton", new TextureRegion(icons, 367, 0, 152, 153));
 		objectTextures.put("cancelbutton", new TextureRegion(icons, 367, 153, 152, 153));
 		objectTextures.put("backbutton", new TextureRegion(icons, 367, 306, 152, 153));
@@ -529,6 +638,11 @@ public class EverythingHolder
 		
 		objectTextures.put("gamelogo", new TextureRegion(icons, 0, 1514, 842, 467));
 		objectTextures.put("mainbuttonframe", new TextureRegion(icons, 880, 422, 361, 572));
+		objectTextures.put("gamebuttonframe", new TextureRegion(icons, 519, 422, 361, 792));
+		
+		objectTextures.put("cashicon", new TextureRegion(icons, 152, 209, 33, 31));
+		objectTextures.put("timeicon", new TextureRegion(icons, 185, 209, 33, 31));
+		objectTextures.put("uniticon", new TextureRegion(icons, 218, 209, 33, 31));
 		
 		objectTextures.put("heroselectsword", new TextureRegion(icons, 1896, 328, 152, 153));
 		objectTextures.put("heroselectwizard", new TextureRegion(icons, 1896, 481, 152, 153));
@@ -596,7 +710,7 @@ public class EverythingHolder
 			}
 			catch (Exception e)
 			{
-//				System.out.println("Don't have " + name + settings.getParticleEffects() + ".p");
+				System.out.println("Don't have " + name + settings.getParticleEffects() + ".p");
 //				if (name.equals("spark"))
 //					System.out.println(e);
 				temp.load(Gdx.files.internal("data/" + name + ".p"), Gdx.files.internal("images"));
@@ -627,12 +741,14 @@ public class EverythingHolder
 //		if (Gdx.app.getType() == ApplicationType.Android)
 //			return null;
 		
-//		return new ParticleEffect();
-		
-		
-		if (particleEffects.containsKey(e))
-			return new ParticleEffect(particleEffects.get(e));
-//		System.out.println("Missing Effect: " + e);
+		if (Gdx.app.getType() == ApplicationType.Android || e.equals("empty"))
+			return new ParticleEffect();
+		else
+		{
+			if (particleEffects.containsKey(e))
+				return new ParticleEffect(particleEffects.get(e));
+		}
+		System.out.println("Missing Effect: " + e);
 		return new ParticleEffect();
 	}
 	
@@ -643,11 +759,12 @@ public class EverythingHolder
 	
 	public int winCondition()
 	{
-		if (!playerBases[0].isAlive())
-			return 2;
-		if (!playerBases[1].isAlive())
-			return 1;
-		return 0;
+		return 2;
+//		if (!playerBases[0].isAlive())
+//			return 2;
+//		if (!playerBases[1].isAlive())
+//			return 1;
+//		return 0;
 	}
 	
 	public void initializeHeroes()
@@ -801,9 +918,22 @@ public class EverythingHolder
 			if (playerBases[((Building)a).team() - 1] == null)
 				playerBases[((Building)a).team() - 1] = (Building)a;
 		}
-		int loc = entities.indexOf(null);
-		if (loc >= 0)
-			entities.add(loc, a);
+//		int loc = entities.indexOf(null);
+//		if (entities.isEmpty())
+//			loc = 0;
+		int loc = -1;
+		for (int i = 0; i < entities.size(); i++)
+		{
+			if (entities.get(i) == null)
+			{
+				loc = i;
+				break;
+			}
+		}
+		if (loc > 100)
+			entities.set(loc, a);
+		else if (loc >= 0)
+			entities.set(loc, a);
 		else
 			entities.add(a);
 	}
@@ -905,6 +1035,11 @@ public class EverythingHolder
 		return temp;
 	}
 	
+	public void sortEntities()
+	{
+		Collections.sort(entities, eCompare);
+	}
+	
 	public void render(float delta)
 	{
 //		for (Actor a : teams[0])
@@ -919,17 +1054,22 @@ public class EverythingHolder
 //		}
 		
 		
-		Collections.sort(entities, eCompare);
-		
-		Entity e;
+//		Collections.sort(entities, eCompare);
+//		int g = 1;
+//		System.out.println(g);
+//		Entity e;
 		for (int i = 0; i < entities.size(); i++)
 		{
-			e = entities.get(i);
-			if (e == null)
-				continue;
-			if (e instanceof Building || (e instanceof Actor && ((Entity)e).isAlive()) || (e instanceof Skill && ((Entity)e).isAlive()))
-				e.draw(batch, delta);
-			else if (!(e instanceof Hero))
+//			e = entities.get(i);
+			tempEnt = entities.get(i);
+//			if (e == null)
+//			if (tempEnt == null)
+//				break;
+			if (tempEnt instanceof Building || (tempEnt instanceof Actor && ((Entity)tempEnt).isAlive()) || (tempEnt instanceof Skill && ((Entity)tempEnt).isAlive()))
+				tempEnt.draw(batch, delta);
+//			if (e instanceof Building || (e instanceof Actor && ((Entity)e).isAlive()) || (e instanceof Skill && ((Entity)e).isAlive()))
+//				e.draw(batch, delta);
+			else if (!(tempEnt instanceof Hero))
 			{
 //				System.out.println("DEAD");
 //				if (e instanceof Minion)
@@ -938,7 +1078,9 @@ public class EverythingHolder
 //					stats.minionDeaths[e.team() - 1]++;
 //					stats.minionKills[(e.team() == 1 ? 1 : 0)]++;
 //				}
+				
 				entities.set(i, null);
+//				entities.get(i).setRemove();
 			}
 //			else if (e instanceof Hero)
 //			{
@@ -961,17 +1103,28 @@ public class EverythingHolder
 //			}
 //		}
 		
-		for (ParticleEffect pe : effects)
+//		for (ParticleEffect pe : effects)
+//		{
+//			if (pe != null)
+//				pe.draw(batch, delta * 0.5f);
+//		}
+		for (int i = 0; i < effects.size(); i++)
 		{
-			pe.draw(batch, delta * 0.5f);
+			if (effects.get(i) != null)
+			{
+				if (effects.get(i).isComplete())
+					effects.set(i, null);
+				else
+					effects.get(i).draw(batch, delta * 0.5f);
+			}
 		}
-		Iterator<ParticleEffect> iter = effects.iterator();
-
-		while (iter.hasNext())
-		{
-			if ((iter.next()).isComplete())
-				iter.remove();
-		}
+//		Iterator<ParticleEffect> iter = effects.iterator();
+//
+//		while (iter.hasNext())
+//		{
+//			if ((iter.next()).isComplete())
+//				iter.remove();
+//		}
 		if (false)//showRange)
 		{
 			for (Entity en : entities)
@@ -1010,8 +1163,11 @@ public class EverythingHolder
 //			a.checkAlive();
 //		for (Actor a : teams[1])
 //			a.checkAlive();
+//		Collections.sort(entities, eCompare);
 		for (Entity e : entities)
 		{
+//			if (e == null)
+//				break;
 			if (e instanceof Actor)
 				((Actor)e).checkAlive();
 		}
@@ -1143,11 +1299,55 @@ public class EverythingHolder
 		showRange = (showRange ? false : true);
 	}
 	
-	public void load(SpriteBatch b, Map m)
+	public void load(SpriteBatch b) //, Map m)
 	{
 		batch = b;
-		map = m;
+		
+//		map = m;
 //		initializeHeroes();
+	}
+	
+	public void addEffect(ParticleEffect e)
+	{
+		int i = effects.indexOf(null);
+		if (i >= 0)
+			effects.set(i, e);
+		else
+			effects.add(e);
+	}
+	
+	public void buildMap()
+	{
+		Building tower = new Building(map.start1().x(), map.start1().y() - 2, 1, 
+				buildingStats.get("stronghold"));//new Stronghold(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
+		tower.upgrade();
+		add(tower, 1);
+		//everything.add(tower, true, 1);
+		//tower = new Stronghold(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
+		tower = new Building(map.start2().x(), map.start2().y() - 2, 2, 
+		buildingStats.get("stronghold"));
+		tower.upgrade();
+		add(tower, 2);
+		
+		int towerNumber = 1;
+		for (Coordinate c : map.buildSites(1))
+		{
+			tower = new Building(c.x(), c.y(), 1, buildingStats.get("arrowtower"));
+//			tower = new ArrowTower(c.x(), c.y(), 1, towerNumber++);
+			tower.upgrade();
+			add(tower, 1);
+//			everything.add(tower, true, 1);
+		}
+		
+		towerNumber = 1;
+		for (Coordinate c : map.buildSites(2))
+		{
+			tower = new Building(c.x(), c.y(), 2, buildingStats.get("arrowtower"));
+//			tower = new ArrowTower(c.x(), c.y(), 2, towerNumber++);
+			tower.upgrade();
+			add(tower, 2);
+//			everything.add(tower, true, 2);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -1165,28 +1365,31 @@ public class EverythingHolder
 		spawning = false;
 		running = false;
 		
-		entities = new ArrayList<Entity>(50);
+//		entities = new ArrayList<Entity>(50);
+		entities = new ArrayList<Entity>();
 //		projectiles = new ArrayList<Projectile>();
 		effects = new ArrayList<ParticleEffect>();
 //		Actor.loadProjectiles(projectiles);
 		
-		Entity.loadStatics(effects);
 		funds1 = 100;
 		funds2 = 100;
 		turn = 0;
 		highestTurn = 10;
 		
+//		Entity.loadStatics(effects);
+		
 //		font[0] = new BitmapFont();
 //		font[1] = new BitmapFont();
 //		font[1].scale(2);
 		
+		
 //		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/BaroqueScript.ttf"));
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
-//		font[2] = generator.generateFont(36);
-		font[0] = generator.generateFont(18);
-		font[1] = generator.generateFont(32);
-		font[2] = generator.generateFont(45);
-		font[2].setColor(1, 1, 1, 1);
+//		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
+////		font[2] = generator.generateFont(36);
+//		font[0] = generator.generateFont(18);
+//		font[1] = generator.generateFont(32);
+//		font[2] = generator.generateFont(45);
+//		font[2].setColor(1, 1, 1, 1);
 		
 //		font[3] = generator.generateFont(36);
 		

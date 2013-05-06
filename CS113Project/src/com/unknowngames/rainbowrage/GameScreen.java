@@ -43,10 +43,10 @@ public class GameScreen implements Screen
 	private SpriteBatch batch;
 	private Texture texture;
 	private Sprite sprite;
-	private Map[] maps = new Map[2];
+//	private Map[] maps = new Map[2];
 	int counter1, counter2;
 	private boolean isPaused;
-	BitmapFont font;
+//	BitmapFont font;
 	static boolean showRange;
 	GameInput inputProcessor;
 	static EverythingHolder everything;// = new EverythingHolder();
@@ -96,11 +96,12 @@ public class GameScreen implements Screen
 
 	public GameScreen(RainbowRage game, boolean multiplayer)
 	{
+		long startTime = System.currentTimeMillis();
+		
 		gl = Gdx.graphics.getGL10();
 		this.game = game;
 		this.multiplayer = multiplayer;
 		everything.reset();
-		Texture.setEnforcePotImages(true);
 		isPaused = false;
 		
 //		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
@@ -125,49 +126,50 @@ public class GameScreen implements Screen
 		uiCamera.setToOrtho(false);
 		batch = new SpriteBatch();
 
-		Texture pauseTexture = new Texture(Gdx.files.internal("images/pausemenu.png"));
-		pauseRegion = new TextureRegion(pauseTexture, 0, 0, 270, 190);
-		TextureRegion region;
-		
-		if (level == 0)
-		{
-			texture = new Texture(Gdx.files.internal("data/mockupmap.png"));
-			region = new TextureRegion(texture, 0, 0, 800, 600);
-			sprite = new Sprite(region);
-	
-			maps[0] = new Map(new Coordinate(100, 1030), sprite, 1600, 1200, 100, 1030, 1300, 170);
-			maps[0].add(new Coordinate(1300, 1030));
-			maps[0].add(new Coordinate(1300, 600));
-			maps[0].add(new Coordinate(300, 600));
-			maps[0].add(new Coordinate(300, 170));
-			maps[0].add(new Coordinate(1300, 170));
-		}
-		else
-		{
-//			texture = new Texture(Gdx.files.internal("images/map1.png"));
-			texture = new Texture(Gdx.files.internal("images/map1.jpg"));
-			region = new TextureRegion(texture, 0, 0, 1200, 960);
-			sprite = new Sprite(region);
-			
-			maps[1] = new Map(new Coordinate(320, 870), sprite, 1200, 960, 310, 870, 1210, 480);
-			maps[1].add(new Coordinate(1205, 870));
-			maps[1].add(new Coordinate(1205, 665));
-			maps[1].add(new Coordinate(380, 665));
-			maps[1].add(new Coordinate(380, 480));
-			maps[1].add(new Coordinate(1200, 480));
-			
-			Coordinate[] sites = new Coordinate[3];
-			sites[0] = new Coordinate(600, 910);
-			sites[1] = new Coordinate(900, 910);
-			sites[2] = new Coordinate(1270, 750);
-			maps[1].buildSites(sites, 1);
-			
-			sites = new Coordinate[3];
-			sites[0] = new Coordinate(900, 445);
-			sites[1] = new Coordinate(600, 445);
-			sites[2] = new Coordinate(300, 550);
-			maps[1].buildSites(sites, 2);
-		}
+//		Texture pauseTexture = new Texture(Gdx.files.internal("images/pausemenu.png"));
+//		pauseRegion = new TextureRegion(pauseTexture, 0, 0, 270, 190);
+		everything.loadMap(level);
+//		TextureRegion region;
+//		
+//		if (level == 0)
+//		{
+//			texture = new Texture(Gdx.files.internal("data/mockupmap.png"));
+//			region = new TextureRegion(texture, 0, 0, 800, 600);
+//			sprite = new Sprite(region);
+//	
+//			maps[0] = new Map(new Coordinate(100, 1030), sprite, 1600, 1200, 100, 1030, 1300, 170);
+//			maps[0].add(new Coordinate(1300, 1030));
+//			maps[0].add(new Coordinate(1300, 600));
+//			maps[0].add(new Coordinate(300, 600));
+//			maps[0].add(new Coordinate(300, 170));
+//			maps[0].add(new Coordinate(1300, 170));
+//		}
+//		else
+//		{
+////			texture = new Texture(Gdx.files.internal("images/map1.png"));
+//			texture = new Texture(Gdx.files.internal("images/map1.jpg"));
+//			region = new TextureRegion(texture, 0, 0, 1200, 960);
+//			sprite = new Sprite(region);
+//			
+//			maps[1] = new Map(new Coordinate(320, 870), sprite, 1200, 960, 310, 870, 1210, 480);
+//			maps[1].add(new Coordinate(1205, 870));
+//			maps[1].add(new Coordinate(1205, 665));
+//			maps[1].add(new Coordinate(380, 665));
+//			maps[1].add(new Coordinate(380, 480));
+//			maps[1].add(new Coordinate(1200, 480));
+//			
+//			Coordinate[] sites = new Coordinate[3];
+//			sites[0] = new Coordinate(600, 910);
+//			sites[1] = new Coordinate(900, 910);
+//			sites[2] = new Coordinate(1270, 750);
+//			maps[1].buildSites(sites, 1);
+//			
+//			sites = new Coordinate[3];
+//			sites[0] = new Coordinate(900, 445);
+//			sites[1] = new Coordinate(600, 445);
+//			sites[2] = new Coordinate(300, 550);
+//			maps[1].buildSites(sites, 2);
+//		}
 //		else
 //		{
 ////			texture = new Texture(Gdx.files.internal("images/map1.png"));
@@ -195,18 +197,10 @@ public class GameScreen implements Screen
 //			maps[1].buildSites(sites, 2);
 //		}
 		
-		everything.load(batch, maps[level]);
-//		Texture sheetR = new Texture(Gdx.files.internal("images/sprite_sheet_red.png"));
-//		Texture sheetB = new Texture(Gdx.files.internal("images/sprite_sheet_blue.png"));
-
-		//<<<<<<< HEAD
-//		Entity.loadStatics(sheetR, sheetB);
-//		Actor.loadRange();
-//		Unit.loadAnimations();
-//		Projectile.loadProjectiles();
-//		Building.loadSprites();
-		sprite.setSize(1600, 1200);
-		font = new BitmapFont();
+		everything.load(batch);
+		
+//		sprite.setSize(1600, 1200);
+//		font = new BitmapFont();
 		EverythingHolder.showRange = true;
 		inputProcessor = new GameInput();
 
@@ -219,37 +213,37 @@ public class GameScreen implements Screen
 		
 //		Building.loadAnimations();
 
-		Building tower = new Building(maps[level].start1().x(), maps[level].start1().y() - 2, 1, 
-									everything.buildingStats.get("stronghold"));//new Stronghold(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
-		tower.upgrade();
-		everything.add(tower, 1);
-//		everything.add(tower, true, 1);
-//		tower = new Stronghold(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
-		tower = new Building(maps[level].start2().x(), maps[level].start2().y() - 2, 2, 
-				everything.buildingStats.get("stronghold"));
-		tower.upgrade();
-		everything.add(tower, 2);
+//		Building tower = new Building(maps[level].start1().x(), maps[level].start1().y() - 2, 1, 
+//									everything.buildingStats.get("stronghold"));//new Stronghold(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
+//		tower.upgrade();
+//		everything.add(tower, 1);
+////		everything.add(tower, true, 1);
+////		tower = new Stronghold(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
+//		tower = new Building(maps[level].start2().x(), maps[level].start2().y() - 2, 2, 
+//				everything.buildingStats.get("stronghold"));
+//		tower.upgrade();
+//		everything.add(tower, 2);
 //		everything.add(tower, true, 2);
 		
-		int towerNumber = 1;
-		for (Coordinate c : everything.map().buildSites(1))
-		{
-			tower = new Building(c.x(), c.y(), 1, everything.buildingStats.get("arrowtower"));
-//			tower = new ArrowTower(c.x(), c.y(), 1, towerNumber++);
-			tower.upgrade();
-			everything.add(tower, 1);
-//			everything.add(tower, true, 1);
-		}
-		
-		towerNumber = 1;
-		for (Coordinate c : everything.map().buildSites(2))
-		{
-			tower = new Building(c.x(), c.y(), 2, everything.buildingStats.get("arrowtower"));
-//			tower = new ArrowTower(c.x(), c.y(), 2, towerNumber++);
-			tower.upgrade();
-			everything.add(tower, 2);
-//			everything.add(tower, true, 2);
-		}
+//		int towerNumber = 1;
+//		for (Coordinate c : everything.map().buildSites(1))
+//		{
+//			tower = new Building(c.x(), c.y(), 1, everything.buildingStats.get("arrowtower"));
+////			tower = new ArrowTower(c.x(), c.y(), 1, towerNumber++);
+//			tower.upgrade();
+//			everything.add(tower, 1);
+////			everything.add(tower, true, 1);
+//		}
+//		
+//		towerNumber = 1;
+//		for (Coordinate c : everything.map().buildSites(2))
+//		{
+//			tower = new Building(c.x(), c.y(), 2, everything.buildingStats.get("arrowtower"));
+////			tower = new ArrowTower(c.x(), c.y(), 2, towerNumber++);
+//			tower.upgrade();
+//			everything.add(tower, 2);
+////			everything.add(tower, true, 2);
+//		}
 		
 		everything.initializeHeroes();
 
@@ -261,10 +255,13 @@ public class GameScreen implements Screen
 		height = everything.map().height();
 		screenH = Gdx.graphics.getHeight() / 2;
 		
-		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
-		startMusic.setLooping(true);
-		startMusic.setVolume(everything.settings.getMusicSound());
-		startMusic.play();	
+//		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
+//		startMusic.setLooping(true);
+//		startMusic.setVolume(everything.settings.getMusicSound());
+//		startMusic.play();
+		
+		everything.setGameMusic();
+		everything.playGameMusic();
 
 		if (!connected && multiplayer)
 			networkSetup();
@@ -276,6 +273,7 @@ public class GameScreen implements Screen
 			everything.setTeam((byte)1);
 		}
 		timeAccumulator = 0;
+		System.out.println("That took: " + (System.currentTimeMillis() - startTime) + " ms");
 //		ready = true;
 	}
 	
@@ -399,18 +397,22 @@ public class GameScreen implements Screen
 			scoreBoard = new ScoreBoard(0, everything, this);
 		else
 			scoreBoard = new ScoreBoard(1, everything, this);
-		startMusic.stop();
+		everything.stopGameMusic();
+		
 		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/526296_In-My-Final-Hours.mp3"));
 		startMusic.setLooping(true);
 		startMusic.setVolume(everything.settings.getMusicSound());
-		startMusic.play();	
+		startMusic.play();
+		
 		isPaused = true;
 	}
 	
 	public void endGame()
 	{
 		everything.end();
-		startMusic.stop();
+		everything.stopGameMusic();
+		if (startMusic != null)
+			startMusic.stop();
 		game.mainMenuScreen.gameWon();
 		game.setScreen(game.mainMenuScreen);
 	}
@@ -484,6 +486,7 @@ public class GameScreen implements Screen
 		if (!multiplayer)
 			randomSpawner();
 		scoreBoards(everything.winCondition());
+		everything.sortEntities();
 	}
 
 	public void randomSpawner()
