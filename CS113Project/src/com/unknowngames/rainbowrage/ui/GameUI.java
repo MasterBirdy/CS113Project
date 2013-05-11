@@ -2,6 +2,7 @@ package com.unknowngames.rainbowrage.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -71,6 +72,7 @@ public class GameUI
 					return false;
 				}
 //				System.out.println("HIT!");
+				Gdx.input.vibrate(50);
 				return true;
 			}
 		};
@@ -165,8 +167,26 @@ public class GameUI
 		update();
 		// Buttons
 		batch.draw(buttonFrame, stackTopX - 46, stackTopY - 355, buttonFrame.getRegionWidth() * .95f * 80 / 146, buttonFrame.getRegionHeight() * .95f * 80 / 146);
-		for (int i = 0; i < buttons.length; i++)
+		for (int i = 0; i < 6; i++)
+		{
 			buttons[i].draw(batch, delta);
+			everything.getFont(3).draw(batch, (everything.getSentUnit(i) > 0 ? everything.getSentUnit(i) + "" : ""), buttons[i].xCoord() - 12, buttons[i].yCoord() + 20);
+		}
+		
+		for (int i = 6; i < 9; i++)
+		{
+			if (7 - i == everything.getHero().stance())
+				batch.setColor(Color.WHITE);
+			else
+				batch.setColor(Color.GRAY);
+			
+			buttons[i].draw(batch, delta);
+		}
+		
+		for (int i = 9; i < 13; i++)
+		{
+			buttons[i].draw(batch, delta);
+		}
 		
 		// Side Stats
 		batch.draw(cash, 478, height - 85); //395);
@@ -191,6 +211,8 @@ public class GameUI
 		everything.getFont(0).draw(batch, "" + everything.funds(), 513, height - 61); // 419);
 		everything.getFont(0).draw(batch, "" + everything.totalTime(), 379, height - 10 ); //384);
 		everything.getFont(0).draw(batch, "" + String.format("%03d", everything.teamSize()), 255, height - 61); //349);
+		
+		everything.getFont(3).draw(batch, (everything.activeCooldown() > 0 ? everything.activeCooldown() / 50 + "" : ""), buttons[9].xCoord() + 25, buttons[9].yCoord() + 57);
 		
 //		font.draw(batch, "Next wave: " + everything.timeLeft(), screenX - 150, screenY - 20);
 //		font.draw(batch, "Time: " + everything.totalTime(), screenX - 150, screenY - 45);

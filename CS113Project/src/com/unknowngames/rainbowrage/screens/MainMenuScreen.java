@@ -214,6 +214,7 @@ public class MainMenuScreen implements Screen
 	
 	public void buttonHit(int h)
 	{
+//		Gdx.input.vibrate(50);
 		if (h == 0) // Single-player
 		{
 			selectScreen = new HeroSelectScreen(everything, game);

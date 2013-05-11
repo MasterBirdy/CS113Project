@@ -326,7 +326,7 @@ public abstract class Actor extends Entity
 	
 	public void particleOnSelf(String s)
 	{
-		ParticleEffect p = everything.getEffect(s);
+		ParticleEffect p = EverythingHolder.getEffect(s);
 		p.setPosition(xCoord + 30, yCoord + 20);
 		p.start();
 		addParticle(p);
@@ -648,7 +648,7 @@ public abstract class Actor extends Entity
 		attackRange = a.attackRange(level);
 		ranged = a.ranged(level);
 		if (!a.soundPack(level).equals("empty"))
-			this.attackSound = everything.getSound(a.soundPack(level));
+			this.attackSound = EverythingHolder.getSound(a.soundPack(level));
 		if (!a.passiveSkill(level).equals("empty"))
 			this.loadPassiveSkill(everything.getSkill(a.passiveSkill(level)));
 		if (!a.procSkill(level).equals("empty"))

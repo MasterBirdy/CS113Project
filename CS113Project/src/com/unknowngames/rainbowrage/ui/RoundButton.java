@@ -3,6 +3,7 @@ package com.unknowngames.rainbowrage.ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -29,6 +30,7 @@ public class RoundButton extends Button
 //			System.out.println("Miss");
 			return false;
 		}
+		Gdx.input.vibrate(50);
 //		System.out.println("HIT!");
 		return true;
 	}

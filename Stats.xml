@@ -2,7 +2,7 @@
 <stats>
 	<!-- MINIONS -->
 	<minion type = "swordsman">
-		<maxhealth>			250		31		311		3111		</maxhealth>
+		<maxhealth>			240		31		311		3111		</maxhealth>
 		<damage>			7		31		311		3111		</damage>
 		<attackspeed>		50		31		311		3111		</attackspeed>
 		<attackrange>		30		31		311		3111		</attackrange>
@@ -20,7 +20,7 @@
 	</minion>
 	<minion type = "archer">
 		<maxhealth>			50		11		111		1111		</maxhealth>
-		<damage>			17		11		111		1111		</damage>
+		<damage>			15		11		111		1111		</damage>
 		<attackspeed>		50		11		111		1111		</attackspeed>
 		<attackrange>		110		11		111		1111		</attackrange>
 		<speed>				1.3f	11f		111f	1111f		</speed>
@@ -37,7 +37,7 @@
 	</minion>
 	<minion type = "monk">
 		<maxhealth>			150		21		211		2111		</maxhealth>
-		<damage>			10		21		211		2111		</damage>
+		<damage>			5		21		211		2111		</damage>
 		<attackspeed>		50		21		211		2111		</attackspeed>
 		<attackrange>		35		21		211		2111		</attackrange>
 		<speed>				1.3f	21f		211f	2111f		</speed>
@@ -54,7 +54,7 @@
 	</minion>
 	<minion type = "mage">
 		<maxhealth>			65		41		411		4111		</maxhealth>
-		<damage>			12		41		411		4111		</damage>
+		<damage>			10		41		411		4111		</damage>
 		<attackspeed>		50		41		411		4111		</attackspeed>
 		<attackrange>		90		41		411		4111		</attackrange>
 		<speed>				1.3f	41f		411f	4111f		</speed>
@@ -70,8 +70,8 @@
 		<procskill>			procfireball						</procskill>
 	</minion>
 	<minion type = "ninja">
-		<maxhealth>			90		51		511		5111		</maxhealth>
-		<damage>			13		51		511		5111		</damage>
+		<maxhealth>			100		51		511		5111		</maxhealth>
+		<damage>			12		51		511		5111		</damage>
 		<attackspeed>		50		51		511		5111		</attackspeed>
 		<attackrange>		25		51		511		5111		</attackrange>
 		<speed>				1.3f	51f		511f	5111f		</speed>
@@ -90,7 +90,7 @@
 		<maxhealth>			450		51		511		5111		</maxhealth>
 		<damage>			20		51		511		5111		</damage>
 		<attackspeed>		50		51		511		5111		</attackspeed>
-		<attackrange>		35		51		511		5111		</attackrange>
+		<attackrange>		30		51		511		5111		</attackrange>
 		<speed>				1.3f	51f		511f	5111f		</speed>
 		<cost> 				50		51		511		5111		</cost>
 		<animation> 		wolf								</animation>
@@ -107,7 +107,7 @@
 		<maxhealth>			450		51		511		5111		</maxhealth>
 		<damage>			20		51		511		5111		</damage>
 		<attackspeed>		50		51		511		5111		</attackspeed>
-		<attackrange>		35		51		511		5111		</attackrange>
+		<attackrange>		30		51		511		5111		</attackrange>
 		<speed>				1.3f	51f		511f	5111f		</speed>
 		<cost> 				50		51		511		5111		</cost>
 		<animation> 		eagle								</animation>
@@ -122,9 +122,9 @@
 	</minion>
 	<minion type = "elemental">
 		<maxhealth>			450		51		511		5111		</maxhealth>
-		<damage>			15		51		511		5111		</damage>
+		<damage>			10		51		511		5111		</damage>
 		<attackspeed>		50		51		511		5111		</attackspeed>
-		<attackrange>		35		51		511		5111		</attackrange>
+		<attackrange>		30		51		511		5111		</attackrange>
 		<speed>				1.3f	51f		511f	5111f		</speed>
 		<cost> 				50		51		511		5111		</cost>
 		<animation> 		elemental							</animation>
@@ -160,7 +160,7 @@
 	</hero>
 	<hero type = "arroweyes">
 		<maxhealth>			350		51		511		5111		</maxhealth>
-		<damage>			34		51		511		5111		</damage>
+		<damage>			29		51		511		5111		</damage>
 		<attackspeed>		50		51		511		5111		</attackspeed>
 		<attackrange>		120		51		511		5111		</attackrange>
 		<speed>				1.34f	51f		511f	5111f		</speed>
@@ -179,7 +179,7 @@
 	</hero>
 	<hero type = "mrwizard">
 		<maxhealth>			450		51		511		5111		</maxhealth>
-		<damage>			28		51		511		5111		</damage>
+		<damage>			29		51		511		5111		</damage>
 		<attackspeed>		50		51		511		5111		</attackspeed>
 		<attackrange>		100		51		511		5111		</attackrange>
 		<speed>				1.34f	51f		511f	5111f		</speed>
@@ -202,13 +202,13 @@
 		<aoe> 				50									</aoe>
 		<targetteam> 		1									</targetteam>
 		<effect>			0									</effect>
-		<effectamount>		80									</effectamount>
+		<effectamount>		60									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
-		<cooldown>			1000								</cooldown>
+		<cooldown>			750									</cooldown>
 		<trigger>			0									</trigger>
 		<traveltime>		30									</traveltime>
-		<damagesplit>		true								</damagesplit>
+		<damagesplit>		false								</damagesplit>
 		<additive>			true								</additive>
 		<continuous>		true								</continuous>
 		<speed>				6									</speed>
@@ -225,7 +225,7 @@
 		<effectamount>		32									</effectamount>
 		<duration>			250									</duration>
 		<effecttick>		0									</effecttick>
-		<cooldown>			1000								</cooldown>
+		<cooldown>			750									</cooldown>
 		<trigger>			0									</trigger>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		false								</damagesplit>
@@ -242,10 +242,10 @@
 		<aoe> 				100									</aoe>
 		<targetteam> 		1									</targetteam>
 		<effect>			2									</effect>
-		<effectamount>		200									</effectamount>
+		<effectamount>		150									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
-		<cooldown>			1000								</cooldown>
+		<cooldown>			750								</cooldown>
 		<trigger>			0									</trigger>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		false								</damagesplit>
@@ -284,7 +284,7 @@
 		<aoe> 				5									</aoe>
 		<targetteam> 		-1									</targetteam>
 		<effect>			1									</effect>
-		<effectamount>		30									</effectamount>
+		<effectamount>		45									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			250									</cooldown>
@@ -298,26 +298,6 @@
 		<cast>				fire								</cast>
 		<travel>			heal								</travel>
 		<detonateeffect>	heal								</detonateeffect>
-		<affected>			fire								</affected>
-	</skill>
-	<skill type = "magefire">
-		<aoe> 				10									</aoe>
-		<targetteam> 		1									</targetteam>
-		<effect>			0									</effect>
-		<effectamount>		500									</effectamount>
-		<duration>			1									</duration>
-		<effecttick>		0									</effecttick>
-		<cooldown>			0									</cooldown>
-		<trigger>			1									</trigger>
-		<traveltime>		30									</traveltime>
-		<damagesplit>		true								</damagesplit>
-		<additive>			true								</additive>
-		<continuous>		true								</continuous>
-		<speed>				5									</speed>
-		<sprite>			fireball							</sprite>
-		<cast>				fire								</cast>
-		<travel>			smallfireball						</travel>
-		<detonateeffect>	smallfireballexplosion				</detonateeffect>
 		<affected>			fire								</affected>
 	</skill>
 	
@@ -367,10 +347,10 @@
 	
 	<!-- PASSIVE SKILLZ -->
 	<skill type = "passivedmgaoe">
-		<aoe> 				5									</aoe>
+		<aoe> 				35									</aoe>
 		<targetteam> 		1									</targetteam>
 		<effect>			0									</effect>
-		<effectamount>		5									</effectamount>
+		<effectamount>		2									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			50									</cooldown>

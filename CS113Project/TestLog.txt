@@ -21,3 +21,16 @@
 -------------------------------
 5/4/13 1:35 PM: Server Started!
 -------------------------------
+-------------------------------
+5/7/13 1:20 AM: Server Started!
+-------------------------------
+5/7/13 1:21 AM: Player joined.
+5/7/13 1:21 AM: Player joined.
+5/7/13 1:21 AM: Player0 and Player0 started.
+5/7/13 1:27 AM: Player 10 logged out.
+5/7/13 1:27 AM: Player 20 logged out.
+5/7/13 1:27 AM: Player joined.
+5/7/13 1:27 AM: Server Killed =(
+Total data sent: 9824
+Total data received: 67056
+5/7/13 1:27 AM: Player 30 logged out.

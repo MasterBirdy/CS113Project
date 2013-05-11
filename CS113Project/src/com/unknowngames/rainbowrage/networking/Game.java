@@ -37,10 +37,14 @@ public class Game
     	status.status = 2;
     	players[1].sendTCP(status);
     	
+    	RainbowRageServer.sentData += 32;
+    	
     	ServerMessage msg = new ServerMessage();
     	msg.message = 1;
     	players[0].sendTCP(msg);
     	players[1].sendTCP(msg);
+    	
+    	RainbowRageServer.sentData += 32;
 	}
 	
 	public int ID()
@@ -98,6 +102,8 @@ public class Game
     		
     		server.sendToTCP(players[0].getID(), cmdIn);
     		server.sendToTCP(players[1].getID(), cmdIn);
+    		
+    		RainbowRageServer.sentData += 32;
 //        		server.sendToAllTCP(add);
     	}
     	else if (cmd.type > 6 && cmd.type < 10) // 7-9 is retreat, guard, and attack.
@@ -109,6 +115,8 @@ public class Game
     		cmdIn.turn = cmd.turn + turnBuffer;
     		server.sendToTCP(players[0].getID(), cmdIn);
     		server.sendToTCP(players[1].getID(), cmdIn);
+    		
+    		RainbowRageServer.sentData += 32;
 //        		server.sendToAllTCP(cmdIn);
     	}
     	else if (cmd.type == 10)
@@ -120,6 +128,8 @@ public class Game
     		cmdIn.turn = cmd.turn + turnBuffer;
     		server.sendToTCP(players[0].getID(), cmdIn);
     		server.sendToTCP(players[1].getID(), cmdIn);
+    		
+    		RainbowRageServer.sentData += 32;
     	}
     	
 //    	else if (cmd.type > 9 && cmd.type < 13) // 10-12 is upgrade towers 1, 2, and 3.

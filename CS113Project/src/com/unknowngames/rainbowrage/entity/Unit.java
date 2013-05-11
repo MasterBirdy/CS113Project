@@ -115,9 +115,11 @@ public abstract class Unit extends Actor
 		
 		
 		if (this instanceof Hero)
-			batch.draw(current, xCoord - point.x * 1.5f - 3, yCoord - point.y * 1.5f - 3, current.getRegionWidth() * 1.5f, current.getRegionHeight() * 1.5f);
+//			batch.draw(current, xCoord - point.x * 1.5f - 3, yCoord - point.y * 1.5f - 3, current.getRegionWidth() * 1.5f, current.getRegionHeight() * 1.5f);
+			batch.draw(current, xCoord - point.x * .75f - 3, yCoord - point.y * .75f - 3, current.getRegionWidth() * .75f, current.getRegionHeight() * .75f);
 		else
-			batch.draw(current, xCoord - point.x, yCoord - point.y);
+			batch.draw(current, xCoord - point.x * .5f, yCoord - point.y * .5f, current.getRegionWidth() * .5f, current.getRegionHeight() * .5f);
+//			batch.draw(current, xCoord - point.x, yCoord - point.y);
 		batch.setColor(Color.WHITE);
 		drawParticleEffects(batch, delta);
 //		everything.getFont(1).draw(batch, "" + getAttacker(), xCoord(), yCoord());

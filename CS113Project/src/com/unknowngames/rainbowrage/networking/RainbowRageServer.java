@@ -43,9 +43,12 @@ public class RainbowRageServer
     
     DateFormat df = DateFormat.getDateTimeInstance (DateFormat.SHORT, DateFormat.SHORT, new Locale("en", "EN"));
     
+    public static long sentData = 0, receivedData = 0;
+    
     
     public RainbowRageServer() throws IOException 
     {
+//    	Log.set(Log.LEVEL_DEBUG);
     	if (allowedUptime > 0)
     	{
 	    	System.out.println("Clock");
@@ -75,6 +78,7 @@ public class RainbowRageServer
         {
         	public void received (Connection c, Object object) 
         	{
+        		receivedData += 16;
         		System.out.println("Received message");
         		// We know all connections for this server are actually UserConnections.
         		UserConnection connection = (UserConnection)c;
@@ -235,6 +239,8 @@ public class RainbowRageServer
     public void kill()
     {
     	writeToLog(df.format(new Date()) + ": Server Killed =(");
+    	writeToLog("Total data sent: " + sentData);
+    	writeToLog("Total data received: " + receivedData);
     	this.server.stop();
     }
     

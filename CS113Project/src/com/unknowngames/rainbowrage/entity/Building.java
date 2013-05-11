@@ -103,7 +103,8 @@ public class Building extends Actor
 		current = buildingAnimation.getAnimation(0).getKeyFrame(stateTime * 0.5f, true);
 		Vector2 point = buildingAnimation.getFeet(0);
 		
-		batch.draw(current, xCoord - point.x, yCoord - point.y);
+		batch.draw(current, xCoord - point.x * .5f, yCoord - point.y * .5f, current.getRegionWidth() * .5f, current.getRegionHeight() * .5f);
+//		batch.draw(current, xCoord - point.x, yCoord - point.y);
 	}
 	
 //	private static Animation loadAnimation(int x, int y, int w, int h, int count, boolean flipX, int team)

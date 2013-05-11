@@ -1,6 +1,7 @@
 package com.unknowngames.rainbowrage;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.audio.Sound;
 
 public class SoundPack 
@@ -28,6 +29,8 @@ public class SoundPack
 	{
 		try
 		{
+			if (Gdx.app.getType() == ApplicationType.Android)
+				attack.stop();
 			attack.play(volume);
 		}
 		catch (Exception e)
