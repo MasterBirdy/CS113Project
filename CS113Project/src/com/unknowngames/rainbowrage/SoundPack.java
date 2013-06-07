@@ -6,7 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 
 public class SoundPack 
 {
-	static float volume = 1f;
+//	static float volume = 1f;
 	Sound attack, 
 		  die,
 		  advance,
@@ -25,7 +25,7 @@ public class SoundPack
 			die = getSound("miniondie.mp3");
 	}
 	
-	public void playAttack()
+	public void playAttack(float volume)
 	{
 		try
 		{
@@ -39,7 +39,7 @@ public class SoundPack
 		}
 	}
 	
-	public void playDie()
+	public void playDie(float volume)
 	{
 		try
 		{

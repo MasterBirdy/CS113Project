@@ -144,16 +144,18 @@ lowMax: 0.0
 highMin: 1.0
 highMax: 1.0
 relative: false
-scalingCount: 4
+scalingCount: 5
 scaling0: 0.0
-scaling1: 0.80898875
-scaling2: 0.66292137
-scaling3: 0.3483146
-timelineCount: 4
+scaling1: 0.7894737
+scaling2: 0.6315789
+scaling3: 0.31578946
+scaling4: 0.0
+timelineCount: 5
 timeline0: 0.0
-timeline1: 0.22033899
-timeline2: 0.6631356
-timeline3: 0.99788135
+timeline1: 0.19863014
+timeline2: 0.65753424
+timeline3: 0.94520545
+timeline4: 1.0
 - Options - 
 attached: false
 continuous: false
@@ -161,4 +163,4 @@ aligned: false
 additive: true
 behind: false
 - Image Path -
-C:\Users\Mikey\Desktop\Particle Effects\smokeparticle.png
+C:\Users\Mikey\Documents\TowerDefense Docs\Particle Effects\smokeparticle.png

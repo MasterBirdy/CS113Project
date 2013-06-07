@@ -20,6 +20,7 @@ import com.esotericsoftware.minlog.Log;
 
 public class UnitParser 
 {
+	String version;
 	int[] maxHealth;
 	int[] damage;
 	int[] attackSpeed;
@@ -74,6 +75,7 @@ public class UnitParser
 			{
 				doc = dBuilder.parse(stats);
 			}
+			
 			doc.getDocumentElement().normalize();
 
 			//Begin parsing: pass the entity type that is to be parsed and start with creating node lists
@@ -180,6 +182,11 @@ public class UnitParser
 							skill.affected = tokenizeString(getElement("affected"));
 							skillStatsMap.put(element.getAttribute("type"), skill);
 						}
+						else if (node.getNodeName().equals("stats"))
+						{
+							version = element.getAttribute("version");
+							System.out.println(version);
+						}
 					}
 				}
 			}
@@ -188,6 +195,11 @@ public class UnitParser
 		{
 			ex.printStackTrace();
 		}
+	}
+	
+	public String getVersion()
+	{
+		return version;
 	}
 	
 	public String getElement(String s)

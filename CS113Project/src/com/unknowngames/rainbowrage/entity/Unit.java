@@ -30,6 +30,8 @@ public abstract class Unit extends Actor
 	int animationDir = 0;
 	ParticleEffect spark, fire, heal;
 	
+	int deathCountdown = 100;
+	
 	boolean standing = false;
 	
 	TextureRegion current;
@@ -57,6 +59,15 @@ public abstract class Unit extends Actor
 	public int getDirection()
 	{
 		return animationDir % 4;
+	}
+	
+	public int getRotation()
+	{
+		if (isAlive())
+			return 0;
+		if (animationDir % 4 == 2)
+			return (deathCountdown > 70 ? 3 * (deathCountdown - 70) : 0) - 90;
+		return 90 - (deathCountdown > 70 ? 3 * (deathCountdown - 70) : 0);
 	}
 
 	@Override
@@ -98,8 +109,12 @@ public abstract class Unit extends Actor
 			else
 				stateTime = .08f;
 		}
-		
-		if (attacking && unitAnimation.getAnimation(animationDir).animationDuration < stateTime / 2)
+		if (!isAlive() && deathCountdown > 0)
+		{
+			current = unitAnimation.getAnimation(animationDir).getKeyFrame(0);
+			batch.setColor(1, 1, 1, deathCountdown / 100f);
+		}
+		else if (attacking && unitAnimation.getAnimation(animationDir).animationDuration < stateTime / 2)
 			current = unitAnimation.getAnimation(animationDir).getKeyFrame(0);
 		else
 			current = unitAnimation.getAnimation(animationDir).getKeyFrame(stateTime / (attacking ? 2 : 1), !attacking);	
@@ -116,13 +131,20 @@ public abstract class Unit extends Actor
 		
 		if (this instanceof Hero)
 //			batch.draw(current, xCoord - point.x * 1.5f - 3, yCoord - point.y * 1.5f - 3, current.getRegionWidth() * 1.5f, current.getRegionHeight() * 1.5f);
-			batch.draw(current, xCoord - point.x * .75f - 3, yCoord - point.y * .75f - 3, current.getRegionWidth() * .75f, current.getRegionHeight() * .75f);
+//			batch.draw(current, xCoord - point.x * .75f - 3, yCoord - point.y * .75f - 3, current.getRegionWidth() * .75f, current.getRegionHeight() * .75f);
+			batch.draw(current, xCoord - point.x * .75f, yCoord - point.y * .75f, unitAnimation.getFeet(animationDir).x / 2, unitAnimation.getFeet(animationDir).y / 2, current.getRegionWidth() * .75f, current.getRegionHeight() * .75f, 1, 1, getRotation());
 		else
-			batch.draw(current, xCoord - point.x * .5f, yCoord - point.y * .5f, current.getRegionWidth() * .5f, current.getRegionHeight() * .5f);
+			batch.draw(current, xCoord - point.x * .5f, yCoord - point.y * .5f, unitAnimation.getFeet(animationDir).x / 2, unitAnimation.getFeet(animationDir).y / 2, current.getRegionWidth() * .5f, current.getRegionHeight() * .5f, 1, 1, getRotation());
+//			batch.draw(current, xCoord - point.x * .5f, yCoord - point.y * .5f, current.getRegionWidth() * .5f, current.getRegionHeight() * .5f);
 //			batch.draw(current, xCoord - point.x, yCoord - point.y);
 		batch.setColor(Color.WHITE);
 		drawParticleEffects(batch, delta);
 //		everything.getFont(1).draw(batch, "" + getAttacker(), xCoord(), yCoord());
+	}
+	
+	public int deathCountdown()
+	{
+		return deathCountdown;
 	}
 	
 	protected void attack()
@@ -137,7 +159,8 @@ public abstract class Unit extends Actor
 	public void particleOnSelf(String s)
 	{
 		ParticleEffect p = everything.getEffect(s);
-		p.setPosition(xCoord - unitAnimation.getFeet(animationDir).x + 10, yCoord + 20);
+//		p.setPosition(xCoord - unitAnimation.getFeet(animationDir).x + 10, yCoord + 20);
+		p.setPosition(xCoord, yCoord + 20);
 		p.start();
 		addParticle(p);
 //		effects.add(p);

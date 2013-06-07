@@ -4,8 +4,9 @@ public class Settings
 {
 	
 //	Difficulty difficulty;
-	int difficulty = 1, particleEffects = 1;
-	float gameSound = .5f, musicSound = .1f;
+	int difficulty = 1, particleEffects = 0;
+	float gameSound = .5f, //.5f, 
+		  musicSound = .1f; //.1f;
 	
 	public void setParticleEffects(int p)
 	{

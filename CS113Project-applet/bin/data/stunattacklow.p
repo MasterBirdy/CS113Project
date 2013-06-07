@@ -2,8 +2,8 @@ healorb
 - Delay -
 active: false
 - Duration - 
-lowMin: 500.0
-lowMax: 500.0
+lowMin: 200.0
+lowMax: 200.0
 - Count - 
 min: 0
 max: 5
@@ -87,8 +87,8 @@ colors0: 1.0
 colors1: 0.94509804
 colors2: 0.7607843
 colors3: 1.0
-colors4: 0.78039217
-colors5: 0.0
+colors4: 1.0
+colors5: 1.0
 colors6: 1.0
 colors7: 0.61960787
 colors8: 0.047058824
@@ -123,4 +123,4 @@ aligned: false
 additive: false
 behind: false
 - Image Path -
-C:\Users\Mikey\Documents\TowerDefense Docs\Particle Effects\stunattackparticle.png
+D:\Documents\TowerDefense Docs\Particle Effects\stunattackparticle.png

@@ -84,6 +84,7 @@ public class Hero extends Unit
 		super.update();
 		if (!isAlive())
 		{
+			--deathCountdown;
 			--respawnCounter;
 //			respawnCounter = respawnTime;
 			return;

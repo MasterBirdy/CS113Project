@@ -114,11 +114,11 @@ public class GameUI
 //		buttons[10] = new RectangularButton(0, 255, (int)(143 * .55f), (int)(109 * .55f),
 //				new TextureRegion(icons, 1905, 0, 143, 109));								// Item Shop
 		
-		buttons[10] = new RectangularButton(0, 255, (int)(143 * .55f), (int)(109 * .55f),
+		buttons[10] = new RectangularButton(0, 350, (int)(143 * .55f), (int)(109 * .55f),
 				EverythingHolder.getObjectTexture("storebutton"));								// Item Shop
 		buttons[11] = new RectangularButton(stackTopX - 100, 0, (int)(192 * .55f), (int)(137 * .55f),
 				EverythingHolder.getObjectTexture(everything.getHeroName() + "button"));			// Hero button
-		buttons[12] = new RectangularButton(0, 190, (int)(143 * .55f), (int)(109 * .55f),
+		buttons[12] = new RectangularButton(0, 275, (int)(143 * .55f), (int)(109 * .55f),
 				EverythingHolder.getObjectTexture("upgradebutton"));								// Upgrades
 		
 		buttons[10].setClickable(false);
@@ -209,10 +209,10 @@ public class GameUI
 		topUI.draw();
 		
 		everything.getFont(0).draw(batch, "" + everything.funds(), 513, height - 61); // 419);
-		everything.getFont(0).draw(batch, "" + everything.totalTime(), 379, height - 10 ); //384);
+//		everything.getFont(0).draw(batch, "" + everything.totalTime(), 379, height - 10 ); //384);
 		everything.getFont(0).draw(batch, "" + String.format("%03d", everything.teamSize()), 255, height - 61); //349);
 		
-		everything.getFont(3).draw(batch, (everything.activeCooldown() > 0 ? everything.activeCooldown() / 50 + "" : ""), buttons[9].xCoord() + 25, buttons[9].yCoord() + 57);
+		everything.getFont(3).draw(batch, (everything.activeCooldown() > 0 ? everything.activeCooldown() / 50 + "" : ""), buttons[9].xCoord() + 30, buttons[9].yCoord() + 57);
 		
 //		font.draw(batch, "Next wave: " + everything.timeLeft(), screenX - 150, screenY - 20);
 //		font.draw(batch, "Time: " + everything.totalTime(), screenX - 150, screenY - 45);

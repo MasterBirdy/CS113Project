@@ -107,7 +107,7 @@ active: false
 - Tint - 
 colorsCount: 12
 colors0: 1.0
-colors1: 0.52156866
+colors1: 0.5176471
 colors2: 0.0
 colors3: 1.0
 colors4: 0.70980394
@@ -144,4 +144,4 @@ aligned: false
 additive: false
 behind: false
 - Image Path -
-C:\Users\Mikey\Documents\TowerDefense Docs\Particle Effects\sparkleparticle.png
+D:\Documents\TowerDefense Docs\Particle Effects\statincreaseparticle.png

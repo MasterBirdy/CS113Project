@@ -90,16 +90,12 @@ lowMax: 180.0
 highMin: 180.0
 highMax: 360.0
 relative: true
-scalingCount: 4
+scalingCount: 2
 scaling0: 1.0
 scaling1: 0.0
-scaling2: 0.98039216
-scaling3: 0.0
-timelineCount: 4
+timelineCount: 2
 timeline0: 0.0
-timeline1: 0.20547946
-timeline2: 0.80136985
-timeline3: 1.0
+timeline1: 1.0
 - Wind - 
 active: false
 - Gravity - 
@@ -107,8 +103,8 @@ active: false
 - Tint - 
 colorsCount: 3
 colors0: 1.0
-colors1: 0.21176471
-colors2: 0.0
+colors1: 1.0
+colors2: 1.0
 timelineCount: 1
 timeline0: 0.0
 - Transparency - 
@@ -118,7 +114,7 @@ highMin: 1.0
 highMax: 1.0
 relative: false
 scalingCount: 3
-scaling0: 0.5263158
+scaling0: 0.0
 scaling1: 1.0
 scaling2: 0.71929824
 timelineCount: 3
@@ -132,4 +128,4 @@ aligned: false
 additive: false
 behind: false
 - Image Path -
-C:\Users\Mikey\Desktop\Particle Effects\fireballparticle.png
+D:\Documents\TowerDefense Docs\Particle Effects\fireballparticle.png

@@ -15,6 +15,11 @@ public class Minion extends Unit
 	@Override
 	public void update() 
 	{
+		if (!isAlive())
+		{
+			deathCountdown--;
+			return;
+		}
 		super.update();
 		if (attacking && attackCooldown <= 0)
 		{

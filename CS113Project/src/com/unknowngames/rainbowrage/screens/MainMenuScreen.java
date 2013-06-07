@@ -75,8 +75,8 @@ public class MainMenuScreen implements Screen
 //		Texture icons = new Texture(Gdx.files.internal("images/buttons_sheet.png"));
 //		gameLogo = new TextureRegion(icons, 0, 1514, 842, 467);
 //		buttonFrame = new TextureRegion(icons, 880, 422, 361, 572);
-		gameLogo = everything.getObjectTexture("gamelogo");
-		buttonFrame = everything.getObjectTexture("mainbuttonframe");
+		gameLogo = EverythingHolder.getObjectTexture("gamelogo");
+		buttonFrame = EverythingHolder.getObjectTexture("mainbuttonframe");
 		
 		int stackTopX = width - 120; //680; //658;
 		int stackTopY = 345; //355;
@@ -93,13 +93,13 @@ public class MainMenuScreen implements Screen
 //				new TextureRegion(icons, 367, 153, 152, 153));	// Quit
 		
 		buttons[0] = new RoundButton(stackTopX, stackTopY - spaceY * 2 + 4, buttonRadius, 			
-				everything.getObjectTexture("singlebutton"));	// Sinlge-player
+				EverythingHolder.getObjectTexture("singlebutton"));	// Sinlge-player
 		buttons[1] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 3 + 4, buttonRadius, 			
-				everything.getObjectTexture("multibutton"));	// Multi-player
+				EverythingHolder.getObjectTexture("multibutton"));	// Multi-player
 		buttons[2] = new RoundButton(stackTopX, stackTopY - spaceY * 4 + 9, buttonRadius, 			
-				everything.getObjectTexture("settingsbutton"));	// Settings
+				EverythingHolder.getObjectTexture("settingsbutton"));	// Settings
 		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9, buttonRadius, 			
-				everything.getObjectTexture("quitbutton"));	// Quit
+				EverythingHolder.getObjectTexture("quitbutton"));	// Quit
 		
 		buttons[2].setClickable(false);
 		
@@ -112,14 +112,15 @@ public class MainMenuScreen implements Screen
 		spark.setPosition(400, 300);
 		spark.start();
 		
-		blood.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
+//		blood.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
+		blood.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/blood.p")), Gdx.files.internal("images"));
 		blood.setPosition(400, 300);
 		for (ParticleEmitter pe : blood.getEmitters())
 			pe.setContinuous(true);
 		blood.start();
 		
 		
-		rainbow = everything.getEffect("rainbowtrailsparkle");
+		rainbow = EverythingHolder.getEffect("rainbowtrailsparkle");
 		System.out.println("Trying");
 		rainbow.setPosition(332, 423);
 		rainbow.start();
@@ -171,6 +172,8 @@ public class MainMenuScreen implements Screen
 		blood.setPosition(x, height - y);
 		blood.draw(batch, delta * .5f);
 		rainbow.draw(batch, delta * .5f);
+		
+		everything.getFont(0).draw(batch, "Rainbow Rage " + everything.getGameVersion() + "_" + everything.getXmlVersion(), 10, 20);
 		
 		batch.end();
 	}

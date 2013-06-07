@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.esotericsoftware.kryo.serializers.MapSerializer;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -58,7 +59,7 @@ public class GameScreen implements Screen
 	Vector3 touchPoint;
 	Vector3 gameTouchPoint;
 	Difficulty difficulty;
-	int level = 1;
+	int level = 2;
 	int income, resources;
 	Audio tempMusic = Gdx.audio;
 	Music startMusic;
@@ -69,7 +70,7 @@ public class GameScreen implements Screen
 	
 	float timeAccumulator = 0;
 	float volume = .2f;
-	boolean following = false;
+	boolean following = true;
 	boolean multiplayer = false; 	// True with multiplayer
 	boolean running = false;		// False with Multiplayer
 	boolean connected = false;
@@ -120,8 +121,9 @@ public class GameScreen implements Screen
 		pauseCooldown = 0;
 
 		camera = new OrthographicCamera(w, h);
-		camera.translate(950, 700);
-		camera.zoom = 1.9f;
+//		camera.translate(950, 700);
+		
+		camera.zoom = 1.5f;
 		uiCamera = new OrthographicCamera(w, h);
 		uiCamera.setToOrtho(false);
 		batch = new SpriteBatch();
@@ -372,6 +374,9 @@ public class GameScreen implements Screen
 	
 			batch.end();
 		}
+		
+//		everything.map().drawPaths(batch, camera);
+		
 		batch.setProjectionMatrix(uiCamera.combined);
 		batch.begin();
 		if (scoreBoard == null)
@@ -691,10 +696,10 @@ public class GameScreen implements Screen
 
 	public void boundCamera()
 	{
-		if (camera.zoom > 2)
-			camera.zoom = 2;
-		if (camera.zoom < .5)
-			camera.zoom = .5f;
+		if (camera.zoom > 2.35)
+			camera.zoom = 2.35f;
+		if (camera.zoom < .45)
+			camera.zoom = .45f;
 		/*float width = camera.viewportWidth;
 		int w = Gdx.graphics.getWidth() / 2;
 		int h = Gdx.graphics.getHeight() / 2;*/
@@ -706,14 +711,14 @@ public class GameScreen implements Screen
 
 		//if (camera.position.y > everything.map().height() * (1 / (2 - camera.zoom)))
 		//	camera.position.y = everything.map().height() * (1 / (2 - camera.zoom));
-		if (camera.position.y > height - cameraH + 240)
+		if (camera.position.y > height - cameraH)// + 240)
 		{
 //			System.out.println("Cam y: " + camera.position.y);
 //			System.out.println("height: " + height);
 //			System.out.println("h: " + cameraH);
 //			System.out.println("screenH: " + screenH);
 			
-			camera.position.y = height - cameraH + 240;
+			camera.position.y = height - cameraH;// + 240;
 		}
 
 		if (camera.position.y < cameraH)
@@ -726,7 +731,7 @@ public class GameScreen implements Screen
 
 		//if (camera.position.x > everything.map().width() + gameUI.width())
 		//	camera.position.x = everything.map().width() + gameUI.width();
-		float temp = width - cameraW + 400;
+		float temp = width - cameraW;// + 400;
 		if (camera.position.x > temp) //(width - (w / 2) + 400))//(w / 4) - w + 400)
 			camera.position.x = temp; //width - (w / 2) + 400; //(w / 4) - w + 400;
 
@@ -862,6 +867,7 @@ public class GameScreen implements Screen
 //		if (Settings.getInstance().getSound() == SoundEnum.ON)
 		everything.musicPlay();
 		ready = true;
+//		camera.translate(everything.map().width() / 2, everything.map().height() / 2);
 	}
 
 	@Override

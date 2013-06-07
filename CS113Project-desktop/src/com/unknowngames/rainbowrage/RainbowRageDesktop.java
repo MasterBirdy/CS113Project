@@ -1,5 +1,7 @@
 package com.unknowngames.rainbowrage;
 
+import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.unknowngames.rainbowrage.RainbowRage;
@@ -7,10 +9,11 @@ import com.unknowngames.rainbowrage.RainbowRage;
 public class RainbowRageDesktop {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "Unknown Defense";
+		cfg.title = "Rainbow Rage";
 		cfg.useGL20 = false;
 		cfg.width = 800;
 		cfg.height = 480;
+		cfg.addIcon("images/ud_iconm.png", FileType.Internal);
 		
 //		cfg.width = 1680;
 //		cfg.height = 1050;

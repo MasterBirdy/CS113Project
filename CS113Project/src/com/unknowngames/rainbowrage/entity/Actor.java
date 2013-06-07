@@ -149,7 +149,8 @@ public abstract class Actor extends Entity
 	{
 //		System.out.println("Stun");
 		attackCooldown = stun;
-		particleOnSelf("attackspeedbuff");
+		particleOnSelf("stunattackeffect");
+//		particleOnSelf("attackspeedbuff");
 //		if (isAlive())
 //		{
 //			if (attackCooldown < stun)
@@ -327,7 +328,7 @@ public abstract class Actor extends Entity
 	public void particleOnSelf(String s)
 	{
 		ParticleEffect p = EverythingHolder.getEffect(s);
-		p.setPosition(xCoord + 30, yCoord + 20);
+		p.setPosition(xCoord, yCoord + 20);
 		p.start();
 		addParticle(p);
 //		effects.add(p);
@@ -335,7 +336,7 @@ public abstract class Actor extends Entity
 	
 	public void particleOnSelf(ParticleEffect p)
 	{
-		p.setPosition(xCoord + 20, yCoord + 20);
+		p.setPosition(xCoord, yCoord + 20);
 		p.start();
 		addParticle(p);
 //		effects.add(p);
@@ -407,7 +408,7 @@ public abstract class Actor extends Entity
 				{
 					try
 					{
-						EverythingHolder.getUnitSounds(sounds).playDie();
+						EverythingHolder.getUnitSounds(sounds).playDie(everything.getSoundLevel());
 					}
 					catch (NullPointerException npe)
 					{
@@ -530,7 +531,7 @@ public abstract class Actor extends Entity
 		{
 			try
 			{
-				EverythingHolder.getUnitSounds(sounds).playAttack();
+				EverythingHolder.getUnitSounds(sounds).playAttack(everything.getSoundLevel());
 			}
 			catch (NullPointerException npe)
 			{
@@ -576,6 +577,7 @@ public abstract class Actor extends Entity
 		projectileStruct.effect.set(0, 0);
 		projectileStruct.effectAmount.set(0, a.damage(level));
 		projectileStruct.duration.set(0, 1);
+		projectileStruct.effectTick.set(0, 0);
 		projectileStruct.travelTime.set(0, 70);
 		projectileStruct.additive.set(0, true);
 		projectileStruct.speed.set(0, 3f);

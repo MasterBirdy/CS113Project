@@ -32,6 +32,8 @@ import com.unknowngames.rainbowrage.skill.Skill;
 public class EverythingHolder 
 {
 	@SuppressWarnings("unchecked")
+	String xmlVersion = "", gameVersion = "0.05_24_13";
+	
 	EntityComparator eCompare = new EntityComparator();
 	static private SpriteBatch batch;
 	static Map map;
@@ -93,7 +95,7 @@ public class EverythingHolder
 	
 	Settings settings = new Settings();
 	
-	private Map[] maps = new Map[2];
+//	private Map[] maps = new Map[2];
 	
 	private Music mainMusic, gameMusic, endMusic;
 	
@@ -105,9 +107,12 @@ public class EverythingHolder
 		
 	public EverythingHolder()
 	{
+		Texture.setEnforcePotImages(true);
+		
 		reset();
 				
 		UnitParser unitParser = new UnitParser();
+		xmlVersion = unitParser.getVersion();
 		minionStats = unitParser.getMinionStats();
 		buildingStats = unitParser.getBuildingStats();
 		heroStats = unitParser.getHeroStats();
@@ -116,7 +121,7 @@ public class EverythingHolder
 		// Wave control
 //		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
 		waveInterval = 	(int) (15 / stepTime); 	// Turns (15 seconds)
-		waveTime = 		(int) (3 / stepTime);	// Turns (2 seconds)
+		waveTime = 		(int) (3 / stepTime);	// Turns (3 seconds)
 				
 		spawning = false;
 //		previousTime = System.nanoTime() / 1000000;
@@ -128,7 +133,7 @@ public class EverythingHolder
 		loadSounds();
 		loadTextures();
 		finished = true;
-		Texture.setEnforcePotImages(true);
+		
 //		Entity.loadStatics(effects);
 		
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
@@ -141,6 +146,16 @@ public class EverythingHolder
 		
 		
 		loadMusic();
+	}
+	
+	public String getXmlVersion()
+	{
+		return xmlVersion;
+	}
+	
+	public String getGameVersion()
+	{
+		return gameVersion;
 	}
 	
 	public void loadMusic()
@@ -188,15 +203,22 @@ public class EverythingHolder
 			sprite = new Sprite(region);
 	
 //			map = new Map(new Coordinate(100, 1030), sprite, 1600, 1200, 100, 1030, 1300, 170);
-			map = new Map(sprite, 1600, 1200, 100, 1030, 1300, 170);
+			map = new Map(sprite, 800, 600, 100, 1030, 1300, 170);
 			map.add(new Coordinate(100, 1030), 1);
 			map.add(new Coordinate(1300, 1030), 1);
 			map.add(new Coordinate(1300, 600), 1);
 			map.add(new Coordinate(300, 600), 1);
 			map.add(new Coordinate(300, 170), 1);
 			map.add(new Coordinate(1300, 170), 1);
+			
+			map.add(new Coordinate(100, 1030), 2);
+			map.add(new Coordinate(1300, 1030), 2);
+			map.add(new Coordinate(1300, 600), 2);
+			map.add(new Coordinate(300, 600), 2);
+			map.add(new Coordinate(300, 170), 2);
+			map.add(new Coordinate(1300, 170), 2);
 		}
-		else
+		else if (level == 1)
 		{
 //			texture = new Texture(Gdx.files.internal("images/map1.png"));
 			texture = new Texture(Gdx.files.internal("images/map1.jpg"));
@@ -233,8 +255,144 @@ public class EverythingHolder
 			sites[2] = new Coordinate(300, 550);
 			map.buildSites(sites, 2);
 		}
+		else
+		{
+			texture = new Texture(Gdx.files.internal("images/mapBeach.jpg"));
+			region = new TextureRegion(texture, 0, 0, 2048, 2048);
+			sprite = new Sprite(region);
+			sprite.setOrigin(0, 0);
+//			sprite.scale(2);
+//			sprite.setSize(3000, 2400);
+			
+//			map = new Map(new Coordinate(320, 870), sprite, 1200, 960, 310, 870, 1210, 480);
+//			map = new Map(sprite, 3000, 2400, 380, 1884, 2542, 792);
+//			map.add(new Coordinate(558, 1884), 1);
+//			map.add(new Coordinate(2242, 1884), 1);
+//			map.add(new Coordinate(2242, 1418), 1);
+//			map.add(new Coordinate(622, 1418), 1);
+//			map.add(new Coordinate(622, 882), 1);
+//			map.add(new Coordinate(2430, 882), 1);
+//			map.add(new Coordinate(1200, 480), 1);
+			
+			map = new Map(sprite, 2048, 2048, 462, 1363, 1546, 821);
+			
+			// Yellow
+			map.add(new Coordinate(471, 1364), 1);
+			map.add(new Coordinate(704, 1367), 1);
+			map.add(new Coordinate(759, 1339), 1);
+			map.add(new Coordinate(824, 1364), 1);
+			map.add(new Coordinate(1058, 1367), 1);
+			map.add(new Coordinate(1119, 1327), 1);
+			map.add(new Coordinate(1211, 1364), 1);
+			map.add(new Coordinate(1359, 1364), 1);
+			map.add(new Coordinate(1410, 1322), 1);
+			map.add(new Coordinate(1396, 1233), 1);
+			map.add(new Coordinate(1405, 1125), 1);
+			map.add(new Coordinate(1253, 1117), 1);
+			map.add(new Coordinate(1164, 1135), 1);
+			map.add(new Coordinate(1054, 1115), 1);
+			map.add(new Coordinate(853, 1117), 1);
+			map.add(new Coordinate(779, 1150), 1);
+			map.add(new Coordinate(692, 1127), 1);
+			map.add(new Coordinate(582, 1125), 1);
+			map.add(new Coordinate(528, 1073), 1);
+			map.add(new Coordinate(498, 981), 1);
+			map.add(new Coordinate(569, 861), 1);
+			map.add(new Coordinate(796, 815), 1);
+			map.add(new Coordinate(875, 834), 1);
+			map.add(new Coordinate(1125, 834), 1);
+			map.add(new Coordinate(1200, 809), 1);
+			map.add(new Coordinate(1278, 834), 1);
+			map.add(new Coordinate(1537, 834), 1);
+			
+			// Blue
+			map.add(new Coordinate(471, 1381), 2); // Base
+			map.add(new Coordinate(702, 1381), 2); // Tower 1
+			map.add(new Coordinate(765, 1408), 2);
+			map.add(new Coordinate(838, 1381), 2);
+			map.add(new Coordinate(1074, 1381), 2); // Tower 2
+			map.add(new Coordinate(1131, 1406), 2);
+			map.add(new Coordinate(1223, 1381), 2);
+			map.add(new Coordinate(1390, 1381), 2); 
+			map.add(new Coordinate(1469, 1347), 2);
+			map.add(new Coordinate(1481, 1276), 2);
+			map.add(new Coordinate(1495, 1203), 2);
+			map.add(new Coordinate(1417, 1098), 2);
+			map.add(new Coordinate(1258, 1082), 2);
+			map.add(new Coordinate(1177, 1059), 2);
+			map.add(new Coordinate(1055, 1096), 2);
+			
+			map.add(new Coordinate(863, 1105), 2);
+			map.add(new Coordinate(779, 1064), 2);
+			map.add(new Coordinate(690, 1109), 2);
+			
+			map.add(new Coordinate(607, 1101), 2);
+			map.add(new Coordinate(628, 979), 2);
+			map.add(new Coordinate(613, 883), 2);
+			map.add(new Coordinate(723, 859), 2);
+			map.add(new Coordinate(782, 880), 2);
+			map.add(new Coordinate(864, 859), 2);
+			map.add(new Coordinate(1132, 859), 2);
+			map.add(new Coordinate(1198, 880), 2);
+			map.add(new Coordinate(1264, 860), 2);
+			map.add(new Coordinate(1537, 851), 2);
+			
+//			map.add(new Coordinate(196, 939), 1);
+//			map.add(new Coordinate(1130, 939), 1);
+//			map.add(new Coordinate(1130, 700), 1);
+//			map.add(new Coordinate(307, 700), 1);
+//			map.add(new Coordinate(223, 556), 1);
+//			map.add(new Coordinate(294, 436), 1);
+//			map.add(new Coordinate(521, 390), 1);
+//			map.add(new Coordinate(600, 409), 1);
+//			map.add(new Coordinate(850, 409), 1);
+//			map.add(new Coordinate(925, 384), 1);
+//			map.add(new Coordinate(1003, 409), 1);
+//			map.add(new Coordinate(1262, 409), 1);
+//			
+//			map.add(new Coordinate(196, 965), 2);
+//			map.add(new Coordinate(1214, 965), 2);
+////			map.add(new Coordinate(1130, 700), 2);
+//			map.add(new Coordinate(1220, 778), 2);
+//			map.add(new Coordinate(1142, 673), 2);
+//			map.add(new Coordinate(983, 657), 2);
+//			map.add(new Coordinate(902, 634), 2);
+//			map.add(new Coordinate(780, 671), 2);
+//			map.add(new Coordinate(334, 676), 2);
+//			map.add(new Coordinate(353, 554), 2);
+//			map.add(new Coordinate(338, 458), 2);
+//			map.add(new Coordinate(448, 434), 2);
+//			map.add(new Coordinate(507, 455), 2);
+//			map.add(new Coordinate(589, 434), 2);
+//			map.add(new Coordinate(857, 434), 2);
+//			map.add(new Coordinate(923, 455), 2);
+//			map.add(new Coordinate(989, 435), 2);
+//			map.add(new Coordinate(1262, 426), 2);
+			
+//			map.add(new Coordinate(320, 885), 2);
+//			map.add(new Coordinate(330, 885), 2);
+//			map.add(new Coordinate(1220, 885), 2);
+//			map.add(new Coordinate(1220, 665), 2);
+//			map.add(new Coordinate(395, 665), 2);
+//			map.add(new Coordinate(395, 495), 2);
+//			map.add(new Coordinate(1200, 495), 2);
+			
+			Coordinate[] sites = new Coordinate[4];
+			sites[0] = new Coordinate(759, 1373);
+			sites[1] = new Coordinate(1136, 1365);
+			sites[2] = new Coordinate(1445, 1234);
+			sites[3] = new Coordinate(1163, 1093);
+			map.buildSites(sites, 1);
+			
+			sites = new Coordinate[4];
+			sites[0] = new Coordinate(1198, 845);
+			sites[1] = new Coordinate(788, 843);
+			sites[2] = new Coordinate(563, 990);
+			sites[3] = new Coordinate(780, 1104);
+			map.buildSites(sites, 2);
+		}
 		
-		sprite.setSize(1600, 1200);
+//		sprite.setSize(1600, 1200);
 		
 		buildMap();
 	}
@@ -247,6 +405,11 @@ public class EverythingHolder
 	public float getMusicLevel()
 	{
 		return settings.getMusicSound();
+	}
+	
+	public float getSoundLevel()
+	{
+		return settings.getGameSound();
 	}
 	
 	public int activeCooldown()
@@ -424,14 +587,14 @@ public class EverythingHolder
 			animation[6] = loadAnimation(748, 330, 60, 82, 4, true, true, i);
 			animation[7] = loadAnimation(748, 412, 84, 80, 4, false, true, i);
 			
-			points[0] = new Vector2(30, 10);
-			points[1] = new Vector2(38, 4);
-			points[2] = new Vector2(21, 4);
-			points[3] = new Vector2(32, 4);
-			points[4] = new Vector2(52, 16);
-			points[5] = new Vector2(48, 8);
-			points[6] = new Vector2(30, 8);
-			points[7] = new Vector2(32, 2);
+			points[0] = new Vector2(32, 8);
+			points[1] = new Vector2(34, 4);
+			points[2] = new Vector2(24, 4);
+			points[3] = new Vector2(30, 6);
+			points[4] = new Vector2(54, 4);
+			points[5] = new Vector2(36, 4);
+			points[6] = new Vector2(24, 4);
+			points[7] = new Vector2(44, 4);
 			
 			unitAnimations.put("ninja" + (i + 1), new UnitAnimation(animation, points));
 			
@@ -448,14 +611,14 @@ public class EverythingHolder
 			animation[6] = loadAnimation(748, 1102, 88, 118, 4, true, true, i);
 			animation[7] = loadAnimation(748, 1220, 86, 114, 4, false, true, i);
 			
-			points[0] = new Vector2(30, 10);
-			points[1] = new Vector2(38, 4);
-			points[2] = new Vector2(32, 4);
-			points[3] = new Vector2(32, 4);
-			points[4] = new Vector2(52, 16);
-			points[5] = new Vector2(48, 8);
-			points[6] = new Vector2(30, 8);
-			points[7] = new Vector2(32, 2);
+			points[0] = new Vector2(44, 0);
+			points[1] = new Vector2(44, 0);
+			points[2] = new Vector2(46, 0);
+			points[3] = new Vector2(42, 0);
+			points[4] = new Vector2(44, 0);
+			points[5] = new Vector2(44, 0);
+			points[6] = new Vector2(44, 0);
+			points[7] = new Vector2(42, 0);
 			
 			unitAnimations.put("eagle" + (i + 1), new UnitAnimation(animation, points));
 			
@@ -472,14 +635,14 @@ public class EverythingHolder
 			animation[6] = loadAnimation(1108, 380, 112, 70, 4, true, true, i);
 			animation[7] = loadAnimation(1108, 450, 44, 96, 4, false, true, i);
 			
-			points[0] = new Vector2(30, 10);
-			points[1] = new Vector2(38, 4);
-			points[2] = new Vector2(32, 4);
-			points[3] = new Vector2(32, 4);
-			points[4] = new Vector2(52, 16);
-			points[5] = new Vector2(48, 8);
-			points[6] = new Vector2(30, 8);
-			points[7] = new Vector2(32, 2);
+			points[0] = new Vector2(30, 18);
+			points[1] = new Vector2(50, 4);
+			points[2] = new Vector2(62, 4);
+			points[3] = new Vector2(20, 46);
+			points[4] = new Vector2(18, 26);
+			points[5] = new Vector2(50, 4);
+			points[6] = new Vector2(62, 4);
+			points[7] = new Vector2(18, 30);
 			
 			unitAnimations.put("wolf" + (i + 1), new UnitAnimation(animation, points));
 	
@@ -592,8 +755,6 @@ public class EverythingHolder
 		return sounds.get(sound);
 	}
 	
-	
-//	public void playSound(Dtring soun)
 	public SkillStructure getSkill(String skill)
 	{
 		return skillStats.get(skill);
@@ -789,7 +950,7 @@ public class EverythingHolder
 //		if (Gdx.app.getType() == ApplicationType.Android)
 //			return null;
 		
-		if (e.equals("empty") || Gdx.app.getType() == ApplicationType.Android)
+		if (e.equals("empty"))// || Gdx.app.getType() == ApplicationType.Android)
 			return new ParticleEffect();
 		else
 		{
@@ -1120,7 +1281,8 @@ public class EverythingHolder
 //			if (e == null)
 //			if (tempEnt == null)
 //				break;
-			if (tempEnt instanceof Building || (tempEnt instanceof Actor && ((Entity)tempEnt).isAlive()) || (tempEnt instanceof Skill && ((Entity)tempEnt).isAlive()))
+			if (tempEnt instanceof Building || (tempEnt instanceof Actor && ((Entity)tempEnt).isAlive()) || (tempEnt instanceof Skill && ((Entity)tempEnt).isAlive()) ||
+				(tempEnt instanceof Unit && ((Unit)tempEnt).deathCountdown() > 0))
 				tempEnt.draw(batch, delta);
 //			if (e instanceof Building || (e instanceof Actor && ((Entity)e).isAlive()) || (e instanceof Skill && ((Entity)e).isAlive()))
 //				e.draw(batch, delta);
@@ -1246,7 +1408,7 @@ public class EverythingHolder
 		
 		for (int i = 0; i < entities.size(); i++)
 		{
-			if (entities.get(i) != null && (entities.get(i).isAlive() || entities.get(i) instanceof Hero))
+			if (entities.get(i) != null && ((entities.get(i).isAlive() || entities.get(i) instanceof Hero) || (entities.get(i) instanceof Unit && ((Unit)entities.get(i)).deathCountdown() > 0)))
 				entities.get(i).update();
 		}
 //		for (Entity e : entities)

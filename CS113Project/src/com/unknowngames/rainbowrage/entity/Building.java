@@ -143,6 +143,7 @@ public class Building extends Actor
 		buildingAnimation = everything.getBuildingAnimation(buildingStructure.animation(level) + team);
 		super.changeToLevel(level, buildingStructure);
 		currentHealth = maxHealth;
+		loadProjectile(buildingStructure);
 	}
 	
 //	public static void loadSprites()

@@ -3,7 +3,12 @@ package com.unknowngames.rainbowrage.map;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 
 public class Map 
@@ -15,7 +20,7 @@ public class Map
 	private int width, height;
 	private Coordinate start1, start2;
 	private Coordinate[] buildSites1, buildSites2;
-	
+	ShapeRenderer shapeRenderer = new ShapeRenderer();
 	
 //	public Map (Coordinate c, Sprite background, int width, int height, int x1, int y1, int x2, int y2)
 	public Map (Sprite background, int width, int height, int x1, int y1, int x2, int y2)
@@ -101,6 +106,34 @@ public class Map
 	public ArrayList<Coordinate> getReversePath(int route)
 	{
 		return reversePath[route - 1];
+	}
+	
+	public void drawPaths(SpriteBatch batch, Camera camera)
+	{
+		int x;// = path[0].get(0).x();
+		int y;// = path[0].get(0).y();
+		int x1, y1;
+		
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		shapeRenderer.begin(ShapeType.Line);
+		
+		shapeRenderer.setColor(1, 1, 0, 1);
+		for (int i = 0; i < path.length; i++)
+		{
+			x = path[i].get(0).x();
+			y = path[i].get(0).y();
+			
+			for (int j = 1; j < path[i].size(); j++)
+			{
+				x1 = path[i].get(j).x();
+				y1 = path[i].get(j).y();
+				shapeRenderer.line(x, y, x1, y1);
+				x = x1;
+				y = y1;
+			}
+			shapeRenderer.setColor(0, 1, 1, 1);
+		}
+		shapeRenderer.end();
 	}
 	
 //	private LinkedList<Coordinate> reversePath()
