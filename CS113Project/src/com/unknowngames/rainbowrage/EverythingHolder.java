@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.PriorityQueue;
 
@@ -32,7 +33,7 @@ import com.unknowngames.rainbowrage.skill.Skill;
 public class EverythingHolder 
 {
 	@SuppressWarnings("unchecked")
-	String xmlVersion = "", gameVersion = "0.05_24_13";
+	String xmlVersion = "", gameVersion = "0.08_23_13";
 	
 	EntityComparator eCompare = new EntityComparator();
 	static private SpriteBatch batch;
@@ -104,7 +105,12 @@ public class EverythingHolder
 	int[] sentUnits = new int[6];
 	
 	boolean top = false, bot = false;
-		
+	
+	float sizeRatio, minZoom = 1, xRatio, yRatio;
+	int screenSizeX = 0, screenSizeY = 0;
+	
+	List<TextEffect> textEffects = new LinkedList<TextEffect>(); 
+	Iterator<TextEffect> textEffectItr;
 	public EverythingHolder()
 	{
 		Texture.setEnforcePotImages(true);
@@ -144,8 +150,47 @@ public class EverythingHolder
 		font[3] = generator.generateFont(45);
 //		font[3].setColor(0, 0, 0, 1);
 		
-		
 		loadMusic();
+		screenSizeX = Gdx.graphics.getWidth();
+		screenSizeY = Gdx.graphics.getHeight();
+		xRatio = (float)screenSizeX / 800;
+		yRatio = (float)screenSizeY / 480;
+		sizeRatio = (float)Gdx.graphics.getWidth() / 800;
+	}
+	
+	public void addTextEffect(float x, float y, String text, int cause)
+	{
+		textEffects.add(new TextEffect(x, y, text, cause));
+	}
+	
+	public float getMinZoom()
+	{
+		return minZoom;
+	}
+	
+	public float getXRatio()
+	{
+		return xRatio;
+	}
+	
+	public float getYRatio()
+	{
+		return yRatio;
+	}
+	
+	public float getSizeRatio()
+	{
+		return sizeRatio;
+	}
+	
+	public float getScreenSizeX()
+	{
+		return screenSizeX;
+	}
+	
+	public float getScreenSizeY()
+	{
+		return screenSizeY;
 	}
 	
 	public String getXmlVersion()
@@ -276,121 +321,170 @@ public class EverythingHolder
 			
 			map = new Map(sprite, 2048, 2048, 462, 1363, 1546, 821);
 			
+			// Balanced map
 			// Yellow
-			map.add(new Coordinate(471, 1364), 1);
-			map.add(new Coordinate(704, 1367), 1);
-			map.add(new Coordinate(759, 1339), 1);
-			map.add(new Coordinate(824, 1364), 1);
-			map.add(new Coordinate(1058, 1367), 1);
-			map.add(new Coordinate(1119, 1327), 1);
-			map.add(new Coordinate(1211, 1364), 1);
-			map.add(new Coordinate(1359, 1364), 1);
-			map.add(new Coordinate(1410, 1322), 1);
-			map.add(new Coordinate(1396, 1233), 1);
-			map.add(new Coordinate(1405, 1125), 1);
-			map.add(new Coordinate(1253, 1117), 1);
-			map.add(new Coordinate(1164, 1135), 1);
-			map.add(new Coordinate(1054, 1115), 1);
-			map.add(new Coordinate(853, 1117), 1);
-			map.add(new Coordinate(779, 1150), 1);
-			map.add(new Coordinate(692, 1127), 1);
-			map.add(new Coordinate(582, 1125), 1);
-			map.add(new Coordinate(528, 1073), 1);
-			map.add(new Coordinate(498, 981), 1);
-			map.add(new Coordinate(569, 861), 1);
-			map.add(new Coordinate(796, 815), 1);
-			map.add(new Coordinate(875, 834), 1);
-			map.add(new Coordinate(1125, 834), 1);
-			map.add(new Coordinate(1200, 809), 1);
-			map.add(new Coordinate(1278, 834), 1);
-			map.add(new Coordinate(1537, 834), 1);
+			map.add(new Coordinate(441, 1345), 1);  // Base 1  (441, 1358)
+			map.add(new Coordinate(734, 1345), 1);
+			map.add(new Coordinate(791, 1315), 1);  // Tower 1 (791, 1358)
+			map.add(new Coordinate(848, 1345), 1);
+			map.add(new Coordinate(1135, 1345), 1);
+			map.add(new Coordinate(1192, 1315), 1); // Tower 2 (1192, 1358)
+			map.add(new Coordinate(1255, 1345), 1);
+			map.add(new Coordinate(1355, 1345), 1);
+			map.add(new Coordinate(1390, 1305), 1); // Turn 1
+			map.add(new Coordinate(1350, 1231), 1); // Tower 3 (1410, 1231)
+			map.add(new Coordinate(1395, 1117), 1); // Turn 2
+			map.add(new Coordinate(1249, 1117), 1);
+			map.add(new Coordinate(1192, 1142), 1); // Tower 4 (1192, 1104)
+			map.add(new Coordinate(1135, 1117), 1);
+			map.add(new Coordinate(848, 1117), 1);
+			map.add(new Coordinate(791, 1142), 1);  // Tower 5 (791, 1104)
+			map.add(new Coordinate(734, 1117), 1);
+			map.add(new Coordinate(582, 1117), 1);
+			map.add(new Coordinate(528, 1073), 1);  // Turn 3
+//			map.add(new Coordinate(511, 978), 1);   // Tower 6 (571, 978)
+//			map.add(new Coordinate(734, 838), 1);   // Turn 4
+			map.add(new Coordinate(513, 978), 1);   // Tower 6 (571, 978)
+			map.add(new Coordinate(573, 887), 1);
+			map.add(new Coordinate(613, 838), 1);
+			map.add(new Coordinate(734, 838), 1);
+			map.add(new Coordinate(791, 808), 1);   // Tower 7 (791, 851)
+			map.add(new Coordinate(848, 838), 1);
+			map.add(new Coordinate(1135, 838), 1);
+			map.add(new Coordinate(1192, 808), 1);  // Tower 8 (1192, 851)
+			map.add(new Coordinate(1249, 838), 1);
+			map.add(new Coordinate(1542, 838), 1);  // Base 2  (1542, 851)
 			
 			// Blue
-			map.add(new Coordinate(471, 1381), 2); // Base
-			map.add(new Coordinate(702, 1381), 2); // Tower 1
-			map.add(new Coordinate(765, 1408), 2);
-			map.add(new Coordinate(838, 1381), 2);
-			map.add(new Coordinate(1074, 1381), 2); // Tower 2
-			map.add(new Coordinate(1131, 1406), 2);
-			map.add(new Coordinate(1223, 1381), 2);
-			map.add(new Coordinate(1390, 1381), 2); 
-			map.add(new Coordinate(1469, 1347), 2);
-			map.add(new Coordinate(1481, 1276), 2);
-			map.add(new Coordinate(1495, 1203), 2);
-			map.add(new Coordinate(1417, 1098), 2);
-			map.add(new Coordinate(1258, 1082), 2);
-			map.add(new Coordinate(1177, 1059), 2);
-			map.add(new Coordinate(1055, 1096), 2);
-			
-			map.add(new Coordinate(863, 1105), 2);
-			map.add(new Coordinate(779, 1064), 2);
-			map.add(new Coordinate(690, 1109), 2);
-			
-			map.add(new Coordinate(607, 1101), 2);
-			map.add(new Coordinate(628, 979), 2);
-			map.add(new Coordinate(613, 883), 2);
-			map.add(new Coordinate(723, 859), 2);
-			map.add(new Coordinate(782, 880), 2);
-			map.add(new Coordinate(864, 859), 2);
-			map.add(new Coordinate(1132, 859), 2);
-			map.add(new Coordinate(1198, 880), 2);
-			map.add(new Coordinate(1264, 860), 2);
-			map.add(new Coordinate(1537, 851), 2);
-			
-//			map.add(new Coordinate(196, 939), 1);
-//			map.add(new Coordinate(1130, 939), 1);
-//			map.add(new Coordinate(1130, 700), 1);
-//			map.add(new Coordinate(307, 700), 1);
-//			map.add(new Coordinate(223, 556), 1);
-//			map.add(new Coordinate(294, 436), 1);
-//			map.add(new Coordinate(521, 390), 1);
-//			map.add(new Coordinate(600, 409), 1);
-//			map.add(new Coordinate(850, 409), 1);
-//			map.add(new Coordinate(925, 384), 1);
-//			map.add(new Coordinate(1003, 409), 1);
-//			map.add(new Coordinate(1262, 409), 1);
-//			
-//			map.add(new Coordinate(196, 965), 2);
-//			map.add(new Coordinate(1214, 965), 2);
-////			map.add(new Coordinate(1130, 700), 2);
-//			map.add(new Coordinate(1220, 778), 2);
-//			map.add(new Coordinate(1142, 673), 2);
-//			map.add(new Coordinate(983, 657), 2);
-//			map.add(new Coordinate(902, 634), 2);
-//			map.add(new Coordinate(780, 671), 2);
-//			map.add(new Coordinate(334, 676), 2);
-//			map.add(new Coordinate(353, 554), 2);
-//			map.add(new Coordinate(338, 458), 2);
-//			map.add(new Coordinate(448, 434), 2);
-//			map.add(new Coordinate(507, 455), 2);
-//			map.add(new Coordinate(589, 434), 2);
-//			map.add(new Coordinate(857, 434), 2);
-//			map.add(new Coordinate(923, 455), 2);
-//			map.add(new Coordinate(989, 435), 2);
-//			map.add(new Coordinate(1262, 426), 2);
-			
-//			map.add(new Coordinate(320, 885), 2);
-//			map.add(new Coordinate(330, 885), 2);
-//			map.add(new Coordinate(1220, 885), 2);
-//			map.add(new Coordinate(1220, 665), 2);
-//			map.add(new Coordinate(395, 665), 2);
-//			map.add(new Coordinate(395, 495), 2);
-//			map.add(new Coordinate(1200, 495), 2);
+			map.add(new Coordinate(441, 1371), 2);  // Base 1  (441, 1358)
+			map.add(new Coordinate(734, 1371), 2);
+			map.add(new Coordinate(791, 1401), 2);  // Tower 1 (791, 1358)
+			map.add(new Coordinate(848, 1371), 2);
+			map.add(new Coordinate(1135, 1371), 2);
+			map.add(new Coordinate(1192, 1401), 2); // Tower 2 (1192, 1358)
+			map.add(new Coordinate(1249, 1371), 2);
+			map.add(new Coordinate(1370, 1371), 2);
+			map.add(new Coordinate(1410, 1322), 2); // Turn 1
+			map.add(new Coordinate(1470, 1231), 2); // Tower 3 (1410, 1231)
+			map.add(new Coordinate(1455, 1135), 2);
+			map.add(new Coordinate(1401, 1091), 2); // Turn 2
+			map.add(new Coordinate(1249, 1091), 2);
+			map.add(new Coordinate(1192, 1066), 2); // Tower 4 (1192, 1104)
+			map.add(new Coordinate(1135, 1091), 2);
+			map.add(new Coordinate(848, 1091), 2);
+			map.add(new Coordinate(791, 1066), 2);  // Tower 5 (791, 1104)
+			map.add(new Coordinate(734, 1091), 2);
+//			map.add(new Coordinate(582, 1091), 2);
+//			map.add(new Coordinate(528, 1073), 2);  // Turn 3
+//			map.add(new Coordinate(631, 978), 2);   // Tower 6 (571, 978)
+//			map.add(new Coordinate(734, 864), 2);   // Turn 4
+			map.add(new Coordinate(594, 1091), 2);
+			map.add(new Coordinate(639, 978), 2);   // Tower 6 (571, 978)
+			map.add(new Coordinate(599, 904), 2);
+			map.add(new Coordinate(634, 864), 2);
+			map.add(new Coordinate(734, 864), 2);
+			map.add(new Coordinate(791, 894), 2);   // Tower 7 (791, 851)
+			map.add(new Coordinate(848, 864), 2);
+			map.add(new Coordinate(1135, 864), 2);
+			map.add(new Coordinate(1192, 894), 2);  // Tower 8 (1192, 851)
+			map.add(new Coordinate(1249, 864), 2);
+			map.add(new Coordinate(1542, 864), 2);  // Base 2  (1542, 851)
 			
 			Coordinate[] sites = new Coordinate[4];
-			sites[0] = new Coordinate(759, 1373);
-			sites[1] = new Coordinate(1136, 1365);
-			sites[2] = new Coordinate(1445, 1234);
-			sites[3] = new Coordinate(1163, 1093);
+			sites[0] = new Coordinate(791, 1358);
+			sites[1] = new Coordinate(1192, 1358);
+			sites[2] = new Coordinate(1410, 1231);
+			sites[3] = new Coordinate(1192, 1104);
 			map.buildSites(sites, 1);
 			
 			sites = new Coordinate[4];
-			sites[0] = new Coordinate(1198, 845);
-			sites[1] = new Coordinate(788, 843);
-			sites[2] = new Coordinate(563, 990);
-			sites[3] = new Coordinate(780, 1104);
+			sites[0] = new Coordinate(1192, 851);
+			sites[1] = new Coordinate(791, 851);
+			sites[2] = new Coordinate(571, 978);
+			sites[3] = new Coordinate(791, 1104);
 			map.buildSites(sites, 2);
+			
+			
+			// Pre balanced
+//			// Yellow
+//			map.add(new Coordinate(471, 1364), 1);
+//			map.add(new Coordinate(704, 1367), 1);
+//			map.add(new Coordinate(759, 1339), 1);
+//			map.add(new Coordinate(824, 1364), 1);
+//			map.add(new Coordinate(1058, 1367), 1);
+//			map.add(new Coordinate(1119, 1327), 1);
+//			map.add(new Coordinate(1211, 1364), 1);
+//			map.add(new Coordinate(1359, 1364), 1);
+//			map.add(new Coordinate(1410, 1322), 1);
+//			map.add(new Coordinate(1396, 1233), 1);
+//			map.add(new Coordinate(1405, 1125), 1);
+//			map.add(new Coordinate(1253, 1117), 1);
+//			map.add(new Coordinate(1164, 1135), 1);
+//			map.add(new Coordinate(1054, 1115), 1);
+//			map.add(new Coordinate(853, 1117), 1);
+//			map.add(new Coordinate(779, 1150), 1);
+//			map.add(new Coordinate(692, 1127), 1);
+//			map.add(new Coordinate(582, 1125), 1);
+//			map.add(new Coordinate(528, 1073), 1);
+//			map.add(new Coordinate(498, 981), 1);
+//			map.add(new Coordinate(569, 861), 1);
+//			map.add(new Coordinate(796, 815), 1);
+//			map.add(new Coordinate(875, 834), 1);
+//			map.add(new Coordinate(1125, 834), 1);
+//			map.add(new Coordinate(1200, 809), 1);
+//			map.add(new Coordinate(1278, 834), 1);
+//			map.add(new Coordinate(1537, 834), 1);
+//			
+//			// Blue
+//			map.add(new Coordinate(471, 1381), 2); // Base
+//			map.add(new Coordinate(702, 1381), 2); // Tower 1
+//			map.add(new Coordinate(765, 1408), 2);
+//			map.add(new Coordinate(838, 1381), 2);
+//			map.add(new Coordinate(1074, 1381), 2); // Tower 2
+//			map.add(new Coordinate(1131, 1406), 2);
+//			map.add(new Coordinate(1223, 1381), 2);
+//			map.add(new Coordinate(1390, 1381), 2); 
+//			map.add(new Coordinate(1469, 1347), 2);
+//			map.add(new Coordinate(1481, 1276), 2);
+//			map.add(new Coordinate(1495, 1203), 2);
+//			map.add(new Coordinate(1417, 1098), 2);
+//			map.add(new Coordinate(1258, 1082), 2);
+//			map.add(new Coordinate(1177, 1059), 2);
+//			map.add(new Coordinate(1055, 1096), 2);
+//			
+//			map.add(new Coordinate(863, 1105), 2);
+//			map.add(new Coordinate(779, 1064), 2);
+//			map.add(new Coordinate(690, 1109), 2);
+//			
+//			map.add(new Coordinate(607, 1101), 2);
+//			map.add(new Coordinate(628, 979), 2);
+//			map.add(new Coordinate(613, 883), 2);
+//			map.add(new Coordinate(723, 859), 2);
+//			map.add(new Coordinate(782, 880), 2);
+//			map.add(new Coordinate(864, 859), 2);
+//			map.add(new Coordinate(1132, 859), 2);
+//			map.add(new Coordinate(1198, 880), 2);
+//			map.add(new Coordinate(1264, 860), 2);
+//			map.add(new Coordinate(1537, 851), 2);
+			
+//			Coordinate[] sites = new Coordinate[4];
+//			sites[0] = new Coordinate(759, 1373);
+//			sites[1] = new Coordinate(1136, 1365);
+//			sites[2] = new Coordinate(1445, 1234);
+//			sites[3] = new Coordinate(1163, 1093);
+//			map.buildSites(sites, 1);
+//			
+//			sites = new Coordinate[4];
+//			sites[0] = new Coordinate(1198, 845);
+//			sites[1] = new Coordinate(788, 843);
+//			sites[2] = new Coordinate(563, 990);
+//			sites[3] = new Coordinate(780, 1104);
+//			map.buildSites(sites, 2);
 		}
+		
+		float xZoom = (float)map.width() / Gdx.graphics.getWidth();
+		float yZoom = (float)map.height() / Gdx.graphics.getHeight();
+		minZoom = (xZoom > yZoom ? yZoom : xZoom);
 		
 //		sprite.setSize(1600, 1200);
 		
@@ -696,6 +790,15 @@ public class EverythingHolder
 			points[0] = new Vector2(46, 14);
 			
 			buildingAnimations.put("rubble" + (i + 1), new BuildingAnimation(animation, points));
+			
+			// Control Point
+			animation = new Animation[1];
+			points = new Vector2[1];
+			
+			animation[0] = loadAnimation(48, 893, 40, 40, 1, false, false, i);
+			points[0] = new Vector2(20, 20);
+			
+			buildingAnimations.put("controlpoint" + (i + 1), new BuildingAnimation(animation, points));
 		}
 //		System.out.println("Loaded unit animations");
 	}
@@ -810,9 +913,15 @@ public class EverythingHolder
 		objectTextures.put("fireball", new TextureRegion(icons, 1814, 0, 90, 90));
 		objectTextures.put("fireattack", new TextureRegion(icons, 1814, 90, 73, 73));
 		
-		objectTextures.put("swordfacebutton", new TextureRegion(icons, 0, 1377, 192, 137));
-		objectTextures.put("arroweyesbutton", new TextureRegion(icons, 192, 1377, 192, 137));
-		objectTextures.put("mrwizardbutton", new TextureRegion(icons, 384, 1377, 192, 137));
+		// New style hero icon
+		objectTextures.put("swordfacebutton", new TextureRegion(icons, 1890, 787, 158, 155));
+		objectTextures.put("mrwizardbutton", new TextureRegion(icons, 1890, 942, 158, 155));
+		objectTextures.put("arroweyesbutton", new TextureRegion(icons, 1890, 1097, 158, 155));
+		
+		// Old style hero icon
+//		objectTextures.put("swordfacebutton", new TextureRegion(icons, 0, 1377, 192, 137));
+//		objectTextures.put("arroweyesbutton", new TextureRegion(icons, 192, 1377, 192, 137));
+//		objectTextures.put("mrwizardbutton", new TextureRegion(icons, 384, 1377, 192, 137));
 		
 		objectTextures.put("swordbutton", new TextureRegion(icons, 0, 1071, 152, 153));
 		objectTextures.put("archerbutton", new TextureRegion(icons, 0, 918, 152, 153));
@@ -826,8 +935,14 @@ public class EverythingHolder
 		objectTextures.put("retreatbutton", new TextureRegion(icons, 0, 306, 152, 153));
 		objectTextures.put("skillbutton", new TextureRegion(icons, 152, 0, 215, 209));
 		
-		objectTextures.put("upgradebutton", new TextureRegion(icons, 1905, 109, 143, 109));
-		objectTextures.put("storebutton", new TextureRegion(icons, 1905, 0, 143, 109));
+		// New style buttons
+		objectTextures.put("upgradebutton", new TextureRegion(icons, 1794, 787, 96, 95));
+		objectTextures.put("storebutton", new TextureRegion(icons, 1794, 882, 96, 95));
+		objectTextures.put("chatbutton", new TextureRegion(icons, 1794, 882, 96, 95));
+		
+		// Old style buttons
+//		objectTextures.put("upgradebutton", new TextureRegion(icons, 1905, 109, 143, 109));
+//		objectTextures.put("storebutton", new TextureRegion(icons, 1905, 0, 143, 109));
 		
 		objectTextures.put("confirmbutton", new TextureRegion(icons, 367, 0, 152, 153));
 		objectTextures.put("cancelbutton", new TextureRegion(icons, 367, 153, 152, 153));
@@ -1353,6 +1468,12 @@ public class EverythingHolder
 				}
 			}
 		}
+		
+		textEffectItr = textEffects.iterator();
+		while (textEffectItr.hasNext())
+		{
+			textEffectItr.next().draw(batch, delta);
+		}
 	}
 	
 	public void heroDeath(int team)
@@ -1435,6 +1556,16 @@ public class EverythingHolder
 			playerHeroes[0].respawn(map.start1().x(), map.start1().y(), map.getPath(1).listIterator());
 		if (!playerHeroes[1].isAlive() && playerHeroes[1].canRespawn())
 			playerHeroes[1].respawn(map.start2().x(), map.start2().y(), map.getReversePath(1).listIterator());
+		
+		textEffectItr = textEffects.iterator();
+		TextEffect tEffect;
+		while (textEffectItr.hasNext())
+		{
+			tEffect = textEffectItr.next();
+			tEffect.update();
+			if (!tEffect.isAlive())
+				textEffectItr.remove();
+		}
 	}
 	
 	private void spawnTimers()

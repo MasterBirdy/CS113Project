@@ -36,24 +36,44 @@ public class TopUI
 	
 	public void draw()
 	{
-		batch.draw(topBar, topX, adTopY + 34, width, 50);
-		
+		// New style
 		// Left Side
-		batch.draw(emptyHealth, topX + 66, adTopY + 50, 282, 16);
-		batch.draw(fullHealth, topX + 66, adTopY + 50, 282 * everything.baseHealthRatio(), 16);
-		batch.draw(frame, 0, adTopY + 18, 356, adHeight);
+		batch.draw(emptyHealth, topX + 46, adTopY + 50, 283, 16);
+		batch.draw(fullHealth, topX + 46, adTopY + 50, 283 * everything.baseHealthRatio(), 16);
+		batch.draw(frame, -20, adTopY + 18, 356, adHeight);
 //		batch.draw(frame, topX, adTopY + 15, width, adHeight);
 		
 		// Right Side
-		batch.draw(emptyHealth, 734, adTopY + 50, -282, 16);
-		batch.draw(fullHealth, 734, adTopY + 50, -282 * everything.heroHealthRatio(), 16);
-		batch.draw(frame, 800, adTopY + 18, -356, adHeight);
+		batch.draw(emptyHealth, 754, adTopY + 50, -283, 16);
+		batch.draw(fullHealth, 754, adTopY + 50, -283 * everything.heroHealthRatio(), 16);
+		batch.draw(frame, 820, adTopY + 18, -356, adHeight);
 //		batch.draw(frame, 800, adTopY + 15, -width, adHeight);
 		
 		// Wave Timer
-		batch.draw(nextWave, 320, adTopY, 166 * .95f, 74 * .95f);
-		everything.getFont(2).draw(batch, String.format("%02d", everything.timeLeft()), 378, adTopY + 55);
+		batch.draw(nextWave, 320, adTopY + 10, 166 * .95f, 74 * .95f);
+		everything.getFont(2).draw(batch, String.format("%02d", everything.timeLeft()), 378, adTopY + 65);
 //		everything.font2.draw(batch, String.format("%02d", everything.timeLeft()), 374, adTopY + 58);
+		
+		
+		//batch.draw(topBar, topX, adTopY + 34, width, 50);
+		
+		// Old style
+//		// Left Side
+//		batch.draw(emptyHealth, topX + 66, adTopY + 50, 282, 16);
+//		batch.draw(fullHealth, topX + 66, adTopY + 50, 282 * everything.baseHealthRatio(), 16);
+//		batch.draw(frame, 0, adTopY + 18, 356, adHeight);
+////		batch.draw(frame, topX, adTopY + 15, width, adHeight);
+//		
+//		// Right Side
+//		batch.draw(emptyHealth, 734, adTopY + 50, -282, 16);
+//		batch.draw(fullHealth, 734, adTopY + 50, -282 * everything.heroHealthRatio(), 16);
+//		batch.draw(frame, 800, adTopY + 18, -356, adHeight);
+////		batch.draw(frame, 800, adTopY + 15, -width, adHeight);
+//		
+//		// Wave Timer
+//		batch.draw(nextWave, 320, adTopY, 166 * .95f, 74 * .95f);
+//		everything.getFont(2).draw(batch, String.format("%02d", everything.timeLeft()), 378, adTopY + 55);
+////		everything.font2.draw(batch, String.format("%02d", everything.timeLeft()), 374, adTopY + 58);
 	}
 	
 	static public void load(SpriteBatch b, EverythingHolder things)

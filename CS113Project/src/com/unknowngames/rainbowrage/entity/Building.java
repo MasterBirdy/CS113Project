@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.map.Coordinate;
 import com.unknowngames.rainbowrage.parser.BuildingAnimation;
 import com.unknowngames.rainbowrage.parser.BuildingStructure;
@@ -34,11 +35,11 @@ public class Building extends Actor
 		if (Gdx.app.getType() != ApplicationType.Android)
 		{
 //			fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
-			fire = everything.getEffect("fire");
+			fire = EverythingHolder.getEffect("fire");
 			fire.setPosition(this.xCoord(), this.yCoord() + 20);
 		}
 //		this.towerNumber = towerNumber;
-		buildingAnimation = everything.getBuildingAnimation(struct.animation(0) + team);
+		buildingAnimation = EverythingHolder.getBuildingAnimation(struct.animation(0) + team);
 		alive = false;
 		buildingStructure = struct;
 	}
@@ -139,9 +140,9 @@ public class Building extends Actor
 	
 	private void changeToLevel(int level)
 	{
+		super.changeToLevel(level, buildingStructure);
 		this.level = level;
 		buildingAnimation = everything.getBuildingAnimation(buildingStructure.animation(level) + team);
-		super.changeToLevel(level, buildingStructure);
 		currentHealth = maxHealth;
 		loadProjectile(buildingStructure);
 	}

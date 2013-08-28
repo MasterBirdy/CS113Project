@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,7 +20,7 @@ public class Map
 	private Sprite background;
 	private int width, height;
 	private Coordinate start1, start2;
-	private Coordinate[] buildSites1, buildSites2;
+	private Coordinate[] buildSites1, buildSites2, buildSites;
 	ShapeRenderer shapeRenderer = new ShapeRenderer();
 	
 //	public Map (Coordinate c, Sprite background, int width, int height, int x1, int y1, int x2, int y2)
@@ -40,6 +41,8 @@ public class Map
 		start1 = new Coordinate(x1, y1);
 		start2 = new Coordinate(x2, y2);
 	}
+	
+	
 
 //	public Map (Collection<Coordinate> c, Sprite background)
 //	{

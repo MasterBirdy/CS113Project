@@ -61,9 +61,6 @@ public class Projectile extends Entity {
 			batch.draw(sprite, xCoord, yCoord, 8, 8, 16, 16, 1, 1, (float)angle);
 //			batch.draw(sprite, xCoord, yCoord, 16, 16);
 	}
-
-//	@Override
-//	public abstract void update();
 	
 	@Override
 	public void update() {

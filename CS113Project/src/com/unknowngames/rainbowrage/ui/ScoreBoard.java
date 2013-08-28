@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.GameScreen;
 
 public class ScoreBoard //implements Screen
 {
 	TextureRegion board, statBox, winloss;
+	Vector3 touchPoint;
 	int result;
 	RoundButton exit;
 	EverythingHolder everything;
@@ -18,6 +20,7 @@ public class ScoreBoard //implements Screen
 	
 	public ScoreBoard(int result, EverythingHolder e, GameScreen s)
 	{
+		touchPoint = new Vector3();
 		everything = e;
 		screen = s;
 		if (result == 0)
@@ -43,7 +46,8 @@ public class ScoreBoard //implements Screen
 		if (Gdx.input.justTouched())
 		{
 			System.out.println("Clicked");
-			if (exit.hit(Gdx.input.getX(), 480 - Gdx.input.getY()))
+			touchPoint = screen.getPointCoord(Gdx.input.getX(), Gdx.input.getY());
+			if (exit.hit(touchPoint.x, touchPoint.y))
 			{
 				System.out.println("Hit");
 				screen.endGame();

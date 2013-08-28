@@ -143,6 +143,10 @@ public class GameInput implements InputProcessor
 			lastDistance = distance;
 			zoom = camera.zoom;
 		}
+		else if (numberOfFingers >= 2)
+		{
+						
+		}
 		 
 		if (pointer == 1)
 		{
@@ -202,6 +206,12 @@ public class GameInput implements InputProcessor
 			Vector3 touchPoint = new Vector3(x, y, 0);
 			camera.unproject(touchPoint);
 		}
+		if(numberOfFingers == 2)
+		{
+			if (fingerOnePointer == pointer)
+				fingerOnePointer = fingerTwoPointer;
+			fingerTwoPointer = -1;
+		}
 		numberOfFingers--;
 		 
 		// just some error prevention... clamping number of fingers (ouch! :-)
@@ -240,7 +250,7 @@ public class GameInput implements InputProcessor
 			else if (factor < .5)
 				factor = 0.5f;*/
 			
-			camera.zoom = zoom - (factor - 1) * .9f;
+			camera.zoom = zoom - (factor - 1) * camera.zoom;// .9f;
 			game.boundCamera();
 		}
 		
@@ -261,7 +271,7 @@ public class GameInput implements InputProcessor
 		deltaY = y - this.y;
 		this.x = x;
 		this.y = y;
-		camera.translate(deltaX, deltaY);
+		camera.translate(deltaX * camera.zoom, deltaY * camera.zoom);
 		game.diasbleFollowing();
 		return false;
 	}

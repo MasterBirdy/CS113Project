@@ -106,7 +106,8 @@ public class MainMenuScreen implements Screen
 		touchPoint = new Vector3();
 	
 		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
-		fire.setPosition(610, 260);
+		fire.setPosition(610 * everything.getXRatio(), 260 * everything.getYRatio());
+		scaleParticleEffect(fire, everything.getSizeRatio());
 		fire.start();
 		
 		spark.setPosition(400, 300);
@@ -117,16 +118,33 @@ public class MainMenuScreen implements Screen
 		blood.setPosition(400, 300);
 		for (ParticleEmitter pe : blood.getEmitters())
 			pe.setContinuous(true);
+		scaleParticleEffect(blood, everything.getSizeRatio());
 		blood.start();
 		
 		
 		rainbow = EverythingHolder.getEffect("rainbowtrailsparkle");
 		System.out.println("Trying");
-		rainbow.setPosition(332, 423);
+		rainbow.setPosition(332 * everything.getXRatio(), 423 * everything.getYRatio());
+		scaleParticleEffect(rainbow, everything.getSizeRatio());
 		rainbow.start();
 		
 		Gdx.graphics.setVSync(true);
 		//Gdx.input.setCursorCatched(false);
+	}
+	
+	public void scaleParticleEffect(ParticleEffect pe, float pScale)
+	{
+		float scaling = pe.getEmitters().get(0).getScale().getHighMax();
+	    pe.getEmitters().get(0).getScale().setHigh(scaling * pScale);
+
+	    scaling = pe.getEmitters().get(0).getScale().getLowMax();
+	    pe.getEmitters().get(0).getScale().setLow(scaling * pScale);
+
+	    scaling = pe.getEmitters().get(0).getVelocity().getHighMax();
+	    pe.getEmitters().get(0).getVelocity().setHigh(scaling * pScale);
+
+	    scaling = pe.getEmitters().get(0).getVelocity().getLowMax();
+	    pe.getEmitters().get(0).getVelocity().setLow(scaling * pScale);
 	}
 
 	@Override
@@ -145,7 +163,7 @@ public class MainMenuScreen implements Screen
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(texture, 0, 0, width, height);
-		batch.draw(gameLogo, 155, 262, 382, 212);
+		batch.draw(gameLogo, 155 * everything.getXRatio(), 262 * everything.getYRatio(), 382 * everything.getXRatio(), 212 * everything.getYRatio());
 		batch.draw(buttonFrame, width - 166, -10, buttonFrame.getRegionWidth() * .95f * 80 / 146, buttonFrame.getRegionHeight() * .95f * 80 / 146);
 //		
 //		newGameSprite.draw(batch);

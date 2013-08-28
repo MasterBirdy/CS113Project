@@ -19,7 +19,7 @@ public class SkillEffect
 						continuous, // For particle effect
 						alive = false;
 	public ParticleEffect 	affected = new ParticleEffect();
-	public Actor 			target;
+	public Actor 			target, caster;
 	public String 			name;
 	static EverythingHolder everything;
 	
@@ -36,6 +36,7 @@ public class SkillEffect
 	public SkillEffect(Skill s, Actor a, int count)
 	{
 		target = a;
+		caster = s.caster;
 		effect = s.effect;
 		if (s.damageSplit == true)
 			effectAmount = s.effectAmount / count;
@@ -106,13 +107,23 @@ public class SkillEffect
 			case 3:
 				target.attackSpeedBoost(effectAmount);
 				break;
-//			case 3:
+			case 4:
+				target.attackDamageBoost(effectAmount);
+				break;
+			case 5:
+				target.attackRangeBoost(effectAmount);
+				break;
+			case 6:
+				target.takeDamage(effectAmount);
+				caster.heal(effectAmount);
+				break;
+//			case 4:
 //				damageBoost += skill.effectAmount;
 //				break;
-//			case 4:
+//			case 5:
 //				attackSpeedBoost += skill.effectAmount;
 //				break;
-//			case 5:
+//			case 6:
 //				attackRangeBoost += skill.effectAmount;
 //				break;
 		}

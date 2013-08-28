@@ -10,13 +10,15 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.unknowngames.rainbowrage.EverythingHolder;
+import com.unknowngames.rainbowrage.GameScreen;
 
 public class GameUI 
 {
 	static SpriteBatch batch;
+	static GameScreen gameScreen;
 	private Texture icons;
 	TextureRegion buttonFrame;
-	Button[] buttons = new Button[13];
+	Button[] buttons = new Button[14];
 	int width = Gdx.graphics.getWidth();
 	int height = Gdx.graphics.getHeight();
 	int buttonRadius = (int)38;// (width * .95f / 20);
@@ -114,15 +116,36 @@ public class GameUI
 //		buttons[10] = new RectangularButton(0, 255, (int)(143 * .55f), (int)(109 * .55f),
 //				new TextureRegion(icons, 1905, 0, 143, 109));								// Item Shop
 		
-		buttons[10] = new RectangularButton(0, 350, (int)(143 * .55f), (int)(109 * .55f),
-				EverythingHolder.getObjectTexture("storebutton"));								// Item Shop
-		buttons[11] = new RectangularButton(stackTopX - 100, 0, (int)(192 * .55f), (int)(137 * .55f),
-				EverythingHolder.getObjectTexture(everything.getHeroName() + "button"));			// Hero button
-		buttons[12] = new RectangularButton(0, 275, (int)(143 * .55f), (int)(109 * .55f),
-				EverythingHolder.getObjectTexture("upgradebutton"));								// Upgrades
+		// New style shop button
+		buttons[10] = new RectangularButton(0, 350, (int)(96 * .55f), (int)(95 * .55f),
+		EverythingHolder.getObjectTexture("storebutton"));								// Item Shop
+		
+		
+		// Old style shop button
+//		buttons[10] = new RectangularButton(0, 350, (int)(143 * .55f), (int)(109 * .55f),
+//				EverythingHolder.getObjectTexture("storebutton"));								// Item Shop
+		
+		// New style hero buttons
+		buttons[11] = new RectangularButton(stackTopX - 100, 0, (int)(158 * .55f), (int)(155 * .55f),
+		EverythingHolder.getObjectTexture(everything.getHeroName() + "button"));			// Hero button
+		
+		// Old style hero buttons
+//		buttons[11] = new RectangularButton(stackTopX - 100, 0, (int)(192 * .55f), (int)(137 * .55f),
+//				EverythingHolder.getObjectTexture(everything.getHeroName() + "button"));			// Hero button
+		
+		// New style upgrade button
+		buttons[12] = new RectangularButton(0, 290, (int)(96 * .55f), (int)(95 * .55f),
+		EverythingHolder.getObjectTexture("upgradebutton"));								// Upgrades
+		buttons[13] = new RectangularButton(0, 230, (int)(96 * .55f), (int)(95 * .55f),
+		EverythingHolder.getObjectTexture("chatbutton"));								// Upgrades
+		
+		// Old style upgrade button
+//		buttons[12] = new RectangularButton(0, 275, (int)(143 * .55f), (int)(109 * .55f),
+//				EverythingHolder.getObjectTexture("upgradebutton"));								// Upgrades
 		
 		buttons[10].setClickable(false);
 		buttons[12].setClickable(false);
+		buttons[13].setClickable(gameScreen.getMultiplayer());
 		screenX = Gdx.graphics.getWidth() / 2;
 		screenY = Gdx.graphics.getHeight() / 2;
 		
@@ -155,10 +178,11 @@ public class GameUI
 		return -1;
 	}
 	
-	static public void load(SpriteBatch b, EverythingHolder things)
+	static public void load(SpriteBatch b, EverythingHolder things, GameScreen gs)
 	{
 		batch = b;
 		everything = things;
+		gameScreen = gs;
 		TopUI.load(batch, everything);		
 	}
 	
@@ -183,7 +207,7 @@ public class GameUI
 			buttons[i].draw(batch, delta);
 		}
 		
-		for (int i = 9; i < 13; i++)
+		for (int i = 9; i < 14; i++)
 		{
 			buttons[i].draw(batch, delta);
 		}

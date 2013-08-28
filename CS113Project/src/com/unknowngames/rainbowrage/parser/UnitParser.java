@@ -38,6 +38,8 @@ public class UnitParser
 	
 	Element element;
 	
+	boolean external = false;
+	
 	public static void main(String args[]) 
 	{
 		UnitParser unitParser = new UnitParser();
@@ -74,6 +76,7 @@ public class UnitParser
 			else
 			{
 				doc = dBuilder.parse(stats);
+				external = true;
 			}
 			
 			doc.getDocumentElement().normalize();
@@ -184,7 +187,7 @@ public class UnitParser
 						}
 						else if (node.getNodeName().equals("stats"))
 						{
-							version = element.getAttribute("version");
+							version = element.getAttribute("version") + (external ? "_external" : "");
 							System.out.println(version);
 						}
 					}

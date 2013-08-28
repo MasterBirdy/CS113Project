@@ -27,7 +27,7 @@ public abstract class Actor extends Entity
 		procCooldown, procCooldownCounter;
 	
 	float attackSpeed, attackCooldown, attackRange,
-		  attackSpeedBoost = 0, attackRangeBoost = 0;	// For buffs
+		  attackSpeedBoost = 0, attackDamageBoost = 0, attackRangeBoost = 0;	// For buffs
 	
 	boolean attacking, ranged;
 	
@@ -165,6 +165,20 @@ public abstract class Actor extends Entity
 			attackSpeedBoost = attackSpeed - 2;
 	}
 	
+	public void attackDamageBoost(int boost)
+	{
+		attackDamageBoost += boost;
+		if (attackDamageBoost < 0)
+			attackDamageBoost = 0;
+	}
+	
+	public void attackRangeBoost(int boost)
+	{
+		attackRangeBoost += boost;
+		if (attackRangeBoost < 0)
+			attackRangeBoost = 0;
+	}
+	
 	public void loadPassiveSkill(SkillStructure pSkill)
 	{
 		passiveSkill = new PassiveSkill(pSkill, this);
@@ -215,6 +229,7 @@ public abstract class Actor extends Entity
 	public void update()
 	{
 		attackSpeedBoost = 0;
+		attackDamageBoost = 0;
 		attackRangeBoost = 0;
 		
 		if (passiveSkill != null)
@@ -356,6 +371,7 @@ public abstract class Actor extends Entity
 		if (currentHealth < 0)
 			currentHealth = 0;
 		
+		everything.addTextEffect(xCoord, yCoord, damage + "", 1);
 //		System.out.println("Hit me!");
 		if (procSkill != null && procStruct.trigger.get(0) == 0)
 		{
@@ -445,7 +461,7 @@ public abstract class Actor extends Entity
 		{
 			currentDistance = getDistanceSquared(target);
 			if (target instanceof Building)
-				currentDistance -= 3600;
+				currentDistance -= 2025;
 			if (currentDistance < attackRange * attackRange)
 			{
 				return;
@@ -466,7 +482,7 @@ public abstract class Actor extends Entity
 			{
 				currentDistance = this.getDistanceSquared(a);
 				if (a instanceof Building)
-					currentDistance -= 6400;
+					currentDistance -= 2025;
 				if ((a.getAttacker() < lowest && currentDistance < attackRange * attackRange + 1) ||
 						(currentDistance < newDistance))
 				{

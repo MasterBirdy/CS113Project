@@ -131,6 +131,7 @@ public class GameScreen implements Screen
 //		Texture pauseTexture = new Texture(Gdx.files.internal("images/pausemenu.png"));
 //		pauseRegion = new TextureRegion(pauseTexture, 0, 0, 270, 190);
 		everything.loadMap(level);
+		TextEffect.loadFonts();
 //		TextureRegion region;
 //		
 //		if (level == 0)
@@ -207,7 +208,7 @@ public class GameScreen implements Screen
 		inputProcessor = new GameInput();
 
 		Gdx.input.setInputProcessor(inputProcessor);
-		GameUI.load(batch, everything);
+		GameUI.load(batch, everything, this);
 		gameUI = new GameUI();
 		
 		GameInput.loadCamera(camera, uiCamera);
@@ -279,6 +280,23 @@ public class GameScreen implements Screen
 //		ready = true;
 	}
 	
+	public boolean getMultiplayer()
+	{
+		return multiplayer;
+	}
+	
+	public boolean getConnected()
+	{
+		return connected;
+	}
+	
+	public Vector3 getPointCoord(int x, int y)
+	{
+		Vector3 newPoint = new Vector3();
+		uiCamera.unproject(newPoint.set(x, y, 0));
+		return newPoint;
+	}
+	
 	public void toggleIsPaused()
 	{
 		isPaused = !isPaused;
@@ -320,7 +338,7 @@ public class GameScreen implements Screen
 			timeAccumulator += delta;
 		
 //		GL10 gl = Gdx.graphics.getGL10();
-		gl.glClearColor(1, 1, 1, 1);
+		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 //		if (gl.glGetError() != 0)
 //			Log.debug("GL ERROR " + gl.glGetError());
@@ -375,7 +393,7 @@ public class GameScreen implements Screen
 			batch.end();
 		}
 		
-//		everything.map().drawPaths(batch, camera);
+		everything.map().drawPaths(batch, camera);
 		
 		batch.setProjectionMatrix(uiCamera.combined);
 		batch.begin();
@@ -391,12 +409,16 @@ public class GameScreen implements Screen
 			scoreBoard.draw(batch);
 //		if (isPaused)
 //			batch.draw(pauseRegion, 400 - pauseRegion.getRegionWidth() / 2 , 240 - pauseRegion.getRegionHeight() / 2);
+		everything.getFont(2).draw(batch, "Zoom: " + camera.zoom, 100, 300);
+		everything.getFont(2).draw(batch, "Min Zoom: " + everything.getMinZoom(), 100, 350);
+		everything.getFont(2).draw(batch, "Ratio Zoom: " + everything.getSizeRatio(), 100, 400);
 		batch.end();
 	}
 	
 	private void scoreBoards(int t)
 	{
-		if (t == 0) return;
+		if (t == 0) 
+			return;
 		Gdx.input.setInputProcessor(null);
 		if (t == team)
 			scoreBoard = new ScoreBoard(0, everything, this);
@@ -559,7 +581,7 @@ public class GameScreen implements Screen
 	
 	public void buyUnit(int unit)
 	{
-		if (multiplayer)
+		if (multiplayer && connected)
 		{
 //			System.out.println("Trying to send unit " + unit + " from team " + team);
 			if (everything.funds() < everything.unitCost(unit, team))
@@ -696,10 +718,12 @@ public class GameScreen implements Screen
 
 	public void boundCamera()
 	{
-		if (camera.zoom > 2.35)
-			camera.zoom = 2.35f;
-		if (camera.zoom < .45)
-			camera.zoom = .45f;
+		if (camera.zoom > everything.getMinZoom())
+			camera.zoom = everything.getMinZoom();
+//		if (camera.zoom > 2.25/ everything.getSizeRatio())
+//			camera.zoom = 2.25f / everything.getSizeRatio();
+		if (camera.zoom < .3f / everything.getSizeRatio())
+			camera.zoom = .3f / everything.getSizeRatio();
 		/*float width = camera.viewportWidth;
 		int w = Gdx.graphics.getWidth() / 2;
 		int h = Gdx.graphics.getHeight() / 2;*/

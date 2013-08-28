@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<stats version = "130524">
+<stats version = "130825">
 	<!-- MINIONS -->
 	<minion type = "swordsman">
 		<maxhealth>			220		31		311		3111		</maxhealth>
@@ -89,7 +89,7 @@
 	<minion type = "wolf">
 		<maxhealth>			600		51		511		5111		</maxhealth>
 		<damage>			20		51		511		5111		</damage>
-		<attackspeed>		50		51		511		5111		</attackspeed>
+		<attackspeed>		51		51		511		5111		</attackspeed>
 		<attackrange>		30		51		511		5111		</attackrange>
 		<speed>				1.3f	51f		511f	5111f		</speed>
 		<cost> 				50		51		511		5111		</cost>
@@ -101,7 +101,7 @@
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionwolf							</soundpack>
 		<passiveskill>		empty								</passiveskill>
-		<procskill>			empty								</procskill>
+		<procskill>			proclifesteal						</procskill>
 	</minion> 
 	<minion type = "eagle">
 		<maxhealth>			450		51		511		5111		</maxhealth>
@@ -288,6 +288,26 @@
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<cooldown>			250									</cooldown>
+		<trigger>			1									</trigger>
+		<traveltime>		0									</traveltime>
+		<damagesplit>		true								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<speed>				0									</speed>
+		<sprite>			empty								</sprite>
+		<cast>				fire								</cast>
+		<travel>			heal								</travel>
+		<detonateeffect>	heal								</detonateeffect>
+		<affected>			fire								</affected>
+	</skill>
+	<skill type = "proclifesteal">
+		<aoe> 				20									</aoe>
+		<targetteam> 		1									</targetteam>
+		<effect>			6									</effect>
+		<effectamount>		45									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<cooldown>			40									</cooldown>
 		<trigger>			1									</trigger>
 		<traveltime>		0									</traveltime>
 		<damagesplit>		true								</damagesplit>
