@@ -283,7 +283,25 @@ public class MainMenuScreen implements Screen
 	@Override
 	public void show() 
 	{
-		startMusic.play();
+		try
+		{
+			startMusic.play();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			try
+			{
+				startMusic = tempMusic.newMusic(Gdx.files.internal("audio/460436_trapped_in_dreams.mp3"));
+				startMusic.setLooping(true);
+				startMusic.setVolume(everything.getMusicLevel());
+				startMusic.play();
+			}
+			catch (Exception e1)
+			{
+				e1.printStackTrace();
+			}
+		}
 		// TODO Auto-generated method stub
 	//	if (Settings.getInstance().getSound() == SoundEnum.ON)
 	//		startMusic.play();

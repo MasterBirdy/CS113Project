@@ -1,6 +1,7 @@
 package com.unknowngames.rainbowrage.skill;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
@@ -11,188 +12,285 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.entity.Actor;
 import com.unknowngames.rainbowrage.entity.Hero;
+import com.unknowngames.rainbowrage.entity.Unit;
 import com.unknowngames.rainbowrage.parser.SkillStructure;
 
 public class TargetedSkill extends Skill 
 {
-	int 	duration,
-			cooldown,
-			ticksLeft = 40,
-			travelTime;
-	float 	speed,
-			speedX = 0,
-			speedY = 0,
-			targetX,
-			targetY;
-	double angle;
-	Actor 	target;
-	TextureRegion spellImage;
-//	ParticleEffect part;
-	
-	public TargetedSkill(SkillStructure s, Actor c, Actor t)
+
+	public TargetedSkill(SkillStructure s, SkillContainer sc)
 	{
-		super(s, c);
-		if (s.sprite.get(0).equals("empty"))
-			spellImage = EverythingHolder.getObjectTexture("cannonball");
-		if (s.sprite.get(0).equals("fireball"))
-			spellImage = EverythingHolder.getObjectTexture(s.sprite.get(0) + everything.teamColor(c.team()));
-		else
-			spellImage = EverythingHolder.getObjectTexture(s.sprite.get(0));
-//		if (spellImage == null)
+		super(s, sc);
+		// TODO Auto-generated constructor stub
+	}
+//	int 	duration,
+//			cooldown,
+//			ticksLeft = 40,
+//			travelTime;
+//	float 	speed,
+//			speedX = 0,
+//			speedY = 0,
+//			targetX,
+//			targetY;
+//	double angle;
+//	Actor 	target;
+//	TextureRegion spellImage;
+////	ParticleEffect part;
+//	
+//	public TargetedSkill(SkillStructure s, Actor c, Actor t)
+//	{
+//		super(s, c);
+//		/*if (s.sprite.get(0).equals("empty"))
+//			spellImage = EverythingHolder.getObjectTexture("cannonball");
+//		if (s.sprite.get(0).equals("fireball"))
+//			spellImage = EverythingHolder.getObjectTexture(s.sprite.get(0) + everything.teamColor(c.team()));
+//		else
+//			spellImage = EverythingHolder.getObjectTexture(s.sprite.get(0));
+////		if (spellImage == null)
+////		{
+////			spellImage = new TextureRegion(new Texture(Gdx.files.internal("images/"+s.sprite.get(0))), 0, 0, 16, 16);
+////			spellImage = new TextureRegion(new Texture(Gdx.files.internal("images/cannonprojectile.png")), 0, 0, 16, 16);
+////		}
+//		target = t;
+//		duration = s.duration.get(0);
+//		speed = s.speed.get(0);
+//		ticksLeft = s.travelTime.get(0);
+//		travelTime = s.travelTime.get(0);*/
+//		if (t != null)
 //		{
-//			spellImage = new TextureRegion(new Texture(Gdx.files.internal("images/"+s.sprite.get(0))), 0, 0, 16, 16);
-//			spellImage = new TextureRegion(new Texture(Gdx.files.internal("images/cannonprojectile.png")), 0, 0, 16, 16);
+//			targetX = t.xCoord();
+//			targetY = t.yCoord();
+//			this.angle = getAngleToEntity(t);
 //		}
-		target = t;
-		duration = s.duration.get(0);
-		speed = s.speed.get(0);
-		ticksLeft = s.travelTime.get(0);
-		if (t != null)
-		{
-			targetX = t.xCoord();
-			targetY = t.yCoord();
-			this.angle = getAngleToEntity(t);
-		}
-		else
-		{
-//			System.out.println("No target");
-			targetX = c.xCoord();
-			targetY = c.yCoord();
-			switch (((Hero)c).getDirection())
-			{
-				case 0:
-					targetY -= 1000;
-					break;
-				case 1:
-					targetX -= 1000;
-					break;
-				case 2:
-					targetX += 1000;
-					break;
-				case 3:
-					targetY += 1000;
-					break;
-			}
-//			switch (((Hero)c).getDirection())
+//		else
+//		{
+////			System.out.println("No target");
+//			targetX = c.xCoord();
+//			targetY = c.yCoord();
+//			
+//			switch (((Unit)c).getDirection())
 //			{
 //				case 0:
 //					targetY -= 1000;
 //					break;
 //				case 1:
-//					targetX += 1000;
-//					break;
-//				case 2:
-//					targetY += 1000;
-//					break;
-//				case 3:
 //					targetX -= 1000;
 //					break;
+//				case 2:
+//					targetX += 1000;
+//					break;
+//				case 3:
+//					targetY += 1000;
+//					break;
 //			}
-		}
-//		part = new ParticleEffect();
-//		part.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
-//		part.setPosition(100, 100);
-//		part = everything.getEffect("fireballexplosion");
-//		fire.setPosition(400, 10);
-//		fire.start();
-//		travelEffect = everything.getEffect(s.travel);
-//		part.start();
-//		travelEffect = new ParticleEffect(s.affected);
-	}
-	
-	@Override
-	public ArrayList<Actor> inRange() 
-	{
-		ArrayList<Actor> temp = new ArrayList<Actor>();
-		if (aoe == 0)
-		{
-			if (targetTeam == target.team())
-				temp.add(target);
-			else
-				temp.add(caster);
-		}
-		else
-			for (Actor a : everything.team(targetTeam))
-				if (this.getDistanceSquared(a) < aoe * aoe)
-					temp.add(a);
-		
-		return temp;
-//		return everything.team(targetTeam);
-	}
-	
-	public void update()
-	{
-//		System.out.println("Updating TargetedSkill");
-		if (!alive)
-			return;
-		if (--ticksLeft < 0)
-			detonate();
-//		travelEffect.setPosition(xCoord(), yCoord());
-		if (target != null && target.isAlive())
-		{
-			targetX = target.xCoord();
-			targetY = target.yCoord();
-		}
-		if (target != null && !target.isAlive())
-			target = null;
-		if (!closeEnough())
-		{
-			float distance = getDistance(targetX, targetY);
-			speedX = speed * ((targetX - xCoord()) / distance);
-			speedY = speed * ((targetY - yCoord()) / distance);
-
-			this.xCoord(this.xCoord() + speedX);
-			this.yCoord(this.yCoord() + speedY);
-		}
-		else
-		{
-			detonate();
-		}
-	}
-	
-	public void draw(SpriteBatch batch, float delta)
-	{
-		if (!alive)
-			return;
-//		System.out.println("Drawing Targeted SKill");
-		if (spellImage != null)
-			batch.draw(spellImage, xCoord(), yCoord(), 8, 8, 16, 16, 1, 1, (float)angle);
-//			batch.draw(spellImage, xCoord(), yCoord(), 15, 15);
-		if (travelEffect.isComplete())
-			travelEffect.start();
-		travelEffect.setPosition(xCoord() + 10, yCoord() + 10);
-		travelEffect.draw(batch, delta * 0.5f);
-//		if (part.isComplete())
-//			part.start();
-//		part.setPosition(xCoord(), yCoord());
-//		part.draw(batch, 0.01f);
-	}
-	
-	public boolean closeEnough()
-	{
-		if (getDistanceSquared(targetX, targetY) < speed * speed)
-			return true;
-		return false;
-	}
-	
-	@Override
-	public void applyToTargets()
-	{
-		if (aoe == 0)
-		{
-			if (targetTeam == caster.team())
-				caster.takeSkillEffect(new SkillEffect(this, caster, 1));
-			else if (target != null && target.isAlive())
-				target.takeSkillEffect(new SkillEffect(this, target, 1));
-			return;
-		}
-		tempActor = inRange();
-		
-//		for (Actor a : inRange())
-		for(int i = 0; i < tempActor.size(); i++)
-		{
-			tempActor.get(i).takeSkillEffect(new SkillEffect(this, tempActor.get(i), tempActor.size()));
-//			a.takeSkillEffect(new SkillEffect(this, a));
-		}
-	}
+////			switch (((Hero)c).getDirection())
+////			{
+////				case 0:
+////					targetY -= 1000;
+////					break;
+////				case 1:
+////					targetX += 1000;
+////					break;
+////				case 2:
+////					targetY += 1000;
+////					break;
+////				case 3:
+////					targetX -= 1000;
+////					break;
+////			}
+//		}
+////		part = new ParticleEffect();
+////		part.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
+////		part.setPosition(100, 100);
+////		part = everything.getEffect("fireballexplosion");
+////		fire.setPosition(400, 10);
+////		fire.start();
+////		travelEffect = everything.getEffect(s.travel);
+////		part.start();
+////		travelEffect = new ParticleEffect(s.affected);
+//	}
+//	
+//	@Override
+//	public ArrayList<Actor> inRange() 
+//	{
+//		ArrayList<Actor> temp = new ArrayList<Actor>();
+//		if (aoe == -1)																// Single target skill
+//		{
+//			if (target != null && target.isAlive() &&
+//			   (travelTime == -1 || 								// Instant cast on target
+//				getDistanceSquared(target) < speed * speed * 2f))	// Projectile cast on target
+//					temp.add(target);
+////			if (travelTime == -1)													// Instant cast on target
+////				temp.add((target != null && target.isAlive()) ? target : null);
+////			else if (target != null && getDistanceSquared(target) < speed * speed * 2f)	// Projectile cast on target
+////				temp.add((target != null && target.isAlive()) ? target : null);
+//			return temp;
+//		}
+//		else																		// Aoe skill
+//		{
+//			for (Actor a : everything.team(caster.team(), targeting))
+//				if (getDistanceSquared(a) <= aoe * aoe)
+//					temp.add(a);
+//			if (temp.size() > 1 && targetCount > 0)
+//			{
+//				switch(Math.abs(targeting))
+//				{
+//				case 4:
+//				case 5:
+//					Collections.sort(temp, Actor.HealthComparator);
+//					break;
+//				}
+//				return new ArrayList<Actor>(temp.subList(0, targetCount));
+////				ArrayList<Actor> temp1 = new ArrayList<Actor>();
+////				for (int i = 0; i < targetCount && i < temp.size(); i++)
+////					temp1.add(temp.get(i));
+////				ArrayList<Actor> temp2 = new ArrayList<Actor>(temp.subList(0, targetCount));
+////				return temp1;
+//				//temp = (ArrayList<Actor>)temp.subList(0, (targetCount > temp.size() ? temp.size() - 1 : targetCount - 1));
+//			}
+//	//		if (aoe == 0)
+//	//		{
+//	//			temp.add(target);
+//	////			if (targetTeam == target.team())
+//	////				temp.add(target);
+//	////			else
+//	////				temp.add(caster);
+//	//		}
+////			else
+////				for (Actor a : everything.team(caster.team(), targeting))
+////					if (this.getDistanceSquared(a) < aoe * aoe)
+////						temp.add(a);
+//			
+////			if (temp.size() > 1 && targetCount > 0)
+////			{
+////				switch(Math.abs(targeting))
+////				{
+////				case 2:
+////				case 3:
+////					Collections.sort(temp, Actor.HealthComparator);
+////					break;
+////				}
+////				ArrayList<Actor> temp1 = new ArrayList<Actor>();
+////				for (int i = 0; i < targetCount && i < temp.size(); i++)
+////					temp1.add(temp.get(i));
+////				return temp1;
+////				//temp = (ArrayList<Actor>)temp.subList(0, (targetCount > temp.size() ? temp.size() - 1 : targetCount - 1));
+////			}
+//		}
+//		
+//		return temp;
+////		return everything.team(targetTeam);
+//	}
+//	
+//	public void update()
+//	{
+////		System.out.println("Updating TargetedSkill");
+//		// Don't update if null
+//		if (!alive)
+//			return;
+//		
+//		// Detonate at end of its life (such as when chasing an enemy or fired blindly)
+//		if (--ticksLeft < 0 && travelTime > 0)
+//		{
+//			detonate();
+//			return;
+//		}
+//		
+//		// Instant skills try to go to the target then detonate where ever it is 
+//		if (travelTime < 0)
+//		{
+//			if  (target != null && target.isAlive())
+//			{
+//				xCoord(target.xCoord());
+//				yCoord(target.yCoord());
+//			}
+//			detonate();
+//			return;
+//		}
+//				
+//		// For tracking skills, try to set target location to target's location 
+//		if (target != null)
+//		{
+//			if  (target.isAlive())
+//			{				
+//				targetX = target.xCoord();
+//				targetY = target.yCoord();
+//			}
+//			else
+//				target = null;
+//		}
+//		
+//		// Detonate when close enough to target, otherwise move towards it
+//		if (!closeEnough())
+//		{
+//			float distance = getDistance(targetX, targetY);
+//			speedX = speed * ((targetX - xCoord()) / distance);
+//			speedY = speed * ((targetY - yCoord()) / distance);
+//
+//			this.xCoord(this.xCoord() + speedX);
+//			this.yCoord(this.yCoord() + speedY);
+//		}
+//		else
+//		{
+//			detonate();
+//		}
+//	}
+//	
+//	public void draw(SpriteBatch batch, float delta)
+//	{
+//		if (!alive)
+//			return;
+////		System.out.println("Drawing Targeted SKill");
+//		if (spellImage != null)
+//			batch.draw(spellImage, xCoord(), yCoord(), 8, 8, 16, 16, 1, 1, (float)angle);
+////			batch.draw(spellImage, xCoord(), yCoord(), 15, 15);
+//		if (travelEffect.isComplete())
+//			travelEffect.start();
+//		travelEffect.setPosition(xCoord() + 10, yCoord() + 10);
+//		travelEffect.draw(batch, delta * 0.5f);
+////		if (part.isComplete())
+////			part.start();
+////		part.setPosition(xCoord(), yCoord());
+////		part.draw(batch, 0.01f);
+//	}
+//	
+//	public boolean closeEnough()
+//	{
+//		if (getDistanceSquared(targetX, targetY) < speed * speed)
+//			return true;
+//		return false;
+//	}
+//	
+//	@Override
+//	public void applyToTargets()
+//	{
+////		if (aoe == -1)
+////		{
+////			if (target != null && target.isAlive())
+////				target.takeSkillEffect(new SkillEffect(this, target, 1));
+//////			if (targetTeam == caster.team())
+//////				caster.takeSkillEffect(new SkillEffect(this, caster, 1));
+//////			else if (target != null && target.isAlive())
+//////				target.takeSkillEffect(new SkillEffect(this, target, 1));
+////			return;
+////		}
+//		/*tempActor = inRange();
+//		if (tempActor == null)
+//			return;
+////		for (Actor a : inRange())
+//		try
+//		{
+//		for(int i = 0; i < tempActor.size(); i++)
+//		{
+//			tempActor.get(i);
+//			SkillEffect temp = new SkillEffect(this, tempActor.get(i), tempActor.size());
+//			tempActor.get(i).takeSkillEffect(temp);
+////			a.takeSkillEffect(new SkillEffect(this, a));
+//		}
+//		}
+//		catch (Exception e)
+//		{
+//			e.printStackTrace();
+//		}*/
+//	}
 }

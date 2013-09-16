@@ -6,7 +6,6 @@ import com.unknowngames.rainbowrage.entity.Entity;
 
 public class EntityComparator implements Comparator<Entity>
 {
-
 	@Override
 	public int compare(Entity arg0, Entity arg1) 
 	{
@@ -31,5 +30,4 @@ public class EntityComparator implements Comparator<Entity>
 			return -1;		
 		return 0;
 	}
-
 }

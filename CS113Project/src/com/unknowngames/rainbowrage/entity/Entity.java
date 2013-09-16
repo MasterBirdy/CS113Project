@@ -9,9 +9,10 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.unknowngames.rainbowrage.BaseClass;
 import com.unknowngames.rainbowrage.EverythingHolder;
 
-public abstract class Entity 
+public abstract class Entity extends BaseClass
 {
 	int team;
 	float xCoord;
@@ -20,7 +21,7 @@ public abstract class Entity
 //	static Texture spriteSheet[] = new Texture[2];
 //	static HashMap<String, Sound> sounds = new HashMap<String, Sound>(); 
 	static float volume = 1;
-	protected static EverythingHolder everything;
+//	protected static EverythingHolder everything;
 //	static ArrayList<ParticleEffect> effects;
 	
 	boolean remove;
@@ -44,10 +45,10 @@ public abstract class Entity
 		remove = true;
 	}
 	
-	static public void linkHolder(EverythingHolder e)
-	{
-		everything = e;
-	}
+//	static public void linkHolder(EverythingHolder e)
+//	{
+//		everything = e;
+//	}
 	
 	public int team()
 	{
@@ -106,14 +107,27 @@ public abstract class Entity
 		return (xCoord - x) * (xCoord - x) + (yCoord - y) * (yCoord - y);
 	}
 	
-	public double getAngleToEntity(Entity target)
+	public double getAngleToPoint(float x, float y)
 	{
-		double x = target.xCoord();
-		double y = target.yCoord();
+//		double x = x;
+//		double y = target.yCoord();
 		double toActor = Math.toDegrees(Math.atan2(x - this.xCoord(), this.yCoord() - y));
 		if (toActor < 0)
 			toActor += 360;
 		return toActor;
+	} 
+	
+	public double getAngleToEntity(Entity target)
+	{
+		if (target != null && target.isAlive())
+			return getAngleToPoint(target.xCoord(), target.yCoord());
+		return 0;
+//		double x = target.xCoord();
+//		double y = target.yCoord();
+//		double toActor = Math.toDegrees(Math.atan2(x - this.xCoord(), this.yCoord() - y));
+//		if (toActor < 0)
+//			toActor += 360;
+//		return toActor;
 	} 
 	
 	public float xCoord()

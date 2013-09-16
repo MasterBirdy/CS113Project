@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.GameScreen;
 import com.unknowngames.rainbowrage.RainbowRage;
+import com.unknowngames.rainbowrage.parser.HeroStructure;
 import com.unknowngames.rainbowrage.ui.Button;
 import com.unknowngames.rainbowrage.ui.RoundButton;
 
@@ -64,7 +65,7 @@ public class HeroSelectScreen implements Screen
 		buttons[1].setClickable(false);
 		buttons[2].setClickable(false);
 //		buttons[5].setClickable(false);
-		selectColor(6);
+		selectColor(5);
 		
 		heroNames[0] = EverythingHolder.getObjectTexture("heronamesword");
 		heroNames[1] = EverythingHolder.getObjectTexture("heronamewizard");
@@ -241,6 +242,11 @@ public class HeroSelectScreen implements Screen
 			color[1] = "red";
 		}
 		selectColor(h);
+	}
+	
+	private void setSelectedHero(String hero)
+	{
+		HeroStructure selectedHero = everything.getHeroStats(hero);
 	}
 	
 	private void selectColor(int c)

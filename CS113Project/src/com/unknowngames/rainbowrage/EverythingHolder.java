@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
@@ -29,11 +30,12 @@ import com.unknowngames.rainbowrage.entity.*;
 import com.unknowngames.rainbowrage.map.*;
 import com.unknowngames.rainbowrage.parser.*;
 import com.unknowngames.rainbowrage.skill.Skill;
+import com.unknowngames.rainbowrage.skill.TravelingSkillContainer;
 
 public class EverythingHolder 
 {
 	@SuppressWarnings("unchecked")
-	String xmlVersion = "", gameVersion = "0.08_23_13";
+	String xmlVersion = "", gameVersion = "0.09_03_13";
 	
 	EntityComparator eCompare = new EntityComparator();
 	static private SpriteBatch batch;
@@ -58,6 +60,7 @@ public class EverythingHolder
 	static boolean showRange;
 	boolean spawning;
 	boolean running;
+	int team1Towers = 0, team2Towers = 0, towerIncome = 0;
 	
 	//	You can call: mrwizard, swordface, or arroweyes
 	String[] heroNames = {"mrwizard", "swordface"};
@@ -79,6 +82,7 @@ public class EverythingHolder
 	HashMap<String, HeroStructure> heroStats = new HashMap<String, HeroStructure>();
 	static HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>();
 	HashMap<String, SkillStructure> skillStats = new HashMap<String, SkillStructure>();
+	HashMap<String, SkillContainerStructure> skillContainerStats = new HashMap<String, SkillContainerStructure>();
 	static HashMap<String, Sound> sounds = new HashMap<String, Sound>();
 	static HashMap<String, SoundPack> unitSounds = new HashMap<String, SoundPack>();
 	static HashMap<String, TextureRegion> objectTextures = new HashMap<String, TextureRegion>();
@@ -111,6 +115,9 @@ public class EverythingHolder
 	
 	List<TextEffect> textEffects = new LinkedList<TextEffect>(); 
 	Iterator<TextEffect> textEffectItr;
+	
+	Random rand;
+	
 	public EverythingHolder()
 	{
 		Texture.setEnforcePotImages(true);
@@ -123,6 +130,7 @@ public class EverythingHolder
 		buildingStats = unitParser.getBuildingStats();
 		heroStats = unitParser.getHeroStats();
 		skillStats = unitParser.getSkillStats();
+		skillContainerStats = unitParser.getSkillContainerStats();
 		
 		// Wave control
 //		waveTimer = System.nanoTime() / 1000000; // Timer to keep track of waves
@@ -132,7 +140,8 @@ public class EverythingHolder
 		spawning = false;
 //		previousTime = System.nanoTime() / 1000000;
 //		Actor.loadProjectiles(projectiles);
-		Entity.linkHolder(this);
+//		Entity.linkHolder(this);
+		BaseClass.load(this);
 		
 		// Load all assets
 		loadEffects();
@@ -156,6 +165,21 @@ public class EverythingHolder
 		xRatio = (float)screenSizeX / 800;
 		yRatio = (float)screenSizeY / 480;
 		sizeRatio = (float)Gdx.graphics.getWidth() / 800;
+	}
+	
+	public void setRandom(int i)
+	{
+		 rand = new Random(i);
+	}
+	
+	public int getRandom(int i)
+	{
+		return rand.nextInt(i);
+	}
+	
+	public HeroStructure getHeroStats(String hero)
+	{
+		return heroStats.get(hero);
 	}
 	
 	public void addTextEffect(float x, float y, String text, int cause)
@@ -306,18 +330,6 @@ public class EverythingHolder
 			region = new TextureRegion(texture, 0, 0, 2048, 2048);
 			sprite = new Sprite(region);
 			sprite.setOrigin(0, 0);
-//			sprite.scale(2);
-//			sprite.setSize(3000, 2400);
-			
-//			map = new Map(new Coordinate(320, 870), sprite, 1200, 960, 310, 870, 1210, 480);
-//			map = new Map(sprite, 3000, 2400, 380, 1884, 2542, 792);
-//			map.add(new Coordinate(558, 1884), 1);
-//			map.add(new Coordinate(2242, 1884), 1);
-//			map.add(new Coordinate(2242, 1418), 1);
-//			map.add(new Coordinate(622, 1418), 1);
-//			map.add(new Coordinate(622, 882), 1);
-//			map.add(new Coordinate(2430, 882), 1);
-//			map.add(new Coordinate(1200, 480), 1);
 			
 			map = new Map(sprite, 2048, 2048, 462, 1363, 1546, 821);
 			
@@ -342,11 +354,9 @@ public class EverythingHolder
 			map.add(new Coordinate(734, 1117), 1);
 			map.add(new Coordinate(582, 1117), 1);
 			map.add(new Coordinate(528, 1073), 1);  // Turn 3
-//			map.add(new Coordinate(511, 978), 1);   // Tower 6 (571, 978)
-//			map.add(new Coordinate(734, 838), 1);   // Turn 4
 			map.add(new Coordinate(513, 978), 1);   // Tower 6 (571, 978)
 			map.add(new Coordinate(573, 887), 1);
-			map.add(new Coordinate(613, 838), 1);
+			map.add(new Coordinate(618, 838), 1);
 			map.add(new Coordinate(734, 838), 1);
 			map.add(new Coordinate(791, 808), 1);   // Tower 7 (791, 851)
 			map.add(new Coordinate(848, 838), 1);
@@ -363,7 +373,7 @@ public class EverythingHolder
 			map.add(new Coordinate(1135, 1371), 2);
 			map.add(new Coordinate(1192, 1401), 2); // Tower 2 (1192, 1358)
 			map.add(new Coordinate(1249, 1371), 2);
-			map.add(new Coordinate(1370, 1371), 2);
+			map.add(new Coordinate(1365, 1371), 2);
 			map.add(new Coordinate(1410, 1322), 2); // Turn 1
 			map.add(new Coordinate(1470, 1231), 2); // Tower 3 (1410, 1231)
 			map.add(new Coordinate(1455, 1135), 2);
@@ -374,10 +384,6 @@ public class EverythingHolder
 			map.add(new Coordinate(848, 1091), 2);
 			map.add(new Coordinate(791, 1066), 2);  // Tower 5 (791, 1104)
 			map.add(new Coordinate(734, 1091), 2);
-//			map.add(new Coordinate(582, 1091), 2);
-//			map.add(new Coordinate(528, 1073), 2);  // Turn 3
-//			map.add(new Coordinate(631, 978), 2);   // Tower 6 (571, 978)
-//			map.add(new Coordinate(734, 864), 2);   // Turn 4
 			map.add(new Coordinate(594, 1091), 2);
 			map.add(new Coordinate(639, 978), 2);   // Tower 6 (571, 978)
 			map.add(new Coordinate(599, 904), 2);
@@ -404,82 +410,9 @@ public class EverythingHolder
 			sites[3] = new Coordinate(791, 1104);
 			map.buildSites(sites, 2);
 			
-			
-			// Pre balanced
-//			// Yellow
-//			map.add(new Coordinate(471, 1364), 1);
-//			map.add(new Coordinate(704, 1367), 1);
-//			map.add(new Coordinate(759, 1339), 1);
-//			map.add(new Coordinate(824, 1364), 1);
-//			map.add(new Coordinate(1058, 1367), 1);
-//			map.add(new Coordinate(1119, 1327), 1);
-//			map.add(new Coordinate(1211, 1364), 1);
-//			map.add(new Coordinate(1359, 1364), 1);
-//			map.add(new Coordinate(1410, 1322), 1);
-//			map.add(new Coordinate(1396, 1233), 1);
-//			map.add(new Coordinate(1405, 1125), 1);
-//			map.add(new Coordinate(1253, 1117), 1);
-//			map.add(new Coordinate(1164, 1135), 1);
-//			map.add(new Coordinate(1054, 1115), 1);
-//			map.add(new Coordinate(853, 1117), 1);
-//			map.add(new Coordinate(779, 1150), 1);
-//			map.add(new Coordinate(692, 1127), 1);
-//			map.add(new Coordinate(582, 1125), 1);
-//			map.add(new Coordinate(528, 1073), 1);
-//			map.add(new Coordinate(498, 981), 1);
-//			map.add(new Coordinate(569, 861), 1);
-//			map.add(new Coordinate(796, 815), 1);
-//			map.add(new Coordinate(875, 834), 1);
-//			map.add(new Coordinate(1125, 834), 1);
-//			map.add(new Coordinate(1200, 809), 1);
-//			map.add(new Coordinate(1278, 834), 1);
-//			map.add(new Coordinate(1537, 834), 1);
-//			
-//			// Blue
-//			map.add(new Coordinate(471, 1381), 2); // Base
-//			map.add(new Coordinate(702, 1381), 2); // Tower 1
-//			map.add(new Coordinate(765, 1408), 2);
-//			map.add(new Coordinate(838, 1381), 2);
-//			map.add(new Coordinate(1074, 1381), 2); // Tower 2
-//			map.add(new Coordinate(1131, 1406), 2);
-//			map.add(new Coordinate(1223, 1381), 2);
-//			map.add(new Coordinate(1390, 1381), 2); 
-//			map.add(new Coordinate(1469, 1347), 2);
-//			map.add(new Coordinate(1481, 1276), 2);
-//			map.add(new Coordinate(1495, 1203), 2);
-//			map.add(new Coordinate(1417, 1098), 2);
-//			map.add(new Coordinate(1258, 1082), 2);
-//			map.add(new Coordinate(1177, 1059), 2);
-//			map.add(new Coordinate(1055, 1096), 2);
-//			
-//			map.add(new Coordinate(863, 1105), 2);
-//			map.add(new Coordinate(779, 1064), 2);
-//			map.add(new Coordinate(690, 1109), 2);
-//			
-//			map.add(new Coordinate(607, 1101), 2);
-//			map.add(new Coordinate(628, 979), 2);
-//			map.add(new Coordinate(613, 883), 2);
-//			map.add(new Coordinate(723, 859), 2);
-//			map.add(new Coordinate(782, 880), 2);
-//			map.add(new Coordinate(864, 859), 2);
-//			map.add(new Coordinate(1132, 859), 2);
-//			map.add(new Coordinate(1198, 880), 2);
-//			map.add(new Coordinate(1264, 860), 2);
-//			map.add(new Coordinate(1537, 851), 2);
-			
-//			Coordinate[] sites = new Coordinate[4];
-//			sites[0] = new Coordinate(759, 1373);
-//			sites[1] = new Coordinate(1136, 1365);
-//			sites[2] = new Coordinate(1445, 1234);
-//			sites[3] = new Coordinate(1163, 1093);
-//			map.buildSites(sites, 1);
-//			
-//			sites = new Coordinate[4];
-//			sites[0] = new Coordinate(1198, 845);
-//			sites[1] = new Coordinate(788, 843);
-//			sites[2] = new Coordinate(563, 990);
-//			sites[3] = new Coordinate(780, 1104);
-//			map.buildSites(sites, 2);
+			team1Towers = 4;
+			team2Towers = 4;
+			towerIncome = 10;
 		}
 		
 		float xZoom = (float)map.width() / Gdx.graphics.getWidth();
@@ -489,6 +422,12 @@ public class EverythingHolder
 //		sprite.setSize(1600, 1200);
 		
 		buildMap();
+	}
+	
+	public void shiftTowerCount(int shift)
+	{
+		team1Towers += shift;
+		team2Towers -= shift;
 	}
 	
 	public Stats Stats()
@@ -863,6 +802,11 @@ public class EverythingHolder
 		return skillStats.get(skill);
 	}
 	
+	public SkillContainerStructure getSkillContainer(String skill)
+	{
+		return skillContainerStats.get(skill);
+	}
+	
 	public float heroHealthRatio()
 	{
 		return playerHeroes[team - 1].getHealthRatio();
@@ -875,6 +819,7 @@ public class EverythingHolder
 	
 	public static TextureRegion getObjectTexture(String name)
 	{
+//		System.out.println("Looking for: " + name);
 		return objectTextures.get(name);
 	}
 	
@@ -935,10 +880,15 @@ public class EverythingHolder
 		objectTextures.put("retreatbutton", new TextureRegion(icons, 0, 306, 152, 153));
 		objectTextures.put("skillbutton", new TextureRegion(icons, 152, 0, 215, 209));
 		
+		// New new style buttons
+		objectTextures.put("upgradebutton", new TextureRegion(icons, 1644, 787, 150, 149));
+		objectTextures.put("storebutton", new TextureRegion(icons, 1644, 936, 150, 149));
+		objectTextures.put("chatbutton", new TextureRegion(icons, 1644, 1085, 150, 149));
+		
 		// New style buttons
-		objectTextures.put("upgradebutton", new TextureRegion(icons, 1794, 787, 96, 95));
-		objectTextures.put("storebutton", new TextureRegion(icons, 1794, 882, 96, 95));
-		objectTextures.put("chatbutton", new TextureRegion(icons, 1794, 882, 96, 95));
+//		objectTextures.put("upgradebutton", new TextureRegion(icons, 1794, 787, 96, 95));
+//		objectTextures.put("storebutton", new TextureRegion(icons, 1794, 882, 96, 95));
+//		objectTextures.put("chatbutton", new TextureRegion(icons, 1794, 882, 96, 95));
 		
 		// Old style buttons
 //		objectTextures.put("upgradebutton", new TextureRegion(icons, 1905, 109, 143, 109));
@@ -980,6 +930,9 @@ public class EverythingHolder
 		objectTextures.put("endstatsbox", new TextureRegion(icons, 1635, 1824, 413, 224));
 		objectTextures.put("endvictory", new TextureRegion(icons, 1687, 1711, 361, 62));
 		objectTextures.put("enddefeat", new TextureRegion(icons, 1687, 1773, 360, 51));
+		
+		objectTextures.put("redrange", new TextureRegion(icons, 1604, 787, 40, 40));
+		objectTextures.put("bluerange", new TextureRegion(icons, 1604, 827, 40, 40));
 	}
 	
 	public void loadSounds()
@@ -1016,7 +969,7 @@ public class EverythingHolder
 				"mediumfireball", "mediumfireballexplosion",
 				"smallfireball", "smallfireballexplosion",
 				"smokebomb",
-				"stunattack",
+				"stunattack", "stunattackeffect", 
 				"attackspeedbuff",
 				"increasearrowspeed",
 				"fire",
@@ -1097,8 +1050,8 @@ public class EverythingHolder
 		heroUnits = new HeroStructure[]{heroStats.get(heroNames[0]), heroStats.get(heroNames[1])};
 		playerHeroes[0] = new Hero(map.start1().x(), map.start1().y(), 1, map().getPath(1).listIterator(), heroUnits[0]);
 		playerHeroes[1] = new Hero(map.start2().x(), map.start2().y(), 2, map().getReversePath(1).listIterator(), heroUnits[1]);
-		add(playerHeroes[0], 1);
-		add(playerHeroes[1], 2);
+		add(playerHeroes[0]); //, 1);
+		add(playerHeroes[1]); //, 2);
 //		System.out.println("PET " + playerHeroes[0].pet());
 //		System.out.println("PET " + playerHeroes[1].pet());
 		playerUnits = new MinionStructure[][]{
@@ -1230,7 +1183,7 @@ public class EverythingHolder
 //		entities.add(a);
 //	}
 	
-	public void add(Entity a, int team)
+	public void add(Entity a) //, int team)
 	{
 //		if (front)
 //			teams[team - 1].add(0, a);
@@ -1254,7 +1207,10 @@ public class EverythingHolder
 			}
 		}
 		if (loc > 100)
+		{
+			System.out.println("So many!");
 			entities.set(loc, a);
+		}
 		else if (loc >= 0)
 			entities.set(loc, a);
 		else
@@ -1309,7 +1265,7 @@ public class EverythingHolder
 		Coordinate start = (team == 1 ? map.start1() : map.start2());
 		ListIterator<Coordinate> iter = (team == 1 ? map.getPath(((top = !top) == false ? 1 : 2)).listIterator() : 
 													 map.getReversePath(((bot = !bot) == false ? 1 : 2)).listIterator());
-		add(new Minion(start.x(), start.y(), team, iter, playerUnits[team - 1][m], 0), team);
+		add(new Minion(start.x(), start.y(), team, iter, playerUnits[team - 1][m], 0)); //, team);
 		
 //		iter = (team == 1 ? map.getPath(2).listIterator() : map.getReversePath(2).listIterator());
 //		add(new Minion(start.x(), start.y(), team, iter, playerUnits[team - 1][m], 0), team);
@@ -1356,6 +1312,153 @@ public class EverythingHolder
 //		return teams[1];
 	}
 	
+	public ArrayList<Actor> team(int t, int targeting)
+	{
+		ArrayList<Actor> temp = new ArrayList<Actor>();
+		int target = 0;
+		
+		if (targeting > 0)
+			target = t;
+		else if (targeting < 0)
+			target = (t == 1 ? 2 : 1);
+			
+		for (Entity a : entities)
+			if (a instanceof Actor && a.isAlive() && (target == 0 || ((Actor)a).team() == target))
+					temp.add((Actor)a);
+		return temp;
+//		if (t == 0)
+//		if (t == 1)
+//			return teams[0];
+//		return teams[1];
+	}
+	
+	public ArrayList<Actor> actorsInRange(Actor center, int radius)
+	{
+		ArrayList<Actor> temp = new ArrayList<Actor>();
+			
+		for (Entity a : entities)
+			if (a instanceof Actor && a.isAlive() && center.getDistanceSquared(a) < radius * radius)
+					temp.add((Actor)a);
+		return temp;
+	}
+	
+	public ArrayList<Actor> actorsInRange(Actor center, int radius, int targeting)
+	{
+		ArrayList<Actor> temp = new ArrayList<Actor>();
+		
+		int target = 0;
+		
+		if (targeting > 0)
+			target = center.team();
+		else if (targeting < 0)
+			target = (center.team() == 1 ? 2 : 1);
+		
+		for (Entity a : entities)
+			if (a instanceof Actor && a.isAlive() && 
+					(target == 0 || ((Actor)a).team() == target) &&
+					center.getDistanceSquared(a) < (radius + center.getRadius() + ((Actor)a).getRadius()) * (radius + center.getRadius() + ((Actor)a).getRadius()))
+//					center.getDistanceSquared(a) < radius * radius)
+				temp.add((Actor)a);
+		
+		if (temp.size() > 1)
+		{
+			switch(Math.abs(targeting))
+			{
+			case -1:
+				Actor.setCenterActor(center);
+				Collections.sort(temp, Actor.TargetedComparator);
+				break;
+			case 4:
+			case 5:
+				Collections.sort(temp, Actor.HealthComparator);
+				break;
+			}
+//			ArrayList<Actor> temp1 = new ArrayList<Actor>();
+//			for (int i = 0; i < targetCount && i < temp.size(); i++)
+//				temp1.add(temp.get(i));
+//			ArrayList<Actor> temp2 = new ArrayList<Actor>(temp.subList(0, targetCount));
+//			return temp1;
+			//temp = (ArrayList<Actor>)temp.subList(0, (targetCount > temp.size() ? temp.size() - 1 : targetCount - 1));
+		}
+		
+		return temp;
+	}
+	
+	public ArrayList<Actor> actorsInRange(Skill s, int radius, int targeting)
+	{
+		ArrayList<Actor> temp = new ArrayList<Actor>();
+		
+		int target = 0;
+		
+		if (targeting > 0)
+			target = s.team();
+		else if (targeting < 0)
+			target = (s.team() == 1 ? 2 : 1);
+		
+		for (Entity a : entities)
+			if (a instanceof Actor && a.isAlive() && 
+					(target == 0 || a.team() == target) && 
+					s.getDistanceSquared(a) < (radius + ((Actor)a).getRadius()) * (radius + ((Actor)a).getRadius()))
+//					s.getDistanceSquared(a) < radius * radius)
+				temp.add((Actor)a);
+		
+		if (temp.size() > 1)
+		{
+			switch(Math.abs(targeting))
+			{
+			case -1:
+				Actor.setCenterActor(s);
+				Collections.sort(temp, Actor.TargetedComparator);
+				break;
+			case 4:
+			case 5:
+				Collections.sort(temp, Actor.HealthComparator);
+				break;
+			}
+		}
+		
+		return temp;
+	}
+	
+	public Actor actorInRange(Actor center, float range, int targeting)
+	{
+		for (Actor a : actorsInRange(center, (int)range, targeting))
+			return a;
+		return null;
+//		ArrayList<Actor> temp = new ArrayList<Actor>();
+//		
+//		int target = 0;
+//		
+//		if (targeting > 0)
+//			target = center.team();
+//		else if (targeting < 0)
+//			target = (center.team() == 1 ? 2 : 1);
+//		
+////		System.out.println("Range: " + range);
+//		
+//		for (Entity a : entities)
+//			if (a instanceof Actor && a.isAlive() && 
+//					(target == 0 || ((Actor)a).team() == target) && 
+//					center.getDistanceSquared(a) < (range + ((Actor)a).getRadius()) * (range + ((Actor)a).getRadius()))
+////					center.getDistanceSquared(a) < range * range + (((Actor)a).getRadius() * ((Actor)a).getRadius()))
+//				temp.add((Actor)a);
+//		
+//		if (temp.isEmpty())
+//			return null;
+//		else if (temp.size() > 1)
+//		{
+//			switch(Math.abs(targeting))
+//			{
+//			case 4:
+//			case 5:
+//				Collections.sort(temp, Actor.HealthComparator);
+//				break;
+//			}
+//		}
+//		System.out.println("Target Found");
+//		return temp.get(0);
+	}
+	
 	public int teamSize()
 	{
 		int temp = 0;
@@ -1396,7 +1499,7 @@ public class EverythingHolder
 //			if (e == null)
 //			if (tempEnt == null)
 //				break;
-			if (tempEnt instanceof Building || (tempEnt instanceof Actor && ((Entity)tempEnt).isAlive()) || (tempEnt instanceof Skill && ((Entity)tempEnt).isAlive()) ||
+			if (tempEnt instanceof Building || (tempEnt instanceof Actor && ((Entity)tempEnt).isAlive()) || (tempEnt instanceof TravelingSkillContainer && ((Entity)tempEnt).isAlive()) ||
 				(tempEnt instanceof Unit && ((Unit)tempEnt).deathCountdown() > 0))
 				tempEnt.draw(batch, delta);
 //			if (e instanceof Building || (e instanceof Actor && ((Entity)e).isAlive()) || (e instanceof Skill && ((Entity)e).isAlive()))
@@ -1469,11 +1572,19 @@ public class EverythingHolder
 			}
 		}
 		
-		textEffectItr = textEffects.iterator();
-		while (textEffectItr.hasNext())
+		if (settings.showTextEffect())
 		{
-			textEffectItr.next().draw(batch, delta);
+			textEffectItr = textEffects.iterator();
+			while (textEffectItr.hasNext())
+			{
+				textEffectItr.next().draw(batch, delta);
+			}
 		}
+	}
+	
+	public Settings getSettings()
+	{
+		return settings;
 	}
 	
 	public void heroDeath(int team)
@@ -1497,55 +1608,17 @@ public class EverythingHolder
 	
 	public void update()
 	{
-//		for (Actor a : teams[0])
-//			a.checkAlive();
-//		for (Actor a : teams[1])
-//			a.checkAlive();
-//		Collections.sort(entities, eCompare);
 		for (Entity e : entities)
 		{
-//			if (e == null)
-//				break;
 			if (e instanceof Actor)
 				((Actor)e).checkAlive();
 		}
 		
-//		ArrayList<Projectile> removeList = new ArrayList<Projectile>();
-//		for (Projectile p : projectiles)
-//		{
-//				//if (p.xCoord == this.target.xCoord() || )
-//			p.update();
-//			if (p.getxSpeed() > 0 && p.xCoord() > p.target().xCoord())
-//				removeList.add(p);
-//			else if (p.getxSpeed() < 0 && p.xCoord() < p.target().xCoord())
-//				removeList.add(p);
-//			else if (p.getySpeed() > 0 && p.yCoord() > p.target().yCoord())
-//				removeList.add(p);
-//			else if (p.getySpeed() < 0 && p.yCoord() < p.target().yCoord())
-//				removeList.add(p);
-//		}
-		
-//		projectiles.removeAll(removeList);
-		
 		for (int i = 0; i < entities.size(); i++)
 		{
-			if (entities.get(i) != null && ((entities.get(i).isAlive() || entities.get(i) instanceof Hero) || (entities.get(i) instanceof Unit && ((Unit)entities.get(i)).deathCountdown() > 0)))
+			if (entities.get(i) != null && ((entities.get(i).isAlive() || entities.get(i) instanceof Hero || entities.get(i) instanceof Building) || (entities.get(i) instanceof Unit && ((Unit)entities.get(i)).deathCountdown() > 0)))
 				entities.get(i).update();
 		}
-//		for (Entity e : entities)
-//		{
-//			if (e != null)
-//			{
-//				try
-//				{
-//				e.update();
-//			}
-//		}
-		
-		/*if (hero1 != null)
-			hero1.update();
-		if (hero2 != null)
-			hero2.update();*/
 		
 //		music.setVolume(musicVolume);
 		++turn;
@@ -1577,7 +1650,7 @@ public class EverythingHolder
 		//totalTime += currentTime - previousTime;
 		previousTime = turn;
 		int timeDiff = turn - waveTimer;
-		if ((timeDiff) > waveInterval)
+		if (timeDiff > waveInterval)
 //		if (currentTurn % waveInterval == 0)
 		{
 			spawning = true;
@@ -1596,27 +1669,9 @@ public class EverythingHolder
 			if (pools[2] == null)
 				pools[2] = new LinkedList<Integer>();
 			if (pools[3] == null)
-				pools[3] = new LinkedList<Integer>();
-			
-//			if (!playerHeroes[0].isAlive())
-//				playerHeroes[0].respawn(map.start1().x(), map.start1().y(), map.getPath().listIterator());
-//			if (!playerHeroes[1].isAlive())
-//				playerHeroes[1].respawn(map.start2().x(), map.start2().y(), map.getReversePath().listIterator());
-			
-//			for (Actor a : teams[0])
-//				if (a instanceof Hero && !a.isAlive())
-//					((Hero)a).respawn(map.start1().x(), map.start1().y(), map.getPath().listIterator());
-//			for (Actor a : teams[1])
-//				if (a instanceof Hero && !a.isAlive())
-//					((Hero)a).respawn(map.start2().x(), map.start2().y(), map.getReversePath().listIterator());
-//					((Hero)a).respawn(map.start2().x(), map.start2().y(), map.getPath().listIterator(map.getPath().size() - 1));
-//			if (Settings.getInstance().getDifficulty() == Difficulty.EASY)
-//				funds += income;
-//			else if (Settings.getInstance().getDifficulty() == Difficulty.HARD)
-//				funds += income * .75;
-			
-			funds1 += income1;
-			funds2 += income2;
+				pools[3] = new LinkedList<Integer>();			
+			funds1 += income1 + team1Towers * towerIncome;
+			funds2 += income2 + team2Towers * towerIncome;
 			
 			sentUnits = new int[6];
 		}
@@ -1671,13 +1726,13 @@ public class EverythingHolder
 		Building tower = new Building(map.start1().x(), map.start1().y() - 2, 1, 
 				buildingStats.get("stronghold"));//new Stronghold(maps[level].start1().x() + 20, maps[level].start1().y(), 1);
 		tower.upgrade();
-		add(tower, 1);
+		add(tower); //, 1);
 		//everything.add(tower, true, 1);
 		//tower = new Stronghold(maps[level].start2().x() - 20, maps[level].start2().y(), 2);
 		tower = new Building(map.start2().x(), map.start2().y() - 2, 2, 
 		buildingStats.get("stronghold"));
 		tower.upgrade();
-		add(tower, 2);
+		add(tower); //, 2);
 		
 		int towerNumber = 1;
 		for (Coordinate c : map.buildSites(1))
@@ -1685,7 +1740,7 @@ public class EverythingHolder
 			tower = new Building(c.x(), c.y(), 1, buildingStats.get("arrowtower"));
 //			tower = new ArrowTower(c.x(), c.y(), 1, towerNumber++);
 			tower.upgrade();
-			add(tower, 1);
+			add(tower); //, 1);
 //			everything.add(tower, true, 1);
 		}
 		
@@ -1695,7 +1750,7 @@ public class EverythingHolder
 			tower = new Building(c.x(), c.y(), 2, buildingStats.get("arrowtower"));
 //			tower = new ArrowTower(c.x(), c.y(), 2, towerNumber++);
 			tower.upgrade();
-			add(tower, 2);
+			add(tower); //, 2);
 //			everything.add(tower, true, 2);
 		}
 	}
@@ -1744,6 +1799,7 @@ public class EverythingHolder
 //		font[3] = generator.generateFont(36);
 		
 		stats = new Stats();
+		setRandom(100);
 //		font[2] = 
 	}
 }

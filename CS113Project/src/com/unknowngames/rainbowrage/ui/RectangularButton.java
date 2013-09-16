@@ -38,6 +38,8 @@ public class RectangularButton extends Button
 	@Override
 	public void draw(SpriteBatch batch, float delta)
 	{
+		if (!visible)
+			return;
 		if (!clickable)
 			batch.setColor(.5f, .5f, .5f, 1f);
 		batch.draw(upButton, xCoord(), yCoord(), width, height);

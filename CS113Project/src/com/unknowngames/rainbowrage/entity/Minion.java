@@ -5,11 +5,14 @@ import com.unknowngames.rainbowrage.map.Coordinate;
 import com.unknowngames.rainbowrage.parser.MinionStructure;
 
 public class Minion extends Unit 
-{	
+{
 	public Minion(int x, int y, int team, ListIterator<Coordinate> p, MinionStructure struct, int level)
 	{
-		super(x, y, struct.ranged(0), team, p, struct);
-		this.level = level;
+		this(x, y, team, p, struct, new int[]{0, 0, 0});
+	}
+	public Minion(int x, int y, int team, ListIterator<Coordinate> p, MinionStructure struct, int[] skillLevels)
+	{
+		super(x, y, team, p, struct, skillLevels);
 	}
 
 	@Override

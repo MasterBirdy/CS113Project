@@ -13,8 +13,8 @@ public class RainbowRageDesktop {
 		cfg.useGL20 = false;
 		cfg.addIcon("images/ud_iconm.png", FileType.Internal);
 		
-//		cfg.width = 800;
-//		cfg.height = 480;
+		cfg.width = 800;
+		cfg.height = 480;
 		
 //		cfg.width = 480;
 //		cfg.height = 800;
@@ -25,8 +25,8 @@ public class RainbowRageDesktop {
 //		cfg.width = 1680;
 //		cfg.height = 1050;
 		
-		cfg.width = 1920;
-		cfg.height = 1080;
+//		cfg.width = 1920;
+//		cfg.height = 1080;
 		
 		cfg.resizable = false;
 //		cfg.fullscreen = true;

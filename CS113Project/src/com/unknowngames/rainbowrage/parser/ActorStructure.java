@@ -13,20 +13,50 @@ public abstract class ActorStructure
 	ArrayList<Integer> physicalResist;
 	ArrayList<Integer> rangedResist;
 	ArrayList<Integer> magicResist;
+	Integer 		   radius;
 	ArrayList<Boolean> ranged;
 	ArrayList<String> projectile;
 //	ArrayList<Integer> animation;
 	ArrayList<String> animation;
-	ArrayList<String> passiveSkill;
-	ArrayList<String> procSkill;
+	ArrayList<String> firstSkill;
+	ArrayList<String> secondSkill;
+	ArrayList<String> thirdSkill;
+//	ArrayList<String> passiveSkill;
+//	ArrayList<String> procSkill;
 	ArrayList<String> soundPack;
 	
-	public String procSkill(int level)
+	public int radius()
 	{
-		if (level < procSkill.size())
-			return procSkill.get(level);
-		return procSkill.get(procSkill.size() - 1);
+		return radius;
 	}
+	
+	public String firstSkill(int level)
+	{
+		if (level < firstSkill.size())
+			return firstSkill.get(level);
+		return firstSkill.get(firstSkill.size() - 1);
+	}
+	
+	public String secondSkill(int level)
+	{
+		if (level < secondSkill.size())
+			return secondSkill.get(level);
+		return secondSkill.get(secondSkill.size() - 1);
+	}
+	
+	public String thirdSkill(int level)
+	{
+		if (level < thirdSkill.size())
+			return thirdSkill.get(level);
+		return thirdSkill.get(thirdSkill.size() - 1);
+	}
+	
+//	public String procSkill(int level)
+//	{
+//		if (level < procSkill.size())
+//			return procSkill.get(level);
+//		return procSkill.get(procSkill.size() - 1);
+//	}
 	
 	public String soundPack(int level)
 	{
@@ -35,12 +65,12 @@ public abstract class ActorStructure
 		return soundPack.get(soundPack.size() - 1);
 	}
 	
-	public String passiveSkill(int level)
-	{
-		if (level < passiveSkill.size())
-			return passiveSkill.get(level);
-		return passiveSkill.get(passiveSkill.size() - 1);
-	}
+//	public String passiveSkill(int level)
+//	{
+//		if (level < passiveSkill.size())
+//			return passiveSkill.get(level);
+//		return passiveSkill.get(passiveSkill.size() - 1);
+//	}
 	
 	public int maxHealth(int level)
 	{

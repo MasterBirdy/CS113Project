@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.GameScreen;
 
@@ -18,12 +19,12 @@ public class GameUI
 	static GameScreen gameScreen;
 	private Texture icons;
 	TextureRegion buttonFrame;
-	Button[] buttons = new Button[14];
+	Button[] buttons = new Button[17];
 	int width = Gdx.graphics.getWidth();
 	int height = Gdx.graphics.getHeight();
 	int buttonRadius = (int)38;// (width * .95f / 20);
 	int stackTopX = width - 120; //680; //658;
-	int stackTopY = 345;//355;
+	int stackTopY = 360;//355;
 	int spaceX = 75;
 	int spaceY = 54;
 	
@@ -126,8 +127,9 @@ public class GameUI
 //				EverythingHolder.getObjectTexture("storebutton"));								// Item Shop
 		
 		// New style hero buttons
-		buttons[11] = new RectangularButton(stackTopX - 100, 0, (int)(158 * .55f), (int)(155 * .55f),
-		EverythingHolder.getObjectTexture(everything.getHeroName() + "button"));			// Hero button
+		setup(); // Hero button
+//		buttons[11] = new RectangularButton(stackTopX - 80, 0, (int)(158 * .55f), (int)(155 * .55f),
+//		EverythingHolder.getObjectTexture(everything.getHeroName() + "button"));			// Hero button
 		
 		// Old style hero buttons
 //		buttons[11] = new RectangularButton(stackTopX - 100, 0, (int)(192 * .55f), (int)(137 * .55f),
@@ -137,7 +139,13 @@ public class GameUI
 		buttons[12] = new RectangularButton(0, 290, (int)(96 * .55f), (int)(95 * .55f),
 		EverythingHolder.getObjectTexture("upgradebutton"));								// Upgrades
 		buttons[13] = new RectangularButton(0, 230, (int)(96 * .55f), (int)(95 * .55f),
-		EverythingHolder.getObjectTexture("chatbutton"));								// Upgrades
+		EverythingHolder.getObjectTexture("chatbutton"));								    // Chat
+		buttons[14] = new RectangularButton(60, 350, (int)(96 * .55f), (int)(95 * .55f),
+				EverythingHolder.getObjectTexture("chatbutton"));							// Happy
+		buttons[15] = new RectangularButton(60, 290, (int)(96 * .55f), (int)(95 * .55f),
+				EverythingHolder.getObjectTexture("chatbutton"));							// Angry
+		buttons[16] = new RectangularButton(60, 230, (int)(96 * .55f), (int)(95 * .55f),
+				EverythingHolder.getObjectTexture("chatbutton"));							// GG
 		
 		// Old style upgrade button
 //		buttons[12] = new RectangularButton(0, 275, (int)(143 * .55f), (int)(109 * .55f),
@@ -145,7 +153,13 @@ public class GameUI
 		
 		buttons[10].setClickable(false);
 		buttons[12].setClickable(false);
-		buttons[13].setClickable(gameScreen.getMultiplayer());
+		//buttons[13].setClickable(gameScreen.getMultiplayer());
+		buttons[13].setClickable(false);
+		buttons[13].setVisible(false);
+		buttons[14].setVisible(false);
+		buttons[15].setVisible(false);
+		buttons[16].setVisible(false);
+		
 		screenX = Gdx.graphics.getWidth() / 2;
 		screenY = Gdx.graphics.getHeight() / 2;
 		
@@ -166,7 +180,7 @@ public class GameUI
 	
 	public void setup()
 	{
-		buttons[11] = new RectangularButton(stackTopX - 100, 0, (int)(192 * .55f), (int)(137 * .55f),
+		buttons[11] = new RectangularButton(stackTopX - 80, 0, (int)(158 * .55f), (int)(155 * .55f),
 				everything.getObjectTexture(everything.getHeroName() + "button"));			// Hero button
 	}
 	
@@ -194,7 +208,8 @@ public class GameUI
 		for (int i = 0; i < 6; i++)
 		{
 			buttons[i].draw(batch, delta);
-			everything.getFont(3).draw(batch, (everything.getSentUnit(i) > 0 ? everything.getSentUnit(i) + "" : ""), buttons[i].xCoord() - 12, buttons[i].yCoord() + 20);
+			//everything.getFont(3).draw(batch, (everything.getSentUnit(i) > 0 ? everything.getSentUnit(i) + "" : ""), buttons[i].xCoord() - 12, buttons[i].yCoord() + 20);
+			everything.getFont(3).drawMultiLine(batch, (everything.getSentUnit(i) > 0 ? everything.getSentUnit(i) + "" : ""), buttons[i].xCoord(), buttons[i].yCoord() + 20, 0, HAlignment.CENTER);
 		}
 		
 		for (int i = 6; i < 9; i++)
@@ -236,7 +251,8 @@ public class GameUI
 //		everything.getFont(0).draw(batch, "" + everything.totalTime(), 379, height - 10 ); //384);
 		everything.getFont(0).draw(batch, "" + String.format("%03d", everything.teamSize()), 255, height - 61); //349);
 		
-		everything.getFont(3).draw(batch, (everything.activeCooldown() > 0 ? everything.activeCooldown() / 50 + "" : ""), buttons[9].xCoord() + 30, buttons[9].yCoord() + 57);
+		everything.getFont(3).drawMultiLine(batch, (everything.activeCooldown() > 0 ? everything.activeCooldown() / 50 + "" : ""), buttons[9].xCoord() + 42, buttons[9].yCoord() + 57, 0, HAlignment.CENTER);
+//		everything.getFont(3).draw(batch, (everything.activeCooldown() > 0 ? everything.activeCooldown() / 50 + "" : ""), buttons[9].xCoord() + 30, buttons[9].yCoord() + 57);
 		
 //		font.draw(batch, "Next wave: " + everything.timeLeft(), screenX - 150, screenY - 20);
 //		font.draw(batch, "Time: " + everything.totalTime(), screenX - 150, screenY - 45);

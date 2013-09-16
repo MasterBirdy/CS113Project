@@ -7,6 +7,50 @@ public class Settings
 	int difficulty = 1, particleEffects = 0;
 	float gameSound = .5f, //.5f, 
 		  musicSound = .1f; //.1f;
+	boolean showPath 		= false, 
+			showRange 		= false, 
+			showRadius 		= true,
+			showTextEffect 	= true;
+	
+	public boolean showPath()
+	{
+		return showPath;
+	}
+	
+	public void showPath(boolean show)
+	{
+		showPath = show;
+	}
+	
+	public boolean showRange()
+	{
+		return showRange;
+	}
+	
+	public void showRange(boolean show)
+	{
+		showRange = show;
+	}
+	
+	public boolean showRadius()
+	{
+		return showRadius;
+	}
+	
+	public void showRadius(boolean show)
+	{
+		showRadius = show;
+	}
+	
+	public boolean showTextEffect()
+	{
+		return showTextEffect;
+	}
+	
+	public void showTextEffect(boolean show)
+	{
+		showTextEffect = show;
+	}
 	
 	public void setParticleEffects(int p)
 	{

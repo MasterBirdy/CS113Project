@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.map.Coordinate;
 import com.unknowngames.rainbowrage.parser.UnitAnimation;
 import com.unknowngames.rainbowrage.parser.UnitStructure;
@@ -38,18 +39,18 @@ public abstract class Unit extends Actor
 	
 	int targetX, targetY;
 	
-	public Unit(int x, int y, boolean ranged, int team, ListIterator<Coordinate> pathIter, UnitStructure u)//int rX, int rY)
+	public Unit(int x, int y, int team, ListIterator<Coordinate> pathIter, UnitStructure u, int[] skillLevels)//int rX, int rY)
 	{
-		super(x, y, ranged, team, u);
+		super(x, y, team, u, skillLevels);
 		this.pathIter = pathIter;
 		destination = pathIter.next();
 		speed = u.speed(level);
 		stateTime = 0f;
 		changedDirection = true;
-		spark = everything.getEffect("spark");
-		fire = everything.getEffect("fireball");
-		heal = everything.getEffect("heal");
-		unitAnimation = everything.getUnitAnimation(u.animation(0) + team);
+		spark = EverythingHolder.getEffect("spark");
+		fire = EverythingHolder.getEffect("fireball");
+		heal = EverythingHolder.getEffect("heal");
+		unitAnimation = EverythingHolder.getUnitAnimation(u.animation(0) + team);
 		int i = 0;
 //		randX = rX;
 //		randY = rY;
@@ -73,7 +74,8 @@ public abstract class Unit extends Actor
 	@Override
 	public void draw(SpriteBatch batch, float delta)
 	{
-//		super.draw(batch);
+		super.draw(batch);
+		
 		stateTime += delta;//Gdx.graphics.getDeltaTime();
 //		TextureRegion current;
 		

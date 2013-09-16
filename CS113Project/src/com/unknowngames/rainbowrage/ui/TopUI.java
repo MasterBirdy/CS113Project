@@ -2,6 +2,7 @@ package com.unknowngames.rainbowrage.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.unknowngames.rainbowrage.EverythingHolder;
@@ -51,7 +52,11 @@ public class TopUI
 		
 		// Wave Timer
 		batch.draw(nextWave, 320, adTopY + 10, 166 * .95f, 74 * .95f);
-		everything.getFont(2).draw(batch, String.format("%02d", everything.timeLeft()), 378, adTopY + 65);
+		everything.getFont(2).drawMultiLine(batch, String.format("%02d", everything.timeLeft()), 400, adTopY + 65, 0, HAlignment.CENTER);
+//		everything.getFont(2).draw(batch, String.format("%02d", everything.timeLeft()), 378, adTopY + 65);
+		
+		
+		
 //		everything.font2.draw(batch, String.format("%02d", everything.timeLeft()), 374, adTopY + 58);
 		
 		

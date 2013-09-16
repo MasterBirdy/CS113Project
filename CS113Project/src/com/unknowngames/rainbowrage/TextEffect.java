@@ -1,6 +1,7 @@
 package com.unknowngames.rainbowrage;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -8,53 +9,78 @@ import com.unknowngames.rainbowrage.entity.Entity;
 
 public class TextEffect
 {
-	float xCoord, yCoord, xVel;
+	float xCoord, yCoord, xVel, yVel, xAccel;
 	String content;
 	int type, timer;
-	boolean alive;
 	static BitmapFont fonts[] = new BitmapFont[4];
+	static boolean first = true;
+	BitmapFont font;
 	
 	public TextEffect(float x, float y, String text, int cause)
 	{
 		xCoord = x;
-		yCoord = y;
-		xVel = -.4f;
+		yCoord = y + 20;
+		first = !first;
+		if (first)
+		{
+			xVel = -.6f;
+			xAccel = 0.15f;
+		}
+		else
+		{
+			xVel = .6f;
+			xAccel = -0.15f;			
+		}
+		yVel = 0.5f;
 		content = text;
 		type = cause;
 		timer = 100;
-		alive = true;
+		//font = new BitmapFont(fonts[0].getData(), null, false);
 	}
 	
 	public static void loadFonts()
 	{
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
+//		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/1900805.ttf"));
 		fonts[0] = generator.generateFont(18);
-		fonts[1] = generator.generateFont(32);
-		fonts[2] = generator.generateFont(45);
-		fonts[2].setColor(1, 1, 1, 1);
-		fonts[3] = generator.generateFont(45);
+		fonts[0].getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+//		fonts[1] = generator.generateFont(32);
+//		fonts[2] = generator.generateFont(45);
+//		fonts[2].setColor(1, 1, 1, 1);
+//		fonts[3] = generator.generateFont(45);
+		generator.dispose();
 	}
 	
 	public void draw(SpriteBatch batch, float delta) 
 	{
+		if (type == 0)
+			fonts[0].setColor(1, 1 - timer / 100f, 0, timer / 100f);
+		else if (type == 1)
+			fonts[0].setColor(1 - timer / 100f, 1 - timer / 100f, 1, timer / 100f);
+		else if (type == 2)
+			fonts[0].setColor(1, 1, 1 - timer / 100f, timer / 100f);
 		fonts[0].draw(batch, content, xCoord, yCoord);
 	}
 
 	
 	public void update() 
 	{
-		yCoord += 0.5;
 		if (timer % 20 < 10)
-			xVel -= 0.1;
+			xVel -= xAccel;
 		else
-			xVel += 0.1;
+			xVel += xAccel;
 		xCoord += xVel;
-		if (--timer < 0)
-			alive = false;
+		yVel += 0.005f;
+		yCoord += yVel;
+		
+//		fonts[0].setColor(1, 100f / timer, 0, 1);
+		
 	}
 	
 	public boolean isAlive()
 	{
-		return alive;
+		if (--timer < 0)
+			return false;
+		return true;
 	}
 }

@@ -8,36 +8,34 @@ public class SkillStructure
 {
 	////////////////////////////
 	public 
-		ArrayList<Integer>	aoe,
-							targetTeam,
-							effect,
-							effectAmount, 
-							state,
-							castTime,
-							cooldown,
-							trigger,
-							effectTick,
-							travelTime,
-							cost,
-							duration;
+		Integer	aoe,
+				targeting,
+				targetCount,
+				effect,
+				effectAmount,
+				castTime,
+				trigger,
+				effectTick,
+				cost,
+				duration,
+				buff,
+				priority;
 	////////////////////////////
 	public 
-		ArrayList<Boolean> 	damageSplit,
-							additive,
-							continuous;
+		Boolean damageSplit,
+				additive,
+				continuous;
 	////////////////////////////
 	public 
-		ArrayList<Float>	speed;
+		Float	speed;
 	////////////////////////////
 	public 
-		ArrayList<String>	sprite,
-							cast, 
-							travel, 
-							detonateEffect,
-							affected;
+		String	travelEffect,
+				detonateEffect,
+				affectedEffect;
 	////////////////////////////	
 	public 
-		ArrayList<String>	name;
+		String	name;
 	
 	public SkillStructure()
 	{
@@ -46,47 +44,26 @@ public class SkillStructure
 	
 	public SkillStructure(SkillStructure s)
 	{
-		aoe = new ArrayList<Integer>();
-		aoe.addAll(s.aoe);
-		targetTeam = new ArrayList<Integer>();
-		targetTeam.addAll(s.targetTeam);
-		effect = new ArrayList<Integer>();
-		effect.addAll(s.effect);
-		effectAmount = new ArrayList<Integer>();
-		effectAmount.addAll(s.effectAmount);
-//		state = new ArrayList<Integer>();
-//		state.addAll(s.state);
-//		castTime = new ArrayList<Integer>();
-//		castTime.addAll(s.castTime);
-		cooldown = new ArrayList<Integer>();
-		cooldown.addAll(s.cooldown);
-		trigger = new ArrayList<Integer>();
-		trigger.addAll(s.trigger);
-		effectTick = new ArrayList<Integer>();
-		effectTick.addAll(s.effectTick);
-		travelTime = new ArrayList<Integer>();
-		travelTime.addAll(s.travelTime);
+		aoe = s.aoe;
+		targeting = s.targeting;
+		targetCount = s.targetCount;
+		effect = s.effect;
+		effectAmount = s.effectAmount;
+//		castTime = s.castTime;
+		trigger = s.trigger;
+		effectTick = s.effectTick;
 //		cost = new ArrayList<Integer>();
 //		cost.addAll(s.cost);
-		duration = new ArrayList<Integer>();
-		duration.addAll(s.duration);
-		damageSplit = new ArrayList<Boolean>();
-		damageSplit.addAll(s.damageSplit);
-		additive = new ArrayList<Boolean>();
-		additive.addAll(s.additive);
-		continuous = new ArrayList<Boolean>();
-		continuous.addAll(s.continuous);
-		speed = new ArrayList<Float>();
-		speed.addAll(s.speed);
-		sprite = new ArrayList<String>();
-		sprite.addAll(s.sprite);
-		cast = s.cast;
-		travel = new ArrayList<String>();
-		travel.addAll(s.travel);
-		detonateEffect = new ArrayList<String>();
-		detonateEffect.addAll(s.detonateEffect);
-		affected = new ArrayList<String>();
-		affected.addAll(s.affected);
+		duration = s.duration;
+		buff = s.buff;
+		damageSplit = s.damageSplit;
+		additive = s.additive;
+		continuous = s.continuous;
+		speed = s.speed;
+		travelEffect = s.travelEffect;
+		detonateEffect = s.detonateEffect;
+		affectedEffect = s.affectedEffect;
+		priority = s.priority;
 //		name = new ArrayList<String>();
 //		name.addAll(s.name);
 	}

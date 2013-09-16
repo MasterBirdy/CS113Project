@@ -15,6 +15,7 @@ import com.unknowngames.rainbowrage.map.Coordinate;
 import com.unknowngames.rainbowrage.parser.BuildingAnimation;
 import com.unknowngames.rainbowrage.parser.BuildingStructure;
 import com.unknowngames.rainbowrage.parser.MinionStructure;
+import com.unknowngames.rainbowrage.skill.BasicAttack;
 import com.unknowngames.rainbowrage.skill.SkillEffect;
 
 public class Building extends Actor
@@ -22,7 +23,8 @@ public class Building extends Actor
 //	Coordinate destination;
 	static ArrayList<Sprite> sprites;
 	BuildingAnimation buildingAnimation;
-	int towerNumber = 0;
+	int towerNumber = 0, capture = 0, captureCount = 150, captureRange = 80;
+	int[] skillLevels = {0, 0, 0};
 //	ArrayList<Projectile> projectiles;
 	float stateTime;
 	ParticleEffect fire = new ParticleEffect();
@@ -31,7 +33,12 @@ public class Building extends Actor
 	
 	public Building(int x, int y, int team, BuildingStructure struct)
 	{
-		super(x, y, struct.ranged(0), team, struct);
+		this(x, y, team, struct, new int[]{0, 0, 0});
+	}
+	
+	public Building(int x, int y, int team, BuildingStructure struct, int[] skillLevels)
+	{
+		super(x, y, team, struct, skillLevels);
 		if (Gdx.app.getType() != ApplicationType.Android)
 		{
 //			fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
@@ -47,6 +54,20 @@ public class Building extends Actor
 	@Override
 	public void update() 
 	{
+		if (!alive)
+		{
+			int nearTeam = 0;
+			for (Actor a : everything.actorsInRange(this, captureRange))
+			{
+				if (a.team == 1)
+					--nearTeam;
+				else if (a.team == 2)
+					++nearTeam;
+			}
+			shiftTeam(nearTeam);
+			return;
+		}
+		
 		super.update();
 		if (attacking && attackCooldown <= 0)
 		{
@@ -59,17 +80,39 @@ public class Building extends Actor
 			attackCooldown--;
 			targetSelector();
 		}
-//		ArrayList<Projectile> removeList = new ArrayList<Projectile>();
-//		for (Projectile p : projectiles)
-//		{
-//				//if (p.xCoord == this.target.xCoord() || )
-//			p.update();
-//			if (Math.abs(p.target.xCoord() - p.xCoord) < 2)
-//				removeList.add(p);
-//			else if (Math.abs(p.target.yCoord() - p.yCoord) < 2)
-//				removeList.add(p);
-//		}
-//		projectiles.removeAll(removeList);
+	}
+	
+	private void shiftTeam(int nearTeam)
+	{
+//		System.out.println("Shifting by " + nearTeam + " from " + capture);
+		if (nearTeam == 0)
+			return;
+		
+		capture += nearTeam;
+		if (capture < -captureCount)
+		{
+			capture = captureRange;
+			if (team == 2)
+			{
+				changeTeam(1);
+				everything.shiftTowerCount(1);
+			}
+		}
+		else if (capture > captureCount)
+		{
+			capture = captureRange;
+			if (team == 1)
+			{
+				changeTeam(2);
+				everything.shiftTowerCount(-1);
+			}
+		}
+	}
+	
+	private void changeTeam(int newTeam)
+	{
+		team = newTeam;
+		changeToLevel(0);
 	}
 	
 	@Override
@@ -79,7 +122,10 @@ public class Building extends Actor
 		{
 			currentHealth = 0;
 			alive = false;
+//			team = (team == 1 ? 2 : 1);
 			changeToLevel(0);
+			//if (this.team == 1)
+//			buildingAnimation = everything.getBuildingAnimation(buildingStructure.animation(level) + team);
 		}
 	}
 	
@@ -91,7 +137,8 @@ public class Building extends Actor
 	@Override
 	public void draw(SpriteBatch batch, float delta)
 	{
-//		super.draw(batch);
+		super.draw(batch);
+		
 		if (this.isAlive() && currentHealth < maxHealth / 2 && Gdx.app.getType() != ApplicationType.Android)
 		{
 			fire.draw(batch, delta * 0.5f);
@@ -144,6 +191,7 @@ public class Building extends Actor
 		this.level = level;
 		buildingAnimation = everything.getBuildingAnimation(buildingStructure.animation(level) + team);
 		currentHealth = maxHealth;
+		skillSpawners[3] = new BasicAttack(this);
 		loadProjectile(buildingStructure);
 	}
 	
