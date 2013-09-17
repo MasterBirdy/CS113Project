@@ -19,7 +19,7 @@ public class TravelingSkillContainer extends SkillContainer
 	{
 		super(skillSpawner, t, target);
 		speed = t.speed;
-		System.out.println("TravelTime: " + t.travelTime);
+//		System.out.println("TravelTime: " + t.travelTime);
 		travelTime = t.travelTime;
 		ticksLeft = t.travelTime;
 		// skillSprite = EverythingHolder.getObjectTexture("arrow");

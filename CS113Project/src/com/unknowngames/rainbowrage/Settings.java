@@ -9,7 +9,7 @@ public class Settings
 		  musicSound = .1f; //.1f;
 	boolean showPath 		= false, 
 			showRange 		= false, 
-			showRadius 		= true,
+			showRadius 		= false,
 			showTextEffect 	= true;
 	
 	public boolean showPath()

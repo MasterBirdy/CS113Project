@@ -23,17 +23,18 @@ public class InstantSkillContainer extends SkillContainer
 	{
 		super(skillSpawner, sContainer, targetX, targetY);
 	}
-//	public InstantSkillContainer(Actor caster, Actor target,
-//			InstantSkillContainerStructure sContainer)
-//	{
-//		super(caster, target, sContainer);
-//	}
-//
-//	public InstantSkillContainer(Actor caster, Actor target,
-//			SkillContainerStructure sContainer, float targetX, float targetY)
-//	{
-//		super(caster, sContainer, targetX, targetY);
-//	}
+
+	// public InstantSkillContainer(Actor caster, Actor target,
+	// InstantSkillContainerStructure sContainer)
+	// {
+	// super(caster, target, sContainer);
+	// }
+	//
+	// public InstantSkillContainer(Actor caster, Actor target,
+	// SkillContainerStructure sContainer, float targetX, float targetY)
+	// {
+	// super(caster, sContainer, targetX, targetY);
+	// }
 
 	@Override
 	public void update()
@@ -42,19 +43,20 @@ public class InstantSkillContainer extends SkillContainer
 		{
 			xCoord(target.xCoord());
 			yCoord(target.yCoord());
-		} else
+		}
+		else
 		{
 			xCoord(targetX);
 			yCoord(targetY);
 		}
 
-		for (Skill s : skills)
-		{
-			s.xCoord(targetX);
-			s.yCoord(targetY);
-		}
+		// for (Skill s : skills)
+		// {
+		// s.xCoord(targetX);
+		// s.yCoord(targetY);
+		// }
 
 		detonate();
-		alive = false;
+//		alive = false;
 	}
 }

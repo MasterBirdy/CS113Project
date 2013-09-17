@@ -145,14 +145,17 @@ public class SkillEffect
 				target.takeDamage(effectAmount);
 				caster.heal(effectAmount);
 				break;
-			case 7:
+			case 7:										// Armor
 				target.armor(effectAmount);
 				break;
-			case 8:
+			case 8:										// Dodge
 				target.dodge(effectAmount);
 				break;
-			case 9:
+			case 9:										// Parry
 				target.parry(effectAmount);
+				break;
+			case 10:									// Cloak
+				target.invis(effectAmount);
 				break;
 //			case 4:
 //				damageBoost += skill.effectAmount;

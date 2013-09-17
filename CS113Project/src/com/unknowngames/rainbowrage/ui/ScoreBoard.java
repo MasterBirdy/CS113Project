@@ -1,7 +1,9 @@
 package com.unknowngames.rainbowrage.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,6 +19,7 @@ public class ScoreBoard //implements Screen
 	RoundButton exit;
 	EverythingHolder everything;
 	GameScreen screen;
+	OrthographicCamera zoom1;
 	
 	public ScoreBoard(int result, EverythingHolder e, GameScreen s)
 	{
@@ -38,6 +41,7 @@ public class ScoreBoard //implements Screen
 		
 		exit = new RoundButton(700, 50, 40, everything.getObjectTexture("confirmbutton"));
 		this.result = result;
+		zoom1 = new OrthographicCamera();
 	}
 	
 	public void draw(SpriteBatch batch)

@@ -923,6 +923,10 @@ public class EverythingHolder
 		objectTextures.put("heroselectarrow", new TextureRegion(icons, 1896, 634, 152, 153));
 		objectTextures.put("heroselection", new TextureRegion(icons, 1722, 327, 174, 187));
 		
+		objectTextures.put("swordfaceimage", new TextureRegion(icons, 1294, 1170, 350, 323));
+		objectTextures.put("arroweyesimage", new TextureRegion(icons, 1304, 1493, 340, 325));
+		objectTextures.put("mrwizardimage", new TextureRegion(icons, 1294, 867, 350, 303));
+		
 		objectTextures.put("heronamesword", new TextureRegion(icons, 1333, 1939, 302, 109));
 		objectTextures.put("heronamewizard", new TextureRegion(icons, 1333, 1830, 302, 109));
 		objectTextures.put("heronamearrow", new TextureRegion(icons, 1333, 1721, 302, 109));
@@ -933,6 +937,9 @@ public class EverythingHolder
 		
 		objectTextures.put("redrange", new TextureRegion(icons, 1604, 787, 40, 40));
 		objectTextures.put("bluerange", new TextureRegion(icons, 1604, 827, 40, 40));
+		
+		objectTextures.put("armoricon", new TextureRegion(icons, 1644, 1085, 150, 149));
+		objectTextures.put("defaulticon", new TextureRegion(icons, 1644, 936, 150, 149));
 	}
 	
 	public void loadSounds()

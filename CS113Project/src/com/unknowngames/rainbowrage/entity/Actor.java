@@ -355,11 +355,10 @@ public abstract class Actor extends Entity
 			{
 				if (skill.caster != null && skill.caster.isAlive())
 				{
-					((BasicAttack)skillSpawners[3]).cast(skill.caster);
-//					SkillEffect returnSkill = new SkillEffect(skill);
-//					returnSkill.target = skill.caster;
-//					returnSkill.caster = this;
-//					returnSkill.target.takeSkillEffect(skill);
+					if (this.getDistanceSquared(skill.caster) < 
+							(getAttackRange() + getRadius() + skill.caster.getRadius()) * 
+							(getAttackRange() + getRadius() + skill.caster.getRadius()))
+						((BasicAttack)skillSpawners[3]).cast(skill.caster);
 				}
 				everything.addTextEffect(xCoord, yCoord, "Parry", 1);
 				return;
@@ -377,6 +376,12 @@ public abstract class Actor extends Entity
 			skillEffects.add(firstEmpty, skill);
 		else
 			skillEffects.add(skill);
+		
+		for (SkillSpawner s : skillSpawners)
+		{
+			if (s != null && s.getTrigger() == 2)
+				s.cast();
+		}
 		
 //		firstEmpty = peEffect.indexOf(nullParticleEffect);
 //		if (firstEmpty >= 0)
@@ -847,7 +852,7 @@ public abstract class Actor extends Entity
 		boolean cast = false;
 		for (int i = 0; i < 3; i++)
 		{
-			if (skillSpawners[i] != null && skillSpawners[i].getTrigger() != 0)
+			if (skillSpawners[i] != null && skillSpawners[i].getTrigger() == 1)
 				cast = (skillSpawners[i].cast() ? true : cast);
 //			if ((!cast || skillSpawners[i].getTrigger() != 1) && skillSpawners[i].cast())
 //				break;

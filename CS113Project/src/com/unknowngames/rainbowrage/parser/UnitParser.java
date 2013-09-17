@@ -293,6 +293,8 @@ public class UnitParser
 		a.firstSkill = tokenizeString(getElement("firstskill"));
 		a.secondSkill = tokenizeString(getElement("secondskill"));
 		a.thirdSkill = tokenizeString(getElement("thirdskill"));
+		a.name = element.getAttribute("type");
+		a.description = getElement("description").trim();
 	}
 	
 	public void loadSkillContainerStructure(SkillContainerStructure s)

@@ -1,13 +1,20 @@
 package com.unknowngames.rainbowrage.screens;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.unknowngames.rainbowrage.BaseClass;
 
-public class SettingsScreen implements Screen
+public class SettingsScreen extends BaseClass implements Screen
 {
-
+	OrthographicCamera oc;
+	
+	public SettingsScreen()
+	{
+//		oc = new OrthographicsCamera();
+	}
 	@Override
-	public void render(float delta) {
-		// TODO Auto-generated method stub
+	public void render(float delta) 
+	{
 		
 	}
 

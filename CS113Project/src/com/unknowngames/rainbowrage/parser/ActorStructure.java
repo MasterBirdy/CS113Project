@@ -24,10 +24,33 @@ public abstract class ActorStructure
 //	ArrayList<String> passiveSkill;
 //	ArrayList<String> procSkill;
 	ArrayList<String> soundPack;
+	String			  name;
+	String			  description;
+	
+	public String description()
+	{
+		return description;
+	}
+	
+	public String name()
+	{
+		return name;
+	}
 	
 	public int radius()
 	{
 		return radius;
+	}
+	
+	public String getSkill(int position, int level)
+	{
+		if (position == 0)
+			return firstSkill(level);
+		else if (position == 1)
+			return secondSkill(level);
+		else if (position == 2)
+			return thirdSkill(level);
+		return "empty";
 	}
 	
 	public String firstSkill(int level)

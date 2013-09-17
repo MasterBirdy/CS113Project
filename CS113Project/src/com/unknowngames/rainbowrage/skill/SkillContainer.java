@@ -70,7 +70,7 @@ public abstract class SkillContainer extends Entity
 		{
 			if (s != null)
 			{
-				System.out.println("Skill: " + s);
+//				System.out.println("Skill: " + s);
 				skills.add(new Skill(everything.getSkill(s), this));
 				// skills.add(new Skill(everything.getSkill(s), caster,
 				// target));

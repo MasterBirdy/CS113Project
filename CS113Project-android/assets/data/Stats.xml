@@ -16,10 +16,12 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionwarrior						</soundpack>
-		<firstskill>		selfarmor							</firstskill>
-		<secondskill>		selfblock							</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		selfarmor	empty					</firstskill>
+		<secondskill>		selfparry	empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
+		<description>		Professional meat shield			</description>
 	</minion>
+	
 	<minion type = "archer">
 		<maxhealth>			50		11		111		1111		</maxhealth>
 		<damage>			15		11		111		1111		</damage>
@@ -35,10 +37,12 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionarcher						</soundpack>
-		<firstskill>		empty								</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		empty		empty					</firstskill>
+		<secondskill>		empty		empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
+		<description>		I shoot arrows!						</description>
 	</minion>
+	
 	<minion type = "monk">
 		<maxhealth>			150		21		211		2111		</maxhealth>
 		<damage>			5		21		211		2111		</damage>
@@ -54,10 +58,12 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionmonk							</soundpack>
-		<firstskill>		procheal							</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		procheal	empty					</firstskill>
+		<secondskill>		selfdodge	empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
+		<description>		Ohmm								</description>
 	</minion>
+	
 	<minion type = "mage">
 		<maxhealth>			65		41		411		4111		</maxhealth>
 		<damage>			0		41		411		4111		</damage>
@@ -73,10 +79,12 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionwizard						</soundpack>
-		<firstskill>		fireball							</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		fireball	empty					</firstskill>
+		<secondskill>		empty		empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
+		<description>		Fire's cool!						</description>
 	</minion>
+	
 	<minion type = "ninja">
 		<maxhealth>			100		51		511		5111		</maxhealth>
 		<damage>			12		51		511		5111		</damage>
@@ -92,10 +100,12 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionninja							</soundpack>
-		<firstskill>		empty								</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		selfcloak	empty					</firstskill>
+		<secondskill>		empty		empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
+		<description>		...									</description>
 	</minion>
+	
 	<minion type = "wolf">
 		<maxhealth>			600		51		511		5111		</maxhealth>
 		<damage>			20		51		511		5111		</damage>
@@ -111,10 +121,12 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionwolf							</soundpack>
-		<firstskill>		empty								</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		lifesteal	empty					</firstskill>
+		<secondskill>		empty		empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
+		<description>		AoooOooooo							</description>
 	</minion> 
+	
 	<minion type = "eagle">
 		<maxhealth>			450		51		511		5111		</maxhealth>
 		<damage>			30		51		511		5111		</damage>
@@ -130,10 +142,12 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			minioneagle							</soundpack>
-		<firstskill>		empty								</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		selfdodge	empty					</firstskill>
+		<secondskill>		empty		empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
+		<description>		Khaaaaa!							</description>
 	</minion>
+	
 	<minion type = "elemental">
 		<maxhealth>			400		51		511		5111		</maxhealth>
 		<damage>			5		51		511		5111		</damage>
@@ -149,9 +163,10 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionelemental						</soundpack>
-		<firstskill>		empty								</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		passiveaoedamage	empty			</firstskill>
+		<secondskill>		empty		empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
+		<description>		Wooosh								</description>
 	</minion>
 	
 	<!-- HEROES -->
@@ -171,11 +186,13 @@
 		<magicresist>		0									</magicresist>
 		<soundpack>			herowarrior							</soundpack>
 		<activeskill>		herostun							</activeskill>
-		<firstskill>		selfblock							</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
-		<pet>				wolf								</pet>
+		<firstskill>		selfarmor	empty					</firstskill>
+		<secondskill>		empty		empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
+		<pet>				wolf		empty					</pet>
+		<description>		It's just a flesh wound				</description>
 	</hero>
+	
 	<hero type = "arroweyes">
 		<maxhealth>			350		51		511		5111		</maxhealth>
 		<damage>			29		51		511		5111		</damage>
@@ -192,11 +209,13 @@
 		<magicresist>		0									</magicresist>
 		<soundpack>			heroarcher							</soundpack>
 		<activeskill>		herorapidfire						</activeskill>
-		<firstskill>		empty								</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		empty		empty					</firstskill>
+		<secondskill>		empty		empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
 		<pet>				eagle								</pet>
+		<description>		Fear my shaft						</description>
 	</hero>
+	
 	<hero type = "mrwizard">
 		<maxhealth>			450		51		511		5111		</maxhealth>
 		<damage>			27		51		511		5111		</damage>
@@ -213,10 +232,11 @@
 		<magicresist>		0									</magicresist>
 		<soundpack>			herowizard							</soundpack>
 		<activeskill>		herofireball						</activeskill>
-		<firstskill>		empty								</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		empty		empty					</firstskill>
+		<secondskill>		empty		empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
 		<pet>				elemental							</pet>
+		<description>		The grand wizard					</description>
 	</hero>
 	
 	<!-- BUILDINGS -->
@@ -234,11 +254,13 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			arrowtower							</soundpack>
-		<firstskill>		empty								</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		empty		empty					</firstskill>
+		<secondskill>		empty		empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
 		<base>				false								</base>
+		<description>		Where baby arrows are born			</description>
 	</building>
+	
 	<building type = "stronghold">
 		<maxhealth>			0		2000						</maxhealth>
 		<damage>			0		15							</damage>
@@ -253,10 +275,11 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			towerbase							</soundpack>
-		<firstskill>		empty								</firstskill>
-		<secondskill>		empty								</secondskill>
-		<thirdskill>		empty								</thirdskill>
+		<firstskill>		empty		empty					</firstskill>
+		<secondskill>		empty		empty					</secondskill>
+		<thirdskill>		empty		empty					</thirdskill>
 		<base>				true								</base>
+		<description>		The mighty erect wonder				</description>
 	</building>
 	
 	<!-- SKILL CONTAINERS -->
@@ -301,7 +324,7 @@
 	
 	<skillcontainer type = "procheal">
 		<targettype>			4									</targettype>
-		<targetrange>			1500								</targetrange>
+		<targetrange>			150									</targetrange>
 		<traveltime>			-1									</traveltime>
 		<cooldown>				100									</cooldown>
 		<trigger>				1									</trigger>
@@ -323,7 +346,7 @@
 		<traveltime>			70									</traveltime>
 		<cooldown>				10									</cooldown>
 		<trigger>				1									</trigger>
-		<skills>				fire								</skills>
+		<skills>				fireball							</skills>
 		<cost>					0									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
@@ -349,29 +372,101 @@
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
-		<casteffect>			heal								</casteffect>
+		<casteffect>			empty								</casteffect>
 		<castsound>				empty								</castsound>
 		<name>					Armor								</name>
 		<description>			Protects against attacks			</description>
 		<icon>					armoricon							</icon>
 	</skillcontainer>
 	
-	<skillcontainer type = "selfblock">
+	<skillcontainer type = "selfparry">
 		<targettype>			1									</targettype>
 		<targetrange>			-1									</targetrange>
 		<traveltime>			-1									</traveltime>
 		<cooldown>				-1									</cooldown>
 		<trigger>				0									</trigger>
-		<skills>				selfblock							</skills>
+		<skills>				selfparry							</skills>
 		<cost>					0									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
-		<casteffect>			heal								</casteffect>
+		<casteffect>			empty								</casteffect>
 		<castsound>				empty								</castsound>
 		<name>					Block								</name>
 		<description>			Block against attacks				</description>
-		<icon>					armoricon							</icon>
+		<icon>					parryicon							</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "passiveaoedamage">
+		<targettype>			1									</targettype>
+		<targetrange>			-1									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				30									</cooldown>
+		<trigger>				0									</trigger>
+		<skills>				passiveaoedamage					</skills>
+		<cost>					0									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Passive AOE Damage					</name>
+		<description>			Does damage to nearby enemies		</description>
+		<icon>					passiveaoedamageicon				</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "selfdodge">
+		<targettype>			1									</targettype>
+		<targetrange>			-1									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				-1									</cooldown>
+		<trigger>				0									</trigger>
+		<skills>				selfdodge							</skills>
+		<cost>					0									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Dodge								</name>
+		<description>			Dodges attacks						</description>
+		<icon>					dodgeicon							</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "selfcloak">
+		<targettype>			1									</targettype>
+		<targetrange>			-1									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				500									</cooldown>
+		<trigger>				2									</trigger>
+		<skills>				selfcloak							</skills>
+		<cost>					0									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			smokebomb							</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Cloak								</name>
+		<description>			Goes invisible when attacked		</description>
+		<icon>					cloakicon							</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "lifesteal">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				lifesteal							</skills>
+		<cost>					0									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Lifesteal							</name>
+		<description>			Takes health from enemy				</description>
+		<icon>					lifestealicon						</icon>
 	</skillcontainer>
 	
 	<!-- ACTIVE HERO SKILL CONTAINERS -->
@@ -386,7 +481,7 @@
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
-		<casteffect>			empty								</casteffect>
+		<casteffect>			stunattack							</casteffect>
 		<castsound>				empty								</castsound>
 		<name>					Hero Stun							</name>
 		<description>			AOE stun							</description>
@@ -415,9 +510,9 @@
 		<targettype>			-1									</targettype>
 		<targetrange>			100									</targetrange>
 		<traveltime>			70									</traveltime>
-		<cooldown>				75									</cooldown>
+		<cooldown>				750									</cooldown>
 		<trigger>				3									</trigger>
-		<skills>				fireball							</skills>
+		<skills>				herofireball						</skills>
 		<cost>					0									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
@@ -473,12 +568,12 @@
 		<affectedeffect>	empty								</affectedeffect>
 	</skill>	
 	
-	<skill type = "fire">
-		<aoe> 				100									</aoe>
+	<skill type = "fireball">
+		<aoe> 				30									</aoe>
 		<targeting> 		-1									</targeting>
 		<targetcount>		5									</targetcount>
 		<effect>			0									</effect>
-		<effectamount>		30									</effectamount>
+		<effectamount>		20									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<buff>				0									</buff>
@@ -493,12 +588,12 @@
 		<affectedeffect>	empty								</affectedeffect>
 	</skill>
 	
-	<skill type = "fireball">
-		<aoe> 				150									</aoe>
+	<skill type = "herofireball">
+		<aoe> 				40									</aoe>
 		<targeting> 		-1									</targeting>
 		<targetcount>		10									</targetcount>
 		<effect>			0									</effect>
-		<effectamount>		50									</effectamount>
+		<effectamount>		45									</effectamount>
 		<duration>			1									</duration>
 		<effecttick>		0									</effecttick>
 		<buff>				0									</buff>
@@ -516,7 +611,7 @@
 	<skill type = "stun">
 		<aoe> 				150									</aoe>
 		<targeting> 		-1									</targeting>
-		<targetcount>		10									</targetcount>
+		<targetcount>		-1									</targetcount>
 		<effect>			2									</effect>
 		<effectamount>		60									</effectamount>
 		<duration>			1									</duration>
@@ -558,27 +653,7 @@
 		<targeting> 		1									</targeting>
 		<targetcount>		1									</targetcount>
 		<effect>			7									</effect>
-		<effectamount>		10									</effectamount>
-		<duration>			-1									</duration>
-		<effecttick>		0									</effecttick>
-		<buff>				0									</buff>
-		<trigger>			0									</trigger>
-		<priority>			0									</priority>
-		<damagesplit>		false								</damagesplit>
-		<additive>			true								</additive>
-		<continuous>		true								</continuous>
-		<casteffect>		empty								</casteffect>
-		<traveleffect>		empty								</traveleffect>
-		<detonateeffect>	empty								</detonateeffect>
-		<affectedeffect>	empty								</affectedeffect>
-	</skill>
-
-	<skill type = "selfblock">
-		<aoe> 				-1									</aoe>
-		<targeting> 		1									</targeting>
-		<targetcount>		1									</targetcount>
-		<effect>			8									</effect>
-		<effectamount>		50									</effectamount>
+		<effectamount>		8									</effectamount>
 		<duration>			-1									</duration>
 		<effecttick>		0									</effecttick>
 		<buff>				0									</buff>
@@ -592,6 +667,106 @@
 		<detonateeffect>	empty								</detonateeffect>
 		<affectedeffect>	empty								</affectedeffect>
 	</skill>	
+	
+	<skill type = "selfparry">
+		<aoe> 				-1									</aoe>
+		<targeting> 		1									</targeting>
+		<targetcount>		1									</targetcount>
+		<effect>			9									</effect>
+		<effectamount>		15									</effectamount>
+		<duration>			-1									</duration>
+		<effecttick>		0									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			0									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	empty								</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+	</skill>
+	
+	<skill type = "passiveaoedamage">
+		<aoe> 				50									</aoe>
+		<targeting> 		-1									</targeting>
+		<targetcount>		-1									</targetcount>
+		<effect>			0									</effect>
+		<effectamount>		5									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			3									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	smallfireballexplosion				</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+	</skill>
+	
+	<skill type = "selfdodge">
+		<aoe> 				-1									</aoe>
+		<targeting> 		1									</targeting>
+		<targetcount>		1									</targetcount>
+		<effect>			8									</effect>
+		<effectamount>		20									</effectamount>
+		<duration>			-1									</duration>
+		<effecttick>		0									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			0									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	empty								</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+	</skill>
+	
+	<skill type = "selfcloak">
+		<aoe> 				-1									</aoe>
+		<targeting> 		1									</targeting>
+		<targetcount>		1									</targetcount>
+		<effect>			10									</effect>
+		<effectamount>		60									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			0									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	empty								</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+	</skill>
+	
+	<skill type = "lifesteal">
+		<aoe> 				-1									</aoe>
+		<targeting> 		-1									</targeting>
+		<targetcount>		-1									</targetcount>
+		<effect>			6									</effect>
+		<effectamount>		20									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			3									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	empty								</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+	</skill>
 	
 	<!-- ACTIVE SKILLZ -->
 	<!--<skill type = "herofireball">

@@ -5,12 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.unknowngames.rainbowrage.BaseClass;
 import com.unknowngames.rainbowrage.EverythingHolder;
 
-public class TopUI 
+public class TopUI extends BaseClass
 {
 	static SpriteBatch batch;
-	static EverythingHolder everything;
+//	static EverythingHolder everything;
 	Texture icons;
 	TextureRegion frame, topBar, emptyHealth, fullHealth, nextWave;
 	int width, height, adHeight, topX, topY, adTopY;
@@ -81,9 +82,9 @@ public class TopUI
 ////		everything.font2.draw(batch, String.format("%02d", everything.timeLeft()), 374, adTopY + 58);
 	}
 	
-	static public void load(SpriteBatch b, EverythingHolder things)
+	static public void load(SpriteBatch b)//, EverythingHolder things)
 	{
 		batch = b;
-		everything = things;
+//		everything = things;
 	}
 }

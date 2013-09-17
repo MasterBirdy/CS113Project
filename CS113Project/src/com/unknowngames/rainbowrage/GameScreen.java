@@ -129,6 +129,7 @@ public class GameScreen implements Screen
 
 		camera.zoom = 1.5f;
 		uiCamera = new OrthographicCamera(w, h);
+//		uiCamera = new OrthographicCamera(800, 480);
 		uiCamera.setToOrtho(false);
 		batch = new SpriteBatch();
 
@@ -137,76 +138,6 @@ public class GameScreen implements Screen
 		// pauseRegion = new TextureRegion(pauseTexture, 0, 0, 270, 190);
 		everything.loadMap(level);
 		TextEffect.loadFonts();
-		// TextureRegion region;
-		//
-		// if (level == 0)
-		// {
-		// texture = new Texture(Gdx.files.internal("data/mockupmap.png"));
-		// region = new TextureRegion(texture, 0, 0, 800, 600);
-		// sprite = new Sprite(region);
-		//
-		// maps[0] = new Map(new Coordinate(100, 1030), sprite, 1600, 1200, 100,
-		// 1030, 1300, 170);
-		// maps[0].add(new Coordinate(1300, 1030));
-		// maps[0].add(new Coordinate(1300, 600));
-		// maps[0].add(new Coordinate(300, 600));
-		// maps[0].add(new Coordinate(300, 170));
-		// maps[0].add(new Coordinate(1300, 170));
-		// }
-		// else
-		// {
-		// // texture = new Texture(Gdx.files.internal("images/map1.png"));
-		// texture = new Texture(Gdx.files.internal("images/map1.jpg"));
-		// region = new TextureRegion(texture, 0, 0, 1200, 960);
-		// sprite = new Sprite(region);
-		//
-		// maps[1] = new Map(new Coordinate(320, 870), sprite, 1200, 960, 310,
-		// 870, 1210, 480);
-		// maps[1].add(new Coordinate(1205, 870));
-		// maps[1].add(new Coordinate(1205, 665));
-		// maps[1].add(new Coordinate(380, 665));
-		// maps[1].add(new Coordinate(380, 480));
-		// maps[1].add(new Coordinate(1200, 480));
-		//
-		// Coordinate[] sites = new Coordinate[3];
-		// sites[0] = new Coordinate(600, 910);
-		// sites[1] = new Coordinate(900, 910);
-		// sites[2] = new Coordinate(1270, 750);
-		// maps[1].buildSites(sites, 1);
-		//
-		// sites = new Coordinate[3];
-		// sites[0] = new Coordinate(900, 445);
-		// sites[1] = new Coordinate(600, 445);
-		// sites[2] = new Coordinate(300, 550);
-		// maps[1].buildSites(sites, 2);
-		// }
-		// else
-		// {
-		// // texture = new Texture(Gdx.files.internal("images/map1.png"));
-		// texture = new Texture(Gdx.files.internal("images/map1.jpg"));
-		// region = new TextureRegion(texture, 0, 0, 1200, 960);
-		// sprite = new Sprite(region);
-		//
-		// maps[1] = new Map(new Coordinate(280, 870), sprite, 1200, 960, 270,
-		// 870, 1210, 480);
-		// maps[1].add(new Coordinate(1190, 870));
-		// maps[1].add(new Coordinate(1190, 665));
-		// maps[1].add(new Coordinate(360, 665));
-		// maps[1].add(new Coordinate(360, 480));
-		// maps[1].add(new Coordinate(1200, 480));
-		//
-		// Coordinate[] sites = new Coordinate[3];
-		// sites[0] = new Coordinate(600, 910);
-		// sites[1] = new Coordinate(900, 910);
-		// sites[2] = new Coordinate(1230, 750);
-		// maps[1].buildSites(sites, 1);
-		//
-		// sites = new Coordinate[3];
-		// sites[0] = new Coordinate(900, 430);
-		// sites[1] = new Coordinate(600, 430);
-		// sites[2] = new Coordinate(300, 550);
-		// maps[1].buildSites(sites, 2);
-		// }
 
 		everything.load(batch);
 
@@ -216,52 +147,11 @@ public class GameScreen implements Screen
 		inputProcessor = new GameInput();
 
 		Gdx.input.setInputProcessor(inputProcessor);
-		GameUI.load(batch, everything, this);
+		GameUI.load(batch, this); //everything, this);
 		gameUI = new GameUI();
 
 		GameInput.loadCamera(camera, uiCamera);
 		GameInput.loadGame(this, gameUI);
-
-		// Building.loadAnimations();
-
-		// Building tower = new Building(maps[level].start1().x(),
-		// maps[level].start1().y() - 2, 1,
-		// everything.buildingStats.get("stronghold"));//new
-		// Stronghold(maps[level].start1().x() + 20, maps[level].start1().y(),
-		// 1);
-		// tower.upgrade();
-		// everything.add(tower, 1);
-		// // everything.add(tower, true, 1);
-		// // tower = new Stronghold(maps[level].start2().x() - 20,
-		// maps[level].start2().y(), 2);
-		// tower = new Building(maps[level].start2().x(),
-		// maps[level].start2().y() - 2, 2,
-		// everything.buildingStats.get("stronghold"));
-		// tower.upgrade();
-		// everything.add(tower, 2);
-		// everything.add(tower, true, 2);
-
-		// int towerNumber = 1;
-		// for (Coordinate c : everything.map().buildSites(1))
-		// {
-		// tower = new Building(c.x(), c.y(), 1,
-		// everything.buildingStats.get("arrowtower"));
-		// // tower = new ArrowTower(c.x(), c.y(), 1, towerNumber++);
-		// tower.upgrade();
-		// everything.add(tower, 1);
-		// // everything.add(tower, true, 1);
-		// }
-		//
-		// towerNumber = 1;
-		// for (Coordinate c : everything.map().buildSites(2))
-		// {
-		// tower = new Building(c.x(), c.y(), 2,
-		// everything.buildingStats.get("arrowtower"));
-		// // tower = new ArrowTower(c.x(), c.y(), 2, towerNumber++);
-		// tower.upgrade();
-		// everything.add(tower, 2);
-		// // everything.add(tower, true, 2);
-		// }
 
 		everything.initializeHeroes();
 
@@ -271,12 +161,6 @@ public class GameScreen implements Screen
 		width = everything.map().width();
 		height = everything.map().height();
 		screenH = Gdx.graphics.getHeight() / 2;
-
-		// startMusic =
-		// tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
-		// startMusic.setLooping(true);
-		// startMusic.setVolume(everything.settings.getMusicSound());
-		// startMusic.play();
 
 		everything.setGameMusic();
 		everything.playGameMusic();
