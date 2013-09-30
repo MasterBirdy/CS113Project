@@ -16,6 +16,8 @@ public class TextEffect
 	static boolean first = true;
 	BitmapFont font;
 	
+	IMovement effect;
+	
 	public TextEffect(float x, float y, String text, int cause)
 	{
 		xCoord = x;
@@ -35,6 +37,10 @@ public class TextEffect
 		content = text;
 		type = cause;
 		timer = 100;
+		if (type == 0)
+			effect = arcMovement;
+		else
+			effect = wavyMovement;
 		//font = new BitmapFont(fonts[0].getData(), null, false);
 	}
 	
@@ -65,17 +71,39 @@ public class TextEffect
 	
 	public void update() 
 	{
-		if (timer % 20 < 10)
-			xVel -= xAccel;
-		else
-			xVel += xAccel;
-		xCoord += xVel;
-		yVel += 0.005f;
-		yCoord += yVel;
-		
-//		fonts[0].setColor(1, 100f / timer, 0, 1);
-		
+		effect.update();		
 	}
+	
+	private interface IMovement
+	{
+		public void update();
+	}
+	
+	private IMovement wavyMovement = new IMovement()
+	{
+		public void update()
+		{
+			if (timer % 20 < 10)
+				xVel -= xAccel;
+			else
+				xVel += xAccel;
+			xCoord += xVel;
+			yVel += 0.005f;
+			yCoord += yVel;
+		}
+		
+	};
+	
+	private IMovement arcMovement = new IMovement()
+	{
+		public void update()
+		{
+			timer -= 1;
+			xCoord += xVel;
+			yVel -= 0.05f;
+			yCoord += yVel;
+		}
+	};
 	
 	public boolean isAlive()
 	{

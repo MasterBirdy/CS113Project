@@ -5,8 +5,8 @@ public class Settings
 	
 //	Difficulty difficulty;
 	int difficulty = 1, particleEffects = 0;
-	float gameSound = .5f, //.5f, 
-		  musicSound = .1f; //.1f;
+	float gameSound = .1f, //.5f, 
+		  musicSound = .01f; //.1f;
 	boolean showPath 		= false, 
 			showRange 		= false, 
 			showRadius 		= false,
@@ -15,6 +15,11 @@ public class Settings
 	public boolean showPath()
 	{
 		return showPath;
+	}
+	
+	public void togglePath()
+	{
+		showPath = !showPath;
 	}
 	
 	public void showPath(boolean show)
@@ -27,6 +32,11 @@ public class Settings
 		return showRange;
 	}
 	
+	public void toggleRange()
+	{
+		showRange = !showRange;
+	}
+	
 	public void showRange(boolean show)
 	{
 		showRange = show;
@@ -37,6 +47,11 @@ public class Settings
 		return showRadius;
 	}
 	
+	public void toggleRadius()
+	{
+		showRadius = !showRadius;
+	}
+	
 	public void showRadius(boolean show)
 	{
 		showRadius = show;
@@ -45,6 +60,11 @@ public class Settings
 	public boolean showTextEffect()
 	{
 		return showTextEffect;
+	}
+	
+	public void toggleTextEffect()
+	{
+		showTextEffect = !showTextEffect;
 	}
 	
 	public void showTextEffect(boolean show)

@@ -6,7 +6,7 @@ import com.unknowngames.rainbowrage.BaseClass;
 
 public class SettingsScreen extends BaseClass implements Screen
 {
-	OrthographicCamera oc;
+	
 	
 	public SettingsScreen()
 	{

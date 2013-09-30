@@ -31,6 +31,7 @@ public abstract class Actor extends Entity
 {
 	int currentHealth, maxHealth, damage, attackSpeed, attackCooldown, aoe,
 		aoeBoost = 0,					 				// For buffs
+		fear = -1, 										// For debuffs
 		invis = -1;										// Ticks left of invis
 //		procCooldown, procCooldownCounter;
 	
@@ -96,24 +97,34 @@ public abstract class Actor extends Entity
 		radiusTexture = EverythingHolder.getObjectTexture("bluerange");
 		rangeTexture = EverythingHolder.getObjectTexture("redrange");
 		
-		// NEED TO REWORK!!!
-		SkillContainerStructure sContainer = everything.getSkillContainer(a.firstSkill(skillLevels[0]));
-		if (sContainer != null)
-			skillSpawners[0] = new SkillSpawner(this, sContainer);
-		else
-			skillSpawners[0] = null;
-			
-		sContainer = everything.getSkillContainer(a.secondSkill(skillLevels[0]));
-		if (sContainer != null)
-			skillSpawners[1] = new SkillSpawner(this, sContainer);
-		else
-			skillSpawners[1] = null;
+		SkillContainerStructure sContainer;
+		for (int i = 0; i < 3; i++)
+		{
+			sContainer = everything.getSkillContainer(a.getSkill(i, skillLevels[i]));
+			if (sContainer == null)
+				skillSpawners[i] = null;
+			else
+				skillSpawners[i] = new SkillSpawner(this, sContainer);
+		}
+		// NEED TO REWORK!!!		
+//		SkillContainerStructure sContainer = everything.getSkillContainer(a.firstSkill(skillLevels[0]));
+//		if (sContainer != null)
+//			skillSpawners[0] = new SkillSpawner(this, sContainer);
+//		else
+//			skillSpawners[0] = null;
+//			
+//		sContainer = everything.getSkillContainer(a.secondSkill(skillLevels[1]));
+//		if (sContainer != null)
+//			skillSpawners[1] = new SkillSpawner(this, sContainer);
+//		else
+//			skillSpawners[1] = null;
+//		
+//		sContainer = everything.getSkillContainer(a.thirdSkill(skillLevels[2]));
+//		if (sContainer != null)
+//			skillSpawners[2] = new SkillSpawner(this, sContainer);
+//		else
+//			skillSpawners[2] = null;
 		
-		sContainer = everything.getSkillContainer(a.thirdSkill(skillLevels[0]));
-		if (sContainer != null)
-			skillSpawners[2] = new SkillSpawner(this, sContainer);
-		else
-			skillSpawners[2] = null;
 		
 //		SkillContainerStructure sContainer;
 //		if (a.ranged(level))
@@ -148,7 +159,7 @@ public abstract class Actor extends Entity
 //		if (!a.soundPack(level).equals("empty"))
 //			this.soundPack = everything.getUnitSounds(a.soundPack(level));
 		this.sounds = a.soundPack(level);
-		loadProjectile(a);
+//		loadProjectile(a);
 		
 //		if (this instanceof Building)
 //		{
@@ -247,6 +258,12 @@ public abstract class Actor extends Entity
 	public int getAttacker()
 	{
 		return attackers;
+	}
+	
+	public void fear(int i)
+	{
+		if (fear < i)
+			fear = i;
 	}
 	
 	public void invis(int i)
@@ -470,7 +487,7 @@ public abstract class Actor extends Entity
 ////					peEffect.add(skill.affected);
 ////			}
 //		}
-		
+		--fear;
 		--invis;
 	}
 	public void draw(SpriteBatch batch)
@@ -929,8 +946,8 @@ public abstract class Actor extends Entity
 //		return temp.get(0);
 	}
 	
-	protected void loadProjectile(ActorStructure a)
-	{
+//	protected void loadProjectile(ActorStructure a)
+//	{
 		//SkillStructure s = everything.getSkill("blank");
 //		projectileStruct = new SkillStructure(everything.getSkill("blank"));
 //		projectileStruct.targetTeam.set(0, 1);
@@ -970,7 +987,7 @@ public abstract class Actor extends Entity
 //		}
 		
 //		projectileStruct.travel.set(0, "fireball");
-	}
+//	}
 	
 	/*protected void rangeAttack() 
 	{

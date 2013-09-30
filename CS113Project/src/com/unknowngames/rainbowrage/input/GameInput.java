@@ -8,13 +8,16 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.unknowngames.rainbowrage.BaseClass;
 import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.GameScreen;
+import com.unknowngames.rainbowrage.entity.Actor;
+import com.unknowngames.rainbowrage.entity.Building;
 import com.unknowngames.rainbowrage.entity.Entity;
 import com.unknowngames.rainbowrage.entity.Hero;
 import com.unknowngames.rainbowrage.ui.GameUI;
 
-public class GameInput implements InputProcessor
+public class GameInput extends BaseClass implements InputProcessor
 {
 	boolean readyToLeave = false;
 	
@@ -24,7 +27,7 @@ public class GameInput implements InputProcessor
 	static OrthographicCamera camera, uiCamera;
 	static Hero hero;
 	static GameScreen game;
-	static GameUI gameUI3;
+	static GameUI gameUI;
 	int numberOfFingers = 0;
 	int fingerOnePointer;
 	int fingerTwoPointer;
@@ -46,19 +49,24 @@ public class GameInput implements InputProcessor
 			EverythingHolder.toggleShowRange();
 		if (keycode == Keys.NUM_1)
 		{
-			EverythingHolder.setMusicVolume(0f);
-			Entity.setVolume(0);
+			everything.getSettings().togglePath();
+//			everything
+//			EverythingHolder.setMusicVolume(0f);
+			//Entity.setVolume(0);
 		}
 		if (keycode == Keys.NUM_2)
 		{
-			game.sendMessage("Suck it, nub");
+			everything.getSettings().toggleRange();
+//			game.sendMessage("Suck it, nub");
 //			game.toggleIsPaused();
 //			Entity.setVolume(0.1f);
 		}
 		if (keycode == Keys.NUM_3)
-			Entity.setVolume(0.2f);
+			everything.getSettings().toggleRadius();
+//			Entity.setVolume(0.2f);
 		if (keycode == Keys.NUM_4)
-			Entity.setVolume(0.3f);
+			everything.getSettings().toggleTextEffect();
+//			Entity.setVolume(0.3f);
 		if (keycode == Keys.NUM_5)
 			Entity.setVolume(0.4f);
 		if (keycode == Keys.NUM_6)
@@ -71,13 +79,17 @@ public class GameInput implements InputProcessor
 			Entity.setVolume(0.8f);
 		if (keycode == Keys.NUM_0)
 		{
-			EverythingHolder.setMusicVolume(1f);
+//			EverythingHolder.setMusicVolume(1f);
 			Entity.setVolume(1f);
 		}
 		if (keycode == Keys.BACKSLASH && readyToLeave == true)
 		{
 			System.out.println("Sending kill");
 			game.sendMessage("kill");
+		}
+		if (keycode == Keys.HOME || keycode == Keys.ESCAPE || keycode == Keys.BACK)
+		{
+			gameUI.setGameMenu(true);
 		}
 		if (keycode == Keys.L)
 		{
@@ -148,19 +160,27 @@ public class GameInput implements InputProcessor
 						
 		}
 		 
-		if (pointer == 1)
-		{
-			EverythingHolder.toggleShowRange();
-			return false;
-		}
+//		if (pointer == 1)
+//		{
+//			EverythingHolder.toggleShowRange();
+//			return false;
+//		}
 		
 //		if (x >= 600)
 //			return false;
 		uiCamera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 		
-		if (buttonHit(gameUI3.hit(touchPoint.x, touchPoint.y)))
+		if (buttonHit(gameUI.hit(touchPoint.x, touchPoint.y)))
 		{
 			return false;
+		}
+		camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+		Actor selectedActor = everything.atPoint(touchPoint.x, touchPoint.y);
+		if (selectedActor != null && selectedActor.team() == everything.team() && selectedActor instanceof Building)
+		{
+			gameUI.selectTower(selectedActor);
+			System.out.println("Click on a tower!");
+			
 		}
 		
 		if (!down)
@@ -190,6 +210,12 @@ public class GameInput implements InputProcessor
 			game.castHeroActive();
 		else if (h == 11)
 			game.toggleFollowing();
+		else if (h == 12)
+			gameUI.setUpgradeMenu(true);
+		else if (h == 20)		// Pause menu
+			gameUI.setGameMenu(false);
+		else if (h == 21)
+			game.quit();
 //			game.centerOnHero();
 		return true;
 	}
@@ -250,7 +276,7 @@ public class GameInput implements InputProcessor
 			else if (factor < .5)
 				factor = 0.5f;*/
 			
-			camera.zoom = zoom - (factor - 1) * camera.zoom;// .9f;
+			camera.zoom = zoom / factor; //zoom - (factor - 1f) * zoom; //* camera.zoom;// .9f;
 			game.boundCamera();
 		}
 		
@@ -304,7 +330,7 @@ public class GameInput implements InputProcessor
 	public static void loadGame(GameScreen g, GameUI ui)
 	{
 		game = g;
-		gameUI3 = ui;
+		gameUI = ui;
 	}
 
 	@Override

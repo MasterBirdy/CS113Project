@@ -8,7 +8,7 @@ public class Minion extends Unit
 {
 	public Minion(int x, int y, int team, ListIterator<Coordinate> p, MinionStructure struct, int level)
 	{
-		this(x, y, team, p, struct, new int[]{0, 0, 0});
+		this(x, y, team, p, struct, new int[]{0, 0, 0});;//{-1, -1, -1});
 	}
 	public Minion(int x, int y, int team, ListIterator<Coordinate> p, MinionStructure struct, int[] skillLevels)
 	{
@@ -24,7 +24,11 @@ public class Minion extends Unit
 			return;
 		}
 		super.update();
-		if (attacking && attackCooldown <= 0)
+		if (fear > 0)
+		{
+			retreat();
+		}
+		else if (attacking && attackCooldown <= 0)
 		{
 			attack();
 			attackCooldown = attackSpeed;

@@ -44,6 +44,9 @@ public abstract class ActorStructure
 	
 	public String getSkill(int position, int level)
 	{
+		if (level == -1)
+			return "empty";
+		
 		if (position == 0)
 			return firstSkill(level);
 		else if (position == 1)
@@ -57,21 +60,21 @@ public abstract class ActorStructure
 	{
 		if (level < firstSkill.size())
 			return firstSkill.get(level);
-		return firstSkill.get(firstSkill.size() - 1);
+		return "empty"; //firstSkill.get(firstSkill.size() - 1);
 	}
 	
 	public String secondSkill(int level)
 	{
 		if (level < secondSkill.size())
 			return secondSkill.get(level);
-		return secondSkill.get(secondSkill.size() - 1);
+		return "empty"; //secondSkill.get(secondSkill.size() - 1);
 	}
 	
 	public String thirdSkill(int level)
 	{
 		if (level < thirdSkill.size())
 			return thirdSkill.get(level);
-		return thirdSkill.get(thirdSkill.size() - 1);
+		return "empty"; //thirdSkill.get(thirdSkill.size() - 1);
 	}
 	
 //	public String procSkill(int level)

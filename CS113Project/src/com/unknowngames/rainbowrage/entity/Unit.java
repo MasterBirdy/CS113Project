@@ -221,6 +221,7 @@ public abstract class Unit extends Actor
 			//setSpeed(distance);
 			xSpeed = 0;
 			ySpeed = 0;
+			previousStance = 1;
 		}
 		
 		if (invis < 0)
@@ -279,6 +280,7 @@ public abstract class Unit extends Actor
 //				destination = (team == 1 ? pathIter.previous() : pathIter.next());
 			distance = getDistanceSquared(destination.x(), destination.y());
 			setSpeed(distance);
+			previousStance = -1;
 		}
 		else
 			distance = getDistanceSquared(destination.x(), destination.y());

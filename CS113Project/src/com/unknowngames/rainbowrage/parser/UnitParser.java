@@ -49,17 +49,13 @@ public class UnitParser
 	public UnitParser()
 	{
 		parseStats();
-//		parseStats("minion");
-//		parseStats("hero");
-//		parseStats("building");
 	}
 
-//	public void parseStats(String entity) 
 	public void parseStats()
 	{
 		try 
 		{			
-			//Prep the doc for parsing
+			// Prep the doc for parsing
 			File stats;
 			Log.info("Reading");
 			
@@ -106,48 +102,14 @@ public class UnitParser
 						{
 							MinionStructure minion = new MinionStructure();
 							loadActorStructure(minion);
-//							minion.maxHealth = tokenizeInt(getElement("maxhealth"));
-//							minion.damage = tokenizeInt(getElement("damage"));
-//							minion.attackSpeed = tokenizeInt(getElement("attackspeed"));
-//							minion.attackRange = tokenizeInt(getElement("attackrange"));
 							minion.speed = tokenizeFloat(getElement("speed"));
-//							minion.cost = tokenizeInt(getElement("cost"));
-//							minion.radius = tokenizeInt(getElement("radius")).get(0);
-//							minion.physicalResist = tokenizeInt(getElement("physicalresist"));
-//							minion.rangedResist = tokenizeInt(getElement("rangedresist"));
-//							minion.magicResist = tokenizeInt(getElement("magicresist"));
-//							minion.animation = tokenizeString(getElement("animation"));
-//							minion.ranged = tokenizeBool(getElement("ranged"));
-//							minion.projectile = tokenizeString(getElement("projectile"));
-//							minion.soundPack = tokenizeString(getElement("soundpack"));
-//							minion.firstSkill = tokenizeString(getElement("firstskill"));
-//							minion.secondSkill = tokenizeString(getElement("secondskill"));
-//							minion.thirdSkill = tokenizeString(getElement("thirdskill"));
-//							minion.passiveSkill = tokenizeString(getElement("passiveskill"));
-//							minion.procSkill = tokenizeString(getElement("procskill"));
 							minionStatsMap.put(element.getAttribute("type"), minion);
 						}
 						else if (node.getNodeName().equals("hero"))
 						{
 							HeroStructure hero = new HeroStructure();
 							loadActorStructure(hero);
-//							hero.maxHealth = tokenizeInt(getElement("maxhealth"));
-//							hero.damage = tokenizeInt(getElement("damage"));
-//							hero.attackSpeed = tokenizeInt(getElement("attackspeed"));
-//							hero.attackRange = tokenizeInt(getElement("attackrange"));
 							hero.speed = tokenizeFloat(getElement("speed"));
-//							hero.cost = tokenizeInt(getElement("cost"));
-//							hero.radius = tokenizeInt(getElement("radius")).get(0);
-//							hero.physicalResist = tokenizeInt(getElement("physicalresist"));
-//							hero.rangedResist = tokenizeInt(getElement("rangedresist"));
-//							hero.magicResist = tokenizeInt(getElement("magicresist"));
-//							hero.animation = tokenizeString(getElement("animation"));
-//							hero.ranged = tokenizeBool(getElement("ranged"));
-//							hero.projectile = tokenizeString(getElement("projectile"));
-//							hero.soundPack = tokenizeString(getElement("soundpack"));
-//							hero.firstSkill = tokenizeString(getElement("firstskill"));
-//							hero.secondSkill = tokenizeString(getElement("secondskill"));
-//							hero.thirdSkill = tokenizeString(getElement("thirdskill"));
 							hero.activeSkill = tokenizeString(getElement("activeskill"));
 							hero.pet = tokenizeString(getElement("pet"));
 							heroStatsMap.put(element.getAttribute("type"), hero);
@@ -156,24 +118,6 @@ public class UnitParser
 						{
 							BuildingStructure building = new BuildingStructure();
 							loadActorStructure(building);
-//							building.maxHealth = tokenizeInt(getElement("maxhealth"));
-//							building.damage = tokenizeInt(getElement("damage"));
-//							building.attackSpeed = tokenizeInt(getElement("attackspeed"));
-//							building.attackRange = tokenizeInt(getElement("attackrange"));
-//							building.cost = tokenizeInt(getElement("cost"));
-//							building.radius = tokenizeInt(getElement("radius")).get(0);
-//							building.physicalResist = tokenizeInt(getElement("physicalresist"));
-//							building.rangedResist = tokenizeInt(getElement("rangedresist"));
-//							building.magicResist = tokenizeInt(getElement("magicresist"));
-//							building.animation = tokenizeString(getElement("animation"));
-//							building.ranged = tokenizeBool(getElement("ranged"));
-//							building.projectile = tokenizeString(getElement("projectile"));
-//							building.soundPack = tokenizeString(getElement("soundpack"));
-//							building.firstSkill = tokenizeString(getElement("firstskill"));
-//							building.secondSkill = tokenizeString(getElement("secondskill"));
-//							building.thirdSkill = tokenizeString(getElement("thirdskill"));
-//							building.passiveSkill = tokenizeString(getElement("passiveskill"));
-//							building.procSkill = tokenizeString(getElement("procskill"));
 							buildingStatsMap.put(element.getAttribute("type"), building);
 						}
 						else if (node.getNodeName().equals("skill"))
@@ -197,63 +141,17 @@ public class UnitParser
 							skill.affectedEffect = tokenizeString(getElement("affectedeffect")).get(0);
 							skillStatsMap.put(element.getAttribute("type"), skill);
 						}
-						/*else if (node.getNodeName().equals("skill"))
-						{
-							SkillStructure skill = new SkillStructure();
-							skill.aoe = tokenizeInt(getElement("aoe"));
-							skill.targeting = tokenizeInt(getElement("targeting"));
-							skill.targetCount = tokenizeInt(getElement("targetcount"));
-							skill.targetRange = tokenizeInt(getElement("targetrange"));
-							skill.effect = tokenizeInt(getElement("effect"));
-							skill.effectAmount = tokenizeInt(getElement("effectamount"));
-							skill.duration = tokenizeInt(getElement("duration"));
-							skill.effectTick = tokenizeInt(getElement("effecttick"));
-							skill.cooldown = tokenizeInt(getElement("cooldown"));
-							skill.trigger = tokenizeInt(getElement("trigger"));
-							skill.travelTime = tokenizeInt(getElement("traveltime"));
-							skill.damageSplit = tokenizeBool(getElement("damagesplit"));
-							skill.additive = tokenizeBool(getElement("additive"));
-							skill.continuous = tokenizeBool(getElement("continuous"));
-							skill.speed = tokenizeFloat(getElement("speed"));
-							skill.sprite = tokenizeString(getElement("sprite"));
-							skill.cast = tokenizeString(getElement("cast"));
-							skill.travel = tokenizeString(getElement("travel"));
-							skill.detonateEffect = tokenizeString(getElement("detonateeffect"));
-							skill.affected = tokenizeString(getElement("affected"));
-							skillStatsMap.put(element.getAttribute("type"), skill);
-						}*/
 						else if (node.getNodeName().equals("skillcontainer") &&	// Instant skill container
 								tokenizeInt(getElement("traveltime")).get(0) == -1) 
 						{
 							InstantSkillContainerStructure skillcontainer = new InstantSkillContainerStructure();
 							loadSkillContainerStructure(skillcontainer);
-//							skillcontainer.targetType = tokenizeInt(getElement("targettype")).get(0);
-//							skillcontainer.targetRange = tokenizeInt(getElement("targetrange")).get(0);
-//							skillcontainer.cooldown = tokenizeInt(getElement("cooldown")).get(0);
-//							skillcontainer.trigger = tokenizeInt(getElement("trigger")).get(0);
-//							skillcontainer.skills = tokenizeString(getElement("skills"));
-//							skillcontainer.cost = tokenizeInt(getElement("cost")).get(0);
-//							skillcontainer.relativeX = tokenizeInt(getElement("relativex")).get(0);
-//							skillcontainer.relativeY = tokenizeInt(getElement("relativey")).get(0);
-//							skillcontainer.castEffect = tokenizeString(getElement("casteffect")).get(0);
-//							skillcontainer.castSound = tokenizeString(getElement("castsound")).get(0);
 							skillContainerStatsMap.put(element.getAttribute("type"), skillcontainer);
 						}
 						else if (node.getNodeName().equals("skillcontainer"))	// Traveling skill container
 						{
-							System.out.println(getElement("traveltime"));
 							TravelingSkillContainerStructure skillcontainer = new TravelingSkillContainerStructure();
 							loadSkillContainerStructure(skillcontainer);
-//							skillcontainer.targetType = tokenizeInt(getElement("targettype")).get(0);
-//							skillcontainer.targetRange = tokenizeInt(getElement("targetrange")).get(0);
-//							skillcontainer.cooldown = tokenizeInt(getElement("cooldown")).get(0);
-//							skillcontainer.trigger = tokenizeInt(getElement("trigger")).get(0);
-//							skillcontainer.skills = tokenizeString(getElement("skills"));
-//							skillcontainer.cost = tokenizeInt(getElement("cost")).get(0);
-//							skillcontainer.relativeX = tokenizeInt(getElement("relativex")).get(0);
-//							skillcontainer.relativeY = tokenizeInt(getElement("relativey")).get(0);
-//							skillcontainer.castEffect = tokenizeString(getElement("casteffect")).get(0);
-//							skillcontainer.castSound = tokenizeString(getElement("castsound")).get(0);
 							skillcontainer.travelTime = tokenizeInt(getElement("traveltime")).get(0);
 							skillcontainer.speed = tokenizeFloat(getElement("speed")).get(0);
 							skillcontainer.skillSprite = tokenizeString(getElement("skillsprite")).get(0);
@@ -406,12 +304,10 @@ public class UnitParser
 		int level = 1;
 		
 		//Check if these are "boolean" type stats
-		//}else if(element.getAttribute("type") == "ranged"){
 		while (st.hasMoreTokens()) 
 		{
 			boolean currentStat = Boolean.parseBoolean(st.nextToken());
 			stats.add(currentStat);
-//			System.out.println("Level " + level + ": " + currentStat);
 			level++;
 		}
 		return stats;		
@@ -427,7 +323,6 @@ public class UnitParser
 		{
 			String currentStat = st.nextToken();
 			stats.add(currentStat);
-//			System.out.println("Level " + level + ": " + currentStat);
 			level++;
 		}
 		return stats;

@@ -8,40 +8,46 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.unknowngames.rainbowrage.BaseClass;
 import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.GameScreen;
 
-public class ScoreBoard //implements Screen
+public class ScoreBoard extends BaseClass//implements Screen
 {
 	TextureRegion board, statBox, winloss;
 	Vector3 touchPoint;
 	int result;
 	RoundButton exit;
-	EverythingHolder everything;
 	GameScreen screen;
 	OrthographicCamera zoom1;
+	float scale;
+	int team1X, team2X;
+	int width = Gdx.graphics.getWidth(),
+		height = Gdx.graphics.getHeight();
 	
-	public ScoreBoard(int result, EverythingHolder e, GameScreen s)
+	public ScoreBoard(int result, GameScreen s)
 	{
+		scale = everything.getScreenScale();
 		touchPoint = new Vector3();
-		everything = e;
 		screen = s;
 		if (result == 0)
 		{
 			board = new TextureRegion(new Texture(Gdx.files.internal("images/victory.png")), 0, 0, 800, 480);
-			winloss = everything.getObjectTexture("endvictory");
+			winloss = EverythingHolder.getObjectTexture("endvictory");
 		}
 		else
 		{
 			board = new TextureRegion(new Texture(Gdx.files.internal("images/defeat.png")), 0, 0, 800, 480);
-			winloss = everything.getObjectTexture("enddefeat");
+			winloss = EverythingHolder.getObjectTexture("enddefeat");
 		}
 		
-		statBox = everything.getObjectTexture("endstatsbox");
+		statBox = EverythingHolder.getObjectTexture("endstatsbox");
 		
-		exit = new RoundButton(700, 50, 40, everything.getObjectTexture("confirmbutton"));
+		exit = new RoundButton(700 * scale, 50 * scale, 40 * scale, EverythingHolder.getObjectTexture("confirmbutton"));
 		this.result = result;
 		zoom1 = new OrthographicCamera();
+		team1X = (int) (410 * scale);
+		team2X = (int) (630 * scale);
 	}
 	
 	public void draw(SpriteBatch batch)
@@ -59,24 +65,23 @@ public class ScoreBoard //implements Screen
 		}
 		
 		batch.setColor(Color.WHITE);
-		batch.draw(board, 0, 0);
+		batch.draw(board, 0, 0, width, height);
 		batch.setColor(1, 1, 1, .85f);
-		batch.draw(statBox, 370, 200);
-		batch.draw(winloss, 400, (result == 0 ? 410 : 422));
-		everything.getFont(0).draw(batch, (everything.team() == 1 ? "You" : "Enemy"), 410, 388);
-		everything.getFont(0).draw(batch, "Hero Kills:   " + everything.Stats().heroKills[0], 410, 366);
-		everything.getFont(0).draw(batch, "Hero Deaths:  " + everything.Stats().heroDeaths[0], 410, 350);
-		everything.getFont(0).draw(batch, "Minions Sent: " + everything.Stats().minionSent[0], 410, 334);
-		everything.getFont(0).draw(batch, "Minion Kills: " + everything.Stats().minionKills[0], 410, 318);
-		everything.getFont(0).draw(batch, "Minion Deaths:" + everything.Stats().minionDeaths[0], 410, 302);
+		batch.draw(statBox, 370 * scale, 200 * scale, statBox.getRegionWidth() * scale, statBox.getRegionHeight() * scale);
+		batch.draw(winloss, 400 * scale, (result == 0 ? 410 : 422) * scale, winloss.getRegionWidth() * scale, winloss.getRegionHeight() * scale);
+		everything.getFont(0).draw(batch, (everything.team() == 1 ? "You" : "Enemy"), team1X, 388 * scale);
+		everything.getFont(0).draw(batch, "Hero Kills:   " + everything.Stats().heroKills[0], team1X, 366 * scale);
+		everything.getFont(0).draw(batch, "Hero Deaths:  " + everything.Stats().heroDeaths[0], team1X, 350 * scale);
+		everything.getFont(0).draw(batch, "Minions Sent: " + everything.Stats().minionSent[0], team1X, 334 * scale);
+		everything.getFont(0).draw(batch, "Minion Kills: " + everything.Stats().minionKills[0], team1X, 318 * scale);
+		everything.getFont(0).draw(batch, "Minion Deaths:" + everything.Stats().minionDeaths[0], team1X, 302 * scale);
 		
-		everything.getFont(0).draw(batch, (everything.team() == 2 ? "You" : "Enemy"), 630, 388);
-		everything.getFont(0).draw(batch, "Hero Kills:   " + everything.Stats().heroKills[1], 630, 366);
-		everything.getFont(0).draw(batch, "Hero Deaths:  " + everything.Stats().heroDeaths[1], 630, 350);
-		everything.getFont(0).draw(batch, "Minions Sent: " + everything.Stats().minionSent[1], 630, 334);
-		everything.getFont(0).draw(batch, "Minion Kills: " + everything.Stats().minionKills[1], 630, 318);
-		everything.getFont(0).draw(batch, "Minion Deaths:" + everything.Stats().minionDeaths[1], 630, 302);
-//		batch.setColor(Color.WHITE);
+		everything.getFont(0).draw(batch, (everything.team() == 2 ? "You" : "Enemy"), team2X, 388 * scale);
+		everything.getFont(0).draw(batch, "Hero Kills:   " + everything.Stats().heroKills[1], team2X, 366 * scale);
+		everything.getFont(0).draw(batch, "Hero Deaths:  " + everything.Stats().heroDeaths[1], team2X, 350 * scale);
+		everything.getFont(0).draw(batch, "Minions Sent: " + everything.Stats().minionSent[1], team2X, 334 * scale);
+		everything.getFont(0).draw(batch, "Minion Kills: " + everything.Stats().minionKills[1], team2X, 318 * scale);
+		everything.getFont(0).draw(batch, "Minion Deaths:" + everything.Stats().minionDeaths[1], team2X, 302 * scale);
 		exit.draw(batch, 0);
 	}
 }

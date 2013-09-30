@@ -189,7 +189,7 @@
 		<firstskill>		selfarmor	empty					</firstskill>
 		<secondskill>		empty		empty					</secondskill>
 		<thirdskill>		empty		empty					</thirdskill>
-		<pet>				wolf		empty					</pet>
+		<pet>				wolf								</pet>
 		<description>		It's just a flesh wound				</description>
 	</hero>
 	
@@ -329,7 +329,7 @@
 		<cooldown>				100									</cooldown>
 		<trigger>				1									</trigger>
 		<skills>				healally							</skills>
-		<cost>					0									</cost>
+		<cost>					100									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
@@ -347,7 +347,7 @@
 		<cooldown>				10									</cooldown>
 		<trigger>				1									</trigger>
 		<skills>				fireball							</skills>
-		<cost>					0									</cost>
+		<cost>					125									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
@@ -368,7 +368,7 @@
 		<cooldown>				-1									</cooldown>
 		<trigger>				0									</trigger>
 		<skills>				selfarmor							</skills>
-		<cost>					0									</cost>
+		<cost>					100									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
@@ -386,7 +386,7 @@
 		<cooldown>				-1									</cooldown>
 		<trigger>				0									</trigger>
 		<skills>				selfparry							</skills>
-		<cost>					0									</cost>
+		<cost>					150									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
@@ -404,7 +404,7 @@
 		<cooldown>				30									</cooldown>
 		<trigger>				0									</trigger>
 		<skills>				passiveaoedamage					</skills>
-		<cost>					0									</cost>
+		<cost>					175									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
@@ -422,7 +422,7 @@
 		<cooldown>				-1									</cooldown>
 		<trigger>				0									</trigger>
 		<skills>				selfdodge							</skills>
-		<cost>					0									</cost>
+		<cost>					125									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
@@ -440,7 +440,7 @@
 		<cooldown>				500									</cooldown>
 		<trigger>				2									</trigger>
 		<skills>				selfcloak							</skills>
-		<cost>					0									</cost>
+		<cost>					100									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
@@ -458,7 +458,7 @@
 		<cooldown>				0									</cooldown>
 		<trigger>				1									</trigger>
 		<skills>				lifesteal							</skills>
-		<cost>					0									</cost>
+		<cost>					150									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
@@ -477,7 +477,7 @@
 		<cooldown>				750									</cooldown>
 		<trigger>				3									</trigger>
 		<skills>				stun								</skills>
-		<cost>					0									</cost>
+		<cost>					75									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
@@ -495,7 +495,7 @@
 		<cooldown>				750									</cooldown>
 		<trigger>				3									</trigger>
 		<skills>				rapidfire							</skills>
-		<cost>					0									</cost>
+		<cost>					75									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
@@ -513,7 +513,7 @@
 		<cooldown>				750									</cooldown>
 		<trigger>				3									</trigger>
 		<skills>				herofireball						</skills>
-		<cost>					0									</cost>
+		<cost>					75									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
@@ -521,10 +521,28 @@
 		<castsound>				empty								</castsound>
 		<speed>					3									</speed>
 		<skillsprite>			fireball							</skillsprite>
-		<traveleffect>			fireball							</traveleffect>
+		<traveleffect>			empty								</traveleffect>
 		<name>					Hero Fireball						</name>
 		<description>			AOE Fireball						</description>
 		<icon>					herofireballicon					</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "herofear">
+		<targettype>			1									</targettype>
+		<targetrange>			-1									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				750									</cooldown>
+		<trigger>				3									</trigger>
+		<skills>				fear								</skills>
+		<cost>					75									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			stunattack							</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Hero Stun							</name>
+		<description>			AOE stun							</description>
+		<icon>					herostunicon						</icon>
 	</skillcontainer>
 	
 	<!-- SKILLS -->
@@ -603,7 +621,7 @@
 		<additive>			true								</additive>
 		<continuous>		true								</continuous>
 		<casteffect>		empty								</casteffect>
-		<traveleffect>		empty								</traveleffect>
+		<traveleffect>		fireball							</traveleffect>
 		<detonateeffect>	largefireballexplosion				</detonateeffect>
 		<affectedeffect>	empty								</affectedeffect>
 	</skill>
@@ -765,6 +783,26 @@
 		<casteffect>		empty								</casteffect>
 		<traveleffect>		empty								</traveleffect>
 		<detonateeffect>	empty								</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+	</skill>
+	
+	<skill type = "fear">
+		<aoe> 				150									</aoe>
+		<targeting> 		-1									</targeting>
+		<targetcount>		-1									</targetcount>
+		<effect>			11									</effect>
+		<effectamount>		120									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			3									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	stunattack							</detonateeffect>
 		<affectedeffect>	empty								</affectedeffect>
 	</skill>
 	

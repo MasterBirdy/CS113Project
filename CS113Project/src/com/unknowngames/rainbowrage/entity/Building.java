@@ -192,7 +192,7 @@ public class Building extends Actor
 		buildingAnimation = everything.getBuildingAnimation(buildingStructure.animation(level) + team);
 		currentHealth = maxHealth;
 		skillSpawners[3] = new BasicAttack(this);
-		loadProjectile(buildingStructure);
+//		loadProjectile(buildingStructure);
 	}
 	
 //	public static void loadSprites()

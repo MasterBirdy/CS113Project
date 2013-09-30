@@ -22,16 +22,18 @@ public class RoundButton extends Button
 		upButton = up;
 	}
 	
+	public RoundButton(float x, float y, float diam, TextureRegion up)
+	{
+		this((int)x, (int)y, (int)diam, up);
+	}
+	
 	public boolean hit(float x, float y)
 	{
-//		System.out.println("Button " + x + ": " + y);
 		if (getDistanceSquared(x, y) > diameter * diameter)
 		{
-//			System.out.println("Miss");
 			return false;
 		}
 		Gdx.input.vibrate(50);
-//		System.out.println("HIT!");
 		return true;
 	}
 	

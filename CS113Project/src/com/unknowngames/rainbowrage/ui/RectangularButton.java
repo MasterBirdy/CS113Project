@@ -23,14 +23,17 @@ public class RectangularButton extends Button
 		upButton = up;
 	}
 	
+	public RectangularButton(float x, float y, float w, float h, TextureRegion up)
+	{
+		this((int)x, (int)y, (int) w, (int)h, up);
+	}
+	
 	public boolean hit(float x, float y)
 	{
 		if (xCoord() > x || xCoord() + width < x || yCoord() > y || yCoord() + height < y)
 			return false;
 		
 		Gdx.input.vibrate(50);
-		
-//		System.out.println("HIT!");
 		return true;
 	}
 	

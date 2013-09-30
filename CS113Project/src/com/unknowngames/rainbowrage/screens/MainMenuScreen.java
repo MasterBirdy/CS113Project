@@ -46,6 +46,7 @@ public class MainMenuScreen implements Screen
 	static ParticleEffect rainbow = new ParticleEffect();
 	boolean newGameStarted;
 	TextureRegion gameLogo, buttonFrame;
+	float scale;
 	
 	HeroSelectScreen selectScreen;
 	
@@ -54,6 +55,7 @@ public class MainMenuScreen implements Screen
 	public MainMenuScreen(RainbowRage game, EverythingHolder everything)
 	{
 		this.game = game;
+		scale = everything.getXRatio();
 //		Settings.getInstance();
 		newGameStarted = false;
 //		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/523938_--MB---The-Black-Wi.mp3"));
@@ -78,11 +80,11 @@ public class MainMenuScreen implements Screen
 		gameLogo = EverythingHolder.getObjectTexture("gamelogo");
 		buttonFrame = EverythingHolder.getObjectTexture("mainbuttonframe");
 		
-		int stackTopX = width - 120; //680; //658;
-		int stackTopY = 345; //355;
-		int spaceX = 75;
-		int spaceY = 54;
-		int buttonRadius = 38; //(int) (width * .95f / 20);
+		int stackTopX = (int) (width - 120 * scale); //680; //658;
+		int stackTopY = (int) (345 * scale); //355;
+		int spaceX = (int) (75 * scale);
+		int spaceY = (int) (54 * scale);
+		int buttonRadius = (int) (39 * scale); //(int) (width * .95f / 20);
 //		buttons[0] = new RoundButton(stackTopX, stackTopY - spaceY * 2 + 4, buttonRadius, 			
 //				new TextureRegion(icons, 367, 459, 152, 153));	// Sinlge-player
 //		buttons[1] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 3 + 4, buttonRadius, 			
@@ -92,13 +94,13 @@ public class MainMenuScreen implements Screen
 //		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9, buttonRadius, 			
 //				new TextureRegion(icons, 367, 153, 152, 153));	// Quit
 		
-		buttons[0] = new RoundButton(stackTopX, stackTopY - spaceY * 2 + 4, buttonRadius, 			
+		buttons[0] = new RoundButton(stackTopX, stackTopY - spaceY * 2 + 4 * scale, buttonRadius, 			
 				EverythingHolder.getObjectTexture("singlebutton"));	// Sinlge-player
-		buttons[1] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 3 + 4, buttonRadius, 			
+		buttons[1] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 3 + 4 * scale, buttonRadius, 			
 				EverythingHolder.getObjectTexture("multibutton"));	// Multi-player
-		buttons[2] = new RoundButton(stackTopX, stackTopY - spaceY * 4 + 9, buttonRadius, 			
+		buttons[2] = new RoundButton(stackTopX, stackTopY - spaceY * 4 + 9 * scale, buttonRadius, 			
 				EverythingHolder.getObjectTexture("settingsbutton"));	// Settings
-		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9, buttonRadius, 			
+		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9 * scale, buttonRadius, 			
 				EverythingHolder.getObjectTexture("quitbutton"));	// Quit
 		
 		buttons[2].setClickable(false);
@@ -164,7 +166,7 @@ public class MainMenuScreen implements Screen
 		batch.begin();
 		batch.draw(texture, 0, 0, width, height);
 		batch.draw(gameLogo, 155 * everything.getXRatio(), 262 * everything.getYRatio(), 382 * everything.getXRatio(), 212 * everything.getYRatio());
-		batch.draw(buttonFrame, width - 166, -10, buttonFrame.getRegionWidth() * .95f * 80 / 146, buttonFrame.getRegionHeight() * .95f * 80 / 146);
+		batch.draw(buttonFrame, width - 166 * scale, -10 * scale, buttonFrame.getRegionWidth() * .95f * 80 * scale / 146, buttonFrame.getRegionHeight() * .95f * 80 * scale / 146);
 //		
 //		newGameSprite.draw(batch);
 //		settingsSprite.draw(batch);

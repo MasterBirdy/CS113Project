@@ -35,6 +35,7 @@ import com.unknowngames.rainbowrage.networking.Network;
 import com.unknowngames.rainbowrage.networking.User;
 import com.unknowngames.rainbowrage.networking.Network.*;
 import com.unknowngames.rainbowrage.parser.HeroStructure;
+import com.unknowngames.rainbowrage.ui.GameMenu;
 import com.unknowngames.rainbowrage.ui.GameUI;
 import com.unknowngames.rainbowrage.ui.ScoreBoard;
 
@@ -44,13 +45,11 @@ public class GameScreen implements Screen
 	private SpriteBatch batch;
 	private Texture texture;
 	private Sprite sprite;
-	// private Map[] maps = new Map[2];
 	int counter1, counter2;
 	private boolean isPaused;
-	// BitmapFont font;
 	static boolean showRange;
 	GameInput inputProcessor;
-	static EverythingHolder everything;// = new EverythingHolder();
+	static EverythingHolder everything;
 	TextureRegion pauseRegion;
 	int pauseCooldown;
 	GameUI gameUI;
@@ -108,15 +107,6 @@ public class GameScreen implements Screen
 		everything.reset();
 		isPaused = false;
 
-		// startMusic =
-		// tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
-		// startMusic.setLooping(true);
-		// startMusic.setVolume(volume);
-		// startMusic.play();
-		// startMusic =
-		// tempMusic.newMusic(Gdx.files.internal("audio/506819_Xanax-amp-Bluebird3.wav"));
-		// startMusic.setLooping(true);
-
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
@@ -125,29 +115,22 @@ public class GameScreen implements Screen
 		pauseCooldown = 0;
 
 		camera = new OrthographicCamera(w, h);
-		// camera.translate(950, 700);
 
 		camera.zoom = 1.5f;
 		uiCamera = new OrthographicCamera(w, h);
-//		uiCamera = new OrthographicCamera(800, 480);
 		uiCamera.setToOrtho(false);
 		batch = new SpriteBatch();
 
-		// Texture pauseTexture = new
-		// Texture(Gdx.files.internal("images/pausemenu.png"));
-		// pauseRegion = new TextureRegion(pauseTexture, 0, 0, 270, 190);
 		everything.loadMap(level);
 		TextEffect.loadFonts();
 
 		everything.load(batch);
 
-		// sprite.setSize(1600, 1200);
-		// font = new BitmapFont();
 		EverythingHolder.showRange = true;
 		inputProcessor = new GameInput();
 
 		Gdx.input.setInputProcessor(inputProcessor);
-		GameUI.load(batch, this); //everything, this);
+		GameUI.load(this);
 		gameUI = new GameUI();
 
 		GameInput.loadCamera(camera, uiCamera);
@@ -175,9 +158,9 @@ public class GameScreen implements Screen
 			everything.setTeam((byte) 1);
 		}
 		timeAccumulator = 0;
+
 		System.out.println("That took: "
 				+ (System.currentTimeMillis() - startTime) + " ms");
-		// ready = true;
 	}
 
 	public boolean getMultiplayer()
@@ -237,12 +220,8 @@ public class GameScreen implements Screen
 		if (ready && !isPaused && (everything.moreTurns() || !multiplayer))
 			timeAccumulator += delta;
 
-		// GL10 gl = Gdx.graphics.getGL10();
 		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		// if (gl.glGetError() != 0)
-		// Log.debug("GL ERROR " + gl.glGetError());
-		// System.out.println("GL ERROR " + gl.glGetError());
 
 		if (following)
 			centerOnHero();
@@ -265,35 +244,16 @@ public class GameScreen implements Screen
 			timeAccumulator -= stepTime;
 		}
 
-		// if (!isPaused && timeAccumulator > stepTime && running && ready &&
-		// (everything.moreTurns() || !multiplayer))
-		// {
-		// while (timeAccumulator > stepTime)
-		// {
-		// sentTurn = false;
-		// sendTurn();
-		// update();
-		// timeAccumulator -= stepTime;
-		// }
-		// }
-
-		// handleInput();
-
 		if (scoreBoard == null)
 		{
 			batch.setProjectionMatrix(camera.combined);
 			batch.begin();
 			everything.map().background().draw(batch);
 			everything.render((isPaused ? 0 : delta));
-			// font.draw(batch, "Total Units: " + (everything.team(1).size() +
-			// everything.team(2).size()), 800, 555);
-			// font.draw(batch, "delta: " + delta, 800, 555);
-			// font.draw(batch, "fps: " + (1 / delta), 800, 555);
-			// font.draw(batch, "team: " + team, 800, 555);
 
 			batch.end();
 		}
-		
+
 		if (scoreBoard == null && everything.settings.showPath())
 			everything.map().drawPaths(batch, camera);
 
@@ -301,22 +261,16 @@ public class GameScreen implements Screen
 		batch.begin();
 		if (scoreBoard == null)
 		{
-			gameUI.render(delta);
+			gameUI.render(batch, delta);
 			pauseCooldown++;
 
 			if (multiplayer == true && connected == false)
 				everything.getFont(2).draw(batch,
 						"Waiting for a challenger...", 100, 300);
-		} else
+		}
+		else
 			scoreBoard.draw(batch);
-		// if (isPaused)
-		// batch.draw(pauseRegion, 400 - pauseRegion.getRegionWidth() / 2 , 240
-		// - pauseRegion.getRegionHeight() / 2);
-		// everything.getFont(2).draw(batch, "Zoom: " + camera.zoom, 100, 300);
-		// everything.getFont(2).draw(batch, "Min Zoom: " +
-		// everything.getMinZoom(), 100, 350);
-		// everything.getFont(2).draw(batch, "Ratio Zoom: " +
-		// everything.getSizeRatio(), 100, 400);
+
 		batch.end();
 	}
 
@@ -326,9 +280,9 @@ public class GameScreen implements Screen
 			return;
 		Gdx.input.setInputProcessor(null);
 		if (t == team)
-			scoreBoard = new ScoreBoard(0, everything, this);
+			scoreBoard = new ScoreBoard(0, this);
 		else
-			scoreBoard = new ScoreBoard(1, everything, this);
+			scoreBoard = new ScoreBoard(1, this);
 		everything.stopGameMusic();
 
 		startMusic = tempMusic.newMusic(Gdx.files
@@ -365,13 +319,6 @@ public class GameScreen implements Screen
 
 			object = commandQueue.remove();
 
-			// if (object instanceof AddUnit)
-			// {
-			// System.out.println("Adding unit");
-			// everything.add(((AddUnit)object).unit, ((AddUnit)object).team);
-			// return;
-			// }
-
 			if (object instanceof CommandIn)
 			{
 				CommandIn command = (CommandIn) object;
@@ -380,33 +327,17 @@ public class GameScreen implements Screen
 					System.out.println("Pulled unit send command.");
 					everything.add(((CommandIn) object).command,
 							((CommandIn) object).team);
-					// return;
-				} else if (command.command > 6 && command.command < 10)
+				}
+				else if (command.command > 6 && command.command < 10)
 				{
 					System.out.println("Pulled hero command.");
 					everything.setHeroStance(command.team, command.command - 8);
-					// heroes[command.team - 1].stance(command.command - 8);
-					// heroes[0].stance(command.command - 8);
-					// heroes[1].stance(command.command - 8);
-					// return;
-				} else if (command.command == 10)
+				}
+				else if (command.command == 10)
 				{
 					System.out.println("Pulled active cast command.");
 					everything.activeHeroSkill(command.team);
-					// return;
 				}
-				// if (command.command > 9 && command.command < 13)
-				// {
-				// System.out.println("Pulled tower command.");
-				// everything.upgradeTower(command.command - 10, team);
-				// // everything.funds -= 40;
-				// System.out.println("Trying to upgrade tower " +
-				// (command.command - 10) + " from team " + team);
-				// // heroes[command.team].stance(command.command - 8);
-				// // heroes[0].stance(command.command - 8);
-				// // heroes[1].stance(command.command - 8);
-				// return;
-				// }
 			}
 		}
 	}
@@ -425,25 +356,12 @@ public class GameScreen implements Screen
 
 	public void randomSpawner()
 	{
-		/*
-		 * if (--counter1 < 0) { // decides to add either a swordsman or an
-		 * archer boolean sword = Math.random() < 0.6; if (sword)
-		 * //everything.add(new Swordsman(start1.x(), start1.y(), 1,
-		 * everything.map().getPath().iterator()), true, 1); everything.add(1,
-		 * 1); else //everything.add(new Archer(start1.x(), start1.y(), 1,
-		 * everything.map().getPath().iterator()), true, 1); everything.add(2,
-		 * 1); counter1 = (int)(Math.random() * 60) + 40; }
-		 */
 		if (--counter2 < 0)
 		{
 			float rand = (float) Math.random();
 			if (rand < 0.20f)
-				// everything.add(new Swordsman(start2.x(), start2.y(), 2,
-				// everything.map().getPath().descendingIterator()), false, 2);
 				everything.add(0, 2);
 			else if (rand < 0.4f)
-				// everything.add(new Archer(start2.x(), start2.y(), 2,
-				// everything.map().getPath().descendingIterator()), false, 2);
 				everything.add(1, 2);
 			else if (rand < 0.6f)
 				everything.add(2, 2);
@@ -462,7 +380,6 @@ public class GameScreen implements Screen
 	{
 		if (multiplayer)
 		{
-			// System.out.println("Trying to send message \"" + message + "\"");
 			UserMessage msg = new UserMessage();
 			msg.message = message;
 			msg.team = team;
@@ -476,7 +393,6 @@ public class GameScreen implements Screen
 		if (multiplayer && sentTurn == false
 				&& everything.turn == everything.highestTurn - 9)
 		{
-			// System.out.println("Sending turn");
 			Command cmd = new Command();
 			cmd.team = team;
 			cmd.type = -2;
@@ -490,11 +406,8 @@ public class GameScreen implements Screen
 	{
 		if (multiplayer && connected)
 		{
-			// System.out.println("Trying to send unit " + unit + " from team "
-			// + team);
 			if (everything.funds() < everything.unitCost(unit, team))
 			{
-				// System.out.println("Out of money.");
 				return;
 			}
 			Command cmd = new Command();
@@ -502,10 +415,10 @@ public class GameScreen implements Screen
 			cmd.type = (byte) unit;
 			cmd.turn = everything.turn();
 			client.sendTCP(cmd);
-		} else
+		}
+		else
 		{
-			// System.out.println("Trying to send unit " + unit + " from team "
-			// + team);
+
 			everything.add(unit, 1);
 		}
 	}
@@ -518,10 +431,9 @@ public class GameScreen implements Screen
 			cmd.type = (byte) (stance + 8);
 			cmd.team = team;
 			cmd.turn = everything.turn();
-			// System.out.println("Setting hero " + cmd.team + " to stance " +
-			// (cmd.type - 8));
 			client.sendTCP(cmd);
-		} else
+		}
+		else
 			everything.setHeroStance(1, stance);
 	}
 
@@ -533,9 +445,9 @@ public class GameScreen implements Screen
 			cmd.type = 10;
 			cmd.team = team;
 			cmd.turn = everything.turn();
-			// System.out.println("Hero " + cmd.team + " casting active");
 			client.sendTCP(cmd);
-		} else
+		}
+		else
 		{
 			// System.out.println("CASTING SPELL");
 			everything.activeHeroSkill(1);
@@ -576,25 +488,9 @@ public class GameScreen implements Screen
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)
 				|| Gdx.input.isKeyPressed(Input.Keys.A))
 			camera.translate(-10, 0);
-		// if ((Gdx.input.isKeyPressed(Input.Keys.ESCAPE) ||
-		// Gdx.input.isKeyPressed(Keys.MENU)) && pauseCooldown > 10)
-		// {
-		// isPaused = !isPaused;
-		// pauseCooldown = 0;
-		// }
-		if (Gdx.input.isKeyPressed(Input.Keys.HOME))
-		{
-			client.close();
-			Gdx.app.exit();
-		}
+
 		if ((Gdx.input.isKeyPressed(Input.Keys.Q)) && pauseCooldown > 100)
 		{
-			// for (Actor a : (team == 1 ? everything.team(1) :
-			// everything.team(2)))
-			// {
-			// if (a instanceof ArrowTower)
-			// ((ArrowTower) a).upgrade();
-			// }
 			pauseCooldown = 0;
 		}
 		if (Gdx.input.justTouched())
@@ -608,22 +504,12 @@ public class GameScreen implements Screen
 					gameTouchPoint.y);
 			if (selected instanceof Building)
 			{
-				// System.out.println(selected.team() + " Tower number: " +
-				// ((Building)selected).towerNumber() + " by team " + team);
 				if (selected.team() == team && !selected.isAlive()
 						&& everything.funds() >= 40)
 				{
-					// System.out.println("Tower number: " +
-					// ((Building)selected).towerNumber() + " by team " + team);
 					upgradeTower(((Building) selected).towerNumber());
-					// ((Building) selected).upgrade();
-					// everything.funds -= 40;
 				}
 			}
-
-			// System.out.println("X: " + touchPoint.x + " Y: " + touchPoint.y);
-			// System.out.println("X1: " + gameTouchPoint.x + " Y1: " +
-			// gameTouchPoint.y);
 		}
 	}
 
@@ -638,14 +524,21 @@ public class GameScreen implements Screen
 		// boundCamera();
 	}
 
+	public void quit()
+	{
+		if (client != null)
+			client.close();
+		Gdx.app.exit();
+	}
+
 	public void boundCamera()
 	{
 		if (camera.zoom > everything.getMinZoom())
 			camera.zoom = everything.getMinZoom();
 		// if (camera.zoom > 2.25/ everything.getSizeRatio())
 		// camera.zoom = 2.25f / everything.getSizeRatio();
-		if (camera.zoom < .3f / everything.getSizeRatio())
-			camera.zoom = .3f / everything.getSizeRatio();
+		if (camera.zoom < .35f / everything.getSizeRatio())
+			camera.zoom = .35f / everything.getSizeRatio();
 		/*
 		 * float width = camera.viewportWidth; int w = Gdx.graphics.getWidth() /
 		 * 2; int h = Gdx.graphics.getHeight() / 2;
@@ -718,7 +611,8 @@ public class GameScreen implements Screen
 						// System.out.println("Entering as player " + team);
 						connected = true;
 						return;
-					} else if (status.status == -1)
+					}
+					else if (status.status == -1)
 					{
 						// System.out.println("Server is full.");
 						System.exit(-1);
@@ -734,7 +628,8 @@ public class GameScreen implements Screen
 						// System.out.println("Highest now " +
 						// ((CommandIn)object).turn);
 						everything.highestTurn = ((CommandIn) object).turn;
-					} else
+					}
+					else
 						commandQueue.add((CommandIn) object);
 				}
 

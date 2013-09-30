@@ -189,13 +189,21 @@ public class Skill extends Entity
 	@Override
 	public void draw(SpriteBatch batch, float delta)
 	{
-		// TODO Auto-generated method stub
-		
+		if (travelEffect != null)
+		{
+			travelEffect.draw(batch, delta);
+		}
 	}
 
 	@Override
 	public void update()
 	{
+		if (travelEffect != null)
+		{
+			if (travelEffect.isComplete())
+				travelEffect.start();
+			travelEffect.setPosition(xCoord(), yCoord());
+		}
 		if (effect == 8)
 			extra += effectAmount;
 	}

@@ -157,6 +157,9 @@ public class SkillEffect
 			case 10:									// Cloak
 				target.invis(effectAmount);
 				break;
+			case 11:
+				target.fear(effectAmount);
+				break;
 //			case 4:
 //				damageBoost += skill.effectAmount;
 //				break;
