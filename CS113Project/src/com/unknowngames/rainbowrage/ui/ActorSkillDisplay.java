@@ -77,9 +77,9 @@ public class ActorSkillDisplay extends BaseClass
 	public void setSelected(int s)
 	{
 		selectedSkill = s;
-		description = getSkillStructure(shownActor, s / 2, s % 2).description;
-		int c = getSkillStructure(shownActor, s / 2, s % 2).cost;
-		price = "Cost: " + (c == 0 ? "Free" : getSkillStructure(shownActor, s / 2, s % 2).cost);
+		description = everything.getSkillStructure(shownActor, s / 2, s % 2).description;
+		int c = everything.getSkillStructure(shownActor, s / 2, s % 2).cost;
+		price = "Cost: " + (c == 0 ? "Free" : everything.getSkillStructure(shownActor, s / 2, s % 2).cost);
 	}
 	
 	public void update(float delta)
@@ -113,25 +113,25 @@ public class ActorSkillDisplay extends BaseClass
 		}
 		
 		font.draw(batch, description, x, y - 50 * scale);
-		font.draw(batch, price, x, y - 70 * scale);
+		font.draw(batch, price, x, y - 75 * scale);
 	}
 	
-	private SkillContainerStructure getSkillStructure(ActorStructure a, int skill, int level)
-	{
-		if (skill == 0)
-			return everything.getSkillContainer(a.firstSkill(level));
-		else if (skill == 1)
-			return everything.getSkillContainer(a.secondSkill(level));
-		else if (skill == 2)
-			return everything.getSkillContainer(a.thirdSkill(level));
-		else if (skill == 3)
-			return everything.getSkillContainer(((HeroStructure)a).activeSkill(level));
-		return null;
-	}
+//	private SkillContainerStructure getSkillStructure(ActorStructure a, int skill, int level)
+//	{
+//		if (skill == 0)
+//			return everything.getSkillContainer(a.firstSkill(level));
+//		else if (skill == 1)
+//			return everything.getSkillContainer(a.secondSkill(level));
+//		else if (skill == 2)
+//			return everything.getSkillContainer(a.thirdSkill(level));
+//		else if (skill == 3)
+//			return everything.getSkillContainer(((HeroStructure)a).activeSkill(level));
+//		return null;
+//	}
 	
 	private TextureRegion getIcon(ActorStructure a, int skill, int level)
 	{
-		SkillContainerStructure s = getSkillStructure(a, skill, level);
+		SkillContainerStructure s = everything.getSkillStructure(a, skill, level);
 		
 //		if (skill == 0)
 //			s = everything.getSkillContainer(a.firstSkill(level));

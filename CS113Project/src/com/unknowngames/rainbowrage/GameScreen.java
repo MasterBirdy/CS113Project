@@ -401,6 +401,18 @@ public class GameScreen implements Screen
 			sentTurn = true;
 		}
 	}
+	
+	public void buyUpgrade(int unit, int skill, int level, int team)
+	{
+		if (multiplayer && connected)
+		{
+			
+		}
+		else
+		{
+			everything.buyUpgrade(unit, skill, level, 1);
+		}
+	}
 
 	public void buyUnit(int unit)
 	{

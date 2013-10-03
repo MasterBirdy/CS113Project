@@ -278,6 +278,7 @@ public class GameInput extends BaseClass implements InputProcessor
 			
 			camera.zoom = zoom / factor; //zoom - (factor - 1f) * zoom; //* camera.zoom;// .9f;
 			game.boundCamera();
+			return false;
 		}
 		
 

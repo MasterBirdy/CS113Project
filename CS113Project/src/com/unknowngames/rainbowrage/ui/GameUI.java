@@ -48,7 +48,7 @@ public class GameUI extends BaseClass
 	{
 		scale = everything.getScreenScale();
 		gameMenu = new GameMenu(300 * scale, 150 * scale);
-		skillDisplay = new ActorSkillUpgrade((int)(200 * everything.getYRatio()), (int)(100 * everything.getYRatio()));
+		skillDisplay = new ActorSkillUpgrade((int)(175 * everything.getYRatio()), (int)(140 * everything.getYRatio()));
 		skillDisplay.setActor(everything.getHeroStats(everything.getHeroName()));
 		screenX = Gdx.graphics.getWidth() / 2;
 		screenY = Gdx.graphics.getHeight() / 2;
@@ -77,10 +77,10 @@ public class GameUI extends BaseClass
 				
 				if (h != -1 && h < 6)
 				{
-					skillDisplay.setActor(everything.getActorStructure(h, everything.team()));
+					skillDisplay.setActor(everything.getActorStructure(h, everything.team()), h);
 				}
 				else if (h == 11)
-					skillDisplay.setActor(everything.getHeroStats(everything.getHeroName()));
+					skillDisplay.setActor(everything.getHeroStats(everything.getHeroName()), 6);
 				else if (h == 12)
 					setUpgradeMenu(false);
 			}
@@ -114,13 +114,16 @@ public class GameUI extends BaseClass
 	{
 		update();
 		everything.getFont(0).draw(batch, message, 200, 20);
-		topUI.draw(batch);
 		
-		minionUI.render(batch, delta);
 		heroControlUI.render(batch, delta);
+		
 		sideUI.render(batch, delta);
 		if (skillDisplay.isShown())
 			skillDisplay.render(batch);
+		
+		topUI.draw(batch);
+		minionUI.render(batch, delta);
+		
 		if (showingMenu)
 			gameMenu.render(batch);
 	}

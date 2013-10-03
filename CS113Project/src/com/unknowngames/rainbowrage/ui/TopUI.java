@@ -58,18 +58,27 @@ public class TopUI extends BaseClass
 				scale2 * waveScale, scale2 * waveScale, 0);
 		
 		everything.getFont(2).drawMultiLine(batch,
-				String.format("%02d", everything.timeLeft()), width * .5f,
-				height * .9604f, 0, HAlignment.CENTER);
+				String.format("%02d", everything.timeLeft()), width / 2,
+				height - 25 * scale, 0, HAlignment.CENTER);
 		
-		batch.draw(cash, width / 2 - (60 + cash.getRegionWidth()) * scale, height - 85 * scale, 0, 0, cash.getRegionWidth(), cash.getRegionHeight(), 
+//		everything.getFont(2).drawMultiLine(batch,
+//				String.format("%02d", everything.timeLeft()), width * .5f,
+//				height * .9604f, 0, HAlignment.CENTER);
+		
+		batch.draw(units, width / 2 - (60 + cash.getRegionWidth()) * scale, height - 85 * scale, 0, 0, cash.getRegionWidth(), cash.getRegionHeight(), 
 				   scale2, scale2, 0);
-		batch.draw(units, width / 2 + 60 * scale, height - 85 * scale, 0, 0, units.getRegionWidth(), units.getRegionHeight(), 
+		batch.draw(cash, width / 2 + 60 * scale, height - 85 * scale, 0, 0, units.getRegionWidth(), units.getRegionHeight(), 
 				   scale2, scale2, 0);
 		
-		everything.getFont(0).drawMultiLine(batch, "" + everything.teamSize(), width / 2 + 100 * scale, //513 * scale,
+		everything.getFont(0).drawMultiLine(batch, "" + everything.funds(), width / 2 + 100 * scale, //513 * scale,
 				height - 61 * scale, 0, HAlignment.LEFT); 
 		everything.getFont(0).drawMultiLine(batch,
-				"" + String.format("%03d", everything.funds()), width / 2 - 100 * scale,
+				"" + String.format("%03d", everything.teamSize()), width / 2 - 100 * scale,
 				height - 61 * scale, 0, HAlignment.RIGHT);
+		
+		// Player Display
+//		everything.getFont(0).drawMultiLine(batch,
+//				everything.getPlayer(0).userName(), 10 * scale,
+//				height - 61 * scale, 0, HAlignment.LEFT);
 	}
 }

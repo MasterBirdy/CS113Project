@@ -72,7 +72,7 @@ public class MinionUI extends BaseClass
 			everything.getFont(3).drawMultiLine(batch,
 					(everything.getSentUnit(i) > 0 ? everything.getSentUnit(i)
 							+ "" : ""), buttons[i].xCoord(),
-					buttons[i].yCoord() + 20, 0, HAlignment.CENTER);
+					buttons[i].yCoord() + 20 * scale, 0, HAlignment.CENTER);
 		}
 		buttons[6].draw(batch, delta);
 	}

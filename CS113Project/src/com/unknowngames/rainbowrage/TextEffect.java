@@ -14,7 +14,7 @@ public class TextEffect
 	int type, timer;
 	static BitmapFont fonts[] = new BitmapFont[4];
 	static boolean first = true;
-	BitmapFont font;
+	int font;
 	
 	IMovement effect;
 	
@@ -38,9 +38,15 @@ public class TextEffect
 		type = cause;
 		timer = 100;
 		if (type == 0)
+		{
 			effect = arcMovement;
+			font = 1;
+		}
 		else
+		{
 			effect = wavyMovement;
+			font = 0;
+		}
 		//font = new BitmapFont(fonts[0].getData(), null, false);
 	}
 	

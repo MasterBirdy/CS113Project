@@ -35,7 +35,7 @@ import com.unknowngames.rainbowrage.skill.TravelingSkillContainer;
 public class EverythingHolder 
 {
 	@SuppressWarnings("unchecked")
-	String xmlVersion = "", gameVersion = "0.09_30_13";
+	String xmlVersion = "", gameVersion = "0.10_03_13_";
 	
 	EntityComparator eCompare = new EntityComparator();
 	static private SpriteBatch batch;
@@ -117,6 +117,8 @@ public class EverythingHolder
 	
 	float scale;
 	
+	Player[] players = new Player[2];
+	
 	public EverythingHolder()
 	{
 		Texture.setEnforcePotImages(true);
@@ -167,6 +169,16 @@ public class EverythingHolder
 		System.out.println("Heap: " + Gdx.app.getJavaHeap());
 	}
 	
+	public Player getSelfPlayer()
+	{
+		return getPlayer(team() - 1);
+	}
+	
+	public Player getPlayer(int t)
+	{
+		return players[t];
+	}
+	
 	public BuildingStructure getBuildingStructure(int i)
 	{
 		return buildingStats.get("arrowtower");
@@ -175,6 +187,11 @@ public class EverythingHolder
 	public ActorStructure getActorStructure(int i, int t)
 	{
 		return playerUnits[t - 1][i];
+	}
+	
+	public HeroStructure getHeroStructure(int t)
+	{
+		return heroUnits[t - 1];
 	}
 	
 	public void setRandom(int i)
@@ -472,7 +489,6 @@ public class EverythingHolder
 		heroNames[0] = hone;
 		heroNames[1] = htwo;
 		System.out.println("Heap 2: " + Gdx.app.getJavaHeap());
-		
 	}
 	
 	public String teamColor(int team)
@@ -915,6 +931,8 @@ public class EverythingHolder
 		objectTextures.put("fullHealth", new TextureRegion(textures, 598, 287, 345, 20));
 		objectTextures.put("nextWave", new TextureRegion(textures, 519, 348, 166, 74));
 		
+		objectTextures.put("upgradeBackground", new TextureRegion(textures, 598, 200, 1, 1));
+		
 		
 		
 		textures = new Texture(Gdx.files.internal("images/spriteblue.png"));
@@ -928,6 +946,8 @@ public class EverythingHolder
 		objectTextures.put("wolfimage", new TextureRegion(textures, 1108, 106, 112, 62));
 		objectTextures.put("eagleimage", new TextureRegion(textures, 748, 660, 90, 168));
 		objectTextures.put("elementalimage", new TextureRegion(textures, 1108, 620, 64, 76));
+		objectTextures.put("arrowtowerimage", new TextureRegion(textures, 0, 1160, 112, 180));
+		
 		
 //		textures.dispose();
 	}
@@ -1126,6 +1146,50 @@ public class EverythingHolder
 		return (min == 0 ? "00" : (min < 10 ? 0 + min : min)) + ":" + (sec == 0 ? "00" : (sec < 10 ? "0" + sec : sec));
 	}
 	
+	public SkillContainerStructure getSkillStructure(ActorStructure a, int skill, int level)
+	{
+		if (skill == 0)
+			return getSkillContainer(a.firstSkill(level));
+		else if (skill == 1)
+			return getSkillContainer(a.secondSkill(level));
+		else if (skill == 2)
+			return getSkillContainer(a.thirdSkill(level));
+		else if (skill == 3)
+			return getSkillContainer(((HeroStructure)a).activeSkill(level));
+		return null;
+	}
+	
+	public void buyUpgrade(int unit, int skill, int level, int team)
+	{
+		System.out.println("Upgrade?");
+		if (players[team - 1].upgrades[unit][skill] != -1)
+		{
+			System.out.println("Already bought it!");
+			return;
+		}
+		int cost;
+		if (unit < 6)
+			cost = getSkillStructure(getActorStructure(unit, team()), skill, level).cost;
+		else
+			cost = getSkillStructure(getHeroStructure(team()), skill, level).cost;
+//		int cost = playerUnits[team - 1][unit].getSkill(skill, level);
+		if ((team == 1 ? funds1 : funds2) < cost)
+			return;
+		if (team == 1)
+			funds1 -= cost;
+		else
+			funds2 -= cost;
+		
+		players[team - 1].upgrades[unit][skill] = level;
+		
+		if (team == this.team)
+		{
+			System.out.println("Upgrade!");
+			Gdx.input.vibrate(50);
+		}
+		System.out.println("Upgrade!?");
+	}
+	
 	public void add(Entity a)
 	{
 		if (a instanceof Building)
@@ -1202,7 +1266,8 @@ public class EverythingHolder
 		Coordinate start = (team == 1 ? map.start1() : map.start2());
 		ListIterator<Coordinate> iter = (team == 1 ? map.getPath(((top = !top) == false ? 1 : 2)).listIterator() : 
 													 map.getReversePath(((bot = !bot) == false ? 1 : 2)).listIterator());
-		add(new Minion(start.x(), start.y(), team, iter, playerUnits[team - 1][m], 0));
+		//add(new Minion(start.x(), start.y(), team, iter, playerUnits[team - 1][m], 0));
+		add(new Minion(start.x(), start.y(), team, iter, playerUnits[team - 1][m], players[team - 1].upgrades[m]));
 	}
 	
 	public ArrayList<Actor> team(int t)
@@ -1555,5 +1620,8 @@ public class EverythingHolder
 		
 		stats = new Stats();
 		setRandom(100);
+		
+		players[0] = new Player("Player1");
+		players[1] = new Player("Computer");
 	}
 }

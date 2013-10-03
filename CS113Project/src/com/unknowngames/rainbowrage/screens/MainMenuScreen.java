@@ -23,7 +23,6 @@ import com.unknowngames.rainbowrage.ui.RoundButton;
 
 // Jason Rogers
 // Mike Tang
-// Matthew Ito
 // Cecilia Bishton
 // Michael Chen
 
@@ -33,7 +32,6 @@ public class MainMenuScreen implements Screen
 	private OrthographicCamera camera;
 	TextureRegion texture;
 	Sprite sprite;
-//	Sprite titleSprite;
 	Button[] buttons = new Button[4];
 	private SpriteBatch batch;
 	int width, height;
@@ -103,6 +101,7 @@ public class MainMenuScreen implements Screen
 		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9 * scale, buttonRadius, 			
 				EverythingHolder.getObjectTexture("quitbutton"));	// Quit
 		
+		buttons[1].setClickable(false);
 		buttons[2].setClickable(false);
 		
 		touchPoint = new Vector3();
@@ -193,7 +192,7 @@ public class MainMenuScreen implements Screen
 		blood.draw(batch, delta * .5f);
 		rainbow.draw(batch, delta * .5f);
 		
-		everything.getFont(0).draw(batch, "Rainbow Rage " + everything.getGameVersion() + "_" + everything.getXmlVersion(), 10, 20);
+		everything.getFont(0).draw(batch, "Rainbow Rage " + everything.getGameVersion() + "_" + everything.getXmlVersion(), 10 * scale, 20 * scale);
 		
 		batch.end();
 	}
@@ -253,10 +252,10 @@ public class MainMenuScreen implements Screen
 		else if (h == 1) // Multi-player
 		{
 //			startMusic.stop();
-			everything.loadTeams("blue", "red", "mrwizard", "swordface");
-			game.gameScreen = new GameScreen(game, true);
-			newGameStarted = true;
-			game.setScreen(game.gameScreen);
+//			everything.loadTeams("blue", "red", "mrwizard", "swordface");
+//			game.gameScreen = new GameScreen(game, true);
+//			newGameStarted = true;
+//			game.setScreen(game.gameScreen);
 			return;
 		}
 		else if (h == 2) // Settings

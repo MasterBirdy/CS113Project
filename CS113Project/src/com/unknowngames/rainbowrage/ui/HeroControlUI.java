@@ -33,10 +33,8 @@ public class HeroControlUI extends BaseClass
 				if (x < xCoord() || y < yCoord()
 						|| (getDistanceSquared(x, y) > width * height))
 				{
-					// System.out.println("Miss");
 					return false;
 				}
-				// System.out.println("HIT!");
 				Gdx.input.vibrate(50);
 				return true;
 			}
@@ -53,7 +51,6 @@ public class HeroControlUI extends BaseClass
 
 	public void setSkillClickable(boolean c)
 	{
-//		buttons[3].clickable = c;
 		buttons[3].setClickable(c);
 	}
 
@@ -71,6 +68,6 @@ public class HeroControlUI extends BaseClass
 		buttons[3].draw(batch, delta);
 		everything.getFont(3).drawMultiLine(batch,
 				(everything.activeCooldown() > 0 ? everything.activeCooldown() / 50 + "" : ""),
-				buttons[3].xCoord() + 42, buttons[3].yCoord() + 57, 0, HAlignment.CENTER);
+				buttons[3].xCoord() + 42 * scale, buttons[3].yCoord() + 57 * scale, 0, HAlignment.CENTER);
 	}
 }
