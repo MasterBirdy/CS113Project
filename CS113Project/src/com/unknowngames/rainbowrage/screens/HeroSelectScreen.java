@@ -2,6 +2,7 @@ package com.unknowngames.rainbowrage.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.unknowngames.rainbowrage.EverythingHolder;
-import com.unknowngames.rainbowrage.GameScreen;
 import com.unknowngames.rainbowrage.RainbowRage;
 import com.unknowngames.rainbowrage.parser.ActorStructure;
 import com.unknowngames.rainbowrage.parser.HeroStructure;
@@ -110,6 +110,11 @@ public class HeroSelectScreen implements Screen
 		batch.begin();
 		
 		batch.draw(background, 0, 0, width, height);
+		
+		batch.setColor(1, 1, 1, .5f);
+		batch.draw(EverythingHolder.getObjectTexture("upgradeBackground"), 0, 0, width, height);
+		batch.setColor(Color.WHITE);
+		
 		everything.font[2].draw(batch, "Choose your hero and team color!", 210 * scale, 450 * scale);
 //		for (int i = 0; i < 3; i++)
 //			batch.draw(heroNames[i], buttons[i].xCoord() - 70, 180, 151, 55);
@@ -231,7 +236,7 @@ public class HeroSelectScreen implements Screen
 			selected = 2;
 			hero[1] = "arroweyes";
 		}
-		buttons[selected].setClickable(false);
+		buttons[selected].setClickable(true);
 	}
 	
 	private void selectColor(int c)

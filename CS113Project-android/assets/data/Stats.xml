@@ -66,7 +66,7 @@
 	
 	<minion type = "mage">
 		<maxhealth>			65		41		411		4111		</maxhealth>
-		<damage>			0		41		411		4111		</damage>
+		<damage>			8		41		411		4111		</damage>
 		<attackspeed>		51		41		411		4111		</attackspeed>
 		<attackrange>		90		41		411		4111		</attackrange>
 		<speed>				2.3f	41f		411f	4111f		</speed>
@@ -191,6 +191,7 @@
 		<thirdskill>		empty		empty					</thirdskill>
 		<pet>				wolf								</pet>
 		<description>		It's just a flesh wound				</description>
+		<startmessage>		Let my blade do the talking!		</startmessage>
 	</hero>
 	
 	<hero type = "arroweyes">
@@ -214,6 +215,7 @@
 		<thirdskill>		empty		empty					</thirdskill>
 		<pet>				eagle								</pet>
 		<description>		Fear my shaft						</description>
+		<startmessage>		They won't know what hit them!		</startmessage>
 	</hero>
 	
 	<hero type = "mrwizard">
@@ -237,6 +239,7 @@
 		<thirdskill>		empty		empty					</thirdskill>
 		<pet>				elemental							</pet>
 		<description>		The grand wizard					</description>
+		<startmessage>		Let's burn them all!				</startmessage>
 	</hero>
 	
 	<!-- BUILDINGS -->

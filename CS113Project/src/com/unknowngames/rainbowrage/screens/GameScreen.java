@@ -1,4 +1,4 @@
-package com.unknowngames.rainbowrage;
+package com.unknowngames.rainbowrage.screens;
 
 //import com.badlogic.gdx.ApplicationListener;
 import java.io.IOException;
@@ -27,6 +27,10 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 import com.esotericsoftware.minlog.Log;
+import com.unknowngames.rainbowrage.Difficulty;
+import com.unknowngames.rainbowrage.EverythingHolder;
+import com.unknowngames.rainbowrage.RainbowRage;
+import com.unknowngames.rainbowrage.TextEffect;
 import com.unknowngames.rainbowrage.entity.*;
 import com.unknowngames.rainbowrage.input.GameInput;
 import com.unknowngames.rainbowrage.map.Coordinate;
@@ -77,7 +81,7 @@ public class GameScreen implements Screen
 	Client client;
 	ScoreBoard scoreBoard;
 
-	// String serverIp = "localhost"; // Local Host
+//	String serverIp = "localhost"; // Local Host
 	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";// "10.170.103.156";
 																			// //
 																			// EC2
@@ -105,6 +109,7 @@ public class GameScreen implements Screen
 		this.game = game;
 		this.multiplayer = multiplayer;
 		everything.reset();
+		EverythingHolder.registerGameScreen(this);
 		isPaused = false;
 
 		float w = Gdx.graphics.getWidth();
@@ -137,7 +142,9 @@ public class GameScreen implements Screen
 		GameInput.loadGame(this, gameUI);
 
 		everything.initializeHeroes();
-
+//		gameUI.setMessage("This is only a test");
+		gameUI.setMessage(everything.getHero().getPhrase("start"));
+		
 		touchPoint = new Vector3();
 		gameTouchPoint = new Vector3();
 
@@ -254,7 +261,7 @@ public class GameScreen implements Screen
 			batch.end();
 		}
 
-		if (scoreBoard == null && everything.settings.showPath())
+		if (scoreBoard == null && everything.getSettings().showPath())
 			everything.map().drawPaths(batch, camera);
 
 		batch.setProjectionMatrix(uiCamera.combined);
@@ -265,7 +272,7 @@ public class GameScreen implements Screen
 			pauseCooldown++;
 
 			if (multiplayer == true && connected == false)
-				everything.getFont(2).draw(batch,
+				EverythingHolder.getFont(2).draw(batch,
 						"Waiting for a challenger...", 100, 300);
 		}
 		else
@@ -288,7 +295,7 @@ public class GameScreen implements Screen
 		startMusic = tempMusic.newMusic(Gdx.files
 				.internal("audio/526296_In-My-Final-Hours.mp3"));
 		startMusic.setLooping(true);
-		startMusic.setVolume(everything.settings.getMusicSound());
+		startMusic.setVolume(everything.getSettings().getMusicSound());
 		startMusic.play();
 
 		isPaused = true;
@@ -313,8 +320,8 @@ public class GameScreen implements Screen
 			if (commandQueue.isEmpty())
 				return;
 			System.out.println(((CommandIn) commandQueue.peek()).turn + " : "
-					+ everything.turn);
-			if (everything.turn != ((CommandIn) commandQueue.peek()).turn)
+					+ everything.getTurn());
+			if (everything.getTurn() != ((CommandIn) commandQueue.peek()).turn)
 				return;
 
 			object = commandQueue.remove();
@@ -337,6 +344,11 @@ public class GameScreen implements Screen
 				{
 					System.out.println("Pulled active cast command.");
 					everything.activeHeroSkill(command.team);
+				}
+				else if (command.command >= 20)
+				{
+					System.out.println("Pulled upgrade command.");
+					everything.buyUpgrade(command.command, command.team);
 				}
 			}
 		}
@@ -391,7 +403,7 @@ public class GameScreen implements Screen
 	public void sendTurn()
 	{
 		if (multiplayer && sentTurn == false
-				&& everything.turn == everything.highestTurn - 9)
+				&& everything.getTurn() == everything.getHighestTurn() - 9)
 		{
 			Command cmd = new Command();
 			cmd.team = team;
@@ -404,9 +416,20 @@ public class GameScreen implements Screen
 	
 	public void buyUpgrade(int unit, int skill, int level, int team)
 	{
+		System.out.println("Sending upgrade");
 		if (multiplayer && connected)
 		{
-			
+			System.out.println("Sending upgrade!");
+			if (everything.funds() < everything.unitCost(unit, team))
+			{
+				return;
+			}
+			Command cmd = new Command();
+			cmd.team = (byte) team;
+			cmd.type = (byte)(20 + level + skill * 3 + unit * 12);
+//			cmd.type = (byte)(20 + team + level * 2 + skill * 6 + unit * 18);
+			cmd.turn = everything.turn();
+			client.sendTCP(cmd);
 		}
 		else
 		{
@@ -418,6 +441,7 @@ public class GameScreen implements Screen
 	{
 		if (multiplayer && connected)
 		{
+			System.out.println("Sending unit");
 			if (everything.funds() < everything.unitCost(unit, team))
 			{
 				return;
@@ -639,7 +663,7 @@ public class GameScreen implements Screen
 					{
 						// System.out.println("Highest now " +
 						// ((CommandIn)object).turn);
-						everything.highestTurn = ((CommandIn) object).turn;
+						everything.setHighestTurn(((CommandIn) object).turn);
 					}
 					else
 						commandQueue.add((CommandIn) object);
@@ -753,5 +777,10 @@ public class GameScreen implements Screen
 				return -1;
 			return 0;
 		}
+	}
+	
+	public void refreshButtons()
+	{
+		gameUI.refreshButtons();
 	}
 }

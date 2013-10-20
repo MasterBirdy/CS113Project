@@ -29,13 +29,14 @@ import com.badlogic.gdx.math.Vector3;
 import com.unknowngames.rainbowrage.entity.*;
 import com.unknowngames.rainbowrage.map.*;
 import com.unknowngames.rainbowrage.parser.*;
+import com.unknowngames.rainbowrage.screens.GameScreen;
 import com.unknowngames.rainbowrage.skill.Skill;
 import com.unknowngames.rainbowrage.skill.TravelingSkillContainer;
 
 public class EverythingHolder 
 {
 	@SuppressWarnings("unchecked")
-	String xmlVersion = "", gameVersion = "0.10_03_13_";
+	String xmlVersion = "", gameVersion = "0.10_19_13";
 	
 	EntityComparator eCompare = new EntityComparator();
 	static private SpriteBatch batch;
@@ -57,7 +58,7 @@ public class EverythingHolder
 
 //	static float musicVolume = 1f;
 	
-	static boolean showRange;
+	public static boolean showRange;
 	boolean spawning;
 	boolean running;
 	int team1Towers = 0, team2Towers = 0, towerIncome = 0;
@@ -88,7 +89,7 @@ public class EverythingHolder
 	static HashMap<String, UnitAnimation> unitAnimations = new HashMap<String, UnitAnimation>();
 	static HashMap<String, BuildingAnimation> buildingAnimations = new HashMap<String, BuildingAnimation>();
 	
-	public BitmapFont[] font = new BitmapFont[4]; //, font2;
+	public static BitmapFont[] font = new BitmapFont[7]; //, font2;
 	private Texture teamTextures[] = new Texture[2];
 	
 	public String[] color = {"blue", "red"};
@@ -105,7 +106,7 @@ public class EverythingHolder
 	
 	int[] sentUnits = new int[6];
 	
-	boolean top = false, bot = false;
+	boolean top, bot;
 	
 	float sizeRatio, minZoom = 1, xRatio, yRatio;
 	int screenSizeX = 0, screenSizeY = 0;
@@ -118,6 +119,8 @@ public class EverythingHolder
 	float scale;
 	
 	Player[] players = new Player[2];
+	
+	static GameScreen gameScreen;
 	
 	public EverythingHolder()
 	{
@@ -138,7 +141,7 @@ public class EverythingHolder
 		waveInterval = 	(int) (15 / stepTime); 	// Turns (15 seconds)
 		waveTime = 		(int) (3 / stepTime);	// Turns (3 seconds)
 				
-		spawning = false;
+//		spawning = false;
 		BaseClass.load(this);
 		
 		// Load all assets
@@ -147,13 +150,7 @@ public class EverythingHolder
 		loadTextures();
 		finished = true;
 		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
-		font[0] = generator.generateFont(18);
-		font[1] = generator.generateFont(32);
-		font[2] = generator.generateFont(45);
-		font[2].setColor(1, 1, 1, 1);
-		font[3] = generator.generateFont(45);
-//		font[3].setColor(0, 0, 0, 1);
+		
 		
 		loadMusic();
 		screenSizeX = Gdx.graphics.getWidth();
@@ -163,10 +160,41 @@ public class EverythingHolder
 		scale = (xRatio < yRatio ? xRatio : yRatio);
 		sizeRatio = (float)Gdx.graphics.getWidth() / 800;
 		
-		for (int i = 0; i < 4; i++)
-			font[i].scale(scale - 1f);
+		loadFonts();
 		
 		System.out.println("Heap: " + Gdx.app.getJavaHeap());
+	}
+	
+	private void loadFonts()
+	{
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
+		font[0] = generator.generateFont(18);
+		font[1] = generator.generateFont(32);
+		font[2] = generator.generateFont(45);
+		font[2].setColor(1, 1, 1, 1);
+		font[3] = generator.generateFont(45);
+//		font[3].setColor(0, 0, 0, 1);
+		font[4] = new BitmapFont(Gdx.files.internal("fonts/myfont.fnt"), Gdx.files.internal("fonts/myfont.png"), false);
+		font[4].scale(-.45f);
+		font[5] = new BitmapFont(Gdx.files.internal("fonts/myfont.fnt"), Gdx.files.internal("fonts/myfont.png"), false);
+		font[5].scale(-.6f);
+//		font[5].scale(-.5f);
+		font[6] = new BitmapFont(Gdx.files.internal("fonts/myfont.fnt"), Gdx.files.internal("fonts/myfont.png"), false);
+//		font[6].scale(-.5f);
+//		font[4].setScale(scale);
+		
+		for (int i = 0; i < font.length; i++)
+			font[i].scale(scale - 1f);
+	}
+	
+	public static GameScreen getGameScreen()
+	{
+		return gameScreen;
+	}
+	
+	public static void registerGameScreen(GameScreen gs)
+	{
+		gameScreen = gs;
 	}
 	
 	public Player getSelfPlayer()
@@ -463,6 +491,21 @@ public class EverythingHolder
 	public float getSoundLevel()
 	{
 		return settings.getGameSound();
+	}
+	
+	public int getHighestTurn()
+	{
+		return highestTurn;
+	}
+	
+	public void setHighestTurn(int turn)
+	{
+		highestTurn = turn;
+	}
+	
+	public int getTurn()
+	{
+		return turn;
 	}
 	
 	public int activeCooldown()
@@ -775,7 +818,7 @@ public class EverythingHolder
 		return heroNames[team - 1];
 	}
 	
-	public BitmapFont getFont(int f)
+	public static BitmapFont getFont(int f)
 	{
 		if (font[f] == null)
 			font[f] = new BitmapFont();
@@ -805,6 +848,7 @@ public class EverythingHolder
 	
 	public SkillContainerStructure getSkillContainer(String skill)
 	{
+//		System.out.println("Skill Container: " + skill);
 		return skillContainerStats.get(skill);
 	}
 	
@@ -933,6 +977,9 @@ public class EverythingHolder
 		
 		objectTextures.put("upgradeBackground", new TextureRegion(textures, 598, 200, 1, 1));
 		
+		objectTextures.put("chatbox", new TextureRegion(textures, 1105, 182, 800, 87));
+		objectTextures.put("heroface", new TextureRegion(textures, 1237, 1952, 96, 96));
+		
 		
 		
 		textures = new Texture(Gdx.files.internal("images/spriteblue.png"));
@@ -947,8 +994,6 @@ public class EverythingHolder
 		objectTextures.put("eagleimage", new TextureRegion(textures, 748, 660, 90, 168));
 		objectTextures.put("elementalimage", new TextureRegion(textures, 1108, 620, 64, 76));
 		objectTextures.put("arrowtowerimage", new TextureRegion(textures, 0, 1160, 112, 180));
-		
-		
 //		textures.dispose();
 	}
 	
@@ -1148,30 +1193,47 @@ public class EverythingHolder
 	
 	public SkillContainerStructure getSkillStructure(ActorStructure a, int skill, int level)
 	{
-		if (skill == 0)
-			return getSkillContainer(a.firstSkill(level));
-		else if (skill == 1)
-			return getSkillContainer(a.secondSkill(level));
-		else if (skill == 2)
-			return getSkillContainer(a.thirdSkill(level));
+		if (skill >= 0 && skill < 3)
+			return getSkillContainer(a.getSkill(skill, level));
+//		if (skill == 0)
+//			return getSkillContainer(a.firstSkill(level));
+//		else if (skill == 1)
+//			return getSkillContainer(a.secondSkill(level));
+//		else if (skill == 2)
+//			return getSkillContainer(a.thirdSkill(level));
 		else if (skill == 3)
 			return getSkillContainer(((HeroStructure)a).activeSkill(level));
 		return null;
 	}
 	
+	public void buyUpgrade(int command, int team)
+	{
+//		System.out.println("Upgrade Command: " + command);
+		command -= 20;
+		int level = command % 3;
+		int skill = ((command - level) / 3) % 4;
+		int unit = (command - level - skill * 3) / 12;
+//		int team = command % 2;
+//		int level = (command - team) % 3;
+//		int skill = (command - team - level) % 3;
+//		int unit = (command - team - level - skill);
+		
+		buyUpgrade(unit, skill, level, team);
+	}
+	
 	public void buyUpgrade(int unit, int skill, int level, int team)
 	{
-		System.out.println("Upgrade?");
+		System.out.println("Upgrade: " + unit + ", " + skill + ", " + level + ", " + team);
 		if (players[team - 1].upgrades[unit][skill] != -1)
 		{
-			System.out.println("Already bought it!");
+//			System.out.println("Already bought it!");
 			return;
 		}
 		int cost;
 		if (unit < 6)
-			cost = getSkillStructure(getActorStructure(unit, team()), skill, level).cost;
+			cost = getSkillStructure(getActorStructure(unit, team), skill, level).cost;
 		else
-			cost = getSkillStructure(getHeroStructure(team()), skill, level).cost;
+			cost = getSkillStructure(getHeroStructure(team), skill, level).cost;
 //		int cost = playerUnits[team - 1][unit].getSkill(skill, level);
 		if ((team == 1 ? funds1 : funds2) < cost)
 			return;
@@ -1184,10 +1246,11 @@ public class EverythingHolder
 		
 		if (team == this.team)
 		{
-			System.out.println("Upgrade!");
+//			System.out.println("Upgrade!");
 			Gdx.input.vibrate(50);
 		}
-		System.out.println("Upgrade!?");
+		gameScreen.refreshButtons();
+//		System.out.println("Upgrade!?");
 	}
 	
 	public void add(Entity a)
@@ -1209,7 +1272,7 @@ public class EverythingHolder
 		}
 		if (loc > 100)
 		{
-			System.out.println("So many!");
+//			System.out.println("So many!");
 			entities.set(loc, a);
 		}
 		else if (loc >= 0)
@@ -1525,18 +1588,27 @@ public class EverythingHolder
 			
 			sentUnits = new int[6];
 		}
-
-		if (!pools[2].isEmpty() && turn - spawnTimer1 > spawnInterval1)
+		
+		if (turn - spawnTimer1 > spawnInterval1)
 		{
-			spawnPool(1);
+			if (!pools[2].isEmpty())
+				spawnPool(1);
+			if (!pools[3].isEmpty())
+				spawnPool(2);
 			spawnTimer1 = turn;
 		}
-		
-		if (!pools[3].isEmpty() && turn - spawnTimer2 > spawnInterval2)
-		{
-			spawnPool(2);
-			spawnTimer2 = turn;
-		}
+
+//		if (!pools[2].isEmpty() && turn - spawnTimer1 > spawnInterval1)
+//		{
+//			spawnPool(1);
+//			spawnTimer1 = turn;
+//		}
+//		
+//		if (!pools[3].isEmpty() && turn - spawnTimer2 > spawnInterval2)
+//		{
+//			spawnPool(2);
+//			spawnTimer2 = turn;
+//		}
 	}
 	
 	public Map map()
@@ -1623,5 +1695,12 @@ public class EverythingHolder
 		
 		players[0] = new Player("Player1");
 		players[1] = new Player("Computer");
+		
+		waveTimer = 0;
+		spawnTimer1 = 0;
+		spawnTimer2 = 0;
+		
+		top = false;
+		bot = false;
 	}
 }

@@ -43,3 +43,148 @@ Total data received: 67056
 -------------------------------
 8/26/13 5:19 PM: Server Started!
 -------------------------------
+-------------------------------
+10/3/13 11:44 PM: Server Started!
+-------------------------------
+10/3/13 11:45 PM: Player joined.
+10/3/13 11:45 PM: Player joined.
+10/3/13 11:45 PM: Player0 and Player0 started.
+10/3/13 11:47 PM: Player 10 logged out.
+10/3/13 11:47 PM: Player 20 logged out.
+10/3/13 11:51 PM: Player joined.
+10/3/13 11:51 PM: Player joined.
+10/3/13 11:51 PM: Player0 and Player0 started.
+10/3/13 11:51 PM: Player 30 logged out.
+10/3/13 11:51 PM: Player 40 logged out.
+10/3/13 11:52 PM: Player joined.
+10/3/13 11:52 PM: Player joined.
+10/3/13 11:52 PM: Player0 and Player0 started.
+10/3/13 11:53 PM: Player 60 logged out.
+10/3/13 11:53 PM: Player 50 logged out.
+-------------------------------
+10/7/13 8:22 PM: Server Started!
+-------------------------------
+-------------------------------
+10/19/13 1:51 PM: Server Started!
+-------------------------------
+10/19/13 1:52 PM: Player joined.
+10/19/13 1:52 PM: Player joined.
+10/19/13 1:52 PM: Player0 and Player0 started.
+10/19/13 1:53 PM: Player 10 logged out.
+10/19/13 1:53 PM: Player 20 logged out.
+10/19/13 1:54 PM: Player joined.
+10/19/13 1:54 PM: Player joined.
+10/19/13 1:54 PM: Player0 and Player0 started.
+10/19/13 1:55 PM: Player 40 logged out.
+10/19/13 1:55 PM: Player 30 logged out.
+10/19/13 1:56 PM: Player joined.
+10/19/13 1:56 PM: Player joined.
+10/19/13 1:56 PM: Player0 and Player0 started.
+10/19/13 1:58 PM: Player 50 logged out.
+10/19/13 1:58 PM: Player 60 logged out.
+10/19/13 2:07 PM: Player joined.
+10/19/13 2:07 PM: Player joined.
+10/19/13 2:07 PM: Player0 and Player0 started.
+10/19/13 2:09 PM: Player 80 logged out.
+10/19/13 2:09 PM: Player 70 logged out.
+10/19/13 2:10 PM: Player joined.
+10/19/13 2:10 PM: Player joined.
+10/19/13 2:10 PM: Player0 and Player0 started.
+10/19/13 2:46 PM: Player 90 logged out.
+10/19/13 2:47 PM: Player 100 logged out.
+10/19/13 2:47 PM: Player joined.
+10/19/13 2:47 PM: Player joined.
+10/19/13 2:47 PM: Player0 and Player0 started.
+10/19/13 2:48 PM: Player 120 logged out.
+10/19/13 2:48 PM: Player 110 logged out.
+10/19/13 2:48 PM: Player joined.
+10/19/13 2:48 PM: Player joined.
+10/19/13 2:48 PM: Player0 and Player0 started.
+10/19/13 2:53 PM: Player 140 logged out.
+10/19/13 2:54 PM: Player 130 logged out.
+10/19/13 2:54 PM: Player joined.
+10/19/13 2:54 PM: Player joined.
+10/19/13 2:54 PM: Player0 and Player0 started.
+10/19/13 2:57 PM: Player 160 logged out.
+10/19/13 2:57 PM: Player 150 logged out.
+10/19/13 2:57 PM: Player joined.
+10/19/13 2:57 PM: Player joined.
+10/19/13 2:57 PM: Player0 and Player0 started.
+10/19/13 2:58 PM: Player 180 logged out.
+10/19/13 2:58 PM: Player 170 logged out.
+10/19/13 2:59 PM: Player joined.
+10/19/13 2:59 PM: Player joined.
+10/19/13 2:59 PM: Player0 and Player0 started.
+10/19/13 3:01 PM: Player 190 logged out.
+10/19/13 3:01 PM: Player 200 logged out.
+10/19/13 3:02 PM: Player joined.
+10/19/13 3:02 PM: Player joined.
+10/19/13 3:02 PM: Player0 and Player0 started.
+10/19/13 3:03 PM: Player 210 logged out.
+10/19/13 3:03 PM: Player 220 logged out.
+10/19/13 3:04 PM: Player joined.
+10/19/13 3:04 PM: Player joined.
+10/19/13 3:04 PM: Player0 and Player0 started.
+10/19/13 3:06 PM: Player 240 logged out.
+10/19/13 3:06 PM: Player 230 logged out.
+10/19/13 3:50 PM: Player joined.
+10/19/13 3:50 PM: Player joined.
+10/19/13 3:50 PM: Player0 and Player0 started.
+10/19/13 3:51 PM: Player 250 logged out.
+10/19/13 3:51 PM: Player 260 logged out.
+10/19/13 3:54 PM: Player joined.
+10/19/13 3:54 PM: Player joined.
+10/19/13 3:54 PM: Player0 and Player0 started.
+10/19/13 3:55 PM: Player 280 logged out.
+10/19/13 3:58 PM: Player 270 logged out.
+10/19/13 3:59 PM: Player joined.
+10/19/13 3:59 PM: Player joined.
+10/19/13 3:59 PM: Player0 and Player0 started.
+10/19/13 4:00 PM: Player 290 logged out.
+10/19/13 4:00 PM: Player 300 logged out.
+10/19/13 4:00 PM: Player joined.
+10/19/13 4:00 PM: Player joined.
+10/19/13 4:00 PM: Player0 and Player0 started.
+10/19/13 4:01 PM: Player 320 logged out.
+10/19/13 4:01 PM: Player 310 logged out.
+10/19/13 4:03 PM: Player joined.
+10/19/13 4:03 PM: Player joined.
+10/19/13 4:03 PM: Player0 and Player0 started.
+10/19/13 4:03 PM: Player 330 logged out.
+10/19/13 4:04 PM: Player 340 logged out.
+10/19/13 4:04 PM: Player joined.
+10/19/13 4:04 PM: Player joined.
+10/19/13 4:04 PM: Player0 and Player0 started.
+10/19/13 4:05 PM: Player 350 logged out.
+10/19/13 4:05 PM: Player 360 logged out.
+10/19/13 4:05 PM: Player joined.
+10/19/13 4:05 PM: Player joined.
+10/19/13 4:05 PM: Player0 and Player0 started.
+10/19/13 4:05 PM: Player 370 logged out.
+10/19/13 4:10 PM: Player 380 logged out.
+10/19/13 4:10 PM: Player joined.
+10/19/13 4:10 PM: Player joined.
+10/19/13 4:10 PM: Player0 and Player0 started.
+10/19/13 4:10 PM: Player 390 logged out.
+10/19/13 4:42 PM: Player joined.
+10/19/13 4:42 PM: Player joined.
+10/19/13 4:42 PM: Player0 and Player0 started.
+10/19/13 4:43 PM: Player 410 logged out.
+10/19/13 4:43 PM: Player 420 logged out.
+10/19/13 5:58 PM: Player joined.
+10/19/13 5:58 PM: Player joined.
+10/19/13 5:58 PM: Player0 and Player0 started.
+10/19/13 5:58 PM: Server Killed =(
+Total data sent: 6048
+Total data received: 132544
+10/19/13 5:58 PM: Player 440 logged out.
+10/19/13 5:58 PM: Player 430 logged out.
+10/19/13 5:58 PM: Player 400 logged out.
+-------------------------------
+10/19/13 6:05 PM: Server Started!
+-------------------------------
+10/19/13 6:05 PM: Player joined.
+10/19/13 6:05 PM: Server Killed =(
+Total data sent: 0
+Total data received: 32
+10/19/13 6:05 PM: Player 10 logged out.

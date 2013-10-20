@@ -153,9 +153,10 @@ public class RainbowRageServer
                 
                 if (object instanceof UserMessage)
                 {
-                	if (((UserMessage)object).message.equals("kill"))
-            			kill();
                 	UserMessage msg = (UserMessage)object;
+//                	if (((UserMessage)object).message.equals("kill"))
+                	if (msg.message.equals("kill"))
+            			kill();
                 	if (user.room >= 0)
                 		games.get(user.room).userMessage(msg);
                 }

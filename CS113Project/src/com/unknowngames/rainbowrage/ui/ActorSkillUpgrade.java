@@ -15,33 +15,47 @@ public class ActorSkillUpgrade extends ActorSkillDisplay
 	public ActorSkillUpgrade(int x, int y)
 	{
 		super(x, y);
-		radius = 30 * scale;
-		confirmButton = new RoundButton(x + 253 * scale, y - 115 * scale, radius, EverythingHolder.getObjectTexture("confirmbutton"));
-		cancelButton = new RoundButton(x + 318 * scale, y - 115 * scale, radius, EverythingHolder.getObjectTexture("cancelbutton"));
+		radius = 35 * scale;
+		confirmButton = new RoundButton(x + 243 * scale, y - 112 * scale, radius, EverythingHolder.getObjectTexture("confirmbutton"));
+		cancelButton = new RoundButton(x + 325 * scale, y - 112 * scale, radius, EverythingHolder.getObjectTexture("cancelbutton"));
 		showDisplay = false;
 		
 		refreshButtons();
 	}
 	
-	private void refreshButtons()
+	public void refreshButtons()
 	{
+		confirmButton.setClickable(true);
+		
 		for (int i = 0; i < buttons.length; i++)
 		{
 			if (buttons[i] != null)
 			{
 				if (!(everything.getSelfPlayer().unitSkillLevel(selectedUnit, i / 2) == i % 2) && selectedUnit != 6)
+				{
 					buttons[i].setClickable(false);
+					
+					if (i == selectedSkill)
+						confirmButton.setClickable(true);
+				}
 				else
+				{
 					buttons[i].setClickable(true);
+					
+					if (i == selectedSkill)
+						confirmButton.setClickable(false);
+				}
 			}
 		}
+		if (selectedSkill == -1)
+			confirmButton.setClickable(false);
 	}
 	
 	public void setActor(ActorStructure actor, int unit)
 	{
 		super.setActor(actor);
 		selectedUnit = unit;
-		
+		selectedSkill = -1;
 		refreshButtons();
 	}
 	
@@ -49,7 +63,7 @@ public class ActorSkillUpgrade extends ActorSkillDisplay
 	{
 		if (confirmButton != null && confirmButton.hit(x, y))
 		{
-			buySelected();
+			buySelectedUpgrade();
 			refreshButtons();
 			return 40;
 		}
@@ -58,7 +72,9 @@ public class ActorSkillUpgrade extends ActorSkillDisplay
 			toggleDisplay();
 			return 41;
 		}
-		return super.hit(x, y);
+		int hit = super.hit(x, y);
+		refreshButtons();
+		return hit;
 	}
 	
 	public boolean isShown()
@@ -76,17 +92,18 @@ public class ActorSkillUpgrade extends ActorSkillDisplay
 		showDisplay = true;
 	}
 	
-	private void buySelected()
+	private void buySelectedUpgrade()
 	{
-		if (selectedUnit != 6)
-			everything.buyUpgrade(selectedUnit, selectedSkill / 2, selectedSkill % 2, everything.team());
+		if (selectedUnit != 6 && selectedSkill != -1)
+			EverythingHolder.getGameScreen().buyUpgrade(selectedUnit, selectedSkill / 2, selectedSkill % 2, everything.team());
+//			everything.buyUpgrade(selectedUnit, selectedSkill / 2, selectedSkill % 2, everything.team());
 	}	
 	
 	@Override
 	public void render(SpriteBatch batch)
 	{
 		batch.setColor(1, 1, 1, .5f);
-		batch.draw(EverythingHolder.getObjectTexture("upgradeBackground"), x - 10, y - 145 * scale, 358 * scale, 420 * scale);
+		batch.draw(EverythingHolder.getObjectTexture("upgradeBackground"), x - 10, y - 145 * scale, 385 * scale, 420 * scale);
 		batch.setColor(Color.WHITE);
 		super.render(batch);
 		if (confirmButton != null)

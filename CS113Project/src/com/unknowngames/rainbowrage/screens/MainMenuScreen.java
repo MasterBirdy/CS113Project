@@ -16,9 +16,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.unknowngames.rainbowrage.EverythingHolder;
-import com.unknowngames.rainbowrage.GameScreen;
 import com.unknowngames.rainbowrage.RainbowRage;
 import com.unknowngames.rainbowrage.ui.Button;
+import com.unknowngames.rainbowrage.ui.LoginUI;
 import com.unknowngames.rainbowrage.ui.RoundButton;
 
 // Jason Rogers
@@ -49,6 +49,8 @@ public class MainMenuScreen implements Screen
 	HeroSelectScreen selectScreen;
 	
 	EverythingHolder everything;
+	
+	LoginUI loginUI;
 
 	public MainMenuScreen(RainbowRage game, EverythingHolder everything)
 	{
@@ -101,7 +103,7 @@ public class MainMenuScreen implements Screen
 		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9 * scale, buttonRadius, 			
 				EverythingHolder.getObjectTexture("quitbutton"));	// Quit
 		
-		buttons[1].setClickable(false);
+//		buttons[1].setClickable(false);
 		buttons[2].setClickable(false);
 		
 		touchPoint = new Vector3();
@@ -131,6 +133,9 @@ public class MainMenuScreen implements Screen
 		
 		Gdx.graphics.setVSync(true);
 		//Gdx.input.setCursorCatched(false);
+		
+		loginUI = new LoginUI();
+//		loginUI.show();
 	}
 	
 	public void scaleParticleEffect(ParticleEffect pe, float pScale)
@@ -192,7 +197,10 @@ public class MainMenuScreen implements Screen
 		blood.draw(batch, delta * .5f);
 		rainbow.draw(batch, delta * .5f);
 		
-		everything.getFont(0).draw(batch, "Rainbow Rage " + everything.getGameVersion() + "_" + everything.getXmlVersion(), 10 * scale, 20 * scale);
+		EverythingHolder.getFont(0).draw(batch, "Rainbow Rage " + everything.getGameVersion() + "_" + everything.getXmlVersion(), 10 * scale, 20 * scale);
+		
+		
+		loginUI.show(batch, delta);
 		
 		batch.end();
 	}
@@ -252,10 +260,10 @@ public class MainMenuScreen implements Screen
 		else if (h == 1) // Multi-player
 		{
 //			startMusic.stop();
-//			everything.loadTeams("blue", "red", "mrwizard", "swordface");
-//			game.gameScreen = new GameScreen(game, true);
-//			newGameStarted = true;
-//			game.setScreen(game.gameScreen);
+			everything.loadTeams("blue", "red", "mrwizard", "swordface");
+			game.gameScreen = new GameScreen(game, true);
+			newGameStarted = true;
+			game.setScreen(game.gameScreen);
 			return;
 		}
 		else if (h == 2) // Settings

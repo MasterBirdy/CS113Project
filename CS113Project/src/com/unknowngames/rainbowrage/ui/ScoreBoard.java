@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.unknowngames.rainbowrage.BaseClass;
 import com.unknowngames.rainbowrage.EverythingHolder;
-import com.unknowngames.rainbowrage.GameScreen;
+import com.unknowngames.rainbowrage.screens.GameScreen;
 
 public class ScoreBoard extends BaseClass//implements Screen
 {

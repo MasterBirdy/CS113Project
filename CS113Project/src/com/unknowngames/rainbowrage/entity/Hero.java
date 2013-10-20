@@ -1,4 +1,5 @@
 package com.unknowngames.rainbowrage.entity;
+import java.util.HashMap;
 import java.util.ListIterator;
 
 import com.unknowngames.rainbowrage.map.Coordinate;
@@ -19,6 +20,7 @@ public class Hero extends Unit
 //	SkillStructure activeSkill;
 	SkillSpawner activeSkill;
 	String pet;
+	HashMap<String, String> phrases;
 	
 	public Hero(int x, int y, int team, ListIterator<Coordinate> p, HeroStructure struct)
 	{
@@ -47,7 +49,19 @@ public class Hero extends Unit
 //			activeCooldown = activeSkill.cooldown.get(0);
 //			activeCooldownCounter = activeCooldown;
 //		}
-		pet = struct.pet(level);		
+		pet = struct.pet(level);
+		
+		phrases = new HashMap<String, String>(struct.getPhrases());
+	}
+	
+
+	
+	public String getPhrase(String type)
+	{
+		String phrase = phrases.get(type);
+		if (phrase == null)
+			phrase = "I've got nothing to say";
+		return phrase;
 	}
 	
 	public int activeCooldown()

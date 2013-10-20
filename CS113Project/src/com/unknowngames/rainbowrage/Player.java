@@ -28,6 +28,7 @@ public class Player
 	
 	public int unitSkillLevel(int unit, int skill)
 	{
+		System.out.println("Player: " + userName + " Unit: " + unit + " Skill: " + skill);
 		if (unit < 0 || unit > 6 || skill < 0)
 		{
 			System.out.println("Out of range");

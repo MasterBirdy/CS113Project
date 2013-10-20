@@ -10,11 +10,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.unknowngames.rainbowrage.BaseClass;
 import com.unknowngames.rainbowrage.EverythingHolder;
-import com.unknowngames.rainbowrage.GameScreen;
 import com.unknowngames.rainbowrage.entity.Actor;
 import com.unknowngames.rainbowrage.entity.Building;
 import com.unknowngames.rainbowrage.entity.Entity;
 import com.unknowngames.rainbowrage.entity.Hero;
+import com.unknowngames.rainbowrage.screens.GameScreen;
 import com.unknowngames.rainbowrage.ui.GameUI;
 
 public class GameInput extends BaseClass implements InputProcessor
@@ -215,7 +215,8 @@ public class GameInput extends BaseClass implements InputProcessor
 		else if (h == 20)		// Pause menu
 			gameUI.setGameMenu(false);
 		else if (h == 21)
-			game.quit();
+			game.endGame();
+//			game.quit();
 //			game.centerOnHero();
 		return true;
 	}

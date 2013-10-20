@@ -112,6 +112,7 @@ public class UnitParser
 							hero.speed = tokenizeFloat(getElement("speed"));
 							hero.activeSkill = tokenizeString(getElement("activeskill"));
 							hero.pet = tokenizeString(getElement("pet"));
+							hero.phrases.put("start", getElement("startmessage").trim());
 							heroStatsMap.put(element.getAttribute("type"), hero);
 						}
 						else if (node.getNodeName().equals("building"))

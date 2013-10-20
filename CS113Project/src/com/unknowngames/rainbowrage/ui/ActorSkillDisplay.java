@@ -42,12 +42,12 @@ public class ActorSkillDisplay extends BaseClass
 			for (int j = 0; j < 2; j++)
 			{
 				if (!actor.getSkill(i, j).equals("empty"))
-					buttons[i * 2 + j] = new RectangularButton(x + (300 - (j * 60)) * scale, y + (200 - (i * 60)) * scale, 50 * scale, 50 * scale, getIcon(actor, i, j));
+					buttons[i * 2 + j] = new RectangularButton(x + (300 - (j * 75)) * scale, y + (200 - (i * 75)) * scale, 70 * scale, 70 * scale, getIcon(actor, i, j));
 				else
 					buttons[i * 2 + j] = null;
 			}
 			if (shownActor instanceof HeroStructure)
-				buttons[6] = new RectangularButton(x + 300 * scale, y - 40 * scale, 50 * scale, 50 * scale, getIcon(actor, 3, 0));
+				buttons[6] = new RectangularButton(x + 300 * scale, y - 40 * scale, 75 * scale, 75 * scale, getIcon(actor, 3, 0));
 			else
 				buttons[6] = null;
 		}

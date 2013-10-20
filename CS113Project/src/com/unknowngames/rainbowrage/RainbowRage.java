@@ -2,6 +2,7 @@ package com.unknowngames.rainbowrage;
 
 import com.badlogic.gdx.Game;
 import com.unknowngames.rainbowrage.cutscene.HeroIntros;
+import com.unknowngames.rainbowrage.screens.GameScreen;
 import com.unknowngames.rainbowrage.screens.MainMenuScreen;
 import com.unknowngames.rainbowrage.screens.SettingsScreen;
 import com.unknowngames.rainbowrage.ui.LoadingScreen;

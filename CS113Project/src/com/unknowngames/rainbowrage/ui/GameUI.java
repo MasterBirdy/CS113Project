@@ -12,9 +12,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.unknowngames.rainbowrage.BaseClass;
 import com.unknowngames.rainbowrage.EverythingHolder;
-import com.unknowngames.rainbowrage.GameScreen;
 import com.unknowngames.rainbowrage.entity.Actor;
 import com.unknowngames.rainbowrage.entity.Building;
+import com.unknowngames.rainbowrage.screens.GameScreen;
 
 public class GameUI extends BaseClass
 {
@@ -43,19 +43,24 @@ public class GameUI extends BaseClass
 	SideUI sideUI;
 	boolean showingMenu = false;
 	float scale;
+	
+	PlayerMessage pMessage;
 
 	public GameUI()
 	{
 		scale = everything.getScreenScale();
 		gameMenu = new GameMenu(300 * scale, 150 * scale);
 		skillDisplay = new ActorSkillUpgrade((int)(175 * everything.getYRatio()), (int)(140 * everything.getYRatio()));
-		skillDisplay.setActor(everything.getHeroStats(everything.getHeroName()));
+		skillDisplay.setActor(everything.getHeroStats(everything.getHeroName()), 6);
 		screenX = Gdx.graphics.getWidth() / 2;
 		screenY = Gdx.graphics.getHeight() / 2;
 		topUI = new TopUI();
 		minionUI = new MinionUI();
 		heroControlUI = new HeroControlUI();
 		sideUI = new SideUI();
+		pMessage = new PlayerMessage();
+//		pMessage.setMessage("This is just a test message!");
+//		pMessage.setMessage(everything.getHero().getPhrase("start")); //"This is just a test message!");
 	}
 
 	public void setup()
@@ -113,16 +118,20 @@ public class GameUI extends BaseClass
 	public void render(SpriteBatch batch, float delta)
 	{
 		update();
-		everything.getFont(0).draw(batch, message, 200, 20);
+		EverythingHolder.getFont(0).draw(batch, message, 200, 20);
 		
 		heroControlUI.render(batch, delta);
 		
 		sideUI.render(batch, delta);
+		
+		pMessage.draw(batch);
+		
 		if (skillDisplay.isShown())
 			skillDisplay.render(batch);
 		
 		topUI.draw(batch);
 		minionUI.render(batch, delta);
+		
 		
 		if (showingMenu)
 			gameMenu.render(batch);
@@ -140,8 +149,9 @@ public class GameUI extends BaseClass
 
 	public void setMessage(String m)
 	{
-		message = m;
-		messageTurnsLeft = 500;
+		pMessage.setMessage(m);
+//		message = m;
+//		messageTurnsLeft = 500;
 	}
 
 	private void update()
@@ -149,5 +159,11 @@ public class GameUI extends BaseClass
 		heroControlUI.setSkillClickable(everything.activeCooldown() < 0);
 		if (--messageTurnsLeft < 0 && !message.equals(""))
 			message = "";
+		pMessage.update();
+	}
+	
+	public void refreshButtons()
+	{
+		skillDisplay.refreshButtons();
 	}
 }

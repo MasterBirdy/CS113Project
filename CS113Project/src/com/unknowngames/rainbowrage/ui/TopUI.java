@@ -57,7 +57,7 @@ public class TopUI extends BaseClass
 		batch.draw(nextWave, waveX, waveY, 0, 0, 166, 74,
 				scale2 * waveScale, scale2 * waveScale, 0);
 		
-		everything.getFont(2).drawMultiLine(batch,
+		EverythingHolder.getFont(6).drawMultiLine(batch,
 				String.format("%02d", everything.timeLeft()), width / 2,
 				height - 25 * scale, 0, HAlignment.CENTER);
 		
@@ -70,9 +70,9 @@ public class TopUI extends BaseClass
 		batch.draw(cash, width / 2 + 60 * scale, height - 85 * scale, 0, 0, units.getRegionWidth(), units.getRegionHeight(), 
 				   scale2, scale2, 0);
 		
-		everything.getFont(0).drawMultiLine(batch, "" + everything.funds(), width / 2 + 100 * scale, //513 * scale,
+		EverythingHolder.getFont(0).drawMultiLine(batch, "" + everything.funds(), width / 2 + 100 * scale, //513 * scale,
 				height - 61 * scale, 0, HAlignment.LEFT); 
-		everything.getFont(0).drawMultiLine(batch,
+		EverythingHolder.getFont(0).drawMultiLine(batch,
 				"" + String.format("%03d", everything.teamSize()), width / 2 - 100 * scale,
 				height - 61 * scale, 0, HAlignment.RIGHT);
 		

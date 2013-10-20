@@ -53,14 +53,19 @@ public class TextEffect
 	public static void loadFonts()
 	{
 //		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/1900805.ttf"));
-		fonts[0] = generator.generateFont(18);
-		fonts[0].getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+//		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/1900805.ttf"));
+//		fonts[0] = generator.generateFont(18);
+//		fonts[0].getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		fonts[0] = EverythingHolder.getFont(5);
+//		fonts[0] = new BitmapFont(Gdx.files.internal("fonts/myfont.fnt"), Gdx.files.internal("fonts/myfont.png"), false);
+//		fonts[0].setScale(.7f);
 //		fonts[1] = generator.generateFont(32);
 //		fonts[2] = generator.generateFont(45);
 //		fonts[2].setColor(1, 1, 1, 1);
 //		fonts[3] = generator.generateFont(45);
-		generator.dispose();
+//		generator.dispose();
 	}
 	
 	public void draw(SpriteBatch batch, float delta) 

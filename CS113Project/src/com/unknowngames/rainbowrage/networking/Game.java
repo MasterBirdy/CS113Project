@@ -87,29 +87,9 @@ public class Game
 	    		rdy2 = false;
 			}
 		}
-    	if (cmd.type >= 0 && cmd.type < 6)
-    	{
-//    		AddUnit add = new AddUnit();
-//    		add.team = cmd.team;
-//    		add.unit = cmd.type;
-//    		add.turn = cmd.turn + turnBuffer;
-//    		add.turn = currentTurn;
-    		CommandIn cmdIn = new CommandIn();
-    		cmdIn.command = cmd.type;
-    		cmdIn.team = cmd.team;
-    		cmdIn.turn = cmd.turn + turnBuffer;
-    		System.out.println("(Game)Sending unit " + cmd.type + " from player " + cmd.team);
-    		
-    		server.sendToTCP(players[0].getID(), cmdIn);
-    		server.sendToTCP(players[1].getID(), cmdIn);
-    		
-    		RainbowRageServer.sentData += 32;
-//        		server.sendToAllTCP(add);
-    	}
-    	else if (cmd.type > 6 && cmd.type < 10) // 7-9 is retreat, guard, and attack.
-    	{
-    		System.out.println("(Game)Sending command out (Hero)");
-    		CommandIn cmdIn = new CommandIn();
+		else if (cmd.type >= 0)
+		{
+			CommandIn cmdIn = new CommandIn();
     		cmdIn.command = cmd.type;
     		cmdIn.team = cmd.team;
     		cmdIn.turn = cmd.turn + turnBuffer;
@@ -117,20 +97,51 @@ public class Game
     		server.sendToTCP(players[1].getID(), cmdIn);
     		
     		RainbowRageServer.sentData += 32;
-//        		server.sendToAllTCP(cmdIn);
-    	}
-    	else if (cmd.type == 10)
-    	{
-    		System.out.println("(Game)Sending active skill");
-    		CommandIn cmdIn = new CommandIn();
-    		cmdIn.command = cmd.type;
-    		cmdIn.team = cmd.team;
-    		cmdIn.turn = cmd.turn + turnBuffer;
-    		server.sendToTCP(players[0].getID(), cmdIn);
-    		server.sendToTCP(players[1].getID(), cmdIn);
-    		
-    		RainbowRageServer.sentData += 32;
-    	}
+		}
+//    	if (cmd.type >= 0 && cmd.type < 6)
+//    	{
+////    		AddUnit add = new AddUnit();
+////    		add.team = cmd.team;
+////    		add.unit = cmd.type;
+////    		add.turn = cmd.turn + turnBuffer;
+////    		add.turn = currentTurn;
+//    		CommandIn cmdIn = new CommandIn();
+//    		cmdIn.command = cmd.type;
+//    		cmdIn.team = cmd.team;
+//    		cmdIn.turn = cmd.turn + turnBuffer;
+//    		System.out.println("(Game)Sending unit " + cmd.type + " from player " + cmd.team);
+//    		
+//    		server.sendToTCP(players[0].getID(), cmdIn);
+//    		server.sendToTCP(players[1].getID(), cmdIn);
+//    		
+//    		RainbowRageServer.sentData += 32;
+////        		server.sendToAllTCP(add);
+//    	}
+//    	else if (cmd.type > 6 && cmd.type < 10) // 7-9 is retreat, guard, and attack.
+//    	{
+//    		System.out.println("(Game)Sending command out (Hero)");
+//    		CommandIn cmdIn = new CommandIn();
+//    		cmdIn.command = cmd.type;
+//    		cmdIn.team = cmd.team;
+//    		cmdIn.turn = cmd.turn + turnBuffer;
+//    		server.sendToTCP(players[0].getID(), cmdIn);
+//    		server.sendToTCP(players[1].getID(), cmdIn);
+//    		
+//    		RainbowRageServer.sentData += 32;
+////        		server.sendToAllTCP(cmdIn);
+//    	}
+//    	else if (cmd.type == 10)
+//    	{
+//    		System.out.println("(Game)Sending active skill");
+//    		CommandIn cmdIn = new CommandIn();
+//    		cmdIn.command = cmd.type;
+//    		cmdIn.team = cmd.team;
+//    		cmdIn.turn = cmd.turn + turnBuffer;
+//    		server.sendToTCP(players[0].getID(), cmdIn);
+//    		server.sendToTCP(players[1].getID(), cmdIn);
+//    		
+//    		RainbowRageServer.sentData += 32;
+//    	}
     	
 //    	else if (cmd.type > 9 && cmd.type < 13) // 10-12 is upgrade towers 1, 2, and 3.
 //    	{

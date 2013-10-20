@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.unknowngames.rainbowrage.EverythingHolder;
-import com.unknowngames.rainbowrage.GameScreen;
 import com.unknowngames.rainbowrage.RainbowRage;
+import com.unknowngames.rainbowrage.screens.GameScreen;
 import com.unknowngames.rainbowrage.screens.MainMenuScreen;
 
 public class LoadingScreen implements Screen

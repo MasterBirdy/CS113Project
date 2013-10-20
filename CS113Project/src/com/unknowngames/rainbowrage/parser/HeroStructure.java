@@ -1,11 +1,13 @@
 package com.unknowngames.rainbowrage.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HeroStructure extends UnitStructure
 {
 	ArrayList<String> activeSkill;
 	ArrayList<String> pet;
+	HashMap<String, String> phrases = new HashMap<String, String>();
 	
 	public String activeSkill(int level)
 	{
@@ -19,5 +21,10 @@ public class HeroStructure extends UnitStructure
 		if (level < pet.size())
 			return pet.get(level);
 		return pet.get(pet.size() - 1);
+	}
+	
+	public HashMap<String, String> getPhrases()
+	{
+		return phrases;
 	}
 }
