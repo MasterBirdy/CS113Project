@@ -7,12 +7,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.PriorityQueue;
 import java.util.Random;
 
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,7 +23,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.unknowngames.rainbowrage.entity.*;
 import com.unknowngames.rainbowrage.map.*;
 import com.unknowngames.rainbowrage.parser.*;
@@ -36,14 +33,14 @@ import com.unknowngames.rainbowrage.skill.TravelingSkillContainer;
 public class EverythingHolder 
 {
 	@SuppressWarnings("unchecked")
-	String xmlVersion = "", gameVersion = "0.10_19_13";
+	String xmlVersion = "", gameVersion = "0.11_3_13";
 	
 	EntityComparator eCompare = new EntityComparator();
 	static private SpriteBatch batch;
 	static Map map;
 	
 	int waveInterval, waveTime, waveTimer, 
-		previousTime, 
+//		previousTime, 
 		spawnTimer1, spawnTimer2, 
 		spawnInterval1, spawnInterval2;
 	
@@ -165,6 +162,17 @@ public class EverythingHolder
 		System.out.println("Heap: " + Gdx.app.getJavaHeap());
 	}
 	
+	public void rescale()
+	{
+		screenSizeX = Gdx.graphics.getWidth();
+		screenSizeY = Gdx.graphics.getHeight();
+		xRatio = (float)screenSizeX / 800;
+		yRatio = (float)screenSizeY / 480;
+		scale = (xRatio < yRatio ? xRatio : yRatio);
+		sizeRatio = (float)Gdx.graphics.getWidth() / 800;
+		loadFonts();
+	}
+	
 	private void loadFonts()
 	{
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
@@ -229,7 +237,10 @@ public class EverythingHolder
 	
 	public int getRandom(int i)
 	{
-		return rand.nextInt(i);
+		int temp = rand.nextInt(i);
+		System.out.println("Turn:" + turn + " Rand: " + temp);
+		return temp;
+//		return rand.nextInt(i);
 	}
 	
 	public HeroStructure getHeroStats(String hero)
@@ -994,7 +1005,77 @@ public class EverythingHolder
 		objectTextures.put("eagleimage", new TextureRegion(textures, 748, 660, 90, 168));
 		objectTextures.put("elementalimage", new TextureRegion(textures, 1108, 620, 64, 76));
 		objectTextures.put("arrowtowerimage", new TextureRegion(textures, 0, 1160, 112, 180));
+		
+		String[] skillIconNames = {"armoricon", "berzerkicon", "parryicon", "reducedamageicon", "knockbackicon", 					// Sword
+								   "arrowdamageicon", "arrowslowicon", "arrowpoisonicon", "arrowpoisonstackicon", "arrowrapidicon",	// Archer
+								   "cloakicon", "passthroughdamageicon", "invincibleicon", "splashdeathicon", "backstabicon",		// Ninja
+								   "fireballicon", "firebufficon", "deathexplodicon", "spelleffectivenessicon", "refreshdebufficon",// Mage
+								   "healicon", "shieldicon", "dodgeicon", "selfhealicon", "removedebufficon",						// Monk
+								   "herostunicon", "herostundurationicon", "herostunknockbackicon", "heroreducedamageicon", "woundicon", // Swordface
+								   "herorapidfireicon", "herofirearrowsicon", "heresplitshowicon", "herotrapsicon", "blankicon",		 // Arroweyes
+								   "herofireballicon", "herofiredoticon", "herofireballpassicon", "heroreflecticon", "heroincspeedicon", // MrWizard
+		};
+		TextureRegion[] skillIcons = spliteSpriteSheet("images/skillicons.png", 128, 128, 8, 8);
+		
+		for (int i = 0; i < skillIconNames.length; i++)
+		{
+			objectTextures.put(skillIconNames[i], skillIcons[i]);
+		}
+		
+		
+		/*textures = new Texture(Gdx.files.internal("images/skillicons.png"));
+		textures.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+//		objectTextures.put("selfhealicon", new TextureRegion(textures, 0, 0, 128, 128));
+		objectTextures.put("arrowpoisonicon", new TextureRegion(textures, 128, 0, 128, 128));
+		objectTextures.put("arrowpoisonstackicon", new TextureRegion(textures, 256, 0, 128, 128));
+		objectTextures.put("arrowrapidicon", new TextureRegion(textures, 384, 0, 128, 128));
+		
+		objectTextures.put("selfhealicon", new TextureRegion(textures, 0, 128, 128, 128));
+		objectTextures.put("removedebufficon", new TextureRegion(textures, 128, 128, 128, 128));
+		objectTextures.put("arrowdamageicon", new TextureRegion(textures, 256, 128, 128, 128));
+		objectTextures.put("arrowslowicon", new TextureRegion(textures, 384, 128, 128, 128));
+		
+		objectTextures.put("knockbackicon", new TextureRegion(textures, 0, 256, 128, 128));
+		objectTextures.put("healicon", new TextureRegion(textures, 128, 256, 128, 128));
+		objectTextures.put("shieldicon", new TextureRegion(textures, 256, 256, 128, 128));
+		objectTextures.put("dodgeicon", new TextureRegion(textures, 384, 256, 128, 128));
+		
+		objectTextures.put("reducedamageicon", new TextureRegion(textures, 0, 384, 128, 128));
+		objectTextures.put("parryicon", new TextureRegion(textures, 128, 384, 128, 128));
+		objectTextures.put("berzerkicon", new TextureRegion(textures, 256, 384, 128, 128));
+		objectTextures.put("armoricon", new TextureRegion(textures, 384, 384, 128, 128));
+		
+		objectTextures.put("fireballicon", new TextureRegion(textures, 0, 512, 128, 128));
+		objectTextures.put("firebufficon", new TextureRegion(textures, 128, 512, 128, 128));
+		objectTextures.put("deathexplodicon", new TextureRegion(textures, 256, 512, 128, 128));
+		objectTextures.put("spelleffectivenessicon", new TextureRegion(textures, 384, 512, 128, 128));
+		
+		objectTextures.put("refreshdebufficon", new TextureRegion(textures, 0, 640, 128, 128));
+		objectTextures.put("cloakicon", new TextureRegion(textures, 128, 640, 128, 128));
+		objectTextures.put("passthroughdamageicon", new TextureRegion(textures, 256, 640, 128, 128));
+		objectTextures.put("invincibleicon", new TextureRegion(textures, 384, 640, 128, 128));
+		
+		objectTextures.put("splashdeathicon", new TextureRegion(textures, 0, 768, 128, 128));
+		objectTextures.put("backstabicon", new TextureRegion(textures, 128, 768, 128, 128));
+//		objectTextures.put("passthroughdamageicon", new TextureRegion(textures, 256, 768, 128, 128));
+//		objectTextures.put("invincibleicon", new TextureRegion(textures, 384, 768, 128, 128));*/
+		
 //		textures.dispose();
+	}
+	
+	public TextureRegion[] spliteSpriteSheet(String filename, int width, int height, int xCount, int yCount)
+	{
+		TextureRegion[] tempTexture = new TextureRegion[xCount * yCount];
+		Texture temp = new Texture(Gdx.files.internal(filename));
+		temp.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		for (int i = 0; i < xCount; i++)
+			for (int j = 0; j < yCount; j++)
+				tempTexture[i + j * xCount] = new TextureRegion(temp, i * width, j * height, width, height);
+		
+		
+		return tempTexture;
 	}
 	
 	public void loadSounds()
@@ -1117,6 +1198,14 @@ public class EverythingHolder
 				Gdx.input.vibrate(50);
 	}
 	
+	public void clearSend(int team)
+	{
+		pools[team - 1] = new LinkedList<Integer>();
+		
+		if (team == this.team)
+			sentUnits = new int[6];
+	}
+	
 	public int turn()
 	{
 		return turn;
@@ -1131,7 +1220,7 @@ public class EverythingHolder
 	{
 		running = run;
 		waveTimer = 0;
-		previousTime = 0;
+//		previousTime = 0;
 	}
 	
 	public void upgradeTower(int tower, int team)
@@ -1223,7 +1312,6 @@ public class EverythingHolder
 	
 	public void buyUpgrade(int unit, int skill, int level, int team)
 	{
-		System.out.println("Upgrade: " + unit + ", " + skill + ", " + level + ", " + team);
 		if (players[team - 1].upgrades[unit][skill] != -1)
 		{
 //			System.out.println("Already bought it!");
@@ -1234,6 +1322,8 @@ public class EverythingHolder
 			cost = getSkillStructure(getActorStructure(unit, team), skill, level).cost;
 		else
 			cost = getSkillStructure(getHeroStructure(team), skill, level).cost;
+		if (cost == -1)
+			return;
 //		int cost = playerUnits[team - 1][unit].getSkill(skill, level);
 		if ((team == 1 ? funds1 : funds2) < cost)
 			return;
@@ -1255,6 +1345,7 @@ public class EverythingHolder
 	
 	public void add(Entity a)
 	{
+//		System.out.println("Starting to add");
 		if (a instanceof Building)
 		{
 			if (playerBases[((Building)a).team() - 1] == null)
@@ -1279,6 +1370,11 @@ public class EverythingHolder
 			entities.set(loc, a);
 		else
 			entities.add(a);
+//		System.out.println("Added at " + loc);
+//		if (loc != -1)
+//			System.out.println("It's team " + entities.get(loc).team());
+//		if (loc == 12)
+//			System.out.println("Should work");
 	}
 	
 	public void add(int unit, int team)
@@ -1287,11 +1383,21 @@ public class EverythingHolder
 		
 		if ((team == 1 ? funds1 : funds2) < cost)
 			return;
+		
+		if (unit != 5 && pools[team - 1].size() >= 5)
+			return;
+		
 		if (team == 1)
 			funds1 -= cost;
 		else
 			funds2 -= cost;
 		
+		if (unit == 5)
+		{
+			pools[team + 1].add(5);
+			return;
+		}
+			      
 		stats.minionSent[team - 1]++;
 		
 		if (team == this.team)
@@ -1303,7 +1409,7 @@ public class EverythingHolder
 		pools[team - 1].add(unit);
 	}
 	
-	public void spawnPools()
+	/*public void spawnPools()
 	{
 		for (int m : pools[0])
 			spawnMob(m, 1);
@@ -1314,7 +1420,7 @@ public class EverythingHolder
 		pools[1] = new LinkedList<Integer>();
 		pools[2] = new LinkedList<Integer>();
 		pools[3] = new LinkedList<Integer>();
-	}
+	}*/
 	
 	private void spawnPool(int team)
 	{
@@ -1541,6 +1647,8 @@ public class EverythingHolder
 			if (entities.get(i) != null && ((entities.get(i).isAlive() || entities.get(i) instanceof Hero || entities.get(i) instanceof Building) || (entities.get(i) instanceof Unit && ((Unit)entities.get(i)).deathCountdown() > 0)))
 				entities.get(i).update();
 		}
+//		if (entities.size() >= 13 && entities.get(12) != null)
+//			System.out.println("Should have updated: " + (entities.get(12).isAlive() ? "True" : "False"));
 		
 		++turn;
 		spawnTimers();
@@ -1564,7 +1672,7 @@ public class EverythingHolder
 	{
 		if (!running)
 			return;
-		previousTime = turn;
+//		previousTime = turn;
 		int timeDiff = turn - waveTimer;
 		if (timeDiff > waveInterval)
 		{
@@ -1577,8 +1685,8 @@ public class EverythingHolder
 			spawnInterval2 = 20;
 			pools[2].addAll(pools[0]);
 			pools[3].addAll(pools[1]);
-			pools[0] = new LinkedList<Integer>();
-			pools[1] = new LinkedList<Integer>();
+//			pools[0] = new LinkedList<Integer>();
+//			pools[1] = new LinkedList<Integer>();
 			if (pools[2] == null)
 				pools[2] = new LinkedList<Integer>();
 			if (pools[3] == null)
@@ -1586,7 +1694,11 @@ public class EverythingHolder
 			funds1 += income1 + team1Towers * towerIncome;
 			funds2 += income2 + team2Towers * towerIncome;
 			
-			sentUnits = new int[6];
+			for (Entity e : entities)
+				if (e != null && e instanceof Building && e.team() == team)
+					((Building)e).generateIncome();
+			
+//			sentUnits = new int[6];
 		}
 		
 		if (turn - spawnTimer1 > spawnInterval1)
@@ -1702,5 +1814,8 @@ public class EverythingHolder
 		
 		top = false;
 		bot = false;
+		
+		textEffects = new LinkedList<TextEffect>(); 
+		sentUnits = new int[6];
 	}
 }

@@ -66,7 +66,7 @@ public class HeroControlUI extends BaseClass
 		}
 		
 		buttons[3].draw(batch, delta);
-		everything.getFont(3).drawMultiLine(batch,
+		EverythingHolder.getFont(3).drawMultiLine(batch,
 				(everything.activeCooldown() > 0 ? everything.activeCooldown() / 50 + "" : ""),
 				buttons[3].xCoord() + 42 * scale, buttons[3].yCoord() + 57 * scale, 0, HAlignment.CENTER);
 	}

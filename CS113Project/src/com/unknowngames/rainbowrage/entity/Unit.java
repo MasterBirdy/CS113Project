@@ -160,7 +160,7 @@ public abstract class Unit extends Actor
 	@Override
 	public void particleOnSelf(String s)
 	{
-		ParticleEffect p = everything.getEffect(s);
+		ParticleEffect p = EverythingHolder.getEffect(s);
 //		p.setPosition(xCoord - unitAnimation.getFeet(animationDir).x + 10, yCoord + 20);
 		p.setPosition(xCoord, yCoord + 20);
 		p.start();

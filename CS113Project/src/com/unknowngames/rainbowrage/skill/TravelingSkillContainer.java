@@ -1,5 +1,7 @@
 package com.unknowngames.rainbowrage.skill;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -15,9 +17,9 @@ public class TravelingSkillContainer extends SkillContainer
 	ParticleEffect travelEffect;
 
 	public TravelingSkillContainer(SkillSpawner skillSpawner,
-			TravelingSkillContainerStructure t, Actor target)
+			TravelingSkillContainerStructure t, Actor target, ArrayList<Skill> extraSkills)
 	{
-		super(skillSpawner, t, target);
+		super(skillSpawner, t, target, extraSkills);
 		speed = t.speed;
 		// System.out.println("TravelTime: " + t.travelTime);
 		travelTime = t.travelTime;
@@ -31,7 +33,8 @@ public class TravelingSkillContainer extends SkillContainer
 	}
 
 	public TravelingSkillContainer(SkillSpawner skillSpawner,
-			TravelingSkillContainerStructure t, float targetX, float targetY)
+			TravelingSkillContainerStructure t, float targetX, float targetY, 
+			ArrayList<Skill> extraSkills)
 	{
 		super(skillSpawner, t, targetX, targetY);
 		speed = t.speed;

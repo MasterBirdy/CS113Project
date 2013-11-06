@@ -24,6 +24,7 @@ import com.unknowngames.rainbowrage.skill.ProcSkill;
 import com.unknowngames.rainbowrage.skill.Skill;
 import com.unknowngames.rainbowrage.skill.SkillContainer;
 import com.unknowngames.rainbowrage.skill.SkillEffect;
+import com.unknowngames.rainbowrage.skill.SkillEffectInjector;
 import com.unknowngames.rainbowrage.skill.SkillSpawner;
 import com.unknowngames.rainbowrage.skill.TargetedSkill;
 
@@ -368,7 +369,7 @@ public abstract class Actor extends Entity
 	{
 		if (skill.priority == 3)
 		{
-			if (everything.getRandom(100) < parry)
+			if (parry > 0 && everything.getRandom(100) < parry)
 			{
 				if (skill.caster != null && skill.caster.isAlive())
 				{
@@ -380,20 +381,30 @@ public abstract class Actor extends Entity
 				everything.addTextEffect(xCoord, yCoord, "Parry", 1);
 				return;
 			}
-			if (everything.getRandom(100) < dodge)
+			if (dodge > 0 && everything.getRandom(100) < dodge)
 			{
 				everything.addTextEffect(xCoord, yCoord, "Dodged", 1);
 				return;
 			}
 		}
-//		System.out.println("Taking SKILL");
-		firstEmpty = skillEffects.indexOf(nullSkillEffect);
-//		skill.affected.start();
-		if (firstEmpty >= 0)
-			skillEffects.add(firstEmpty, skill);
+
+		if (skill instanceof SkillEffectInjector)
+		{
+			if (skill.effect > 0)
+				skillSpawners[skill.effect].addExtraSkill((SkillEffectInjector)skill);
+			//SkillEffectInjector temp = (SkillEffectInjector)skill;
+			
+		}
 		else
-			skillEffects.add(skill);
-		
+		{
+	//		System.out.println("Taking SKILL");
+			firstEmpty = skillEffects.indexOf(nullSkillEffect);
+	//		skill.affected.start();
+			if (firstEmpty >= 0)
+				skillEffects.add(firstEmpty, skill);
+			else
+				skillEffects.add(skill);
+		}
 		for (SkillSpawner s : skillSpawners)
 		{
 			if (s != null && s.getTrigger() == 2)

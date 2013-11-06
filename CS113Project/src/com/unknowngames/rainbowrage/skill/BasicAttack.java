@@ -125,12 +125,12 @@ public class BasicAttack extends SkillSpawner
 	{
 		SkillContainer sContainer;
 		if (skillContainerStructure instanceof InstantSkillContainerStructure)
-			sContainer = new InstantSkillContainer(this, (InstantSkillContainerStructure)skillContainerStructure, target);
+			sContainer = new InstantSkillContainer(this, (InstantSkillContainerStructure)skillContainerStructure, target, extraSkills);
 //			sContainer = new InstantSkillContainer(caster, target, (InstantSkillContainerStructure)skillContainerStructure);
 //			sContainer = new InstantSkillContainer(caster, skillContainerStructure), 
 //						   						   caster.team());
 		else
-			sContainer = new TravelingSkillContainer(this, (TravelingSkillContainerStructure)skillContainerStructure, target);
+			sContainer = new TravelingSkillContainer(this, (TravelingSkillContainerStructure)skillContainerStructure, target, extraSkills);
 //			sContainer = new TravelingSkillContainer(caster, target, (TravelingSkillContainerStructure)skillContainerStructure);
 //			everything.add(new TravelingSkillContainer(caster, (TravelingSkillContainerStructure)skillContainerStructure), 
 //						   caster.team());

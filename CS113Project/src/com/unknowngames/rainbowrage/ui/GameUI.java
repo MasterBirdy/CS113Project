@@ -20,7 +20,7 @@ public class GameUI extends BaseClass
 {
 	static GameScreen gameScreen;
 	TextureRegion buttonFrame;
-	Button[] buttons = new Button[17];
+//	Button[] buttons = new Button[17];
 	int width = Gdx.graphics.getWidth();
 	int height = Gdx.graphics.getHeight();
 	int buttonRadius = (int) 38;

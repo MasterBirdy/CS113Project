@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<stats version = "130825">
+<stats version = "131103">
 	<!-- MINIONS -->
 	<minion type = "swordsman">
 		<maxhealth>			220		31		311		3111		</maxhealth>
@@ -17,8 +17,8 @@
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionwarrior						</soundpack>
 		<firstskill>		selfarmor	empty					</firstskill>
-		<secondskill>		selfparry	empty					</secondskill>
-		<thirdskill>		empty		empty					</thirdskill>
+		<secondskill>		selfparry	tempberzerk				</secondskill>
+		<thirdskill>		tempknockback	tempreducedamage	</thirdskill>
 		<description>		Professional meat shield			</description>
 	</minion>
 	
@@ -37,9 +37,9 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionarcher						</soundpack>
-		<firstskill>		empty		empty					</firstskill>
-		<secondskill>		empty		empty					</secondskill>
-		<thirdskill>		empty		empty					</thirdskill>
+		<firstskill>		temparrowdamage		empty			</firstskill>
+		<secondskill>		temparrowslow	temparrowpoison		</secondskill>
+		<thirdskill>		temppoisonstack	temprapidarrow		</thirdskill>
 		<description>		I shoot arrows!						</description>
 	</minion>
 	
@@ -185,10 +185,10 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			herowarrior							</soundpack>
-		<activeskill>		herostun							</activeskill>
-		<firstskill>		selfarmor	empty					</firstskill>
-		<secondskill>		empty		empty					</secondskill>
-		<thirdskill>		empty		empty					</thirdskill>
+		<activeskill>		empty								</activeskill>
+		<firstskill>		herostun		empty				</firstskill>
+		<secondskill>		tempherostunduration	tempherostunknockback	</secondskill>
+		<thirdskill>		tempheroreducedamage	tempherowound	</thirdskill>
 		<pet>				wolf								</pet>
 		<description>		It's just a flesh wound				</description>
 		<startmessage>		Let my blade do the talking!		</startmessage>
@@ -506,7 +506,7 @@
 		<castsound>				empty								</castsound>
 		<name>					Hero Rapidfire						</name>
 		<description>			Increased attack speed				</description>
-		<icon>					rapidfireicon						</icon>
+		<icon>					herorapidfireicon					</icon>
 	</skillcontainer>
 	
 	<skillcontainer type = "herofireball">
@@ -545,7 +545,224 @@
 		<castsound>				empty								</castsound>
 		<name>					Hero Stun							</name>
 		<description>			AOE stun							</description>
-		<icon>					herostunicon						</icon>
+		<icon>					herostunknockbackicon				</icon>
+	</skillcontainer>
+	
+	<!-- TEMP SKILLS -->
+	<skillcontainer type = "tempberzerk">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Berzerk								</name>
+		<description>			Lower health causes more damage		</description>
+		<icon>					berzerkicon							</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempreducedamage">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					ReduceDamage						</name>
+		<description>			Reduces enemy damage				</description>
+		<icon>					reducedamageicon					</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempknockback">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Knockback							</name>
+		<description>			Knocks enemy back					</description>
+		<icon>					knockbackicon						</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "temparrowdamage">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					ArrowDamage							</name>
+		<description>			Arrow damage increases with distance</description>
+		<icon>					arrowdamageicon						</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "temparrowslow">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					ArrowSlow							</name>
+		<description>			Slows enemy on hit					</description>
+		<icon>					arrowslowicon						</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "temparrowpoison">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					PoisonArrow							</name>
+		<description>			Poisons on hit						</description>
+		<icon>					arrowpoisonicon						</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "temppoisonstack">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					PoisonStack							</name>
+		<description>			Increase poison stack				</description>
+		<icon>					arrowpoisonstackicon				</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "temprapidarrow">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					RapidArrow							</name>
+		<description>			Quickly shoots multiple arrows		</description>
+		<icon>					arrowrapidicon						</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempherostunduration">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					StunDuration						</name>
+		<description>			Increases stun duration				</description>
+		<icon>					herostundurationicon				</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempherostunknockback">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					StunKnockback						</name>
+		<description>			Adds knockback to stun				</description>
+		<icon>					herostunknockbackicon				</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempheroreducedamage">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					ReduceDamage						</name>
+		<description>			Reduces enemy damage				</description>
+		<icon>					heroreducedamageicon				</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempherowound">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Wound								</name>
+		<description>			Increases damage taken by enemy		</description>
+		<icon>					woundicon							</icon>
 	</skillcontainer>
 	
 	<!-- SKILLS -->
@@ -610,7 +827,7 @@
 	</skill>
 	
 	<skill type = "herofireball">
-		<aoe> 				40									</aoe>
+		<aoe> 				45									</aoe>
 		<targeting> 		-1									</targeting>
 		<targetcount>		10									</targetcount>
 		<effect>			0									</effect>
@@ -630,7 +847,7 @@
 	</skill>
 	
 	<skill type = "stun">
-		<aoe> 				150									</aoe>
+		<aoe> 				75									</aoe>
 		<targeting> 		-1									</targeting>
 		<targetcount>		-1									</targetcount>
 		<effect>			2									</effect>

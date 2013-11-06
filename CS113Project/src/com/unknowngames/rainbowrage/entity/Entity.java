@@ -1,16 +1,8 @@
 package com.unknowngames.rainbowrage.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.badlogic.gdx.Audio;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.unknowngames.rainbowrage.BaseClass;
-import com.unknowngames.rainbowrage.EverythingHolder;
 
 public abstract class Entity extends BaseClass
 {

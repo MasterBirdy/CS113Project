@@ -17,9 +17,10 @@ public abstract class SkillContainer extends Entity
 	// public SkillContainer(Actor caster, Actor target,
 	// SkillContainerStructure sContainer)
 	public SkillContainer(SkillSpawner skillSpawner,
-			SkillContainerStructure sContainer, Actor target)
+			SkillContainerStructure sContainer, Actor target, ArrayList<Skill> extraSkills)
 	{
 		super(skillSpawner.xCoord(), skillSpawner.yCoord(), skillSpawner.team());
+//		System.out.println("Creating");
 		this.caster = skillSpawner.caster;
 		this.target = target;
 		if (target != null)
@@ -34,6 +35,8 @@ public abstract class SkillContainer extends Entity
 		alive = true;
 
 		loadSkills(sContainer);
+		loadSkills(extraSkills);
+//		System.out.println("Finally Created");
 	}
 
 	public SkillContainer(SkillSpawner skillSpawner,
@@ -66,6 +69,7 @@ public abstract class SkillContainer extends Entity
 	// sContainer)
 	protected void loadSkills(SkillContainerStructure sContainer)
 	{
+		//loadSkills(sContainer.skills);
 		for (String s : sContainer.skills)
 		{
 			if (s != null)
@@ -76,6 +80,20 @@ public abstract class SkillContainer extends Entity
 				// target));
 			}
 		}
+	}
+	
+//	protected void loadSkills(ArrayList<String> skills)
+//	{
+//		for (String s : skills)
+//			if (s != null)
+//				this.skills.add(new Skill(everything.getSkill(s), this));
+//	}
+	
+	protected void loadSkills(ArrayList<Skill> skills)
+	{
+		for (Skill s : skills)
+			if (s != null)
+				this.skills.add(s);
 	}
 
 	@Override
@@ -108,7 +126,7 @@ public abstract class SkillContainer extends Entity
 
 	public void detonate()
 	{
-		// System.out.println("Detonate container!");
+//		System.out.println("Detonate container! at: " + xCoord() + ", " + yCoord());
 		for (Skill s : skills)
 		{
 			s.xCoord(xCoord());

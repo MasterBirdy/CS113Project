@@ -26,6 +26,8 @@ public class SkillSpawner extends BaseClass
 	
 	Actor caster;
 	
+	ArrayList<SkillEffectInjector> extraSkills = new ArrayList<SkillEffectInjector>();
+	
 	public SkillSpawner(Actor c, SkillContainerStructure s)
 	{
 		caster = c;
@@ -85,11 +87,24 @@ public class SkillSpawner extends BaseClass
 			Actor target = inRange();
 			if (target != null)
 			{
+				ArrayList<Skill> allExtraSkills = new ArrayList<Skill>();
+
+				for (SkillEffectInjector sei : extraSkills)
+				{
+					allExtraSkills.addAll(sei.getSkills());
+//					for (Skill s : sei.getSkills())
+//					{
+//						allExtraSkills.add(s);
+//					}
+				}
+				
 				if (skillContainerStructure instanceof InstantSkillContainerStructure)
-					everything.add(new InstantSkillContainer(this, (InstantSkillContainerStructure)skillContainerStructure, target));
+				{
+					everything.add(new InstantSkillContainer(this, (InstantSkillContainerStructure)skillContainerStructure, target, allExtraSkills));
+				}
 //					everything.add(new InstantSkillContainer(caster, target, (InstantSkillContainerStructure)skillContainerStructure)); //,caster.team());
 				else					
-					everything.add(new TravelingSkillContainer(this, (TravelingSkillContainerStructure)skillContainerStructure, target));
+					everything.add(new TravelingSkillContainer(this, (TravelingSkillContainerStructure)skillContainerStructure, target, allExtraSkills));
 //					everything.add(new TravelingSkillContainer(caster, target, (TravelingSkillContainerStructure)skillContainerStructure)); //,caster.team());
 				if (cooldown != -1)
 					count = cooldown;
@@ -111,5 +126,10 @@ public class SkillSpawner extends BaseClass
 //		if (temp != null && temp.isEmpty())
 //			return temp.get(0);
 //		return null;
+	}
+	
+	public void addExtraSkill(SkillEffectInjector s)
+	{
+		
 	}
 }

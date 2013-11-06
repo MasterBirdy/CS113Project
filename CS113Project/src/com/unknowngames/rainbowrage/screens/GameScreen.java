@@ -67,7 +67,7 @@ public class GameScreen implements Screen
 	Audio tempMusic = Gdx.audio;
 	Music startMusic;
 
-	boolean sentTurn = false;
+//	boolean sentTurn = false;
 
 	float cameraW, cameraH, width, height, screenH;
 
@@ -100,6 +100,8 @@ public class GameScreen implements Screen
 	boolean ready = false;
 
 	GL10 gl;
+	
+	int currentDisplayMode = 0;
 
 	public GameScreen(RainbowRage game, boolean multiplayer)
 	{
@@ -163,7 +165,22 @@ public class GameScreen implements Screen
 			everything.setRunning(true);
 			team = 1;
 			everything.setTeam((byte) 1);
+//			everything.add(0, 2);
+//			everything.add(0, 2);
+//			everything.add(1, 2);
+//			everything.add(1, 2);
+//			everything.add(3, 2);
 		}
+		
+		for (int i = 1; i < 3; i++)
+		{
+			everything.add(0, i);
+			everything.add(0, i);
+			everything.add(1, i);
+			everything.add(1, i);
+			everything.add(3, i);
+		}
+		
 		timeAccumulator = 0;
 
 		System.out.println("That took: "
@@ -241,11 +258,13 @@ public class GameScreen implements Screen
 
 		uiCamera.update();
 		uiCamera.apply(gl);
-
+		int maxLoops = 5;
+		if (multiplayer)
+			maxLoops = 1;
 		while (!isPaused && timeAccumulator > stepTime && running && ready
-				&& (everything.moreTurns() || !multiplayer))
+				&& (everything.moreTurns() || !multiplayer) && maxLoops-- > 0)
 		{
-			sentTurn = false;
+//			sentTurn = false;
 			sendTurn();
 			update();
 			timeAccumulator -= stepTime;
@@ -345,6 +364,11 @@ public class GameScreen implements Screen
 					System.out.println("Pulled active cast command.");
 					everything.activeHeroSkill(command.team);
 				}
+				else if (command.command == 11)
+				{
+					System.out.println("Pulled clear send command.");
+					everything.clearSend(command.team);
+				}
 				else if (command.command >= 20)
 				{
 					System.out.println("Pulled upgrade command.");
@@ -357,11 +381,11 @@ public class GameScreen implements Screen
 	public void update()
 	{
 		handleInput();
-		if (multiplayer)
+//		if (multiplayer)
 			pullCommand();
 		everything.update();
-		if (!multiplayer)
-			randomSpawner();
+//		if (!multiplayer)
+//			randomSpawner();
 		scoreBoards(everything.winCondition());
 		everything.sortEntities();
 	}
@@ -387,6 +411,26 @@ public class GameScreen implements Screen
 			counter2 = (int) (Math.random() * 60) + 60;
 		}
 	}
+	
+	public void sendCommand(int command)
+	{
+		if (multiplayer)
+		{
+			Command cmd = new Command();
+			cmd.type = (byte) command;
+			cmd.team = team;
+			cmd.turn = everything.turn();
+			client.sendTCP(cmd);
+		}
+		else
+		{
+			CommandIn cmd = new CommandIn();
+			cmd.command = (byte) command;
+			cmd.team = (byte) everything.team();
+			cmd.turn = everything.turn() + 1;
+			commandQueue.add((CommandIn) cmd);
+		}
+	}
 
 	public void sendMessage(String message)
 	{
@@ -402,44 +446,59 @@ public class GameScreen implements Screen
 
 	public void sendTurn()
 	{
-		if (multiplayer && sentTurn == false
-				&& everything.getTurn() == everything.getHighestTurn() - 9)
+		if (multiplayer && //sentTurn == false && 
+			everything.getTurn() == everything.getHighestTurn() - 9)
 		{
 			Command cmd = new Command();
 			cmd.team = team;
 			cmd.type = -2;
 			cmd.turn = everything.turn();
 			client.sendTCP(cmd);
-			sentTurn = true;
+//			sentTurn = true;
 		}
 	}
 	
 	public void buyUpgrade(int unit, int skill, int level, int team)
 	{
-		System.out.println("Sending upgrade");
-		if (multiplayer && connected)
-		{
-			System.out.println("Sending upgrade!");
-			if (everything.funds() < everything.unitCost(unit, team))
-			{
-				return;
-			}
-			Command cmd = new Command();
-			cmd.team = (byte) team;
-			cmd.type = (byte)(20 + level + skill * 3 + unit * 12);
-//			cmd.type = (byte)(20 + team + level * 2 + skill * 6 + unit * 18);
-			cmd.turn = everything.turn();
-			client.sendTCP(cmd);
-		}
-		else
-		{
-			everything.buyUpgrade(unit, skill, level, 1);
-		}
+		if (multiplayer && !connected)
+			return;
+		
+		sendCommand(20 + level + skill * 3 + unit * 12);
+		
+//		System.out.println("Sending upgrade");
+//		if (multiplayer && connected)
+//		{
+//			System.out.println("Sending upgrade!");
+//			if (everything.funds() < everything.unitCost(unit, team))
+//			{
+//				return;
+//			}
+//			Command cmd = new Command();
+//			cmd.team = (byte) team;
+//			cmd.type = (byte)(20 + level + skill * 3 + unit * 12);
+////			cmd.type = (byte)(20 + team + level * 2 + skill * 6 + unit * 18);
+//			cmd.turn = everything.turn();
+//			client.sendTCP(cmd);
+//		}
+//		else
+//		{
+//			CommandIn cmd = new CommandIn();
+//			cmd.team = (byte) team;
+//			cmd.command = (byte) (20 + level + skill * 3 + unit * 12);
+//			cmd.turn = everything.turn() + 1;
+//			commandQueue.add((CommandIn) cmd);
+////			everything.buyUpgrade(unit, skill, level, 1);
+//		}
 	}
 
 	public void buyUnit(int unit)
 	{
-		if (multiplayer && connected)
+		if (multiplayer && !connected)
+			return;
+		
+		sendCommand(unit);
+		
+		/*if (multiplayer && connected)
 		{
 			System.out.println("Sending unit");
 			if (everything.funds() < everything.unitCost(unit, team))
@@ -454,14 +513,22 @@ public class GameScreen implements Screen
 		}
 		else
 		{
-
-			everything.add(unit, 1);
-		}
+			CommandIn cmd = new CommandIn();
+			cmd.team = team;
+			cmd.command = (byte) unit;
+			cmd.turn = everything.turn() + 1;
+			commandQueue.add((CommandIn) cmd);
+//			everything.add(unit, 1);
+		}*/
 	}
 
 	public void setHeroStance(int stance)
 	{
-		if (multiplayer)
+		if (multiplayer && !connected)
+			return;
+		
+		sendCommand(stance + 8);
+		/*if (multiplayer && connected)
 		{
 			Command cmd = new Command();
 			cmd.type = (byte) (stance + 8);
@@ -470,12 +537,47 @@ public class GameScreen implements Screen
 			client.sendTCP(cmd);
 		}
 		else
-			everything.setHeroStance(1, stance);
+		{
+			CommandIn cmd = new CommandIn();
+			cmd.team = team;
+			cmd.command = (byte) (stance + 8);
+			cmd.turn = everything.turn() + 1;
+			commandQueue.add((CommandIn) cmd);
+			//everything.setHeroStance(1, stance);
+		}*/
+	}
+	
+	public void clearSend()
+	{
+		if (multiplayer && !connected)
+			return;
+		
+		sendCommand(11);
 	}
 
 	public void castHeroActive()
 	{
-		if (multiplayer)
+		if (multiplayer && !connected)
+			return;
+		
+		sendCommand(10);
+		
+//		if (++currentDisplayMode == 1)
+//			Gdx.graphics.setDisplayMode(1680, 1050, false);
+//		else if (currentDisplayMode == 2)
+//			Gdx.graphics.setDisplayMode(1920, 1080, false);
+//		else
+//		{
+//			currentDisplayMode = 0;
+//			Gdx.graphics.setDisplayMode(800, 480, false);
+//		}
+//		
+//		everything.rescale();
+//		if (Gdx.graphics.isFullscreen())
+//			Gdx.graphics.setDisplayMode(800, 480, false);
+//		else
+//			Gdx.graphics.setDisplayMode(1920, 1200, true);
+		/*if (multiplayer && connected)
 		{
 			Command cmd = new Command();
 			cmd.type = 10;
@@ -485,9 +587,27 @@ public class GameScreen implements Screen
 		}
 		else
 		{
+			CommandIn cmd = new CommandIn();
+			cmd.command = 10;
+			cmd.team = (byte) everything.team();
+			cmd.turn = everything.turn() + 1;
+			commandQueue.add((CommandIn) cmd);
 			// System.out.println("CASTING SPELL");
-			everything.activeHeroSkill(1);
-		}
+//			everything.activeHeroSkill(1);
+		}*/
+//		if (multiplayer)
+//		{
+//			Command cmd = new Command();
+//			cmd.type = 10;
+//			cmd.team = team;
+//			cmd.turn = everything.turn();
+//			client.sendTCP(cmd);
+//		}
+//		else
+//		{
+//			// System.out.println("CASTING SPELL");
+//			everything.activeHeroSkill(1);
+//		}
 	}
 
 	public void upgradeTower(int tower)
@@ -525,8 +645,9 @@ public class GameScreen implements Screen
 				|| Gdx.input.isKeyPressed(Input.Keys.A))
 			camera.translate(-10, 0);
 
-		if ((Gdx.input.isKeyPressed(Input.Keys.Q)) && pauseCooldown > 100)
+		if ((Gdx.input.isKeyPressed(Input.Keys.P)) && (pauseCooldown > 100 || isPaused))
 		{
+//			toggleIsPaused();
 			pauseCooldown = 0;
 		}
 		if (Gdx.input.justTouched())

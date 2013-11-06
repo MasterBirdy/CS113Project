@@ -76,6 +76,8 @@ public class TextEffect
 			fonts[0].setColor(1 - timer / 100f, 1 - timer / 100f, 1, timer / 100f);
 		else if (type == 2)
 			fonts[0].setColor(1, 1, 1 - timer / 100f, timer / 100f);
+		else if (type == 3)	// Income
+			fonts[0].setColor(1f, 0.84f, 0f, timer / 100f);
 		fonts[0].draw(batch, content, xCoord, yCoord);
 	}
 

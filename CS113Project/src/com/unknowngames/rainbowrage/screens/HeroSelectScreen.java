@@ -48,9 +48,52 @@ public class HeroSelectScreen implements Screen
 	public HeroSelectScreen(EverythingHolder everything, RainbowRage game)
 	{
 //		scale = everything.getXRatio();
-		scale = everything.getScreenScale();
+		//scale = everything.getScreenScale();
 		this.everything = everything;
 		this.game = game;
+		
+		resetDrawing();
+		/*camera = new OrthographicCamera(width, height);
+		camera.setToOrtho(false);
+		batch = new SpriteBatch();
+		diameter = (int)(40 * scale);
+//		batch.setProjectionMatrix(camera.combined);
+//		this.batch = batch;
+		background = new TextureRegion(new Texture(Gdx.files.internal("images/mainmenubackground.jpg")), 0, 0, 800, 480);
+		
+		selection = EverythingHolder.getObjectTexture("heroselection");
+		
+		buttons[0] = new RoundButton(100 * scale, 80 * scale, 75 * scale, EverythingHolder.getObjectTexture("heroselectsword"));
+		buttons[1] = new RoundButton(100 * scale, 240 * scale, 75 * scale, EverythingHolder.getObjectTexture("heroselectarrow"));
+		buttons[2] = new RoundButton(100 * scale, 400 * scale, 75 * scale, EverythingHolder.getObjectTexture("heroselectwizard"));
+		buttons[3] = new RoundButton(width - 130 * scale, 45 * scale, diameter, EverythingHolder.getObjectTexture("confirmbutton"));
+		buttons[4] = new RoundButton(width - 45 * scale, 45 * scale, diameter, EverythingHolder.getObjectTexture("backbutton"));
+		buttons[5] = new RoundButton(660 * scale, 150 * scale, diameter, EverythingHolder.getObjectTexture("redbutton"));
+		buttons[6] = new RoundButton(750 * scale, 150 * scale, diameter, EverythingHolder.getObjectTexture("bluebutton"));
+		buttons[7] = new RoundButton(660 * scale, 240 * scale, diameter, EverythingHolder.getObjectTexture("greenbutton"));
+		buttons[8] = new RoundButton(750 * scale, 240 * scale, diameter, EverythingHolder.getObjectTexture("orangebutton"));
+		buttons[9] = new RoundButton(660 * scale, 330 * scale, diameter, EverythingHolder.getObjectTexture("purplebutton"));
+		buttons[10] = new RoundButton(750 * scale, 330 * scale, diameter, EverythingHolder.getObjectTexture("yellowbutton"));
+		
+		buttons[1].setClickable(false);
+		buttons[2].setClickable(false);
+//		buttons[5].setClickable(false);
+		selectColor(5);
+		
+		heroNames[0] = EverythingHolder.getObjectTexture("heronamesword");
+		heroNames[1] = EverythingHolder.getObjectTexture("heronamewizard");
+		heroNames[2] = EverythingHolder.getObjectTexture("heronamearrow");
+		
+		skillDisplay = new ActorSkillDisplay((int)(200 * scale), (int)(125 * scale));
+//		skillDisplay.setActor(selectedActor);
+		setSelectedHero(hero[0]);
+		
+		glViewport = new Rectangle(0, 0, width, height);*/
+	}
+	
+	public void resetDrawing()
+	{
+		scale = everything.getScreenScale();
 		camera = new OrthographicCamera(width, height);
 		camera.setToOrtho(false);
 		batch = new SpriteBatch();

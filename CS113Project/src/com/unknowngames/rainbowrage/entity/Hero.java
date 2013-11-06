@@ -24,7 +24,7 @@ public class Hero extends Unit
 	
 	public Hero(int x, int y, int team, ListIterator<Coordinate> p, HeroStructure struct)
 	{
-		this(x, y, team, p, struct, new int[]{0, 0, 0});
+		this(x, y, team, p, struct, new int[]{-1, -1, -1});
 	}
 	public Hero(int x, int y, int team, ListIterator<Coordinate> p, HeroStructure struct, int[] skillLevels)
 	{
@@ -54,7 +54,10 @@ public class Hero extends Unit
 		phrases = new HashMap<String, String>(struct.getPhrases());
 	}
 	
-
+	public int getRespawnTime()
+	{
+		return respawnCounter;
+	}
 	
 	public String getPhrase(String type)
 	{
@@ -79,14 +82,20 @@ public class Hero extends Unit
 	
 	public boolean activeSkill()
 	{
-		if (activeSkill != null && this.isAlive()) // && activeSkill.getCooldown() < 0) //activeCooldownCounter < 0)
+		for (int i = 0; i < 3; i++)
+		{
+			if (skillSpawners[i] != null && isAlive() && skillSpawners[i].getTrigger() == 3)
+				skillSpawners[i].cast();
+		}
+		
+		/*if (activeSkill != null && this.isAlive()) // && activeSkill.getCooldown() < 0) //activeCooldownCounter < 0)
 		{
 			//activeCooldownCounter = activeCooldown;
 			return activeSkill.cast();
 //			everything.add(new TargetedSkill(activeSkill, this, findTarget(this, activeSkill))); //, team);
 //			everything.add(new TargetedSkill(activeSkill, this, target), team);
 //			return true;
-		}
+		}*/
 		
 		return false;
 	}

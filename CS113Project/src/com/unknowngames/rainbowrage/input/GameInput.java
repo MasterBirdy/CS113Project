@@ -174,14 +174,14 @@ public class GameInput extends BaseClass implements InputProcessor
 		{
 			return false;
 		}
-		camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+		/*camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 		Actor selectedActor = everything.atPoint(touchPoint.x, touchPoint.y);
 		if (selectedActor != null && selectedActor.team() == everything.team() && selectedActor instanceof Building)
 		{
 			gameUI.selectTower(selectedActor);
 			System.out.println("Click on a tower!");
 			
-		}
+		}*/
 		
 		if (!down)
 		{
@@ -208,6 +208,8 @@ public class GameInput extends BaseClass implements InputProcessor
 			game.setHeroStance(7 - h);
 		else if (h == 9)
 			game.castHeroActive();
+		else if (h == 10)
+			game.clearSend();
 		else if (h == 11)
 			game.toggleFollowing();
 		else if (h == 12)

@@ -79,7 +79,14 @@ public class ActorSkillDisplay extends BaseClass
 		selectedSkill = s;
 		description = everything.getSkillStructure(shownActor, s / 2, s % 2).description;
 		int c = everything.getSkillStructure(shownActor, s / 2, s % 2).cost;
-		price = "Cost: " + (c == 0 ? "Free" : everything.getSkillStructure(shownActor, s / 2, s % 2).cost);
+		price = "Cost: ";
+		if (c == 0)
+			price += "Free";
+		else if (c == -1)
+			price = "Upcoming";
+		else
+			price += everything.getSkillStructure(shownActor, s / 2, s % 2).cost;
+//		price = "Cost: " + (c == 0 ? "Free" : everything.getSkillStructure(shownActor, s / 2, s % 2).cost);
 	}
 	
 	public void update(float delta)

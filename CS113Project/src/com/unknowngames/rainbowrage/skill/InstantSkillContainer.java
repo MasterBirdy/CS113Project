@@ -13,9 +13,10 @@ public class InstantSkillContainer extends SkillContainer
 {
 
 	public InstantSkillContainer(SkillSpawner skillSpawner,
-			InstantSkillContainerStructure sContainer, Actor target)
+			InstantSkillContainerStructure sContainer, Actor target, ArrayList<Skill> extraSkills)
 	{
-		super(skillSpawner, sContainer, target);
+		super(skillSpawner, sContainer, target, extraSkills);
+//		System.out.println("Created");
 	}
 
 	public InstantSkillContainer(SkillSpawner skillSpawner,
@@ -39,6 +40,7 @@ public class InstantSkillContainer extends SkillContainer
 	@Override
 	public void update()
 	{
+//		System.out.println("Updating Skill");
 		if (target != null && target.isAlive())
 		{
 			xCoord(target.xCoord());
@@ -55,7 +57,7 @@ public class InstantSkillContainer extends SkillContainer
 		// s.xCoord(targetX);
 		// s.yCoord(targetY);
 		// }
-
+//		System.out.println("About to detonate");
 		detonate();
 //		alive = false;
 	}

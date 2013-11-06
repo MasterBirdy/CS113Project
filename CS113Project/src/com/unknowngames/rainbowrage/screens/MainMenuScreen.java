@@ -46,6 +46,8 @@ public class MainMenuScreen implements Screen
 	TextureRegion gameLogo, buttonFrame;
 	float scale;
 	
+	int currentDisplayMode = 0;
+	
 	HeroSelectScreen selectScreen;
 	
 	EverythingHolder everything;
@@ -138,6 +140,99 @@ public class MainMenuScreen implements Screen
 //		loginUI.show();
 	}
 	
+	public void rescale()
+	{
+//		this.game = game;
+		scale = everything.getXRatio();
+//		Settings.getInstance();
+		newGameStarted = false;
+//		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/523938_--MB---The-Black-Wi.mp3"));
+//		startMusic.setLooping(true);
+//		startMusic.play();
+//		this.everything = everything;
+//		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/460436_trapped_in_dreams.mp3"));
+//		startMusic.setLooping(true);
+//		startMusic.setVolume(everything.getMusicLevel());
+//		startMusic.play();
+		width = Gdx.graphics.getWidth();
+		height = Gdx.graphics.getHeight();
+//		batch = new SpriteBatch();
+		camera = new OrthographicCamera(width, height);
+		camera.setToOrtho(false);
+//		texture = new TextureRegion(new Texture(Gdx.files.internal("images/mainmenubackground.jpg")), 0, 0, 800, 480);
+//		Texture textTexture = new Texture(Gdx.files.internal("images/textmenuscreen.png"));
+//		TextureRegion textRegion = new TextureRegion(textTexture, 0, 0, 451, 49);
+//		Texture icons = new Texture(Gdx.files.internal("images/buttons_sheet.png"));
+//		gameLogo = new TextureRegion(icons, 0, 1514, 842, 467);
+//		buttonFrame = new TextureRegion(icons, 880, 422, 361, 572);
+//		gameLogo = EverythingHolder.getObjectTexture("gamelogo");
+//		buttonFrame = EverythingHolder.getObjectTexture("mainbuttonframe");
+		
+		int stackTopX = (int) (width - 120 * scale); //680; //658;
+		int stackTopY = (int) (345 * scale); //355;
+		int spaceX = (int) (75 * scale);
+		int spaceY = (int) (54 * scale);
+		int buttonRadius = (int) (39 * scale); //(int) (width * .95f / 20);
+//		buttons[0] = new RoundButton(stackTopX, stackTopY - spaceY * 2 + 4, buttonRadius, 			
+//				new TextureRegion(icons, 367, 459, 152, 153));	// Sinlge-player
+//		buttons[1] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 3 + 4, buttonRadius, 			
+//				new TextureRegion(icons, 367, 612, 152, 153));	// Multi-player
+//		buttons[2] = new RoundButton(stackTopX, stackTopY - spaceY * 4 + 9, buttonRadius, 			
+//				new TextureRegion(icons, 367, 765, 152, 153));	// Settings
+//		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9, buttonRadius, 			
+//				new TextureRegion(icons, 367, 153, 152, 153));	// Quit
+		
+		buttons[0] = new RoundButton(stackTopX, stackTopY - spaceY * 2 + 4 * scale, buttonRadius, 			
+				EverythingHolder.getObjectTexture("singlebutton"));	// Sinlge-player
+		buttons[1] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 3 + 4 * scale, buttonRadius, 			
+				EverythingHolder.getObjectTexture("multibutton"));	// Multi-player
+		buttons[2] = new RoundButton(stackTopX, stackTopY - spaceY * 4 + 9 * scale, buttonRadius, 			
+				EverythingHolder.getObjectTexture("settingsbutton"));	// Settings
+		buttons[3] = new RoundButton(stackTopX + spaceX, stackTopY - spaceY * 5 + 9 * scale, buttonRadius, 			
+				EverythingHolder.getObjectTexture("quitbutton"));	// Quit
+		
+//		buttons[1].setClickable(false);
+		buttons[2].setClickable(false);
+		
+		touchPoint = new Vector3();
+		fire.dispose();
+		fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
+		fire.setPosition(610 * everything.getXRatio(), 260 * everything.getYRatio());
+		scaleParticleEffect(fire, everything.getSizeRatio());
+//		fire.reset();
+		fire.start();
+		
+//		spark.setPosition(400, 300);
+//		spark.reset();
+//		spark.start();
+		
+//		blood.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/BloodEffect.p")), Gdx.files.internal("images"));
+		blood.dispose();
+		blood.load(Gdx.files.internal((Gdx.app.getType() == ApplicationType.Android ? "data/BloodEffectAndroid.p" : "data/blood.p")), Gdx.files.internal("images"));
+		blood.setPosition(400, 300);
+		for (ParticleEmitter pe : blood.getEmitters())
+			pe.setContinuous(true);
+		scaleParticleEffect(blood, everything.getSizeRatio());
+//		blood.reset();
+		blood.start();
+		
+		rainbow.dispose();
+
+		rainbow.load(Gdx.files.internal("data/rainbowtrailsparkle.p"), Gdx.files.internal("images"));
+//		rainbow = EverythingHolder.getEffect("rainbowtrailsparkle");
+		System.out.println("Trying");
+		rainbow.setPosition(332 * everything.getXRatio(), 423 * everything.getYRatio());
+		scaleParticleEffect(rainbow, everything.getSizeRatio());
+//		rainbow.reset();
+		rainbow.start();
+		
+		Gdx.graphics.setVSync(true);
+		//Gdx.input.setCursorCatched(false);
+		
+//		loginUI = new LoginUI();
+//		loginUI.show();
+	}
+	
 	public void scaleParticleEffect(ParticleEffect pe, float pScale)
 	{
 		float scaling = pe.getEmitters().get(0).getScale().getHighMax();
@@ -207,6 +302,12 @@ public class MainMenuScreen implements Screen
 
 	public void update (float deltaTime) 
 	{
+//		if (scale != everything.getScreenScale())
+//		{
+//			everything.rescale();
+//			rescale();
+//		}
+		
 		if (Gdx.input.justTouched()) {
 //			camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 			
@@ -268,6 +369,21 @@ public class MainMenuScreen implements Screen
 		}
 		else if (h == 2) // Settings
 		{
+			
+			if (++currentDisplayMode == 1)
+				Gdx.graphics.setDisplayMode(1280, 1024, false);
+			else if (currentDisplayMode == 2)
+				Gdx.graphics.setDisplayMode(1680, 1050, false);
+			else if (currentDisplayMode == 3)
+				Gdx.graphics.setDisplayMode(1920, 1080, false);
+			else
+			{
+				currentDisplayMode = 0;
+				Gdx.graphics.setDisplayMode(800, 480, false);
+			}
+			
+			everything.rescale();
+			rescale();
 //			startMusic.stop();
 //			game.setScreen(game.settingsScreen);
 			return;

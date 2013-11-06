@@ -30,6 +30,7 @@ public class Building extends Actor
 	ParticleEffect fire = new ParticleEffect();
 	boolean debug = false;
 	BuildingStructure buildingStructure;
+	int worth = 10;
 	
 	public Building(int x, int y, int team, BuildingStructure struct)
 	{
@@ -80,6 +81,11 @@ public class Building extends Actor
 			attackCooldown--;
 			targetSelector();
 		}
+	}
+	
+	public void generateIncome()
+	{
+		everything.addTextEffect(xCoord, yCoord, "$" + worth, 3);
 	}
 	
 	private void shiftTeam(int nearTeam)

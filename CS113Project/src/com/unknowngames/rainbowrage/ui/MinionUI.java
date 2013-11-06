@@ -69,11 +69,23 @@ public class MinionUI extends BaseClass
 		for (int i = 0; i < 6; i++)
 		{
 			buttons[i].draw(batch, delta);
-			everything.getFont(3).drawMultiLine(batch,
+			EverythingHolder.getFont(3).drawMultiLine(batch,
 					(everything.getSentUnit(i) > 0 ? everything.getSentUnit(i)
 							+ "" : ""), buttons[i].xCoord(),
 					buttons[i].yCoord() + 20 * scale, 0, HAlignment.CENTER);
 		}
+		if (!everything.getHero().isAlive())
+			buttons[6].setClickable(false);
+		else
+			buttons[6].setClickable(true);
+		
 		buttons[6].draw(batch, delta);
+		
+		if (!everything.getHero().isAlive())
+		{
+			EverythingHolder.getFont(3).drawMultiLine(batch,
+					everything.getHero().getRespawnTime() / 50 + "",
+					buttons[6].xCoord() + 42 * scale, buttons[6].yCoord() + 57 * scale, 0, HAlignment.CENTER);
+		}
 	}
 }
