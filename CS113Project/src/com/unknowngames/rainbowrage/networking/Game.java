@@ -4,8 +4,12 @@ import com.esotericsoftware.kryonet.Server;
 import com.unknowngames.rainbowrage.networking.Network.AddUnit;
 import com.unknowngames.rainbowrage.networking.Network.Command;
 import com.unknowngames.rainbowrage.networking.Network.CommandIn;
-import com.unknowngames.rainbowrage.networking.Network.LoginStatus;
+import com.unknowngames.rainbowrage.networking.Network.HeroSelectStart;
+import com.unknowngames.rainbowrage.networking.Network.HeroSelectStatus;
+//import com.unknowngames.rainbowrage.networking.Network.LoginStatus;
 import com.unknowngames.rainbowrage.networking.Network.ServerMessage;
+import com.unknowngames.rainbowrage.networking.Network.StartGameInfo;
+import com.unknowngames.rainbowrage.networking.Network.StartGameRoom;
 import com.unknowngames.rainbowrage.networking.Network.UserMessage;
 import com.unknowngames.rainbowrage.networking.RainbowRageServer.UserConnection;
 
@@ -17,8 +21,10 @@ public class Game
 	int currentTurn = 0;
 	float stepTime = 0.02f;
 	int turnBuffer = 21, turnBlock = 20;
-	int highestTurn1, highestTurn2, highestCount;
-	boolean rdy1 = false, rdy2 = false;
+	int highestTurn1 = 19, highestTurn2 = 19; //, highestCount = 0;
+	boolean rdy1 = false, rdy2 = false, inGame = false, started = false;
+	
+	HeroSelectStart[] heroSelectStart = new HeroSelectStart[2];
 	
 	
 	public Game(UserConnection p1, UserConnection p2, Server s, int ID)//Server s, int ID)
@@ -31,20 +37,59 @@ public class Game
 		gameID = ID;
 		
 		
-    	LoginStatus status = new LoginStatus();
+    	/*LoginStatus status = new LoginStatus();
     	status.status = 1;
     	players[0].sendTCP(status);
     	status.status = 2;
-    	players[1].sendTCP(status);
+    	players[1].sendTCP(status);*/
+		
+		/*// Setup gameInfo message
+		StartGameInfo gameInfo = new StartGameInfo();
+		gameInfo.names = new String[2];
+		gameInfo.names[0] = p1.user.name;
+		gameInfo.names[1] = p2.user.name;
+		
+		gameInfo.heroes = new String[2];
+		gameInfo.heroes[0] = "mrwizard";
+		gameInfo.heroes[1] = "swordface";
+		
+		gameInfo.colors = new String[2];
+		gameInfo.colors[0] = "red";
+		gameInfo.colors[1] = "green";
+		
+		gameInfo.map = "";
+		
+		for (int i = 0; i < 2; i++)
+		{
+			gameInfo.team = (byte) (i + 1);
+	    	players[i].sendTCP(gameInfo);
+		}*/
+		
+		// Setup hero select
+		StartGameRoom gameRoom = new StartGameRoom();
+		gameRoom.usernames = new String[players.length];
+		for (int i = 0; i < players.length; i++)
+			gameRoom.usernames[i] = players[i].user.name;
+		
+		for (int i = 0; i < players.length; i++)
+		{
+			gameRoom.team = (byte)i;
+			players[i].sendTCP(gameRoom);
+		}
+		
+		/*gameInfo.team = 1;
+    	players[0].sendTCP(gameInfo);
+    	gameInfo.team = 2;
+    	players[1].sendTCP(gameInfo);*/
     	
     	RainbowRageServer.sentData += 32;
     	
-    	ServerMessage msg = new ServerMessage();
+    	/*ServerMessage msg = new ServerMessage();
     	msg.message = 1;
     	players[0].sendTCP(msg);
     	players[1].sendTCP(msg);
     	
-    	RainbowRageServer.sentData += 32;
+    	RainbowRageServer.sentData += 32;*/
 	}
 	
 	public int ID()
@@ -54,17 +99,32 @@ public class Game
 	
 	public void userMessage(UserMessage msg)
 	{
-		int team = (msg.team == 1 ? 1 : 0);
+		int team = (msg.team == 0 ? 1 : 0);
 		
 		server.sendToTCP(players[team].getID(), msg);
 	}
 	
-	public void messageCommand(Command cmd)
+	public void heroSelectStatus(HeroSelectStatus heroSelect)
 	{
-		System.out.println("(Game)Recevied command " + cmd.type);
-		if (cmd.type == -2)
+		server.sendToTCP(players[0].getID(), heroSelect);
+		server.sendToTCP(players[1].getID(), heroSelect);
+		
+		if (heroSelect.ready)
 		{
-			if (cmd.team == 1)
+			if (heroSelect.team == 0)
+				rdy1 = true;
+			else
+				rdy2 = true;
+		}
+		
+		if (rdy1 && rdy2)
+		{
+			moveToGame();
+//			startGame();
+		}
+		/*if (heroSelect.ready)
+		{
+			if (heroSelect.team == 1)
 			{
 				System.out.println("Player 1 rdy");
 				rdy1 = true;
@@ -74,9 +134,73 @@ public class Game
 				System.out.println("Player 2 rdy");
 				rdy2 = true;
 			}
+			
+			if (rdy1 && rdy2)
+			{
+				startGame();
+			}
+		}*/
+	}
+	
+	private void moveToGame()
+	{
+		System.out.println("Moving to game");
+		rdy1 = false;
+		rdy2 = false;
+		inGame = true;
+	}
+	
+	private void startGame()
+	{
+		System.out.println("Starting");
+		started = true;
+//		highestCount = 0;
+		
+		ServerMessage msg1 = new ServerMessage();
+    	msg1.message = 1;
+    	players[0].sendTCP(msg1);
+    	players[1].sendTCP(msg1);
+		
+		CommandIn msg = new CommandIn();
+		msg.command = -2;
+		msg.turn = 0 + turnBlock - 1;
+		System.out.println("Sending turn update " + msg.turn);
+		server.sendToTCP(players[0].getID(), msg);
+		server.sendToTCP(players[1].getID(), msg);
+	}
+	
+	public void messageCommand(Command cmd)
+	{
+		System.out.println("(Game)Recevied command " + cmd.type);
+		if (inGame && !started && !(rdy1 && rdy2))
+		{
+			System.out.println(inGame + " : " + rdy1 + " : " + rdy2 + " : " + cmd.team);
+			if (cmd.team == 0)
+				rdy1 = true;
+			else
+				rdy2 = true;
+			System.out.println(":: " + inGame + " : " + rdy1 + " : " + rdy2 + " : " + cmd.team);
+			if (rdy1 && rdy2)
+			{
+				startGame();
+			}
+		}
+		else if (cmd.type == -2)
+		{
+			if (cmd.team == 0)
+			{
+				System.out.println("Player 1 rdy");
+				rdy1 = true;
+			}
+			else
+			{
+				System.out.println("Player 2 rdy");
+				rdy2 = true;
+			}
+			
 			if (rdy1 && rdy2) //++highestCount == players.length)
 			{
-				highestCount = 0;
+//				highestCount = 0;
 				CommandIn msg = new CommandIn();
 				msg.command = -2;
 				msg.turn = cmd.turn + turnBlock - 1;

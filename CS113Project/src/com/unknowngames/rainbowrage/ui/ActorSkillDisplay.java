@@ -25,6 +25,7 @@ public class ActorSkillDisplay extends BaseClass
 	int selectedSkill = -1;
 	int width = Gdx.graphics.getWidth();
 	int height = Gdx.graphics.getHeight();
+	float portraitWidth = 300, portraitHeight = 300;
 	float scale; // = height / 480; //width / 800;
 	
 	public ActorSkillDisplay(int x, int y)
@@ -36,19 +37,29 @@ public class ActorSkillDisplay extends BaseClass
 	
 	public void setActor(ActorStructure actor)
 	{
+		if (actor == null)
+			return;
+		
 		shownActor = actor;
 		for (int i = 0; i < 3; i++)
 		{
-			for (int j = 0; j < 2; j++)
+			for (int j = 1; j >= 0; j--)
 			{
 				if (!actor.getSkill(i, j).equals("empty"))
-					buttons[i * 2 + j] = new RectangularButton(x + (300 - (j * 75)) * scale, y + (200 - (i * 75)) * scale, 70 * scale, 70 * scale, getIcon(actor, i, j));
+				{
+					float split = 0.0f;
+					if (j == 0 && buttons[i * 2 + 1] == null)
+					{
+						split = 0.5f;
+					}
+					buttons[i * 2 + j] = new RectangularButton(x + (300 - ((split + j) * 75)) * scale, y + (175 - (i * 85)) * scale, 70 * scale, 70 * scale, getIcon(actor, i, j));
+				}
 				else
 					buttons[i * 2 + j] = null;
 			}
-			if (shownActor instanceof HeroStructure)
-				buttons[6] = new RectangularButton(x + 300 * scale, y - 40 * scale, 75 * scale, 75 * scale, getIcon(actor, 3, 0));
-			else
+//			if (shownActor instanceof HeroStructure)
+//				buttons[6] = new RectangularButton(x + 300 * scale, y - 40 * scale, 75 * scale, 75 * scale, getIcon(actor, 3, 0));
+//			else
 				buttons[6] = null;
 		}
 		
@@ -108,10 +119,15 @@ public class ActorSkillDisplay extends BaseClass
 	{
 		if (chibi != null)
 		{
-			float resize = 325 / chibi.getRegionHeight();
-			if (resize * chibi.getRegionWidth() > 390)
-				resize = 350f / chibi.getRegionWidth();
-			batch.draw(chibi, x, y - 50 * scale, chibi.getRegionWidth() * resize * scale, chibi.getRegionHeight() * resize * scale);//, 350, 40);
+			float resize = portraitHeight / chibi.getRegionHeight();
+			if (resize * chibi.getRegionWidth() > portraitWidth)
+				resize = portraitWidth / chibi.getRegionWidth();
+			batch.draw(chibi, x, y + (portraitHeight - chibi.getRegionHeight() * resize - 40) * scale, chibi.getRegionWidth() * resize * scale, chibi.getRegionHeight() * resize * scale);//, 350, 40);
+//			float resize = 325 / chibi.getRegionHeight();
+//			if (resize * chibi.getRegionWidth() > 390)
+//				resize = 350f / chibi.getRegionWidth();
+			
+//			batch.draw(chibi, x, y - 50 * scale, chibi.getRegionWidth() * resize * scale, chibi.getRegionHeight() * resize * scale);//, 350, 40);
 		}
 		for (Button b : buttons)
 		{
@@ -119,8 +135,8 @@ public class ActorSkillDisplay extends BaseClass
 				b.draw(batch, 0);
 		}
 		
-		font.draw(batch, description, x, y - 50 * scale);
-		font.draw(batch, price, x, y - 75 * scale);
+		font.draw(batch, description, x, y - 40 * scale);
+		font.draw(batch, price, x, y - 70 * scale);
 	}
 	
 //	private SkillContainerStructure getSkillStructure(ActorStructure a, int skill, int level)

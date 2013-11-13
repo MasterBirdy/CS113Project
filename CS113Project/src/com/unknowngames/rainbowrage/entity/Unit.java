@@ -132,13 +132,25 @@ public abstract class Unit extends Actor
 		
 		
 		if (this instanceof Hero)
+		{
 //			batch.draw(current, xCoord - point.x * 1.5f - 3, yCoord - point.y * 1.5f - 3, current.getRegionWidth() * 1.5f, current.getRegionHeight() * 1.5f);
 //			batch.draw(current, xCoord - point.x * .75f - 3, yCoord - point.y * .75f - 3, current.getRegionWidth() * .75f, current.getRegionHeight() * .75f);
 			batch.draw(current, xCoord - point.x * .75f, yCoord - point.y * .75f, unitAnimation.getFeet(animationDir).x / 2, unitAnimation.getFeet(animationDir).y / 2, current.getRegionWidth() * .75f, current.getRegionHeight() * .75f, 1, 1, getRotation());
+			if (this.team() == everything.team())
+			{
+				batch.setColor(everything.getColor());
+				batch.draw(EverythingHolder.getObjectTexture("unitpointer"), xCoord - 15, yCoord + 70, 30, 30);
+			}
+		}
 		else
+		{
 			batch.draw(current, xCoord - point.x * .5f, yCoord - point.y * .5f, unitAnimation.getFeet(animationDir).x / 2, unitAnimation.getFeet(animationDir).y / 2, current.getRegionWidth() * .5f, current.getRegionHeight() * .5f, 1, 1, getRotation());
+			
+//			if (this.team() == everything.team())
+//				batch.draw(EverythingHolder.getObjectTexture("unitpointer"), xCoord - 7, yCoord + 50, 15, 18);
 //			batch.draw(current, xCoord - point.x * .5f, yCoord - point.y * .5f, current.getRegionWidth() * .5f, current.getRegionHeight() * .5f);
 //			batch.draw(current, xCoord - point.x, yCoord - point.y);
+		}
 		batch.setColor(Color.WHITE);
 		drawParticleEffects(batch, delta);
 //		everything.getFont(1).draw(batch, "" + getAttacker(), xCoord(), yCoord());

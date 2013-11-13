@@ -24,7 +24,7 @@ import com.unknowngames.rainbowrage.skill.ProcSkill;
 import com.unknowngames.rainbowrage.skill.Skill;
 import com.unknowngames.rainbowrage.skill.SkillContainer;
 import com.unknowngames.rainbowrage.skill.SkillEffect;
-import com.unknowngames.rainbowrage.skill.SkillEffectInjector;
+import com.unknowngames.rainbowrage.skill.SkillEffectInjected;
 import com.unknowngames.rainbowrage.skill.SkillSpawner;
 import com.unknowngames.rainbowrage.skill.TargetedSkill;
 
@@ -387,16 +387,25 @@ public abstract class Actor extends Entity
 				return;
 			}
 		}
-
-		if (skill instanceof SkillEffectInjector)
+		
+		for (SkillSpawner s : skillSpawners)
 		{
-			if (skill.effect > 0)
-				skillSpawners[skill.effect].addExtraSkill((SkillEffectInjector)skill);
-			//SkillEffectInjector temp = (SkillEffectInjector)skill;
-			
+			if (s != null && s.getTrigger() == 2)
+				s.cast();
 		}
-		else
+
+		if (skill instanceof SkillEffectInjected)
 		{
+			System.out.println("Injecting skill");
+			if (skill.effect > 0)
+			{
+				skillSpawners[skill.effect].addExtraSkill((SkillEffectInjected)skill);
+				return;
+			}
+		}
+		
+//		else
+//		{
 	//		System.out.println("Taking SKILL");
 			firstEmpty = skillEffects.indexOf(nullSkillEffect);
 	//		skill.affected.start();
@@ -404,12 +413,8 @@ public abstract class Actor extends Entity
 				skillEffects.add(firstEmpty, skill);
 			else
 				skillEffects.add(skill);
-		}
-		for (SkillSpawner s : skillSpawners)
-		{
-			if (s != null && s.getTrigger() == 2)
-				s.cast();
-		}
+//		}
+		
 		
 //		firstEmpty = peEffect.indexOf(nullParticleEffect);
 //		if (firstEmpty >= 0)
@@ -441,8 +446,11 @@ public abstract class Actor extends Entity
 //		if(procSkill != null)
 //			procSkill.update();
 		Collections.sort(skillEffects, SkillEffect.PriorityComparator);
-		for (SkillEffect skill : skillEffects)
-			skill.update();
+		int size = skillEffects.size();
+		for (int i = 0; i < size; i++)
+			skillEffects.get(i).update();
+//		for (SkillEffect skill : skillEffects)
+//			skill.update();
 		
 		for (SkillSpawner s : skillSpawners)
 		{
@@ -656,9 +664,14 @@ public abstract class Actor extends Entity
 		{
 			if (alive)// && Gdx.app.getType() == Application.ApplicationType.Desktop)
 			{
+				alive = false;
 //				effects.add(this.fire());
 				for (SkillEffect skill : skillEffects)
+				{
+					if (skill.ticksLeft == -2)
+						skill.update();
 					skill.kill();
+				}
 				this.particleOnSelf("blood");
 //				effects.add(this.blood());
 //				soundPack.playDie();
@@ -673,7 +686,6 @@ public abstract class Actor extends Entity
 						
 					}
 				}
-				alive = false;
 				
 				if (this instanceof Minion)
 				{

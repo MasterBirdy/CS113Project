@@ -39,54 +39,44 @@ public class Skill extends Entity
 	
 	public Skill(SkillStructure s, SkillContainer sc) //Actor c)
 	{
-		super(sc.xCoord(), sc.yCoord(), sc.team());
+		this(s, sc, sc.caster, sc.target);
+		/*super(sc.xCoord(), sc.yCoord(), sc.team());
 		caster = sc.caster;
-//		int level = 0;
-//		xCoord(c.xCoord() - 8);
-//		yCoord(c.yCoord() + (c instanceof Building ? 50 : 0));
 		aoe = s.aoe;
 		targeting = s.targeting;
 		targetCount = s.targetCount;
-//		targetRange = s.targetRange.get(0);
-//		if (s.targeting.get(0) == 0)
-//		{
-//			targetTeam = 0;
-//		}
-//		else if (s.targeting.get(0) == 1)
-//		{
-//			if (c.team() == 1)
-//				targetTeam = 2;
-//			else
-//				targetTeam = 1;
-//		}
-//		else
-//		{
-//			if (c.team() == 1)
-//				targetTeam = 1;
-//			else
-//				targetTeam = 2;
-//		}
-//		targetTeam = s.targetTeam.get(0);
 		effect = s.effect;
 		effectAmount = s.effectAmount;
 		effectTick = s.effectTick;
 		duration = s.duration;
-//		tickCounter = effectTick;
 		damageSplit = s.damageSplit;
 		additive = s.additive;
 		continuous = s.continuous;
 		travelEffect = EverythingHolder.getEffect(s.travelEffect);
 		detonateEffect = EverythingHolder.getEffect(s.detonateEffect);
-//		affectedEffect = new ParticleEffect();
-//		affectedEffect.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
-//		affected = everything.getEffect(s.affected);
-		
-//		detonateEffect = s.detonateEffect;
-//		affected = s.affected;
-//		name = s.name.get(0);
-//		caster = c;
-//		target = c.getTarget();
 		target = sc.target;
+		alive = true;
+		priority = s.priority;
+		extra = 0;*/
+	}
+	
+	public Skill(SkillStructure s, Entity e, Actor caster, Actor target)
+	{
+		super(e.xCoord(), e.yCoord(), e.team());
+		this.caster = caster;
+		aoe = s.aoe;
+		targeting = s.targeting;
+		targetCount = s.targetCount;
+		effect = s.effect;
+		effectAmount = s.effectAmount;
+		effectTick = s.effectTick;
+		duration = s.duration;
+		damageSplit = s.damageSplit;
+		additive = s.additive;
+		continuous = s.continuous;
+		travelEffect = EverythingHolder.getEffect(s.travelEffect);
+		detonateEffect = EverythingHolder.getEffect(s.detonateEffect);
+		this.target = target;
 		alive = true;
 		priority = s.priority;
 		extra = 0;

@@ -4,11 +4,16 @@ import java.util.ArrayList;
 
 public class SkillInjectorStructure extends SkillStructure
 {
-	public ArrayList<String> skills = new ArrayList<String>();
+	public String skill;
+	
+	public SkillInjectorStructure()
+	{
+		
+	}
 	
 	public SkillInjectorStructure(SkillInjectorStructure s)
 	{
 		super(s);
-		skills = s.skills;
+		skill = s.skill;
 	}
 }

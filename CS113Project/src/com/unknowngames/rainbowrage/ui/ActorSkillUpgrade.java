@@ -16,8 +16,8 @@ public class ActorSkillUpgrade extends ActorSkillDisplay
 	{
 		super(x, y);
 		radius = 35 * scale;
-		confirmButton = new RoundButton(x + 243 * scale, y - 112 * scale, radius, EverythingHolder.getObjectTexture("confirmbutton"));
-		cancelButton = new RoundButton(x + 325 * scale, y - 112 * scale, radius, EverythingHolder.getObjectTexture("cancelbutton"));
+		confirmButton = new RoundButton(x + 243 * scale, y - 102 * scale, radius, EverythingHolder.getObjectTexture("confirmbutton"));
+		cancelButton = new RoundButton(x + 325 * scale, y - 102 * scale, radius, EverythingHolder.getObjectTexture("cancelbutton"));
 		showDisplay = false;
 		
 		refreshButtons();

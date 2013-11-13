@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<stats version = "131103">
+<stats version = "131109">
 	<!-- MINIONS -->
 	<minion type = "swordsman">
 		<maxhealth>			220		31		311		3111		</maxhealth>
@@ -59,8 +59,8 @@
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionmonk							</soundpack>
 		<firstskill>		procheal	empty					</firstskill>
-		<secondskill>		selfdodge	empty					</secondskill>
-		<thirdskill>		empty		empty					</thirdskill>
+		<secondskill>		selfdodge	shieldally				</secondskill>
+		<thirdskill>		tempselfheal	tempremovedebuff	</thirdskill>
 		<description>		Ohmm								</description>
 	</minion>
 	
@@ -80,7 +80,7 @@
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionwizard						</soundpack>
 		<firstskill>		fireball	empty					</firstskill>
-		<secondskill>		empty		empty					</secondskill>
+		<secondskill>		explodeondeath	empty				</secondskill>
 		<thirdskill>		empty		empty					</thirdskill>
 		<description>		Fire's cool!						</description>
 	</minion>
@@ -209,10 +209,10 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			heroarcher							</soundpack>
-		<activeskill>		herorapidfire						</activeskill>
-		<firstskill>		empty		empty					</firstskill>
-		<secondskill>		empty		empty					</secondskill>
-		<thirdskill>		empty		empty					</thirdskill>
+		<activeskill>		empty								</activeskill>
+		<firstskill>		herorapidfire	empty				</firstskill>
+		<secondskill>		tempherofirearrow	tempherosplitshot	</secondskill>
+		<thirdskill>		tempherotrap		empty			</thirdskill>
 		<pet>				eagle								</pet>
 		<description>		Fear my shaft						</description>
 		<startmessage>		They won't know what hit them!		</startmessage>
@@ -233,10 +233,10 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			herowizard							</soundpack>
-		<activeskill>		herofireball						</activeskill>
-		<firstskill>		empty		empty					</firstskill>
-		<secondskill>		empty		empty					</secondskill>
-		<thirdskill>		empty		empty					</thirdskill>
+		<activeskill>		empty								</activeskill>
+		<firstskill>		herofireball	empty				</firstskill>
+		<secondskill>		tempherofiredot	tempherofirepass	</secondskill>
+		<thirdskill>		tempheroreflect	tempheroincspeed	</thirdskill>
 		<pet>				elemental							</pet>
 		<description>		The grand wizard					</description>
 		<startmessage>		Let's burn them all!				</startmessage>
@@ -472,6 +472,42 @@
 		<icon>					lifestealicon						</icon>
 	</skillcontainer>
 	
+	<skillcontainer type = "explodeondeath">
+		<targettype>			-1									</targettype>
+		<targetrange>			100									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				200									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				explodeondeath						</skills>
+		<cost>					100									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Explode on Death					</name>
+		<description>			Enemies explode on death			</description>
+		<icon>					deathexplodeicon					</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "shieldally">
+		<targettype>			2									</targettype>
+		<targetrange>			150									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				100									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				shieldally							</skills>
+		<cost>					100									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Shield								</name>
+		<description>			Shield								</description>
+		<icon>					shieldicon							</icon>
+	</skillcontainer>
+	
 	<!-- ACTIVE HERO SKILL CONTAINERS -->
 	<skillcontainer type = "herostun">
 		<targettype>			1									</targettype>
@@ -529,6 +565,27 @@
 		<description>			AOE Fireball						</description>
 		<icon>					herofireballicon					</icon>
 	</skillcontainer>
+	
+	<!-- <skillcontainer type = "herofireball">
+		<targettype>			-1									</targettype>
+		<targetrange>			100									</targetrange>
+		<traveltime>			70									</traveltime>
+		<cooldown>				7									</cooldown>
+		<trigger>				3									</trigger>
+		<skills>				explodeondeath						</skills>
+		<cost>					75									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<speed>					3									</speed>
+		<skillsprite>			fireball							</skillsprite>
+		<traveleffect>			empty								</traveleffect>
+		<name>					Hero Fireball						</name>
+		<description>			AOE Fireball						</description>
+		<icon>					herofireballicon					</icon>
+	</skillcontainer> -->
 	
 	<skillcontainer type = "herofear">
 		<targettype>			1									</targettype>
@@ -693,6 +750,61 @@
 		<icon>					arrowrapidicon						</icon>
 	</skillcontainer>
 	
+	<skillcontainer type = "tempshield">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Shield								</name>
+		<description>			Shield ally from damage				</description>
+		<icon>					shieldicon							</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempselfheal">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					SelfHeal							</name>
+		<description>			Heal self							</description>
+		<icon>					selfhealicon							</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempremovedebuff">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					RemoveDebuff						</name>
+		<description>			Remove debuff from ally				</description>
+		<icon>					removedebufficon					</icon>
+	</skillcontainer>
+	
+	<!-- TempSwordface -->
 	<skillcontainer type = "tempherostunduration">
 		<targettype>			-1									</targettype>
 		<targetrange>			0									</targetrange>
@@ -763,6 +875,134 @@
 		<name>					Wound								</name>
 		<description>			Increases damage taken by enemy		</description>
 		<icon>					woundicon							</icon>
+	</skillcontainer>
+	
+	<!-- TempArrowEyes -->
+	<skillcontainer type = "tempherofirearrow">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					HeroFireArrow						</name>
+		<description>			Sets hero's arrows on fire			</description>
+		<icon>					herofirearrowsicon					</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempherosplitshot">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					HeroSplitShot						</name>
+		<description>			Fires arrows at different targets 	</description>
+		<icon>					herosplitshowicon					</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempherotrap">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					HeroTrap							</name>
+		<description>			Lays down trap						</description>
+		<icon>					herotrapsicon						</icon>
+	</skillcontainer>
+	
+	<!-- TempMrWizard -->
+	<skillcontainer type = "tempherofiredot">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					HeroFireDoT							</name>
+		<description>			Sets enemy on fire					</description>
+		<icon>					herofiredoticon						</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempherofirepass">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					HeroFirePass						</name>
+		<description>			Fireball does passthrough damage 	</description>
+		<icon>					herofireballpassicon					</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempheroreflect">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					HeroReflect							</name>
+		<description>			Reflects damage as AoE				</description>
+		<icon>					heroreflecticon						</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "tempheroincspeed">
+		<targettype>			-1									</targettype>
+		<targetrange>			0									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				0									</cooldown>
+		<trigger>				1									</trigger>
+		<skills>				empty								</skills>
+		<cost>					-1									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					HeroIncSpeed						</name>
+		<description>			Increases speed of allies			</description>
+		<icon>					heroincspeedicon						</icon>
 	</skillcontainer>
 	
 	<!-- SKILLS -->
@@ -1025,6 +1265,68 @@
 		<detonateeffect>	stunattack							</detonateeffect>
 		<affectedeffect>	empty								</affectedeffect>
 	</skill>
+	
+	<skill type = "shieldally">
+		<aoe> 				-1									</aoe>
+		<targeting> 		1									</targeting>
+		<targetcount>		-1									</targetcount>
+		<effect>			7									</effect>
+		<effectamount>		8									</effectamount>
+		<duration>			600									</duration>
+		<effecttick>		0									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			0									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	heal								</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+	</skill>
+	
+	<skill type = "selfexplode">
+		<aoe> 				60									</aoe>
+		<targeting> 		1									</targeting>
+		<targetcount>		10									</targetcount>
+		<effect>			0									</effect>
+		<effectamount>		60									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			3									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	smallfireballexplosion				</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+	</skill>
+	
+	<!-- SKILL INJECTORS -->
+	<skillinjector type = "explodeondeath">
+		<aoe> 				-1									</aoe>
+		<targeting> 		-1									</targeting>
+		<targetcount>		-1									</targetcount>
+		<effect>			0									</effect>
+		<effectamount>		10									</effectamount>
+		<duration>			-2									</duration>
+		<effecttick>		-2									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			3									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	empty								</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+		<skills>			selfexplode							</skills>
+	</skillinjector>
 	
 	<!-- ACTIVE SKILLZ -->
 	<!--<skill type = "herofireball">

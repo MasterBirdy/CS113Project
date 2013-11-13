@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.unknowngames.rainbowrage.entity.Actor;
 import com.unknowngames.rainbowrage.entity.Entity;
 import com.unknowngames.rainbowrage.parser.SkillContainerStructure;
+import com.unknowngames.rainbowrage.parser.SkillInjectorStructure;
+import com.unknowngames.rainbowrage.parser.SkillStructure;
 
 public abstract class SkillContainer extends Entity
 {
@@ -74,8 +76,12 @@ public abstract class SkillContainer extends Entity
 		{
 			if (s != null)
 			{
+				SkillStructure skillStructure = everything.getSkill(s);
+				if (skillStructure instanceof SkillInjectorStructure)
+					skills.add(new SkillInjector((SkillInjectorStructure) skillStructure, this));
+				else
 //				System.out.println("Skill: " + s);
-				skills.add(new Skill(everything.getSkill(s), this));
+					skills.add(new Skill(skillStructure, this));
 				// skills.add(new Skill(everything.getSkill(s), caster,
 				// target));
 			}

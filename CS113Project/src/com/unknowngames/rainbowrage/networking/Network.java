@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import com.unknowngames.rainbowrage.EverythingHolder.TeamColor;
 //import com.test.gdxkyro.Unit;
 
 public class Network 
@@ -15,6 +16,10 @@ public class Network
 	static public void register(EndPoint endPoint)
 	{
 		Kryo kryo = endPoint.getKryo();
+		
+		kryo.register(String[].class);
+		kryo.register(TeamColor.class);
+		
 		kryo.register(Login.class);
 		kryo.register(AccountMessage.class);
 		kryo.register(Command.class);
@@ -28,6 +33,9 @@ public class Network
         kryo.register(ServerMessage.class);
         kryo.register(AccountInfo.class);
         kryo.register(UserMessage.class);
+        kryo.register(StartGameInfo.class);
+        kryo.register(HeroSelectStatus.class);
+        kryo.register(StartGameRoom.class);
 	}
 	
 	// From client
@@ -60,11 +68,39 @@ public class Network
 		public int message;
 	}
 	
+	static public class HeroSelectStatus
+	{
+		public boolean ready;
+		public String heroname;
+		public TeamColor teamColor;
+		public byte team;
+	}
+	
+	static public class HeroSelectStart
+	{
+		public String[] heroname;
+		public TeamColor[] teamColor;
+	}
 	
 	// From server
 	static public class LoginStatus
 	{
 		public byte status;
+	}
+	
+	static public class StartGameInfo
+	{
+		public String[] names;
+		public String[] heroes;
+		public String[] colors;
+		public byte team;
+		public String map;
+	}
+	
+	static public class StartGameRoom
+	{
+		public String[] usernames;
+		public byte team;
 	}
 	
 	static public class CommandIn

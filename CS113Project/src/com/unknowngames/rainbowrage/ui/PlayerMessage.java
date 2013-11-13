@@ -25,7 +25,7 @@ public class PlayerMessage extends BaseClass
 		resize *= scale;
 		//font = new BitmapFont(Gdx.files.internal("fonts/myfont.fnt"), Gdx.files.internal("fonts/myfont.png"), false);
 		font = EverythingHolder.getFont(4);
-		font.setColor(.5f, 0, 0, 1);
+//		font.setColor(.5f, 0, 0, 1);
 	}
 	
 	public PlayerMessage(String output)

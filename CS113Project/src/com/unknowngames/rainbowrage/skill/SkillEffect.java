@@ -46,7 +46,7 @@ public class SkillEffect
 		else
 			effectAmount = s.effectAmount;
 		effectTick = s.effectTick;
-		effectTickCounter = 0; //effectTick;
+		effectTickCounter = effectTick;
 //		if (s instanceof PassiveSkill)
 //			ticksLeft = 1;
 //		else
@@ -71,7 +71,7 @@ public class SkillEffect
 		effect = s.effect;
 		effectAmount = s.effectAmount;
 		effectTick = s.effectTick;
-		effectTickCounter = 0;
+		effectTickCounter = effectTick;
 		ticksLeft = s.ticksLeft;
 		continuous = s.continuous;
 		priority = s.priority;
@@ -91,7 +91,7 @@ public class SkillEffect
 //		System.out.println("Updating Skill Effect");
 		
 //		affected.setPosition(target.xCoord(), target.yCoord());
-		if (--effectTickCounter < 0)
+		if (--effectTickCounter <= 0)
 		{
 			effectTickCounter = effectTick;
 			causeEffect();

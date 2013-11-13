@@ -18,13 +18,13 @@ public class Hero extends Unit
 //		activeCooldown = 0, activeCooldownCounter = 0;
 	boolean changedDirection = false;
 //	SkillStructure activeSkill;
-	SkillSpawner activeSkill;
+//	SkillSpawner activeSkill;
 	String pet;
 	HashMap<String, String> phrases;
 	
 	public Hero(int x, int y, int team, ListIterator<Coordinate> p, HeroStructure struct)
 	{
-		this(x, y, team, p, struct, new int[]{-1, -1, -1});
+		this(x, y, team, p, struct, new int[]{0, -1, -1});
 	}
 	public Hero(int x, int y, int team, ListIterator<Coordinate> p, HeroStructure struct, int[] skillLevels)
 	{
@@ -35,11 +35,11 @@ public class Hero extends Unit
 		alive = false;
 		
 		
-		SkillContainerStructure sContainer = everything.getSkillContainer(struct.activeSkill(level));
-		if (sContainer != null)
-			activeSkill = new SkillSpawner(this, sContainer);
-		else
-			activeSkill = null;
+//		SkillContainerStructure sContainer = everything.getSkillContainer(struct.activeSkill(level));
+//		if (sContainer != null)
+//			activeSkill = new SkillSpawner(this, sContainer);
+//		else
+//			activeSkill = null;
 //		activeSkill = new SkillSpawner(this, everything.getSkillContainer(struct.activeSkill(level)));
 		
 		
@@ -69,8 +69,10 @@ public class Hero extends Unit
 	
 	public int activeCooldown()
 	{
-		if (activeSkill != null)
-			return activeSkill.getCooldown();
+		if (skillSpawners[0] != null)
+			return skillSpawners[0].getCooldown();
+//		if (activeSkill != null)
+//			return activeSkill.getCooldown();
 		return 0;
 //		return activeCooldownCounter;
 	}
@@ -134,8 +136,8 @@ public class Hero extends Unit
 //			respawnCounter = respawnTime;
 			return;
 		}
-		if (activeSkill != null)
-			activeSkill.update();
+//		if (activeSkill != null)
+//			activeSkill.update();
 		attackCooldown--;
 //		activeCooldownCounter--;
 		if (stance == -1)

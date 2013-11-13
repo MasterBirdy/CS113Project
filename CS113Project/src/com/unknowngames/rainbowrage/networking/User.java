@@ -10,7 +10,6 @@ public class User
 	public String name;
 	public String otherStuff;
 	public int id, x, y, room;
-	static TextureRegion[] texture = new TextureRegion[2];
 	
 	public User()
 	{

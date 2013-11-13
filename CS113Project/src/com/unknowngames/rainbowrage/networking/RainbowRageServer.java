@@ -30,6 +30,7 @@ public class RainbowRageServer
 	Server server;
 	//LinkedList<User> waitingUsers = new LinkedList<User>();
 	LinkedList<UserConnection> userConnection = new LinkedList<UserConnection>();
+	LinkedList<UserConnection> waitingUsers = new LinkedList<UserConnection>();
 //	LinkedList<Game[]> games = new LinkedList<Game[]>();
 	HashMap<Integer, Game> games = new HashMap<Integer, Game>();
 	int gameCount = 0;
@@ -44,6 +45,7 @@ public class RainbowRageServer
     DateFormat df = DateFormat.getDateTimeInstance (DateFormat.SHORT, DateFormat.SHORT, new Locale("en", "EN"));
     
     public static long sentData = 0, receivedData = 0;
+    private MySQLAccess mySQLAccess;
     
     
     public RainbowRageServer() throws IOException 
@@ -83,22 +85,46 @@ public class RainbowRageServer
         		// We know all connections for this server are actually UserConnections.
         		UserConnection connection = (UserConnection)c;
                 User user = connection.user;
-
+                
                 if (object instanceof Login) 
                 {
                 	// Ignore if already logged in.
+                	LoginStatus loginMsg = new LoginStatus();
                     if (user != null) 
+                    {
+                    	loginMsg.status = -4;
+                    	c.sendTCP(loginMsg);
                     	return;
+                    }
                     
                     // Reject if the name is invalid.
                     String name = ((Login)object).name;
-                    if (!isValid(name)) 
+                    String password = ((Login)object).password;
+                    
+                    if (!isValid(name) || !isValid(password)) // || !mySQLAccess.login(name, password)) 
                     {
+                    	loginMsg.status = -1;
+                    	c.sendTCP(loginMsg);
                     	c.close();
                         return;
                     }
+                                        
+                    loginMsg.status = 0;
+                    c.sendTCP(loginMsg);
                     
                     // Reject if already logged in.
+                    if (!name.equals("Guest"))
+                    {
+	                    for (UserConnection userCon : userConnection)
+	                    {
+	                    	if (userCon.user.name.equals(name))
+	                    	{
+	                    		loginMsg.status = -4;
+	                        	c.sendTCP(loginMsg);
+	                        	return;
+	                    	}
+	                    }
+                    }
 //                    for (Unit other : loggedIn) 
 //                    {
 //                    	if (other.name.equals(name)) 
@@ -127,8 +153,10 @@ public class RainbowRageServer
 //                    }
                     
 //                    user = new User(totalUsers);
-                    user = new User();
-                    user.name = ((Login)object).name;
+                    
+                    user = loadUserInfo(((Login)object).name);
+                    /*user = new User();
+                    user.name = ((Login)object).name;*/
 //                    unit.otherStuff = register.otherStuff;
 //                    unit.x = 0;
 //                    unit.y = 0;
@@ -165,6 +193,19 @@ public class RainbowRageServer
                 {
                 	return;
                 }
+                
+                if (object instanceof HeroSelectStatus)
+                {
+                	if (user.room >= 0)
+                		games.get(user.room).heroSelectStatus((HeroSelectStatus)object);
+                }
+        	}
+        	
+        	private User loadUserInfo(String name)
+        	{
+        		User user = new User();
+        		user.name = name;
+        		return user;
         	}
         	
         	private boolean isValid (String value) 
@@ -217,6 +258,9 @@ public class RainbowRageServer
         server.bind(Network.port);
         server.start();
         System.out.println("Server started");
+        
+//        mySQLAccess = new MySQLAccess();
+        
         writeToLog("-------------------------------");
         writeToLog(df.format(new Date()) + ": Server Started!");
         writeToLog("-------------------------------");
@@ -259,13 +303,6 @@ public class RainbowRageServer
     {
     	c.user = user;
     	
-    	// Add existing characters to new logged in connection.
-//        for (Unit other : loggedIn) 
-//        {
-//        	AddUnit addUnit = new AddUnit();
-//        	addUnit.unit = other;
-//        	c.sendTCP(addUnit);
-//        }
         System.out.println("Player " + user.name + userConnection.size() + " just joined.");
         
         writeToLog(df.format(new Date()) + ": " + user.name + " joined.");
@@ -280,7 +317,7 @@ public class RainbowRageServer
     	    System.out.println(e);
     	}*/
     	
-        LoginStatus status = new LoginStatus();
+//        LoginStatus status = new LoginStatus();
 //        status.status = (byte)userConnection.size();//waitingUsers.size();
         
 //        if (userConnection.size() > 2)
@@ -294,33 +331,48 @@ public class RainbowRageServer
         
 //        waitingUsers.add(user);
         userConnection.add(c);
+        waitingUsers.add(c);
         
 //        c.sendTCP(status);
         
-        if (userConnection.size() >= 2)
+//        if (userConnection.size() >= 2)
+//        {
+//        	UserConnection p1 = null, p2 = null;
+//        	while (p1 == null)
+//        		p1 = userConnection.pop();
+//        	while (p2 == null)
+//        		p2 = userConnection.pop();
+//        	
+//        	Game game = new Game(p1, p2, server, gameCount);
+//        	games.put(gameCount++, game);
+//        	
+//        	writeToLog(df.format(new Date()) + ": " + p1.user.name + " and " + p1.user.name + " started.");
+//        	/*try 
+//        	{
+//        	    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("TestLog.txt", true)));
+//        	    out.println(df.format(new Date()) + ": " + p1.user.name + userConnection.size() + " and " + p1.user.name + userConnection.size() + 
+//        	    			" started.");
+//        	    out.close();
+//        	}
+//        	catch (IOException e) 
+//        	{
+//        	    System.out.println(e);
+//        	}*/
+//        }
+        
+        // Change to send array of players to accommodate different modes
+        if (waitingUsers.size() >= 2)
         {
         	UserConnection p1 = null, p2 = null;
         	while (p1 == null)
-        		p1 = userConnection.pop();
+        		p1 = waitingUsers.pop();
         	while (p2 == null)
-        		p2 = userConnection.pop();
+        		p2 = waitingUsers.pop();
         	
         	Game game = new Game(p1, p2, server, gameCount);
         	games.put(gameCount++, game);
         	
-        	writeToLog(df.format(new Date()) + ": " + p1.user.name + userConnection.size() + " and " + p1.user.name + userConnection.size() + 
-	    			" started.");
-        	/*try 
-        	{
-        	    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("TestLog.txt", true)));
-        	    out.println(df.format(new Date()) + ": " + p1.user.name + userConnection.size() + " and " + p1.user.name + userConnection.size() + 
-        	    			" started.");
-        	    out.close();
-        	}
-        	catch (IOException e) 
-        	{
-        	    System.out.println(e);
-        	}*/
+        	writeToLog(df.format(new Date()) + ": " + p1.user.name + " and " + p1.user.name + " started.");
         }
     }
     

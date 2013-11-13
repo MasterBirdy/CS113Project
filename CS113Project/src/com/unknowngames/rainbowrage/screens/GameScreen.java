@@ -77,12 +77,13 @@ public class GameScreen implements Screen
 	boolean multiplayer = false; // True with multiplayer
 	boolean running = false; // False with Multiplayer
 	boolean connected = false;
-	byte team; // Team 1 is top and Team 2 is bottom
+	byte team; // Team 0 is top and Team 1 is bottom
 	Client client;
 	ScoreBoard scoreBoard;
 
+	String serverIp = "unknowngamestudio.com";
 //	String serverIp = "localhost"; // Local Host
-	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";// "10.170.103.156";
+//	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";// "10.170.103.156";
 																			// //
 																			// EC2
 																			// Server
@@ -97,7 +98,7 @@ public class GameScreen implements Screen
 	PriorityQueue<CommandIn> commandQueue = new PriorityQueue<CommandIn>(20,
 			comparator);
 
-	boolean ready = false;
+	boolean ready = false, sentReady = false;
 
 	GL10 gl;
 	
@@ -105,7 +106,10 @@ public class GameScreen implements Screen
 
 	public GameScreen(RainbowRage game, boolean multiplayer)
 	{
+		System.out.println("Starting game screen");
 		long startTime = System.currentTimeMillis();
+		
+		client = everything.getClient();
 
 		gl = Gdx.graphics.getGL10();
 		this.game = game;
@@ -163,16 +167,20 @@ public class GameScreen implements Screen
 		{
 			running = true;
 			everything.setRunning(true);
-			team = 1;
-			everything.setTeam((byte) 1);
+			team = 0;
+			everything.setTeam((byte) team);
 //			everything.add(0, 2);
 //			everything.add(0, 2);
 //			everything.add(1, 2);
 //			everything.add(1, 2);
 //			everything.add(3, 2);
 		}
+		else
+		{
+			team = (byte)everything.team();
+		}
 		
-		for (int i = 1; i < 3; i++)
+		for (int i = 0; i < 2; i++)
 		{
 			everything.add(0, i);
 			everything.add(0, i);
@@ -240,7 +248,14 @@ public class GameScreen implements Screen
 	public void render(float delta)
 	{
 		boundCamera();
-
+		
+		if (!sentReady)
+		{
+			sentReady = true;
+			Command cmd = new Command();
+			cmd.team = team;
+			client.sendTCP(cmd);
+		}
 		if (ready && !isPaused && (everything.moreTurns() || !multiplayer))
 			timeAccumulator += delta;
 
@@ -302,7 +317,7 @@ public class GameScreen implements Screen
 
 	private void scoreBoards(int t)
 	{
-		if (t == 0)
+		if (t == -1)
 			return;
 		Gdx.input.setInputProcessor(null);
 		if (t == team)
@@ -322,6 +337,7 @@ public class GameScreen implements Screen
 
 	public void endGame()
 	{
+		System.out.println("Ending game");
 		everything.end();
 		everything.stopGameMusic();
 		if (startMusic != null)
@@ -683,6 +699,7 @@ public class GameScreen implements Screen
 
 	public void quit()
 	{
+		System.out.println("Quitting");
 		if (client != null)
 			client.close();
 		Gdx.app.exit();
@@ -744,10 +761,14 @@ public class GameScreen implements Screen
 
 	private void networkSetup()
 	{
-		client = new Client();
-		client.start();
+		if (client == null || !client.isConnected())
+		{
+			client = new Client();
+			client.start();
+		}
+		
 		Network.register(client);
-
+		
 		// ThreadedListener runs the listener methods on a different thread.
 		client.addListener(new ThreadedListener(new Listener()
 		{
@@ -757,11 +778,12 @@ public class GameScreen implements Screen
 
 			public void received(Connection connection, Object object)
 			{
-				if (object instanceof LoginStatus)
+				/*if (object instanceof LoginStatus)
 				{
 					LoginStatus status = (LoginStatus) object;
 					if (status.status >= 0)
 					{
+						System.out.println("Loginstatus");
 						team = (byte) status.status;
 						everything.setTeam(team);
 						gameUI.setup();
@@ -775,16 +797,19 @@ public class GameScreen implements Screen
 						System.exit(-1);
 					}
 					return;
-				}
+				}*/
 
 				if (object instanceof CommandIn)
 				{
-					// System.out.println("CommandIn");
+					System.out.println("CommandIn");
 					if (((CommandIn) object).command == -2)
 					{
 						// System.out.println("Highest now " +
 						// ((CommandIn)object).turn);
+						System.out.println("New highest " + ((CommandIn)object).turn);
 						everything.setHighestTurn(((CommandIn) object).turn);
+						if (!connected)
+							connected = true;
 					}
 					else
 						commandQueue.add((CommandIn) object);
@@ -827,7 +852,8 @@ public class GameScreen implements Screen
 		// String host = ui.inputHost();
 		try
 		{
-			client.connect(5000, serverIp, Network.port);
+			if (!client.isConnected())
+				client.connect(5000, serverIp, Network.port);
 			// Server communication after connection can go here, or in
 			// Listener#connected().
 		}
@@ -840,9 +866,9 @@ public class GameScreen implements Screen
 		}
 
 		// name = ui.inputName();
-		Login login = new Login();
+		/*Login login = new Login();
 		login.name = "Player";
-		client.sendTCP(login);
+		client.sendTCP(login);*/
 	}
 
 	@Override
@@ -878,6 +904,7 @@ public class GameScreen implements Screen
 	@Override
 	public void hide()
 	{
+		System.out.println("Hiding");
 		// TODO Auto-generated method stub
 		Gdx.input.setInputProcessor(null);// setInputProcessor(inputProcessor);
 		everything.end();

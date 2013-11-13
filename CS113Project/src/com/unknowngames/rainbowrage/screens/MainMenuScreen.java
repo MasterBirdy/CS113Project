@@ -53,6 +53,8 @@ public class MainMenuScreen implements Screen
 	EverythingHolder everything;
 	
 	LoginUI loginUI;
+	SettingsScreen settingsScreen;
+	LoginScreen loginScreen;
 
 	public MainMenuScreen(RainbowRage game, EverythingHolder everything)
 	{
@@ -348,7 +350,7 @@ public class MainMenuScreen implements Screen
 //		Gdx.input.vibrate(50);
 		if (h == 0) // Single-player
 		{
-			selectScreen = new HeroSelectScreen(everything, game);
+			selectScreen = new HeroSelectScreen(game, false);
 			game.setScreen(selectScreen);
 			newGameStarted = true;
 //			startMusic.stop();
@@ -369,13 +371,23 @@ public class MainMenuScreen implements Screen
 		}
 		else if (h == 2) // Settings
 		{
+			loginScreen = new LoginScreen(game);
+			game.setScreen(loginScreen);
 			
-			if (++currentDisplayMode == 1)
+			/*settingsScreen = new SettingsScreen(game);
+			game.setScreen(settingsScreen);*/
+			
+			
+//			settingsScreen.show();
+			/*if (++currentDisplayMode == 1)
 				Gdx.graphics.setDisplayMode(1280, 1024, false);
 			else if (currentDisplayMode == 2)
 				Gdx.graphics.setDisplayMode(1680, 1050, false);
 			else if (currentDisplayMode == 3)
-				Gdx.graphics.setDisplayMode(1920, 1080, false);
+			{
+				Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
+				//Gdx.graphics.setDisplayMode(1920, 1080, false);
+			}
 			else
 			{
 				currentDisplayMode = 0;
@@ -383,7 +395,8 @@ public class MainMenuScreen implements Screen
 			}
 			
 			everything.rescale();
-			rescale();
+			rescale();*/
+			
 //			startMusic.stop();
 //			game.setScreen(game.settingsScreen);
 			return;

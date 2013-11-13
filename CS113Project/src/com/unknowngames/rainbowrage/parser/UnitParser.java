@@ -124,7 +124,8 @@ public class UnitParser
 						else if (node.getNodeName().equals("skill"))
 						{
 							SkillStructure skill = new SkillStructure();
-							skill.aoe = tokenizeInt(getElement("aoe")).get(0);
+							loadSkillStructure(skill);
+							/*skill.aoe = tokenizeInt(getElement("aoe")).get(0);
 							skill.targeting = tokenizeInt(getElement("targeting")).get(0);
 							skill.targetCount = tokenizeInt(getElement("targetcount")).get(0);
 							skill.effect = tokenizeInt(getElement("effect")).get(0);
@@ -139,8 +140,15 @@ public class UnitParser
 							skill.continuous = tokenizeBool(getElement("continuous")).get(0);
 							skill.travelEffect = tokenizeString(getElement("traveleffect")).get(0);
 							skill.detonateEffect = tokenizeString(getElement("detonateeffect")).get(0);
-							skill.affectedEffect = tokenizeString(getElement("affectedeffect")).get(0);
+							skill.affectedEffect = tokenizeString(getElement("affectedeffect")).get(0);*/
 							skillStatsMap.put(element.getAttribute("type"), skill);
+						}
+						else if (node.getNodeName().equals("skillinjector"))
+						{
+							SkillInjectorStructure skillInjector = new SkillInjectorStructure();
+							loadSkillStructure(skillInjector);
+							skillInjector.skill = tokenizeString(getElement("skills")).get(0);
+							skillStatsMap.put(element.getAttribute("type"), skillInjector);
 						}
 						else if (node.getNodeName().equals("skillcontainer") &&	// Instant skill container
 								tokenizeInt(getElement("traveltime")).get(0) == -1) 
@@ -172,6 +180,26 @@ public class UnitParser
 		{
 			ex.printStackTrace();
 		}
+	}
+	
+	public void loadSkillStructure(SkillStructure s)
+	{
+		s.aoe = tokenizeInt(getElement("aoe")).get(0);
+		s.targeting = tokenizeInt(getElement("targeting")).get(0);
+		s.targetCount = tokenizeInt(getElement("targetcount")).get(0);
+		s.effect = tokenizeInt(getElement("effect")).get(0);
+		s.effectAmount = tokenizeInt(getElement("effectamount")).get(0);
+		s.duration = tokenizeInt(getElement("duration")).get(0);
+		s.effectTick = tokenizeInt(getElement("effecttick")).get(0);
+		s.buff = tokenizeInt(getElement("buff")).get(0);
+		s.trigger = tokenizeInt(getElement("trigger")).get(0);
+		s.priority = tokenizeInt(getElement("priority")).get(0);
+		s.damageSplit = tokenizeBool(getElement("damagesplit")).get(0);
+		s.additive = tokenizeBool(getElement("additive")).get(0);
+		s.continuous = tokenizeBool(getElement("continuous")).get(0);
+		s.travelEffect = tokenizeString(getElement("traveleffect")).get(0);
+		s.detonateEffect = tokenizeString(getElement("detonateeffect")).get(0);
+		s.affectedEffect = tokenizeString(getElement("affectedeffect")).get(0);
 	}
 	
 	public void loadActorStructure(ActorStructure a)

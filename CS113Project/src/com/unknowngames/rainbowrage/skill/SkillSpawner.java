@@ -26,7 +26,7 @@ public class SkillSpawner extends BaseClass
 	
 	Actor caster;
 	
-	ArrayList<SkillEffectInjector> extraSkills = new ArrayList<SkillEffectInjector>();
+	ArrayList<SkillEffectInjected> extraSkills = new ArrayList<SkillEffectInjected>();
 	
 	public SkillSpawner(Actor c, SkillContainerStructure s)
 	{
@@ -89,9 +89,10 @@ public class SkillSpawner extends BaseClass
 			{
 				ArrayList<Skill> allExtraSkills = new ArrayList<Skill>();
 
-				for (SkillEffectInjector sei : extraSkills)
+				for (SkillEffectInjected sei : extraSkills)
 				{
-					allExtraSkills.addAll(sei.getSkills());
+					if (sei != null && sei.getSkill() != null)
+						allExtraSkills.add(sei.getSkill());
 //					for (Skill s : sei.getSkills())
 //					{
 //						allExtraSkills.add(s);
@@ -128,7 +129,7 @@ public class SkillSpawner extends BaseClass
 //		return null;
 	}
 	
-	public void addExtraSkill(SkillEffectInjector s)
+	public void addExtraSkill(SkillEffectInjected s)
 	{
 		
 	}
