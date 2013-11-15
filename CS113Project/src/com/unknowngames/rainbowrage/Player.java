@@ -1,11 +1,12 @@
 package com.unknowngames.rainbowrage;
 
-import com.unknowngames.rainbowrage.EverythingHolder.TeamColor;
+import com.unknowngames.rainbowrage.AllEnums.TeamColor;
+
 
 public class Player
 {
 	String userName, hero = "";
-	TeamColor teamColor = TeamColor.red;
+	TeamColor teamColor;// = TeamColor.red;
 	int[][] upgrades = new int[7][];
 	int funds;
 	

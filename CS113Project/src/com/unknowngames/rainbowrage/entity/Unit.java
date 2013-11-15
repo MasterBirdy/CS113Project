@@ -135,6 +135,7 @@ public abstract class Unit extends Actor
 		{
 //			batch.draw(current, xCoord - point.x * 1.5f - 3, yCoord - point.y * 1.5f - 3, current.getRegionWidth() * 1.5f, current.getRegionHeight() * 1.5f);
 //			batch.draw(current, xCoord - point.x * .75f - 3, yCoord - point.y * .75f - 3, current.getRegionWidth() * .75f, current.getRegionHeight() * .75f);
+//			batch.draw(EverythingHolder.getObjectTexture("entityshadow"), xCoord - 25, yCoord - 18, 51, 38);
 			batch.draw(current, xCoord - point.x * .75f, yCoord - point.y * .75f, unitAnimation.getFeet(animationDir).x / 2, unitAnimation.getFeet(animationDir).y / 2, current.getRegionWidth() * .75f, current.getRegionHeight() * .75f, 1, 1, getRotation());
 			if (this.team() == everything.team())
 			{
@@ -144,6 +145,7 @@ public abstract class Unit extends Actor
 		}
 		else
 		{
+//			batch.draw(EverythingHolder.getObjectTexture("entityshadow"), xCoord - 13, yCoord - 8, 25, 19);
 			batch.draw(current, xCoord - point.x * .5f, yCoord - point.y * .5f, unitAnimation.getFeet(animationDir).x / 2, unitAnimation.getFeet(animationDir).y / 2, current.getRegionWidth() * .5f, current.getRegionHeight() * .5f, 1, 1, getRotation());
 			
 //			if (this.team() == everything.team())

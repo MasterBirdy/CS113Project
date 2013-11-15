@@ -411,3 +411,79 @@ Total data received: 32
 11/13/13 1:35 AM: Guest and Guest started.
 11/13/13 1:35 AM: Player 31 logged out.
 11/13/13 1:35 AM: Player 40 logged out.
+-------------------------------
+11/13/13 12:49 PM: Server Started!
+-------------------------------
+11/13/13 12:50 PM: Guest joined.
+11/13/13 12:50 PM: Guest joined.
+11/13/13 12:50 PM: Guest and Guest started.
+11/13/13 12:50 PM: Player 21 logged out.
+11/13/13 12:50 PM: Player 10 logged out.
+11/13/13 12:55 PM: Guest joined.
+11/13/13 12:55 PM: Guest joined.
+11/13/13 12:55 PM: Guest and Guest started.
+11/13/13 12:55 PM: Player 31 logged out.
+11/13/13 12:55 PM: Player 40 logged out.
+11/13/13 12:56 PM: Guest joined.
+11/13/13 12:56 PM: Guest joined.
+11/13/13 12:56 PM: Guest and Guest started.
+11/13/13 12:56 PM: Player 51 logged out.
+11/13/13 12:56 PM: Player 60 logged out.
+11/13/13 12:58 PM: Guest joined.
+11/13/13 12:58 PM: Guest joined.
+11/13/13 12:58 PM: Guest and Guest started.
+11/13/13 12:58 PM: Player 71 logged out.
+11/13/13 12:58 PM: Player 80 logged out.
+11/13/13 12:59 PM: Guest joined.
+11/13/13 12:59 PM: Guest joined.
+11/13/13 12:59 PM: Guest and Guest started.
+11/13/13 12:59 PM: Player 91 logged out.
+11/13/13 12:59 PM: Player 100 logged out.
+11/13/13 1:00 PM: Guest joined.
+11/13/13 1:00 PM: Guest joined.
+11/13/13 1:00 PM: Guest and Guest started.
+11/13/13 1:00 PM: Player 111 logged out.
+11/13/13 1:00 PM: Player 120 logged out.
+11/13/13 1:01 PM: Guest joined.
+11/13/13 1:01 PM: Guest joined.
+11/13/13 1:01 PM: Guest and Guest started.
+11/13/13 1:02 PM: Player 141 logged out.
+11/13/13 1:02 PM: Player 130 logged out.
+11/13/13 1:02 PM: Guest joined.
+11/13/13 1:02 PM: Guest joined.
+11/13/13 1:02 PM: Guest and Guest started.
+11/13/13 1:03 PM: Player 161 logged out.
+11/13/13 1:03 PM: Player 150 logged out.
+11/13/13 1:03 PM: Guest joined.
+11/13/13 1:03 PM: Guest joined.
+11/13/13 1:03 PM: Guest and Guest started.
+11/13/13 1:04 PM: Player 181 logged out.
+11/13/13 1:04 PM: Player 170 logged out.
+11/13/13 1:04 PM: Guest joined.
+11/13/13 1:04 PM: Guest joined.
+11/13/13 1:04 PM: Guest and Guest started.
+11/13/13 1:05 PM: Player 191 logged out.
+11/13/13 1:05 PM: Player 200 logged out.
+11/13/13 1:05 PM: Guest joined.
+11/13/13 1:05 PM: Guest joined.
+11/13/13 1:05 PM: Guest and Guest started.
+11/13/13 1:06 PM: Player 221 logged out.
+11/13/13 1:06 PM: Player 210 logged out.
+11/13/13 1:06 PM: Guest joined.
+11/13/13 1:06 PM: Guest joined.
+11/13/13 1:06 PM: Guest and Guest started.
+11/13/13 1:07 PM: Player 231 logged out.
+11/13/13 1:07 PM: Player 240 logged out.
+11/13/13 1:07 PM: Guest joined.
+11/13/13 1:07 PM: Guest joined.
+11/13/13 1:07 PM: Guest and Guest started.
+11/13/13 1:07 PM: Player 261 logged out.
+11/13/13 1:07 PM: Player 250 logged out.
+11/13/13 1:10 PM: Guest joined.
+11/13/13 1:10 PM: Guest joined.
+11/13/13 1:10 PM: Guest and Guest started.
+11/13/13 1:11 PM: Player 271 logged out.
+11/13/13 1:11 PM: Player 280 logged out.
+-------------------------------
+11/13/13 1:13 PM: Server Started!
+-------------------------------

@@ -156,4 +156,9 @@ public class ClientNetwork extends BaseClass
 	{
 		return failCode;
 	}
+	
+	public void disconnect()
+	{
+		everything.getClient().close();
+	}
 }

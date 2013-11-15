@@ -520,7 +520,7 @@
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
-		<casteffect>			stunattack							</casteffect>
+		<casteffect>			empty								</casteffect>
 		<castsound>				empty								</castsound>
 		<name>					Hero Stun							</name>
 		<description>			AOE stun							</description>

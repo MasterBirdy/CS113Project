@@ -511,6 +511,8 @@ public abstract class Actor extends Entity
 	}
 	public void draw(SpriteBatch batch)
 	{
+		if (everything.getSettings().getShadows())
+			shadow(batch);
 		if (everything.getSettings().showRange())
 			rangeIndicator(batch);
 		if (everything.getSettings().showRadius())
@@ -592,6 +594,11 @@ public abstract class Actor extends Entity
 //		effects.add(p);
 	}
 	
+	public void shadow(SpriteBatch batch)
+	{
+		batch.draw(EverythingHolder.getObjectTexture("entityshadow"), xCoord - radius * .8f, yCoord - radius * .8f * 38 / 51, radius * .8f * 2, 2 * radius * .8f * 38 / 51);
+//		batch.draw(EverythingHolder.getObjectTexture("entityshadow"), xCoord - 13, yCoord - 8, 25, 19);
+	}
 	
 	public void rangeIndicator(SpriteBatch batch)
 	{

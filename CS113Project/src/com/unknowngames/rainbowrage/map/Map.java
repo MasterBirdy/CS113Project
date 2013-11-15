@@ -63,7 +63,7 @@ public class Map
 	
 	public Coordinate[] buildSites(int team)
 	{
-		Coordinate[] temp = (team == 1 ? buildSites1 : buildSites2);
+		Coordinate[] temp = (team == 0 ? buildSites1 : buildSites2);
 		if (temp == null)
 			return new Coordinate[0];
 		return temp;

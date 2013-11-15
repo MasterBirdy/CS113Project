@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import com.unknowngames.rainbowrage.EverythingHolder.TeamColor;
+import com.unknowngames.rainbowrage.AllEnums.TeamColor;
 //import com.test.gdxkyro.Unit;
 
 public class Network 

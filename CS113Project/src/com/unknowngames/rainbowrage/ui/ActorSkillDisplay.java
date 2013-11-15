@@ -20,8 +20,9 @@ public class ActorSkillDisplay extends BaseClass
 //	TextureRegion[] skillIcons = new TextureRegion[4];
 	RectangularButton[] buttons = new RectangularButton[7];
 	TextureRegion chibi;
-	String description = "", price = "";
-	BitmapFont font = everything.getFont(1);
+	String description = "", price = "", skillName = "";
+	BitmapFont largeFont = EverythingHolder.getFont(1),
+			   smallFont = EverythingHolder.getFont(0);
 	int selectedSkill = -1;
 	int width = Gdx.graphics.getWidth();
 	int height = Gdx.graphics.getHeight();
@@ -63,6 +64,7 @@ public class ActorSkillDisplay extends BaseClass
 				buttons[6] = null;
 		}
 		
+		skillName = "Hero";
 		description = actor.description();
 		price = "";
 		chibi = getActorImage(shownActor.name());
@@ -88,6 +90,7 @@ public class ActorSkillDisplay extends BaseClass
 	public void setSelected(int s)
 	{
 		selectedSkill = s;
+		skillName = everything.getSkillStructure(shownActor, s / 2, s % 2).name;
 		description = everything.getSkillStructure(shownActor, s / 2, s % 2).description;
 		int c = everything.getSkillStructure(shownActor, s / 2, s % 2).cost;
 		price = "Cost: ";
@@ -122,7 +125,7 @@ public class ActorSkillDisplay extends BaseClass
 			float resize = portraitHeight / chibi.getRegionHeight();
 			if (resize * chibi.getRegionWidth() > portraitWidth)
 				resize = portraitWidth / chibi.getRegionWidth();
-			batch.draw(chibi, x, y + (portraitHeight - chibi.getRegionHeight() * resize - 40) * scale, chibi.getRegionWidth() * resize * scale, chibi.getRegionHeight() * resize * scale);//, 350, 40);
+			batch.draw(chibi, x, y + (portraitHeight - chibi.getRegionHeight() * resize - 20) * scale, chibi.getRegionWidth() * resize * scale, chibi.getRegionHeight() * resize * scale);//, 350, 40);
 //			float resize = 325 / chibi.getRegionHeight();
 //			if (resize * chibi.getRegionWidth() > 390)
 //				resize = 350f / chibi.getRegionWidth();
@@ -135,8 +138,9 @@ public class ActorSkillDisplay extends BaseClass
 				b.draw(batch, 0);
 		}
 		
-		font.draw(batch, description, x, y - 40 * scale);
-		font.draw(batch, price, x, y - 70 * scale);
+		largeFont.draw(batch, skillName, x + 20 * scale, y - 10);
+		smallFont.draw(batch, price, x + 230 * scale, y - 20 * scale);
+		smallFont.drawMultiLine(batch, description, x + 20 * scale, y - 50 * scale);
 	}
 	
 //	private SkillContainerStructure getSkillStructure(ActorStructure a, int skill, int level)

@@ -167,9 +167,20 @@ public class LoginScreen extends BaseClass implements Screen
 	
 	public boolean login(String name, String pass)
 	{
-		System.out.println("Name: " + name + " Pass: " + pass);
-		if (!validate(name) || !validate(pass))
+		if (clientNetwork.loggedIn())
 			return false;
+		
+		System.out.println("Name: " + name + " Pass: " + pass);
+		if (!validate(name))
+		{
+			messageLabel.setText("Invalid username");
+			return false;
+		}
+		if (!validate(pass))
+		{
+			messageLabel.setText("Invalid password");
+			return false;
+		}
 		System.out.println("Name: " + name + " Pass: " + pass);
 		
 		messageLabel.setText("Establishing connection...");
@@ -195,17 +206,17 @@ public class LoginScreen extends BaseClass implements Screen
 			switch(clientNetwork.failCode())
 			{
 			case -1:
-				messageLabel.setText("Incorrect username/password.");
+				messageLabel.setText("Incorrect username/password");
 				break;
 			case -2:
-				messageLabel.setText("Server is full, try again later.");
+				messageLabel.setText("Server is full, try again later");
 				break;
 			case -3:
-				messageLabel.setText("Server down for maintenance.");
+				messageLabel.setText("Server down for maintenance");
 				break;
-			default:
+			/*default:
 				messageLabel.setText("Something new happened: " + clientNetwork.failCode());
-				break;
+				break;*/
 			}
 			return;
 		}
@@ -221,6 +232,7 @@ public class LoginScreen extends BaseClass implements Screen
 	
 	public void goBack()
 	{
+		clientNetwork.disconnect();
 		game.setScreen(game.mainMenuScreen);
 	}
 	
@@ -255,7 +267,7 @@ public class LoginScreen extends BaseClass implements Screen
 			}
 		);
 		
-		final TextButton guestButton = new TextButton("Login as Guest", skin);
+		final TextButton guestButton = new TextButton("Guest", skin);
 		guestButton.addListener(new ChangeListener()
 			{
 				public void changed(ChangeEvent event, Actor actor)
@@ -281,6 +293,10 @@ public class LoginScreen extends BaseClass implements Screen
 		messageLabel = new Label("", skin);
 		
 		Table table = new Table();
+		table.setTransform(true);
+		table.setOrigin(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+		table.setScale(everything.getScreenScale());
+//		table.setScale(1.5f);
 		table.setFillParent(true);
 //		table.debug();
 //		table.debugTable();
@@ -294,12 +310,13 @@ public class LoginScreen extends BaseClass implements Screen
 		table.add(passwordText).width(100);
 		table.row();
 		table.add(messageLabel).colspan(2);
-		table.row();
+		table.row().spaceTop(15);
 		table.add(guestButton).left().width(60);
 		table.add(loginButton).right().width(60);
-		table.row();
-		table.add(backButton).left().width(60);
-		table.add(checkButton).right().width(60);
+		table.row().spaceTop(15);
+		table.add(backButton).right().width(60).colspan(2);
+//		table.add(checkButton).right().width(60);
+		
 		
 	}
 	

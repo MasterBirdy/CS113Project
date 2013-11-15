@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
+import com.unknowngames.rainbowrage.AllEnums.TeamColor;
 import com.unknowngames.rainbowrage.entity.*;
 import com.unknowngames.rainbowrage.map.*;
 import com.unknowngames.rainbowrage.parser.*;
@@ -35,7 +36,7 @@ import com.unknowngames.rainbowrage.skill.TravelingSkillContainer;
 public class EverythingHolder 
 {
 	@SuppressWarnings("unchecked")
-	String xmlVersion = "", gameVersion = "0.11_9_13";
+	String xmlVersion = "", gameVersion = "0.11_14_13";
 	
 	EntityComparator eCompare = new EntityComparator();
 	static private SpriteBatch batch;
@@ -121,8 +122,8 @@ public class EverythingHolder
 	
 	static GameScreen gameScreen;
 	
-//	static String serverIp = "unknowngamestudio.com";
-	static String serverIp = "localhost"; // Local Host
+	static String serverIp = "unknowngamestudio.com";
+//	static String serverIp = "localhost"; // Local Host
 //	String serverIp = "ec2-204-236-164-26.us-west-1.compute.amazonaws.com";// "10.170.103.156";
 																			// //
 																			// EC2
@@ -133,7 +134,7 @@ public class EverythingHolder
 	// "ernie-the-giant-chicken.ics.uci.edu";//"128.195.6.172";
 	// String serverIp = "169.234.242.202"; // My desktop
 	
-	public enum TeamColor {red, blue, green, orange, purple, yellow};
+//	public enum TeamColor {red, blue, green, orange, purple, yellow};
 	public String[] allHeroes = {"swordface", "arroweyes", "mrwizard"};
 	
 	Client client;
@@ -256,8 +257,8 @@ public class EverythingHolder
 	private void loadFonts()
 	{
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
-		font[0] = generator.generateFont(18);
-		font[1] = generator.generateFont(32);
+		font[0] = generator.generateFont(24);	// Description and cost
+		font[1] = generator.generateFont(32);	// Skill name and timers
 		font[2] = generator.generateFont(45);
 		font[2].setColor(1, 1, 1, 1);
 		font[3] = generator.generateFont(45);
@@ -386,7 +387,7 @@ public class EverythingHolder
 	{
 		Audio tempMusic = Gdx.audio;
 		gameMusic = tempMusic.newMusic(Gdx.files.internal("audio/373780_The_Devil_On_A_Bicy.mp3"));
-		gameMusic.setVolume(settings.musicSound);
+		gameMusic.setVolume(settings.musicVolume);
 		gameMusic.setLooping(true);
 	}
 	
@@ -407,7 +408,7 @@ public class EverythingHolder
 	
 	public void setGameMusic()
 	{
-		gameMusic.setVolume(settings.musicSound);
+		gameMusic.setVolume(settings.musicVolume);
 	}
 	
 	public int getSentUnit(int unit)
@@ -648,7 +649,7 @@ public class EverythingHolder
 	{		
 		for (int i = 0; i < players.length; i++)
 		{
-			System.out.println("Loading teams: " + players[i].getColor().name());
+//			System.out.println("Loading teams: " + players[i].getColor().name());
 			teamTextures[i] = new Texture(Gdx.files.internal("images/sprite" + players[i].getColor().name() + ".png"));
 			teamTextures[i].setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		}
@@ -1034,6 +1035,7 @@ public class EverythingHolder
 		
 		textures = new Texture(Gdx.files.internal("images/buttons_sheet.png"));
 		textures.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+//		textures.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		objectTextures.put("fireball", new TextureRegion(textures, 1814, 0, 90, 90));
 		objectTextures.put("fireattack", new TextureRegion(textures, 1814, 90, 73, 73));
@@ -1106,7 +1108,7 @@ public class EverythingHolder
 		objectTextures.put("redrange", new TextureRegion(textures, 1604, 787, 40, 40));
 		objectTextures.put("bluerange", new TextureRegion(textures, 1604, 827, 40, 40));
 		
-		objectTextures.put("armoricon", new TextureRegion(textures, 1644, 1085, 150, 149));
+//		objectTextures.put("armoricon", new TextureRegion(textures, 1644, 1085, 150, 149));
 		objectTextures.put("defaulticon", new TextureRegion(textures, 1644, 936, 150, 149));
 		
 		objectTextures.put("healthFrame", new TextureRegion(textures, 519, 0, 431, 87));
@@ -1114,10 +1116,12 @@ public class EverythingHolder
 		objectTextures.put("fullHealth", new TextureRegion(textures, 598, 287, 345, 20));
 		objectTextures.put("nextWave", new TextureRegion(textures, 519, 348, 166, 74));
 		
-		objectTextures.put("upgradeBackground", new TextureRegion(textures, 598, 200, 1, 1));
+		objectTextures.put("upgradebackground", new TextureRegion(textures, 598, 200, 1, 1));
 		
 		objectTextures.put("chatbox", new TextureRegion(textures, 1105, 182, 800, 87));
 		objectTextures.put("heroface", new TextureRegion(textures, 1237, 1952, 96, 96));
+		
+		objectTextures.put("entityshadow", new TextureRegion(textures, 1282, 1914, 51, 38));
 		
 		
 		
@@ -1152,43 +1156,15 @@ public class EverythingHolder
 		
 		objectTextures.put("mainbackground", new TextureRegion(new Texture(Gdx.files.internal("images/mainmenubackground.jpg")), 0, 0, 800, 480));
 		
-		/*textures = new Texture(Gdx.files.internal("images/skillicons.png"));
-		textures.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		textures = new Texture(Gdx.files.internal("images/extraui.png"));
+		objectTextures.put("selectflagpole", new TextureRegion(textures, 0, 146, 555, 18));
+		objectTextures.put("selectpurpleflag", new TextureRegion(textures, 0, 0, 95, 146));
+		objectTextures.put("selectblueflag", new TextureRegion(textures, 95, 0, 95, 146));
+		objectTextures.put("selectgreenflag", new TextureRegion(textures, 190, 0, 95, 146));
+		objectTextures.put("selectyellowflag", new TextureRegion(textures, 285, 0, 95, 146));
+		objectTextures.put("selectorangeflag", new TextureRegion(textures, 380, 0, 95, 146));
+		objectTextures.put("selectredflag", new TextureRegion(textures, 475, 0, 95, 146));
 		
-//		objectTextures.put("selfhealicon", new TextureRegion(textures, 0, 0, 128, 128));
-		objectTextures.put("arrowpoisonicon", new TextureRegion(textures, 128, 0, 128, 128));
-		objectTextures.put("arrowpoisonstackicon", new TextureRegion(textures, 256, 0, 128, 128));
-		objectTextures.put("arrowrapidicon", new TextureRegion(textures, 384, 0, 128, 128));
-		
-		objectTextures.put("selfhealicon", new TextureRegion(textures, 0, 128, 128, 128));
-		objectTextures.put("removedebufficon", new TextureRegion(textures, 128, 128, 128, 128));
-		objectTextures.put("arrowdamageicon", new TextureRegion(textures, 256, 128, 128, 128));
-		objectTextures.put("arrowslowicon", new TextureRegion(textures, 384, 128, 128, 128));
-		
-		objectTextures.put("knockbackicon", new TextureRegion(textures, 0, 256, 128, 128));
-		objectTextures.put("healicon", new TextureRegion(textures, 128, 256, 128, 128));
-		objectTextures.put("shieldicon", new TextureRegion(textures, 256, 256, 128, 128));
-		objectTextures.put("dodgeicon", new TextureRegion(textures, 384, 256, 128, 128));
-		
-		objectTextures.put("reducedamageicon", new TextureRegion(textures, 0, 384, 128, 128));
-		objectTextures.put("parryicon", new TextureRegion(textures, 128, 384, 128, 128));
-		objectTextures.put("berzerkicon", new TextureRegion(textures, 256, 384, 128, 128));
-		objectTextures.put("armoricon", new TextureRegion(textures, 384, 384, 128, 128));
-		
-		objectTextures.put("fireballicon", new TextureRegion(textures, 0, 512, 128, 128));
-		objectTextures.put("firebufficon", new TextureRegion(textures, 128, 512, 128, 128));
-		objectTextures.put("deathexplodicon", new TextureRegion(textures, 256, 512, 128, 128));
-		objectTextures.put("spelleffectivenessicon", new TextureRegion(textures, 384, 512, 128, 128));
-		
-		objectTextures.put("refreshdebufficon", new TextureRegion(textures, 0, 640, 128, 128));
-		objectTextures.put("cloakicon", new TextureRegion(textures, 128, 640, 128, 128));
-		objectTextures.put("passthroughdamageicon", new TextureRegion(textures, 256, 640, 128, 128));
-		objectTextures.put("invincibleicon", new TextureRegion(textures, 384, 640, 128, 128));
-		
-		objectTextures.put("splashdeathicon", new TextureRegion(textures, 0, 768, 128, 128));
-		objectTextures.put("backstabicon", new TextureRegion(textures, 128, 768, 128, 128));
-//		objectTextures.put("passthroughdamageicon", new TextureRegion(textures, 256, 768, 128, 128));
-//		objectTextures.put("invincibleicon", new TextureRegion(textures, 384, 768, 128, 128));*/
 		
 //		textures.dispose();
 	}
@@ -1663,7 +1639,8 @@ public class EverythingHolder
 		if (targeting > 0)
 			target = s.team();
 		else if (targeting < 0)
-			target = (s.team() == 0 ? 1 : 2);
+			target = (s.team() + 1) % 2;
+//			target = (s.team() == 0 ? 1 : 0);
 		
 		for (Entity a : entities)
 			if (a instanceof Actor && a.isAlive() && 
@@ -1675,7 +1652,7 @@ public class EverythingHolder
 		{
 			switch(Math.abs(targeting))
 			{
-			case -1:
+			case 1:
 				Actor.setCenterActor(s);
 				Collections.sort(temp, Actor.TargetedComparator);
 				break;
@@ -1723,15 +1700,18 @@ public class EverythingHolder
 				entities.set(i, null);
 			}
 		}
-
-		for (int i = 0; i < effects.size(); i++)
+		
+		if (settings.getParticleEffects() != 0)
 		{
-			if (effects.get(i) != null)
+			for (int i = 0; i < effects.size(); i++)
 			{
-				if (effects.get(i).isComplete())
-					effects.set(i, null);
-				else
-					effects.get(i).draw(batch, delta * 0.5f);
+				if (effects.get(i) != null)
+				{
+					if (effects.get(i).isComplete())
+						effects.set(i, null);
+					else
+						effects.get(i).draw(batch, delta * 0.5f);
+				}
 			}
 		}
 
@@ -1915,8 +1895,18 @@ public class EverythingHolder
 		tower.upgrade();
 		add(tower);
 		
+		for (int i = 0; i < 2; i++)
+		{
+			for (Coordinate c : map.buildSites(i))
+			{
+				tower = new Building(c.x(), c.y(), i, buildingStats.get("arrowtower"));
+				tower.upgrade();
+				add(tower);
+			}
+		}
+		
 //		int towerNumber = 1;
-		for (Coordinate c : map.buildSites(1))
+		/*for (Coordinate c : map.buildSites(0))
 		{
 			tower = new Building(c.x(), c.y(), 0, buildingStats.get("arrowtower"));
 			tower.upgrade();
@@ -1924,12 +1914,12 @@ public class EverythingHolder
 		}
 		
 //		towerNumber = 1;
-		for (Coordinate c : map.buildSites(2))
+		for (Coordinate c : map.buildSites(1))
 		{
 			tower = new Building(c.x(), c.y(), 1, buildingStats.get("arrowtower"));
 			tower.upgrade();
 			add(tower);
-		}
+		}*/
 	}
 	
 //	@SuppressWarnings("unchecked")

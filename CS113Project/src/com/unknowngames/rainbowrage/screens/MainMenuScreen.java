@@ -59,7 +59,7 @@ public class MainMenuScreen implements Screen
 	public MainMenuScreen(RainbowRage game, EverythingHolder everything)
 	{
 		this.game = game;
-		scale = everything.getXRatio();
+		scale = everything.getScreenScale(); //getXRatio();
 //		Settings.getInstance();
 		newGameStarted = false;
 //		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/523938_--MB---The-Black-Wi.mp3"));
@@ -194,7 +194,7 @@ public class MainMenuScreen implements Screen
 				EverythingHolder.getObjectTexture("quitbutton"));	// Quit
 		
 //		buttons[1].setClickable(false);
-		buttons[2].setClickable(false);
+//		buttons[2].setClickable(false);
 		
 		touchPoint = new Vector3();
 		fire.dispose();
@@ -363,19 +363,22 @@ public class MainMenuScreen implements Screen
 		else if (h == 1) // Multi-player
 		{
 //			startMusic.stop();
-			everything.loadTeams("blue", "red", "mrwizard", "swordface");
+			/*everything.loadTeams("blue", "red", "mrwizard", "swordface");
 			game.gameScreen = new GameScreen(game, true);
 			newGameStarted = true;
-			game.setScreen(game.gameScreen);
+			game.setScreen(game.gameScreen);*/
+			
+			loginScreen = new LoginScreen(game);
+			game.setScreen(loginScreen);
 			return;
 		}
 		else if (h == 2) // Settings
 		{
-			loginScreen = new LoginScreen(game);
-			game.setScreen(loginScreen);
+			/*loginScreen = new LoginScreen(game);
+			game.setScreen(loginScreen);*/
 			
-			/*settingsScreen = new SettingsScreen(game);
-			game.setScreen(settingsScreen);*/
+			settingsScreen = new SettingsScreen(game);
+			game.setScreen(settingsScreen);
 			
 			
 //			settingsScreen.show();
@@ -421,8 +424,11 @@ public class MainMenuScreen implements Screen
 	@Override
 	public void show() 
 	{
+		
 		try
 		{
+			rescale();
+			startMusic.setVolume(everything.getMusicLevel());
 			startMusic.play();
 		}
 		catch (Exception e)

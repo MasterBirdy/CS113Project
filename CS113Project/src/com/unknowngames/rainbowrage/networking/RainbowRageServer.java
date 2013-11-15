@@ -47,8 +47,7 @@ public class RainbowRageServer
     public static long sentData = 0, receivedData = 0;
     private MySQLAccess mySQLAccess;
     
-    
-    public RainbowRageServer() throws IOException 
+    public RainbowRageServer(String adminName, String adminPassword) throws IOException 
     {
 //    	Log.set(Log.LEVEL_DEBUG);
     	if (allowedUptime > 0)
@@ -101,7 +100,7 @@ public class RainbowRageServer
                     String name = ((Login)object).name;
                     String password = ((Login)object).password;
                     
-                    if (!isValid(name) || !isValid(password)) // || !mySQLAccess.login(name, password)) 
+                    if (!isValid(name) || !isValid(password) || !mySQLAccess.login(name, password)) 
                     {
                     	loginMsg.status = -1;
                     	c.sendTCP(loginMsg);
@@ -237,6 +236,12 @@ public class RainbowRageServer
         			userConnection.remove(c);
         		}
         		
+        		if (waitingUsers.contains(c))
+        		{
+        			System.out.println("Player removed from waiting");
+        			waitingUsers.remove(c);
+        		}
+        		
         		writeToLog(df.format(new Date()) + ": Player " + c.getID() + userConnection.size() + " logged out.");
         		
 //        		try 
@@ -259,7 +264,7 @@ public class RainbowRageServer
         server.start();
         System.out.println("Server started");
         
-//        mySQLAccess = new MySQLAccess();
+        mySQLAccess = new MySQLAccess(adminName, adminPassword);
         
         writeToLog("-------------------------------");
         writeToLog(df.format(new Date()) + ": Server Started!");
@@ -385,6 +390,8 @@ public class RainbowRageServer
     public static void main (String[] args) throws IOException 
     {
     	Log.set(Log.LEVEL_DEBUG);
-        new RainbowRageServer();
+    	if (args.length != 2)
+    		return;
+        new RainbowRageServer(args[0], args[1]);
     }   
 }

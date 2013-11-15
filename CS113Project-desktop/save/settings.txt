@@ -1,0 +1,7 @@
+particleEffects = 1
+graphics = 1
+resolution = 2
+musicVolume = 0.25
+gameVolume = 0.1
+textEffect = true
+shadows = true

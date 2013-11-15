@@ -47,7 +47,7 @@ public class ScoreBoard extends BaseClass//implements Screen
 		this.result = result;
 		zoom1 = new OrthographicCamera();
 		team1X = (int) (410 * scale);
-		team2X = (int) (630 * scale);
+		team2X = (int) (600 * scale);
 	}
 	
 	public void draw(SpriteBatch batch)

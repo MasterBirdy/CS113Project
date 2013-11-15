@@ -1,149 +1,237 @@
 package com.unknowngames.rainbowrage;
 
-public class Settings 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+
+public class Settings
 {
-	
-//	Difficulty difficulty;
-	int difficulty = 1, particleEffects = 0;
-	float gameSound = .1f, //.5f, 
-		  musicSound = .01f; //.1f;
+
+	// Difficulty difficulty;
+	int 	difficulty 		= 1, 
+			particleEffects = 1, 
+			graphics 		= 1, 
+			resolution 		= 1;
+	float 	gameVolume 		= .1f, // .5f,
+			musicVolume 	= .01f; // .1f;
 	boolean showPath 		= false, 
 			showRange 		= false, 
 			showRadius 		= false,
-			showTextEffect 	= true;
+			showTextEffect 	= true, 
+			showShadows 	= true;
+
+	public Settings()
+	{
+		try
+		{
+			FileHandle handle = Gdx.files.local("save/settings.txt");
+			if (handle.exists())
+			{
+				String fileContent = handle.readString();
 	
+				particleEffects = Integer.parseInt(getSetting("particleEffects", fileContent));
+				graphics = Integer.parseInt(getSetting("graphics", fileContent));
+				resolution = Integer.parseInt(getSetting("resolution", fileContent));
+				musicVolume = Float.parseFloat(getSetting("musicVolume", fileContent));
+				gameVolume = Float.parseFloat(getSetting("gameVolume", fileContent));
+				showTextEffect = Boolean.parseBoolean(getSetting("textEffect", fileContent));
+				showShadows = Boolean.parseBoolean(getSetting("shadows", fileContent));
+			}
+			else
+			{				
+				createNew();
+			}
+		}
+		catch (GdxRuntimeException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public String getSetting(String name, String fileContent)
+	{
+		if (name == null || fileContent == null)
+			return null;
+
+		int loc = fileContent.indexOf(name) + name.length();
+		while (fileContent.charAt(loc) == ' ' || fileContent.charAt(loc) == '=')
+			loc++;
+		return fileContent.substring(loc, fileContent.indexOf('\n', loc));
+	}
+	
+	public void writeSetting(String output, FileHandle handle)
+	{
+		handle.writeString(output, false);
+	}
+
+	public void createNew()
+	{
+		difficulty = 1;
+		particleEffects = 1;
+		graphics = 1;
+		resolution = 1;
+		gameVolume = .1f;
+		musicVolume = .01f;
+		showPath = false;
+		showRange = false;
+		showRadius = false;
+		showTextEffect = true;
+		showShadows = true;
+		
+		saveFile();
+	}
+	
+//	graphics", fileContent));
+//	resolution = Integer
+//			.parseInt(getSetting("resolution", fileContent));
+//	musicSound = Float
+//			.parseFloat(getSetting("musicVolume", fileContent));
+//	gameSound = Float.parseFloat(getSetting("gameVolume", fileContent));
+//	showTextEffect = Boolean.parseBoolean(getSetting("textEffect",
+//			fileContent));
+//	showTextEffect = Boolean.parseBoolean(getSetting("shadows
+
+	public void saveFile()
+	{
+		String output = "";
+		output += "particleEffects = " + particleEffects + "\n";
+		output += "graphics = " + graphics + "\n";
+		output += "resolution = " + resolution + "\n";
+		output += "musicVolume = " + musicVolume + "\n";
+		output += "gameVolume = " + gameVolume + "\n";
+		output += "textEffect = " + showTextEffect + "\n";
+		output += "shadows = " + showShadows + "\n";
+		
+		try
+		{
+			FileHandle handle = Gdx.files.local("save/settings.txt");
+			handle.writeString(output, false);
+		}
+		catch (GdxRuntimeException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public int getResolution()
+	{
+		return resolution;
+	}
+
+	public void setResolution(int r)
+	{
+		resolution = r;
+	}
+
+	public boolean getShadows()
+	{
+		return showShadows;
+	}
+
+	public int graphics()
+	{
+		return graphics;
+	}
+
+	public void setShadows(boolean s)
+	{
+		showShadows = s;
+	}
+
+	public void setGraphics(int g)
+	{
+		if (g >= 0 && g <= 1)
+			graphics = g;
+	}
+
 	public boolean showPath()
 	{
 		return showPath;
 	}
-	
+
 	public void togglePath()
 	{
 		showPath = !showPath;
 	}
-	
+
 	public void showPath(boolean show)
 	{
 		showPath = show;
 	}
-	
+
 	public boolean showRange()
 	{
 		return showRange;
 	}
-	
+
 	public void toggleRange()
 	{
 		showRange = !showRange;
 	}
-	
+
 	public void showRange(boolean show)
 	{
 		showRange = show;
 	}
-	
+
 	public boolean showRadius()
 	{
 		return showRadius;
 	}
-	
+
 	public void toggleRadius()
 	{
 		showRadius = !showRadius;
 	}
-	
+
 	public void showRadius(boolean show)
 	{
 		showRadius = show;
 	}
-	
+
 	public boolean showTextEffect()
 	{
 		return showTextEffect;
 	}
-	
+
 	public void toggleTextEffect()
 	{
 		showTextEffect = !showTextEffect;
 	}
-	
+
 	public void showTextEffect(boolean show)
 	{
 		showTextEffect = show;
+		System.out.println("text " + (showTextEffect ? "enabled" : "disabled"));
 	}
-	
+
 	public void setParticleEffects(int p)
 	{
 		particleEffects = p;
 	}
-	
+
 	public void setGameSound(float s)
 	{
-		gameSound = s;
+		gameVolume = s;
 	}
-	
+
 	public void setMusicSound(float s)
 	{
-		musicSound = s;
+		musicVolume = s;
 	}
-	
-	public String getParticleEffects()
+
+	public int getParticleEffects()
 	{
-		if (particleEffects == 1)
-			return "low";
-		return "";
+		return particleEffects;
 	}
-	
+
 	public float getGameSound()
 	{
-		return gameSound;
+		return gameVolume;
 	}
-	
+
 	public float getMusicSound()
 	{
-		return musicSound;
+		return musicVolume;
 	}
-	
-	
-	
-//	SoundEnum sound;
-
-    // Private constructor prevents instantiation from other classes
-//    private Settings() 
-//    {
-//    	difficulty = Difficulty.EASY;
-//    	sound = SoundEnum.ON;
-//    }
-
-    /**
-    * SingletonHolder is loaded on the first execution of Singleton.getInstance() 
-    * or the first access to SingletonHolder.INSTANCE, not before.
-    */
-//    private static class SingletonHolder { 
-//            public static final Settings INSTANCE = new Settings();
-//    }
-//
-//    public static Settings getInstance() {
-//            return SingletonHolder.INSTANCE;
-//    }
-//    
-//    public void setDifficulty(Difficulty d)
-//    {
-//    	difficulty = d;
-//    }
-//    
-//    public Difficulty getDifficulty()
-//    {
-//    	return difficulty;
-//    }
-//    
-//    public void setSound(SoundEnum s)
-//    {
-//    	sound = s;
-//    }
-//    
-//    public SoundEnum getSound()
-//    {
-//    	return sound;
-//    }
 }

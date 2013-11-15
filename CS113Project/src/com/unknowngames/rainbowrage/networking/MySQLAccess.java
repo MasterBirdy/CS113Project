@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.Scanner;
 import java.security.*;
 
+
 public class MySQLAccess
 {
 	private Connection connect = null;
@@ -39,12 +40,23 @@ public class MySQLAccess
 		close();
 	}
 	
+	public MySQLAccess(String adminName, String adminPassword)
+	{
+		this.adminName = adminName;
+		this.adminPass = adminPassword;
+		connect();
+		close();
+	}
+	
 	public boolean connect()
 	{
 		try
 		{
-			Class.forName("com.mysql.jdxb.Driver");
+			System.out.println("Start connect");
+			Class.forName("com.mysql.jdbc.Driver");
+			System.out.println("Loaded driver");
 			connect = DriverManager.getConnection(dbLocation, adminName, adminPass);
+			System.out.println("Connected to db");
 		}
 		catch (SQLException e)
 		{
@@ -62,33 +74,57 @@ public class MySQLAccess
 	
 	public boolean login(String username, String userPass)
 	{
+		if (username.equals("Guest"))
+			return true;
+		
 		try
 		{
 			if (!connect())
 				return false;
+			
 //			Class.forName("com.mysql.jdxb.Driver");
 //			connect = DriverManager.getConnection(dbLocation, adminName, adminPass);
 			preparedStatement = connect.prepareStatement("SELECT password FROM " + userTable + 
 														 " WHERE username = ?");
 			
-			String[] passSalt = {null, null};
-			String passAndSalt;
+			/*String[] passSalt = {null, null};
+			String passAndSalt;*/
+			String hash;
 			
-			boolean loggedIn = false;
+//			boolean loggedIn = false;
 			
-			while (!loggedIn)
-			{
+//			while (!loggedIn)
+//			{
 				try
 				{
 					preparedStatement.setString(1, username);
 					resultSet = preparedStatement.executeQuery();
+					
 					if (resultSet.next())
 					{
-						passAndSalt = resultSet.getString("password");
+//						hash = resultSet.getString("password");
+						if (checkPassword(userPass, resultSet.getString("password")))
+						{
+							System.out.println("Loggin in!");
+							close();
+							return true;
+						}
+						else
+						{
+							System.out.println("Incorrect login info");
+							close();
+							return false;
+						}
+						/*passAndSalt = resultSet.getString("password");
 						if (passAndSalt != null)
 						{
 							passSalt = passAndSalt.split(":");
 						}
+						else
+						{
+							close();
+							return false;
+						}*/
 					}
 					else
 					{
@@ -96,11 +132,11 @@ public class MySQLAccess
 						close();
 						return false;
 					}
-					if (passAndSalt != null
-							&& md5(userPass + passSalt[1]).equals(passSalt[0]))
+					
+					/*if (passAndSalt != null && md5(userPass + passSalt[1]).equals(passSalt[0]))
 					{
 						System.out.println("Logging in!");
-						loggedIn = true;
+//						loggedIn = true;
 						close();
 						return true;
 					}
@@ -109,14 +145,14 @@ public class MySQLAccess
 //						System.out.println("Incorrect username and/or password." + username + " " + password);
 						close();
 						return false;
-					}
+					}*/
 				}
 				catch(Exception e)
 				{
 					close();
 					e.printStackTrace();
 				}
-			}
+//			}
 		}
 		catch (SQLException e)
 		{
@@ -130,6 +166,16 @@ public class MySQLAccess
 		}
 		close();
 		return false;
+	}
+	
+	public boolean checkPassword(String pass, String hash)
+	{
+		if (pass == null || hash == null)
+			return false;
+		
+		System.out.println(pass + " " + hash);
+		
+		return BCrypt.checkpw(pass, hash);
 	}
 	
 	public void readDataBase() throws Exception
@@ -300,18 +346,18 @@ public class MySQLAccess
 
 			if (connect != null)
 			{
-				try
-				{
-					connect.commit();
-				}
-				catch (SQLException e)
-				{
-					System.out.println("Error while closing SQL: " + e);
-				}
-				finally
-				{
+//				try
+//				{
+//					connect.commit();
+//				}
+//				catch (SQLException e)
+//				{
+//					System.out.println("Error while closing SQL: " + e);
+//				}
+//				finally
+//				{
 					connect.close();
-				}
+//				}
 			}
 		}
 		catch (Exception e)

@@ -103,7 +103,7 @@ public class ActorSkillUpgrade extends ActorSkillDisplay
 	public void render(SpriteBatch batch)
 	{
 		batch.setColor(1, 1, 1, .5f);
-		batch.draw(EverythingHolder.getObjectTexture("upgradeBackground"), x - 10, y - 145 * scale, 385 * scale, 420 * scale);
+		batch.draw(EverythingHolder.getObjectTexture("upgradebackground"), x - 10, y - 145 * scale, 385 * scale, 420 * scale);
 		batch.setColor(Color.WHITE);
 		super.render(batch);
 		if (confirmButton != null)

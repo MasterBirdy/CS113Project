@@ -249,7 +249,7 @@ public class GameScreen implements Screen
 	{
 		boundCamera();
 		
-		if (!sentReady)
+		if (multiplayer && !sentReady)
 		{
 			sentReady = true;
 			Command cmd = new Command();
