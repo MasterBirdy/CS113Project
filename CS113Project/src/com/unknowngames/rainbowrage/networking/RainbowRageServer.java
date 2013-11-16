@@ -116,7 +116,8 @@ public class RainbowRageServer
                     {
 	                    for (UserConnection userCon : userConnection)
 	                    {
-	                    	if (userCon.user.name.equals(name))
+//	                    	if (userCon.user.name.equals(name))
+	                    	if (userCon.user.publicPlayerInfo.username.equals(name))
 	                    	{
 	                    		loginMsg.status = -4;
 	                        	c.sendTCP(loginMsg);
@@ -203,7 +204,8 @@ public class RainbowRageServer
         	private User loadUserInfo(String name)
         	{
         		User user = new User();
-        		user.name = name;
+//        		user.name = name;
+        		user.publicPlayerInfo.username = name;
         		return user;
         	}
         	
@@ -308,9 +310,12 @@ public class RainbowRageServer
     {
     	c.user = user;
     	
-        System.out.println("Player " + user.name + userConnection.size() + " just joined.");
-        
-        writeToLog(df.format(new Date()) + ": " + user.name + " joined.");
+//        System.out.println("Player " + user.name + userConnection.size() + " just joined.");
+//    	writeToLog(df.format(new Date()) + ": " + user.name + " joined.");
+    	
+    	System.out.println("Player " + user.publicPlayerInfo.username + userConnection.size() + " just joined.");
+    	writeToLog(df.format(new Date()) + ": " + user.publicPlayerInfo.username + " joined.");
+
         /*try 
     	{
     	    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("TestLog.txt", true)));
@@ -368,7 +373,8 @@ public class RainbowRageServer
         // Change to send array of players to accommodate different modes
         if (waitingUsers.size() >= 2)
         {
-        	UserConnection p1 = null, p2 = null;
+        	startGameRoom();
+        	/*UserConnection p1 = null, p2 = null;
         	while (p1 == null)
         		p1 = waitingUsers.pop();
         	while (p2 == null)
@@ -377,8 +383,24 @@ public class RainbowRageServer
         	Game game = new Game(p1, p2, server, gameCount);
         	games.put(gameCount++, game);
         	
-        	writeToLog(df.format(new Date()) + ": " + p1.user.name + " and " + p1.user.name + " started.");
+//        	writeToLog(df.format(new Date()) + ": " + p1.user.name + " and " + p1.user.name + " started.");
+        	writeToLog(df.format(new Date()) + ": " + p1.user.publicPlayerInfo.username + " and " + p1.user.publicPlayerInfo.username + " started.");*/
         }
+    }
+    
+    private void startGameRoom()
+    {
+    	UserConnection p1 = null, p2 = null;
+    	while (p1 == null)
+    		p1 = waitingUsers.pop();
+    	while (p2 == null)
+    		p2 = waitingUsers.pop();
+    	
+    	Game game = new Game(p1, p2, server, gameCount);
+    	games.put(gameCount++, game);
+    	
+//    	writeToLog(df.format(new Date()) + ": " + p1.user.name + " and " + p1.user.name + " started.");
+    	writeToLog(df.format(new Date()) + ": " + p1.user.publicPlayerInfo.username + " and " + p1.user.publicPlayerInfo.username + " started.");
     }
     
     // This holds per connection state.

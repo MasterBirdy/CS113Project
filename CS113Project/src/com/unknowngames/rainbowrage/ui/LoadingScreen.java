@@ -1,5 +1,6 @@
 package com.unknowngames.rainbowrage.ui;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -30,6 +31,20 @@ public class LoadingScreen implements Screen
 		loading = new TextureRegion(new Texture(Gdx.files.internal("images/teamlogo.png")), 0, 0, 800, 480);
 		this.game = game;
 		batch = new SpriteBatch();
+		if (Gdx.app.getType() == ApplicationType.Desktop)
+		{
+			switch(EverythingHolder.getSettings().getResolution())
+			{
+			case 0:
+				Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
+				break;
+			case 1:
+				Gdx.graphics.setDisplayMode(800, 480, false);
+				break;
+			case 2:
+				Gdx.graphics.setDisplayMode(1680, 1050, false);
+			}
+		}
 	}
 	
 	public EverythingHolder getEverything()

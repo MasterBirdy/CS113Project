@@ -14,6 +14,10 @@ import java.util.Date;
 import java.util.Scanner;
 import java.security.*;
 
+import com.unknowngames.rainbowrage.player.PlayerInfo;
+import com.unknowngames.rainbowrage.player.PrivatePlayerInfo;
+import com.unknowngames.rainbowrage.player.PublicPlayerInfo;
+
 
 public class MySQLAccess
 {
@@ -22,6 +26,12 @@ public class MySQLAccess
 	private PreparedStatement preparedStatement = null, loggedInStatement = null;
 	private ResultSet resultSet = null;
 	private String accountTable = "test.Accounts",
+				   playersTable = "test.Players",
+				   playerSkinsTable = "test.playerSkins",
+				   playerHeroesTable = "test.playerHeroes",
+				   friendsTable = "test.Friends",
+				   skinstable = "test.Skins",
+				   heroesTable = "test.Heroes",
 				   userTable = "joomla.phbdt_users",
 				   dbLocation = "jdbc:mysql://localhost:3306";
 	private String adminName, adminPass;
@@ -52,6 +62,8 @@ public class MySQLAccess
 	{
 		try
 		{
+			if (connect.isValid(5))
+				return true;
 			System.out.println("Start connect");
 			Class.forName("com.mysql.jdbc.Driver");
 			System.out.println("Loaded driver");
@@ -71,6 +83,227 @@ public class MySQLAccess
 
 		return true;
 	}
+	
+	public PublicPlayerInfo getPublicPlayerInfo(String username, String selfUsername)
+	{
+		if (username == null)
+			return null;
+		
+		PublicPlayerInfo returnInfo = new PublicPlayerInfo();
+		
+		try
+		{
+			if (!connect())
+				return null;
+			
+			int userID = getUserID(username);
+			int selfUserID = getUserID(selfUsername);
+			loadPlayerInfo(userID, returnInfo);
+			loadPublicPlayerInfo(userID, selfUserID, returnInfo);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return returnInfo;
+	}
+	
+	public PrivatePlayerInfo getPrivatePlayerInfo(String username)
+	{
+		if (username == null)
+			return null;
+		
+		PrivatePlayerInfo returnInfo = new PrivatePlayerInfo();
+		
+		try
+		{
+			if (!connect())
+				return null;
+			
+			int userID = getUserID(username);
+			loadPlayerInfo(userID, returnInfo);
+			loadPrivatePlayerInfo(userID, returnInfo);
+			loadPrivateSkins(userID, returnInfo);
+			loadPrivateHeroes(userID, returnInfo);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return returnInfo;
+	}
+	
+	public void loadPlayerInfo(int playerID, PlayerInfo returnInfo)
+	{
+		if (playerID == 0)
+			return;
+		
+		try
+		{
+			if (!connect())
+				return;
+			
+			preparedStatement = 
+				connect.prepareStatement("SELECT " + userTable + ".username, " + playersTable + ".wins, " + playersTable + ".exp, " + playersTable + ".profilePic" +
+										 "FROM " + userTable +
+										 "RIGHT JOIN " + playersTable +
+										 "ON " + playersTable + ".playerID = " + userTable + ".id" +
+										 "WHERE " + userTable + ".id = ?");
+			preparedStatement.setInt(1, playerID);
+			resultSet = preparedStatement.executeQuery();
+			
+			returnInfo.username = resultSet.getString(1);
+			returnInfo.wins = resultSet.getInt(2);
+			returnInfo.exp = resultSet.getInt(3);
+			returnInfo.profilePic = resultSet.getInt(4);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void loadPublicPlayerInfo(int playerID, int selfPlayerID, PublicPlayerInfo returnInfo)
+	{
+		if (playerID == 0)
+			return;
+		
+		try
+		{			
+			preparedStatement = 
+				connect.prepareStatement("SELECT COUNT(*)" +
+										 "FROM " + friendsTable +
+										 "WHERE ((" + friendsTable + ".player1ID = " + playerID + " AND " + friendsTable + ".player2ID = " + selfPlayerID + ") OR (" +
+										 friendsTable + ".player1ID = " + selfPlayerID + " AND " + friendsTable + ".player2ID = " + playerID + ")) AND " + 
+										 friendsTable + ".accepted = 1");
+			preparedStatement.setInt(1, playerID);
+			resultSet = preparedStatement.executeQuery();
+			
+			returnInfo.friend = resultSet.getInt(1) == 0 ? false : true;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void loadPrivatePlayerInfo(int playerID, PrivatePlayerInfo returnInfo)
+	{
+		if (playerID == 0)
+			return;
+		
+		try
+		{
+			if (!connect())
+				return;
+			
+			preparedStatement = 
+				connect.prepareStatement("SELECT " + playersTable + ".earnedPoints, " + playersTable + ".paidPoints, " + playersTable + ".losses, " + playersTable + ".timePlayed" +
+										 "FROM " + playersTable +
+										 "WHERE " + playersTable + ".playerID = ?");
+			preparedStatement.setInt(1, playerID);
+			resultSet = preparedStatement.executeQuery();
+			
+			returnInfo.earnedPoints = resultSet.getInt(1);
+			returnInfo.paidPoints = resultSet.getInt(2);
+			returnInfo.losses = resultSet.getInt(3);
+			returnInfo.timePlayed = resultSet.getInt(4);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadPrivateSkins(int playerID, PrivatePlayerInfo returnInfo)
+	{
+		if (playerID == 0)
+			return;
+		
+		try
+		{
+			if (!connect())
+				return;
+			
+			preparedStatement = 
+				connect.prepareStatement("SELECT COUNT(*)" +
+										 "FROM " + playerSkinsTable +
+										 "WHERE " + playerSkinsTable + ".playerID = ?");
+			preparedStatement.setInt(1, playerID);
+			resultSet = preparedStatement.executeQuery();
+			int count = resultSet.getInt(1);
+			
+			preparedStatement = 
+				connect.prepareStatement("SELECT " + playerSkinsTable + ".skinID" +
+										 "FROM " + playerSkinsTable +
+										 "WHERE " + playerSkinsTable + ".playerID = ?");
+			preparedStatement.setInt(1, playerID);
+			resultSet = preparedStatement.executeQuery();
+			
+			if (count <= 0)
+				return;
+			
+			returnInfo.skins = new int[count];
+			
+			for (int i = 0; i < count; i++)
+				returnInfo.skins[i] = resultSet.getInt(i);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadPrivateHeroes(int playerID, PrivatePlayerInfo returnInfo)
+	{
+		if (playerID == 0)
+			return;
+		
+		try
+		{
+			if (!connect())
+				return;
+			
+			preparedStatement = 
+				connect.prepareStatement("SELECT COUNT(*)" +
+										 "FROM " + playerHeroesTable +
+										 "WHERE " + playerHeroesTable + ".playerID = ?");
+			preparedStatement.setInt(1, playerID);
+			resultSet = preparedStatement.executeQuery();
+			int count = resultSet.getInt(1);
+			
+			preparedStatement = 
+				connect.prepareStatement("SELECT " + playerHeroesTable + ".heroID" +
+										 "FROM " + playerHeroesTable +
+										 "WHERE " + playerHeroesTable + ".playerID = ?");
+			preparedStatement.setInt(1, playerID);
+			resultSet = preparedStatement.executeQuery();
+			
+			if (count <= 0)
+				return;
+			
+			returnInfo.heroes = new int[count];
+			
+			for (int i = 0; i < count; i++)
+				returnInfo.heroes[i] = resultSet.getInt(i);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	// Returns userID or 0 if it doesn't exist
+	private int getUserID(String username) throws SQLException
+	{
+		preparedStatement = connect.prepareStatement("SELECT " + userTable + ".id FROM " + userTable + " WHERE " + userTable + ".username = ?");
+		preparedStatement.setString(1, username);
+		resultSet = preparedStatement.executeQuery();
+		
+		return resultSet.getInt(1);
+	}	
 	
 	public boolean login(String username, String userPass)
 	{

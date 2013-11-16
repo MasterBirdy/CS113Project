@@ -9,6 +9,7 @@ import com.unknowngames.rainbowrage.networking.Network.ServerMessage;
 import com.unknowngames.rainbowrage.networking.Network.StartGameRoom;
 import com.unknowngames.rainbowrage.networking.Network.UserMessage;
 import com.unknowngames.rainbowrage.networking.RainbowRageServer.UserConnection;
+import com.unknowngames.rainbowrage.player.PublicPlayerInfo;
 
 public class Game 
 {
@@ -64,9 +65,16 @@ public class Game
 		
 		// Setup hero select
 		StartGameRoom gameRoom = new StartGameRoom();
-		gameRoom.usernames = new String[players.length];
+		gameRoom.publicPlayerInfos = new PublicPlayerInfo[players.length];
+		gameRoom.publicPlayerInfos[0] = p1.user.publicPlayerInfo;
+		gameRoom.publicPlayerInfos[1] = p2.user.publicPlayerInfo;
+		/*for (int i = 0; i < players.length; i++)
+		{
+			gameRoom.publicPlayerInfos[i] = 
+		}*/
+		/*gameRoom.usernames = new String[players.length];
 		for (int i = 0; i < players.length; i++)
-			gameRoom.usernames[i] = players[i].user.name;
+			gameRoom.usernames[i] = players[i].user.name;*/
 		
 		for (int i = 0; i < players.length; i++)
 		{

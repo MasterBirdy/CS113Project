@@ -1,5 +1,6 @@
 package com.unknowngames.rainbowrage.screens;
 
+import java.awt.event.KeyEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +14,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -27,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
@@ -304,17 +307,17 @@ public class LoginScreen extends BaseClass implements Screen
 		table.setBackground(skin.getDrawable("background"));	
 		
 		table.add(nameLabel).left();
-		table.add(nameText).width(100);
+		table.add(nameText).width(100);//.padLeft(5).padRight(5);
 		table.row().spaceTop(10);
 		table.add(passwordLabel).left();
-		table.add(passwordText).width(100);
+		table.add(passwordText).width(100);//.padLeft(20).padRight(20);;
 		table.row();
 		table.add(messageLabel).colspan(2);
 		table.row().spaceTop(15);
-		table.add(guestButton).left().width(60);
-		table.add(loginButton).right().width(60);
+		table.add(guestButton).left().width(70);
+		table.add(loginButton).right().width(70);
 		table.row().spaceTop(15);
-		table.add(backButton).right().width(60).colspan(2);
+		table.add(backButton).right().width(70).colspan(2);
 //		table.add(checkButton).right().width(60);
 		
 		
@@ -329,7 +332,11 @@ public class LoginScreen extends BaseClass implements Screen
 		pixmap.fill();
 		skin.add("white", new Texture(pixmap));
 		
-		skin.add("default", new BitmapFont());
+//		skin.add("default", new BitmapFont());
+//		skin.add("default", EverythingHolder.getFont(0));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
+		BitmapFont font = generator.generateFont(30);
+		skin.add("default", font);
 		
 		//skin.add("background", new TextureRegion(new Texture(Gdx.files.internal("images/mainmenubackground.jpg")), 0, 0, 800, 480));
 		skin.add("background", EverythingHolder.getObjectTexture("mainbackground"));
@@ -347,8 +354,8 @@ public class LoginScreen extends BaseClass implements Screen
 		selectBoxStyle.background = skin.newDrawable("white", Color.CYAN);
 		selectBoxStyle.backgroundOpen = skin.newDrawable("white", Color.GREEN);
 		selectBoxStyle.backgroundOver = skin.newDrawable("white", Color.RED);
-		selectBoxStyle.listBackground = skin.newDrawable("white", Color.YELLOW);
-		selectBoxStyle.listSelection = skin.newDrawable("white", Color.PINK);
+//		selectBoxStyle.listBackground = skin.newDrawable("white", Color.YELLOW);
+//		selectBoxStyle.listSelection = skin.newDrawable("white", Color.PINK);
 		
 		SliderStyle sliderStyle = new SliderStyle();
 		sliderStyle.background = skin.newDrawable("white", Color.CYAN);

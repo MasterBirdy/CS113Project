@@ -511,11 +511,11 @@ public abstract class Actor extends Entity
 	}
 	public void draw(SpriteBatch batch)
 	{
-		if (everything.getSettings().getShadows())
-			shadow(batch);
-		if (everything.getSettings().showRange())
+//		if (everything.getSettings().getShadows())
+//			shadow(batch);
+		if (EverythingHolder.getSettings().showRange())
 			rangeIndicator(batch);
-		if (everything.getSettings().showRadius())
+		if (EverythingHolder.getSettings().showRadius())
 			radiusIndicator(batch);
 	}
 	

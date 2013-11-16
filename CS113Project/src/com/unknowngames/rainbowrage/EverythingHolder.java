@@ -29,6 +29,8 @@ import com.unknowngames.rainbowrage.AllEnums.TeamColor;
 import com.unknowngames.rainbowrage.entity.*;
 import com.unknowngames.rainbowrage.map.*;
 import com.unknowngames.rainbowrage.parser.*;
+import com.unknowngames.rainbowrage.player.Player;
+import com.unknowngames.rainbowrage.player.PrivatePlayerInfo;
 import com.unknowngames.rainbowrage.screens.GameScreen;
 import com.unknowngames.rainbowrage.skill.Skill;
 import com.unknowngames.rainbowrage.skill.TravelingSkillContainer;
@@ -98,7 +100,7 @@ public class EverythingHolder
 	
 	Stats stats;
 	
-	Settings settings = new Settings();
+	static Settings settings = new Settings();
 	
 	private Music mainMusic, gameMusic, endMusic;
 	
@@ -138,6 +140,8 @@ public class EverythingHolder
 	public String[] allHeroes = {"swordface", "arroweyes", "mrwizard"};
 	
 	Client client;
+	
+	PrivatePlayerInfo privatePlayerInfo;
 	
 	public EverythingHolder()
 	{
@@ -185,6 +189,16 @@ public class EverythingHolder
 		loadFonts();
 		
 		System.out.println("Heap: " + Gdx.app.getJavaHeap());
+	}
+	
+	public PrivatePlayerInfo getPrivatePlayerInfo()
+	{
+		return privatePlayerInfo;
+	}
+	
+	public void setPrivatePlayerInfo(PrivatePlayerInfo p)
+	{
+		privatePlayerInfo = p;
 	}
 	
 	public String[] getAllHeroes()
@@ -259,7 +273,7 @@ public class EverythingHolder
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
 		font[0] = generator.generateFont(24);	// Description and cost
 		font[1] = generator.generateFont(32);	// Skill name and timers
-		font[2] = generator.generateFont(45);
+		font[2] = generator.generateFont(45);	// Large font
 		font[2].setColor(1, 1, 1, 1);
 		font[3] = generator.generateFont(45);
 //		font[3].setColor(0, 0, 0, 1);
@@ -1418,7 +1432,8 @@ public class EverythingHolder
 	
 	public void buyUpgrade(int unit, int skill, int level, int team)
 	{
-		if (players[team].upgrades[unit][skill] != -1)
+//		if (players[team].upgrades[unit][skill] != -1)
+		if (players[team].getUpgrade(unit, skill) != -1)
 		{
 //			System.out.println("Already bought it!");
 			return;
@@ -1442,7 +1457,8 @@ public class EverythingHolder
 			funds2 -= cost;*/
 		
 		
-		players[team].upgrades[unit][skill] = level;
+//		players[team].upgrades[unit][skill] = level;
+		players[team].setUpgrade(unit, skill, level);
 		
 		if (team == this.team)
 		{
@@ -1549,7 +1565,8 @@ public class EverythingHolder
 		ListIterator<Coordinate> iter = (team == 0 ? map.getPath(((top = !top) == false ? 1 : 2)).listIterator() : 
 													 map.getReversePath(((bot = !bot) == false ? 1 : 2)).listIterator());
 		//add(new Minion(start.x(), start.y(), team, iter, playerUnits[team - 1][m], 0));
-		add(new Minion(start.x(), start.y(), team, iter, playerUnits[team][m], players[team].upgrades[m]));
+//		add(new Minion(start.x(), start.y(), team, iter, playerUnits[team][m], players[team].upgrades[m]));
+		add(new Minion(start.x(), start.y(), team, iter, playerUnits[team][m], players[team].getUpgrades(m)));
 	}
 	
 	public ArrayList<Actor> team(int t)
@@ -1737,7 +1754,7 @@ public class EverythingHolder
 		}
 	}
 	
-	public Settings getSettings()
+	static public Settings getSettings()
 	{
 		return settings;
 	}

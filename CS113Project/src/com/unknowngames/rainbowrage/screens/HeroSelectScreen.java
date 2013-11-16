@@ -16,10 +16,10 @@ import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 import com.unknowngames.rainbowrage.AllEnums.TeamColor;
 import com.unknowngames.rainbowrage.BaseClass;
 import com.unknowngames.rainbowrage.EverythingHolder;
-import com.unknowngames.rainbowrage.Player;
 import com.unknowngames.rainbowrage.RainbowRage;
 import com.unknowngames.rainbowrage.networking.Network.HeroSelectStatus;
 import com.unknowngames.rainbowrage.parser.ActorStructure;
+import com.unknowngames.rainbowrage.player.Player;
 import com.unknowngames.rainbowrage.ui.ActorSkillDisplay;
 import com.unknowngames.rainbowrage.ui.Button;
 import com.unknowngames.rainbowrage.ui.HeroSelectFlag;
@@ -256,6 +256,9 @@ public class HeroSelectScreen extends BaseClass implements Screen
 			buttons[i].draw(batch, delta);
 
 		skillDisplay.render(batch);
+		
+		EverythingHolder.font[1].draw(batch, players[0].userName(), 610 * scale, 450 * scale);
+		EverythingHolder.font[1].draw(batch, players[1].userName(), 610 * scale, 420 * scale);
 
 		batch.end();
 

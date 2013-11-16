@@ -130,6 +130,7 @@ public abstract class Unit extends Actor
 				batch.setColor(.8f, .8f, .8f, .7f);
 		}
 		
+		batch.draw(EverythingHolder.getObjectTexture("entityshadow"), xCoord - radius * .8f, yCoord - radius * .8f * 38 / 51, radius * .8f * 2, 2 * radius * .8f * 38 / 51);
 		
 		if (this instanceof Hero)
 		{

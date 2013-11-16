@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -126,7 +127,7 @@ public class SettingsScreen extends BaseClass implements Screen
 		resolutionButtons.add(resolution1Button);
 		resolutionButtons.add(resolution2Button);
 		System.out.println("Resolution: " + resolution + getButtonName(resolutionButtons, resolution));
-		graphicsButtons.setChecked("800x480"); //getButtonName(resolutionButtons, resolution));
+		resolutionButtons.setChecked(getButtonName(resolutionButtons, resolution));
 //		switch (graphics)
 //		{
 //		case 0:
@@ -271,6 +272,7 @@ public class SettingsScreen extends BaseClass implements Screen
 		table.setOrigin(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 		table.setScale(everything.getScreenScale());
 		stage.addActor(table);
+		table.setBackground(skin.getDrawable("background"));
 		table.add(effectsLabel).left();
 		table.add(effectsOffButton);
 		table.add(effectsOnButton);
@@ -283,12 +285,12 @@ public class SettingsScreen extends BaseClass implements Screen
 		table.add(textEffectsOffButton);
 		table.add(textEffectsOnButton);
 		table.row().padTop(10);
-		if (!(Gdx.app.getType() == ApplicationType.Android))
+		if (Gdx.app.getType() == ApplicationType.Desktop)
 		{
 			table.add(resolutionLabel).left();
-			table.add(resolutionFullButton).padRight(10);
 			table.add(resolution1Button);
 			table.add(resolution2Button);
+			table.add(resolutionFullButton).padLeft(10);
 			table.row().padTop(10);
 		}
 		table.add(musicLabel).left().setWidgetWidth(50);
@@ -325,9 +327,31 @@ public class SettingsScreen extends BaseClass implements Screen
 		Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
 		pixmap.setColor(Color.WHITE);
 		pixmap.fill();
+		
 		skin.add("white", new Texture(pixmap));
 
-		skin.add("default", new BitmapFont());
+//		skin.add("default", new BitmapFont());
+//		skin.add("default", EverythingHolder.getFont(0));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
+		BitmapFont font = generator.generateFont(30);
+		/*BitmapFont font;
+		switch (settings.getResolution())
+		{
+		case 0:
+			font = generator.generateFont(30);
+			break;
+		case 1:
+			font = generator.generateFont(24);
+			break;
+		case 2:
+			font = generator.generateFont(30);
+			break;
+		default:
+			font = generator.generateFont(24);
+		}*/
+		skin.add("default", font);
+		
+		skin.add("background", EverythingHolder.getObjectTexture("mainbackground"));
 
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = skin.newDrawable("white", Color.LIGHT_GRAY);
@@ -341,8 +365,9 @@ public class SettingsScreen extends BaseClass implements Screen
 		selectBoxStyle.background = skin.newDrawable("white", Color.CYAN);
 		selectBoxStyle.backgroundOpen = skin.newDrawable("white", Color.GREEN);
 		selectBoxStyle.backgroundOver = skin.newDrawable("white", Color.RED);
-		selectBoxStyle.listBackground = skin.newDrawable("white", Color.YELLOW);
-		selectBoxStyle.listSelection = skin.newDrawable("white", Color.PINK);
+//		selectBoxStyle.listBackground = skin.newDrawable("white", Color.YELLOW);
+//		selectBoxStyle.listBackground = skin.newDrawable("white", Color.YELLOW);
+//		selectBoxStyle.listSelection = skin.newDrawable("white", Color.PINK);
 
 		// skin.add("atest",
 		// EverythingHolder.getObjectTexture("selectredflag"));//skin.newDrawable("white",

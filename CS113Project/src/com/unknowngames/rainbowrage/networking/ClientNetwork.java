@@ -8,7 +8,6 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 import com.unknowngames.rainbowrage.BaseClass;
 import com.unknowngames.rainbowrage.EverythingHolder;
-import com.unknowngames.rainbowrage.Player;
 import com.unknowngames.rainbowrage.networking.Network.CommandIn;
 import com.unknowngames.rainbowrage.networking.Network.Login;
 import com.unknowngames.rainbowrage.networking.Network.LoginStatus;
@@ -16,6 +15,8 @@ import com.unknowngames.rainbowrage.networking.Network.ServerMessage;
 import com.unknowngames.rainbowrage.networking.Network.StartGameInfo;
 import com.unknowngames.rainbowrage.networking.Network.StartGameRoom;
 import com.unknowngames.rainbowrage.networking.Network.UserMessage;
+import com.unknowngames.rainbowrage.player.Player;
+import com.unknowngames.rainbowrage.player.PrivatePlayerInfo;
 import com.unknowngames.rainbowrage.screens.LoginScreen;
 
 public class ClientNetwork extends BaseClass
@@ -81,12 +82,17 @@ public class ClientNetwork extends BaseClass
 				{
 					StartGameRoom info = (StartGameRoom)object;
 					everything.setTeam((byte)(info.team));
-					Player[] ps = new Player[info.usernames.length];
+					Player[] ps = new Player[info.publicPlayerInfos.length];
+					for (int i = 0; i < info.publicPlayerInfos.length; i++)
+					{
+						ps[i] = new Player(info.publicPlayerInfos[i]);
+					}
+					/*Player[] ps = new Player[info.usernames.length];
 					for (int i = 0; i < info.usernames.length; i++)
 					{
 						ps[i] = new Player(info.usernames[i]);
 						//everything.getPlayer(i) = new Player(info.usernames[i]);
-					}
+					}*/
 					everything.setPlayers(ps);
 					loginScreen.joinRoom();
 				}
@@ -94,6 +100,10 @@ public class ClientNetwork extends BaseClass
 				{
 					if (((StartGameInfo)object).team > 0)
 						loginScreen.joinRoom();
+				}
+				else if (object instanceof PrivatePlayerInfo)
+				{
+					everything.setPrivatePlayerInfo((PrivatePlayerInfo)object);
 				}
 				loginScreen.check();
 			}

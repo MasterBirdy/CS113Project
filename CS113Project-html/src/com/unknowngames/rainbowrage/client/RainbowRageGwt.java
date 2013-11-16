@@ -14,6 +14,7 @@ public class RainbowRageGwt extends GwtApplication
 	@Override
 	public GwtApplicationConfiguration getConfig () 
 	{
+		System.out.println("Testing");
 		GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(800, 480);
 		return cfg;
 	}
@@ -21,6 +22,7 @@ public class RainbowRageGwt extends GwtApplication
 	@Override
 	public ApplicationListener getApplicationListener () 
 	{
+		System.out.println("Test");
 		return new RainbowRage();
 	}
 
@@ -46,5 +48,19 @@ public class RainbowRageGwt extends GwtApplication
 	public void removeLifecycleListener(LifecycleListener listener) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void log(String tag, String message, Throwable exception)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getLogLevel()
+	{
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

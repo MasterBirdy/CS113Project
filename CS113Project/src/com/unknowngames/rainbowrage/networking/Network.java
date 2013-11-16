@@ -7,6 +7,8 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.unknowngames.rainbowrage.AllEnums.TeamColor;
 //import com.test.gdxkyro.Unit;
+import com.unknowngames.rainbowrage.player.PrivatePlayerInfo;
+import com.unknowngames.rainbowrage.player.PublicPlayerInfo;
 
 public class Network 
 {
@@ -36,6 +38,8 @@ public class Network
         kryo.register(StartGameInfo.class);
         kryo.register(HeroSelectStatus.class);
         kryo.register(StartGameRoom.class);
+        kryo.register(PublicPlayerInfo.class);
+        kryo.register(PrivatePlayerInfo.class);
 	}
 	
 	// From client
@@ -99,7 +103,8 @@ public class Network
 	
 	static public class StartGameRoom
 	{
-		public String[] usernames;
+//		public String[] usernames;
+		public PublicPlayerInfo[] publicPlayerInfos;
 		public byte team;
 	}
 	
@@ -177,4 +182,6 @@ public class Network
 		public byte team;
 		public int turn;
 	}
+	
+//	static public class 
 }
