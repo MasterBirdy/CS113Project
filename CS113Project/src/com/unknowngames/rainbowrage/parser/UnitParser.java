@@ -113,6 +113,9 @@ public class UnitParser
 							hero.activeSkill = tokenizeString(getElement("activeskill"));
 							hero.pet = tokenizeString(getElement("pet"));
 							hero.phrases.put("start", getElement("startmessage").trim());
+							hero.phrases.put("happy", getElement("happymessage").trim());
+							hero.phrases.put("angry", getElement("angrymessage").trim());
+							hero.phrases.put("gg", getElement("ggmessage").trim());
 							heroStatsMap.put(element.getAttribute("type"), hero);
 						}
 						else if (node.getNodeName().equals("building"))

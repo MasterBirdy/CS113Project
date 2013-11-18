@@ -14,7 +14,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -24,6 +26,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.esotericsoftware.kryonet.Client;
 import com.unknowngames.rainbowrage.AllEnums.TeamColor;
 import com.unknowngames.rainbowrage.entity.*;
@@ -38,7 +46,7 @@ import com.unknowngames.rainbowrage.skill.TravelingSkillContainer;
 public class EverythingHolder 
 {
 	@SuppressWarnings("unchecked")
-	String xmlVersion = "", gameVersion = "0.11_14_13";
+	String xmlVersion = "", gameVersion = "0.11_17_13";
 	
 	EntityComparator eCompare = new EntityComparator();
 	static private SpriteBatch batch;
@@ -143,6 +151,10 @@ public class EverythingHolder
 	
 	PrivatePlayerInfo privatePlayerInfo;
 	
+	private Skin skin;
+	
+	boolean multiplayerGame;
+	
 	public EverythingHolder()
 	{
 		Texture.setEnforcePotImages(true);
@@ -174,6 +186,7 @@ public class EverythingHolder
 		loadEffects();
 		loadSounds();
 		loadTextures();
+		createSkin();
 		finished = true;
 		
 		
@@ -189,6 +202,95 @@ public class EverythingHolder
 		loadFonts();
 		
 		System.out.println("Heap: " + Gdx.app.getJavaHeap());
+	}
+	
+	public void setMultiplayerGame(boolean multiplayer)
+	{
+		multiplayerGame = multiplayer;
+	}
+	
+	public boolean getMultiplayerGame()
+	{
+		return multiplayerGame;
+	}
+	
+	public void createSkin()
+	{
+		skin = new Skin();
+		
+		Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
+		pixmap.setColor(Color.WHITE);
+		pixmap.fill();
+		skin.add("white", new Texture(pixmap));
+		
+//		skin.add("default", new BitmapFont());
+//		skin.add("default", EverythingHolder.getFont(0));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Kingthings Exeter.ttf"));
+		BitmapFont font = generator.generateFont(30);
+		BitmapFont smallFont = generator.generateFont(24);
+		skin.add("default", font);
+		skin.add("small", smallFont);
+		
+		//skin.add("background", new TextureRegion(new Texture(Gdx.files.internal("images/mainmenubackground.jpg")), 0, 0, 800, 480));
+		skin.add("background", EverythingHolder.getObjectTexture("mainbackground"));
+		
+		TextButtonStyle textButtonStyle = new TextButtonStyle();
+		textButtonStyle.up = skin.newDrawable("white", Color.WHITE);
+		textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+		textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
+		textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+		textButtonStyle.font = skin.getFont("default");
+		textButtonStyle.fontColor = Color.BLACK;
+		
+		SelectBoxStyle selectBoxStyle = new SelectBoxStyle();
+		selectBoxStyle.font = skin.getFont("default");
+		selectBoxStyle.background = skin.newDrawable("white", Color.CYAN);
+		selectBoxStyle.backgroundOpen = skin.newDrawable("white", Color.GREEN);
+		selectBoxStyle.backgroundOver = skin.newDrawable("white", Color.RED);
+//		selectBoxStyle.listBackground = skin.newDrawable("white", Color.YELLOW);
+//		selectBoxStyle.listSelection = skin.newDrawable("white", Color.PINK);
+		
+		SliderStyle sliderStyle = new SliderStyle();
+		sliderStyle.background = skin.newDrawable("white", Color.CYAN);
+		sliderStyle.knob = skin.newDrawable("white", Color.GREEN);
+		sliderStyle.knobAfter = skin.newDrawable("white", Color.RED);
+		sliderStyle.knobBefore= skin.newDrawable("white", Color.YELLOW);
+		
+		TextFieldStyle textFieldStyle = new TextFieldStyle();
+		textFieldStyle.background = skin.newDrawable("white", Color.LIGHT_GRAY);
+		textFieldStyle.cursor = skin.newDrawable("white", Color.BLACK);
+		textFieldStyle.disabledBackground = skin.newDrawable("white", Color.RED);
+		textFieldStyle.selection = skin.newDrawable("white", Color.GRAY);
+		textFieldStyle.font = skin.getFont("default");
+		textFieldStyle.fontColor = Color.BLACK;
+		
+		LabelStyle labelStyle = new LabelStyle();
+		labelStyle.background = skin.newDrawable("white", new Color(0.0f, 0.0f, 0.0f, 0.0f));
+		labelStyle.font = skin.getFont("default");
+		labelStyle.fontColor = Color.WHITE;
+		
+		LabelStyle chatLabelStyle = new LabelStyle();
+		chatLabelStyle.background = skin.newDrawable("white", new Color(Color.rgba8888(0.3f, 0.3f, 0.3f, 0.9f)));
+		chatLabelStyle.font = skin.getFont("small");
+		chatLabelStyle.fontColor = Color.WHITE;
+		
+		LabelStyle smallLabelStyle = new LabelStyle();
+		smallLabelStyle.background = skin.newDrawable("white", new Color(0.0f, 0.0f, 0.0f, 0.0f));
+		smallLabelStyle.font = skin.getFont("small");
+		smallLabelStyle.fontColor = Color.WHITE;
+		
+		skin.add("default", textButtonStyle);
+		skin.add("default", selectBoxStyle);
+		skin.add("default-vertical", sliderStyle);
+		skin.add("default", textFieldStyle);
+		skin.add("default", labelStyle);
+		skin.add("chat", chatLabelStyle);
+		skin.add("small", smallLabelStyle);
+	}
+	
+	public Skin getSkin()
+	{
+		return skin;
 	}
 	
 	public PrivatePlayerInfo getPrivatePlayerInfo()
@@ -1161,12 +1263,21 @@ public class EverythingHolder
 								   "herorapidfireicon", "herofirearrowsicon", "herosplitshowicon", "herotrapsicon", "blankicon",		// Arroweyes
 								   "herofireballicon", "herofiredoticon", "herofireballpassicon", "heroreflecticon", "heroincspeedicon",// MrWizard
 		};
+		
 		TextureRegion[] skillIcons = spliteSpriteSheet("images/skillicons.png", 128, 128, 8, 8);
 		
 		for (int i = 0; i < skillIconNames.length; i++)
 		{
 			objectTextures.put(skillIconNames[i], skillIcons[i]);
 		}
+		
+		// Profile pics
+		objectTextures.put("profilepic0", skillIcons[35]); // Meteor
+		objectTextures.put("profilepic1", skillIcons[25]); // Dizzy 
+		objectTextures.put("profilepic2", skillIcons[16]); // Man on fire
+		objectTextures.put("profilepic3", skillIcons[17]); // Explosion
+		objectTextures.put("profilepic4", skillIcons[10]); // Grand entrance
+		objectTextures.put("profilepic5", skillIcons[31]); // Flaming arrow
 		
 		objectTextures.put("mainbackground", new TextureRegion(new Texture(Gdx.files.internal("images/mainmenubackground.jpg")), 0, 0, 800, 480));
 		
@@ -1244,11 +1355,11 @@ public class EverythingHolder
 			temp = new ParticleEffect();
 			try
 			{
-				temp.load(Gdx.files.internal("data/" + name + settings.getParticleEffects() + ".p"), Gdx.files.internal("images"));
+				temp.load(Gdx.files.internal("data/" + name + (settings.getParticleEffects() == 0 ? "low" : "") + ".p"), Gdx.files.internal("images"));
 			}
 			catch (Exception e)
 			{
-				System.out.println("Don't have " + name + settings.getParticleEffects() + ".p");
+				System.out.println("Don't have " + name + (settings.getParticleEffects() == 0 ? "low" : "") + ".p");
 				temp.load(Gdx.files.internal("data/" + name + ".p"), Gdx.files.internal("images"));
 			}
 			particleEffects.put(name, temp);
@@ -1369,6 +1480,11 @@ public class EverythingHolder
 	public Hero getHero()
 	{
 		return playerHeroes[team];
+	}
+	
+	public Hero getHero(int h)
+	{
+		return playerHeroes[h];
 	}
 	
 	public Actor atPoint(float x, float y)
@@ -1625,6 +1741,7 @@ public class EverythingHolder
 		{
 			switch(Math.abs(targeting))
 			{
+			case 1:
 			case 2:
 				Actor.setCenterActor(center);
 				Collections.sort(temp, Actor.TargetedComparator);

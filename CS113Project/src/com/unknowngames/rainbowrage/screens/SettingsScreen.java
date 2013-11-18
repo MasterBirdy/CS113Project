@@ -40,14 +40,17 @@ public class SettingsScreen extends BaseClass implements Screen
 	
 	float gameSound, musicSound;
 	boolean textEffects;
-	int particleEffects, graphics, resolution;
+	int particleEffects, graphics, resolution, realResolution;
 	Table table;
+	
+	Screen previousScreen;
 	
 	// private Actor button;
 
-	public SettingsScreen(RainbowRage game)
+	public SettingsScreen(RainbowRage game, Screen previous)
 	{
 		this.game = game;
+		previousScreen = previous;
 		loadCurrentSettings();
 		create();
 		loadMusic();
@@ -55,13 +58,14 @@ public class SettingsScreen extends BaseClass implements Screen
 	
 	private void loadCurrentSettings()
 	{
-		settings = everything.getSettings();
+		settings = EverythingHolder.getSettings();
 		gameSound = settings.getGameSound();
 		musicSound = settings.getMusicSound();
 		textEffects = settings.showTextEffect();
 		particleEffects = settings.getParticleEffects();
 		graphics = settings.graphics();
 		resolution = settings.getResolution();
+		realResolution = resolution;
 	}
 	
 	public String getButtonName(ButtonGroup bg, boolean b)
@@ -227,6 +231,7 @@ public class SettingsScreen extends BaseClass implements Screen
 		{
 			public void changed(ChangeEvent event, Actor actor)
 			{
+				System.out.print("Anyone");
 				setResolution(1);
 			}
 		});
@@ -235,6 +240,7 @@ public class SettingsScreen extends BaseClass implements Screen
 		{
 			public void changed(ChangeEvent event, Actor actor)
 			{
+				System.out.print("Else?");
 				setResolution(2);
 			}
 		});
@@ -243,6 +249,7 @@ public class SettingsScreen extends BaseClass implements Screen
 		{
 			public void changed(ChangeEvent event, Actor actor)
 			{
+				System.out.print("Ooooh, that's what happened");
 				setResolution(0);
 			}
 		});
@@ -251,7 +258,12 @@ public class SettingsScreen extends BaseClass implements Screen
 		{
 			public void changed(ChangeEvent event, Actor actor)
 			{
-				game.setScreen(game.mainMenuScreen);
+//				if (previousScreen instanceof LobbyScreen)
+//					((LobbyScreen)previousScreen).refreshSize();
+//				previousScreen.resize(0, 0);
+				goBack();
+//				game.setScreen(previousScreen);
+//				game.setScreen(game.mainMenuScreen);
 			}
 		});
 
@@ -301,6 +313,12 @@ public class SettingsScreen extends BaseClass implements Screen
 		table.row().padTop(20);
 		table.add(saveButton);
 		table.add(backButton);
+	}
+	
+	public void goBack()
+	{
+		setResolution(realResolution);
+		game.setScreen(previousScreen);
 	}
 	
 	public void setResolution(int r)
@@ -417,7 +435,11 @@ public class SettingsScreen extends BaseClass implements Screen
 		settings.setParticleEffects(particleEffects);
 		settings.setGraphics(graphics);
 		settings.showTextEffect(textEffects);
-		settings.setResolution(resolution);
+		
+		realResolution = resolution;
+		settings.setResolution(realResolution);
+		everything.rescale();
+		
 		settings.saveFile();
 		System.out.println("Graphics: " + graphics);
 	}
@@ -441,14 +463,15 @@ public class SettingsScreen extends BaseClass implements Screen
 	@Override
 	public void show()
 	{
-		// TODO Auto-generated method stub
-
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
 	public void hide()
 	{
 		settingsMusic.stop();
+		stage.dispose();
+		Gdx.input.setInputProcessor(null);
 	}
 
 	@Override
@@ -462,6 +485,7 @@ public class SettingsScreen extends BaseClass implements Screen
 	{
 		if (settingsMusic != null)
 			settingsMusic.play();
+		
 	}
 
 	@Override
@@ -469,6 +493,7 @@ public class SettingsScreen extends BaseClass implements Screen
 	{
 		stage.dispose();
 		skin.dispose();
+		Gdx.input.setInputProcessor(null);
 	}
 
 }

@@ -51,6 +51,7 @@ public class ClientNetwork extends BaseClass
 				if (object instanceof LoginStatus)
 				{
 					LoginStatus status = (LoginStatus) object;
+					System.out.println("Login status: " + status.status);
 					if (status.status >= 0)
 					{
 						//everything.setTeam((byte)status.status);
@@ -78,7 +79,7 @@ public class ClientNetwork extends BaseClass
 //					else
 //						loginScreen.joinRoom();
 				}
-				else if (object instanceof StartGameRoom)
+				/*else if (object instanceof StartGameRoom)
 				{
 					StartGameRoom info = (StartGameRoom)object;
 					everything.setTeam((byte)(info.team));
@@ -87,12 +88,12 @@ public class ClientNetwork extends BaseClass
 					{
 						ps[i] = new Player(info.publicPlayerInfos[i]);
 					}
-					/*Player[] ps = new Player[info.usernames.length];
+					Player[] ps = new Player[info.usernames.length];
 					for (int i = 0; i < info.usernames.length; i++)
 					{
 						ps[i] = new Player(info.usernames[i]);
 						//everything.getPlayer(i) = new Player(info.usernames[i]);
-					}*/
+					}
 					everything.setPlayers(ps);
 					loginScreen.joinRoom();
 				}
@@ -100,10 +101,12 @@ public class ClientNetwork extends BaseClass
 				{
 					if (((StartGameInfo)object).team > 0)
 						loginScreen.joinRoom();
-				}
+				}*/
 				else if (object instanceof PrivatePlayerInfo)
 				{
+					System.out.println("Received PrivatePlayerInfo");
 					everything.setPrivatePlayerInfo((PrivatePlayerInfo)object);
+					loginScreen.joinRoom();
 				}
 				loginScreen.check();
 			}

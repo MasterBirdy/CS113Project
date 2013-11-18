@@ -2,6 +2,7 @@ package com.unknowngames.rainbowrage.entity;
 import java.util.HashMap;
 import java.util.ListIterator;
 
+import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.map.Coordinate;
 import com.unknowngames.rainbowrage.parser.HeroStructure;
 import com.unknowngames.rainbowrage.parser.MinionStructure;
@@ -104,6 +105,9 @@ public class Hero extends Unit
 	
 	public void stance(int s)
 	{
+//		if (s == 0)
+//			EverythingHolder.getUnitSounds(sounds).playDefend(everything.getSoundLevel());
+		
 		stance = s;
 	}
 	

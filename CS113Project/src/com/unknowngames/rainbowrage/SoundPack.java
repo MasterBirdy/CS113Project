@@ -17,7 +17,7 @@ public class SoundPack
 	{
 		attack 	= getSound(name + "attack.mp3");
 		die 	= getSound(name + "die.mp3");
-		advance = getSound(name + "defend.mp3");
+		advance = getSound(name + "advance.mp3");
 		retreat = getSound(name + "retreat.mp3");
 		defend 	= getSound(name + "defend.mp3");
 		
@@ -25,12 +25,46 @@ public class SoundPack
 			die = getSound("miniondie.mp3");
 	}
 	
+	public void playAdvance(float volume)
+	{
+		try
+		{
+			advance.play(volume);
+		}
+		catch (Exception e)
+		{
+			return;
+		}
+	}
+	
+	public void playDefend(float volume)
+	{
+		try
+		{
+			defend.play(volume);
+		}
+		catch (Exception e)
+		{
+			return;
+		}
+	}
+	
+	public void playRetreat(float volume)
+	{
+		try
+		{
+			retreat.play(volume);
+		}
+		catch (Exception e)
+		{
+			return;
+		}
+	}
+	
 	public void playAttack(float volume)
 	{
 		try
 		{
-			if (Gdx.app.getType() == ApplicationType.Android)
-				attack.stop();
 			attack.play(volume);
 		}
 		catch (Exception e)

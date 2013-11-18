@@ -46,6 +46,7 @@ public class RainbowRageServer
     
     public static long sentData = 0, receivedData = 0;
     private MySQLAccess mySQLAccess;
+    private int guestCount = 0;
     
     public RainbowRageServer(String adminName, String adminPassword) throws IOException 
     {
@@ -73,6 +74,7 @@ public class RainbowRageServer
         
         System.out.println(InetAddress.getByName(InetAddress.getLocalHost().getHostName()) + " : " + Network.port);
         
+        Game.setMainServer(this);
 //        Listener listen = new Listener();
 //        server.addListener();
         server.addListener(new Listener() 
@@ -80,7 +82,7 @@ public class RainbowRageServer
         	public void received (Connection c, Object object) 
         	{
         		receivedData += 16;
-        		System.out.println("Received message");
+//        		System.out.println("Received message");
         		// We know all connections for this server are actually UserConnections.
         		UserConnection connection = (UserConnection)c;
                 User user = connection.user;
@@ -107,9 +109,6 @@ public class RainbowRageServer
                     	c.close();
                         return;
                     }
-                                        
-                    loginMsg.status = 0;
-                    c.sendTCP(loginMsg);
                     
                     // Reject if already logged in.
                     if (!name.equals("Guest"))
@@ -117,12 +116,18 @@ public class RainbowRageServer
 	                    for (UserConnection userCon : userConnection)
 	                    {
 //	                    	if (userCon.user.name.equals(name))
-	                    	if (userCon.user.publicPlayerInfo.username.equals(name))
+	                    	if (userCon.user.privatePlayerInfo.playerName.equals(name))
 	                    	{
 	                    		loginMsg.status = -4;
 	                        	c.sendTCP(loginMsg);
 	                        	return;
 	                    	}
+	                    	/*if (userCon.user.privatePlayerInfo.username.equals(name))
+	                    	{
+	                    		loginMsg.status = -4;
+	                        	c.sendTCP(loginMsg);
+	                        	return;
+	                    	}*/
 	                    }
                     }
 //                    for (Unit other : loggedIn) 
@@ -134,9 +139,9 @@ public class RainbowRageServer
 //                    	}
 //                    }
                     
-                    if (userConnection.size() >= 2)//totalUsers >= 5)
+                    if (userConnection.size() >= 10)//totalUsers >= 5)
                     {
-                    	System.out.println("Server full with " + userConnection.size() + " users");
+//                    	System.out.println("Server full with " + userConnection.size() + " users");
                     	ServerMessage msg = new ServerMessage();
                     	msg.message = -2;
                     	c.sendTCP(msg);
@@ -154,7 +159,13 @@ public class RainbowRageServer
                     
 //                    user = new User(totalUsers);
                     
-                    user = loadUserInfo(((Login)object).name);
+                    user = loadPrivateUserInfo(((Login)object).name);
+                    if (user.privatePlayerInfo.playerName.equals("Guest"))
+                    	user.privatePlayerInfo.shownName += guestCount++;
+                    
+                    loginMsg.status = 0;
+                    c.sendTCP(loginMsg);
+                    
                     /*user = new User();
                     user.name = ((Login)object).name;*/
 //                    unit.otherStuff = register.otherStuff;
@@ -164,22 +175,19 @@ public class RainbowRageServer
                     loggedIn(connection, user);
                     return;
                 }
-                
-                if (object instanceof AccountMessage)
+                else if (object instanceof AccountMessage)
                 {
                 	return;
                 }
-                
-                if (object instanceof Command)
+                else if (object instanceof Command)
                 {
-                	System.out.println("Lets do this at room " + user.room);
+//                	System.out.println("Lets do this at room " + user.room);
                 	Command cmd = (Command)object;
                 	if (user.room >= 0)
                 		games.get(user.room).messageCommand(cmd);
                 	return;
                 }
-                
-                if (object instanceof UserMessage)
+                else if (object instanceof UserMessage)
                 {
                 	UserMessage msg = (UserMessage)object;
 //                	if (((UserMessage)object).message.equals("kill"))
@@ -188,24 +196,51 @@ public class RainbowRageServer
                 	if (user.room >= 0)
                 		games.get(user.room).userMessage(msg);
                 }
-                
-                if (object instanceof ClientMessage)
+                else if (object instanceof ClientMessage)
                 {
                 	return;
                 }
-                
-                if (object instanceof HeroSelectStatus)
+                else if (object instanceof HeroSelectStatus)
                 {
                 	if (user.room >= 0)
                 		games.get(user.room).heroSelectStatus((HeroSelectStatus)object);
                 }
+                else if (object instanceof ClientToServerMessage)
+                {
+                	switch (((ClientToServerMessage)object).msg)
+                	{
+                	case 1:
+                		addToWaitlist((UserConnection)c);
+                		break;
+                	case 2:
+                		removeFromWaitlist((UserConnection)c);
+                		break;
+                	case 3:
+                		removeFromRoom((UserConnection)c);
+                		break;
+                	case 4:
+                		rotateProfilePic((UserConnection)c);
+//                		mySQLAccess.rotateProfilePic(((UserConnection)c).user.privatePlayerInfo.username);
+                		break;
+                	}
+                }
+                else if (object instanceof FinishedGame)
+                {
+                	if (user.room >= 0)
+                		games.get(user.room).finished(((FinishedGame)object));
+                }
+                else if (object instanceof LobbyChatMessage)
+                {
+                	sendLobbyChat(user.privatePlayerInfo.shownName + ": " +((LobbyChatMessage)object).message);
+                }
         	}
         	
-        	private User loadUserInfo(String name)
+        	private User loadPrivateUserInfo(String name)
         	{
         		User user = new User();
 //        		user.name = name;
-        		user.publicPlayerInfo.username = name;
+        		user.privatePlayerInfo = mySQLAccess.getPrivatePlayerInfo(name);
+//        		user.publicPlayerInfo.username = name;
         		return user;
         	}
         	
@@ -231,7 +266,7 @@ public class RainbowRageServer
 //                	server.sendToAllTCP(removeUnit);
 //                	users--;
 //                }
-        		System.out.println("Player logged out.");
+        		/*System.out.println("Player logged out.");
         		if (userConnection.contains(c))
         		{
         			System.out.println("Player removed");
@@ -242,7 +277,16 @@ public class RainbowRageServer
         		{
         			System.out.println("Player removed from waiting");
         			waitingUsers.remove(c);
-        		}
+        		}*/
+        		
+        		System.out.println("Player logged out.");
+        		if (userConnection.remove(c))
+        			System.out.println("Player removed");
+        		if (waitingUsers.remove(c))
+        			System.out.println("Player removed from waiting");
+//        		removeFromWaitlist((UserConnection)c);
+//        		removeFromLobby((UserConnection)c);
+        		removeFromRoom((UserConnection)c);
         		
         		writeToLog(df.format(new Date()) + ": Player " + c.getID() + userConnection.size() + " logged out.");
         		
@@ -274,12 +318,61 @@ public class RainbowRageServer
         
     }
     
+    private void sendLobbyChat(String msg)
+    {
+    	System.out.println("Sending message: " + msg);
+    	LobbyChatMessage message = new LobbyChatMessage();
+    	message.message = msg;
+    	
+    	for (int i = 0; i < userConnection.size(); i++)
+    	{
+    		userConnection.get(i).sendTCP(message);
+    	}
+    	
+    	writeToChatLog(msg);
+    }
+    
+    public void rotateProfilePic(UserConnection c)
+    {
+    	c.user.privatePlayerInfo.profilePic = (c.user.privatePlayerInfo.profilePic + 1) % 6;
+    	mySQLAccess.rotateProfilePic(c.user.privatePlayerInfo.playerName);
+    }
+    
+    public void addWin(String username)
+    {
+    	mySQLAccess.addWin(username);
+    }
+    
+    public void addLoss(String username)
+    {
+    	mySQLAccess.addLoss(username);
+    }
+    
+    public void writeToLogWithDate(String txt)
+    {
+    	writeToLog(df.format(new Date()) + ": " + txt);
+    }
+    
     public void writeToLog(String txt)
     {
     	try 
     	{
     	    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("TestLog.txt", true)));
     	    out.println(txt);
+    	    out.close();
+    	}
+    	catch (IOException e) 
+    	{
+    	    System.out.println(e);
+    	}
+    }
+    
+    public void writeToChatLog(String txt)
+    {
+    	try 
+    	{
+    	    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("ChatLog.txt", true)));
+    	    out.println(df.format(new Date()) + ": " + txt);
     	    out.close();
     	}
     	catch (IOException e) 
@@ -306,15 +399,65 @@ public class RainbowRageServer
     	return games.size();
     }
     
-    void loggedIn (UserConnection c, User user) 
+    public void removeFromLobby(UserConnection c)
+    {
+    	if (c == null || c.user == null || c.user.room == -1)
+    		return;
+    	
+//    	System.out.println("Removing user from room");
+    	try
+    	{
+    		userConnection.remove(c);
+    	}
+    	catch (NullPointerException e)
+    	{
+    		System.out.println("User already removed");
+    	}
+    }
+    
+    public void removeFromRoom(UserConnection c)
+    {
+    	if (c == null || c.user == null || c.user.room == -1)
+    		return;
+    	
+//    	System.out.println("Removing user from room");
+    	try
+    	{
+    		games.get(c.user.room).playerQuit(c);
+    		c.user.room = -1;
+    	}
+    	catch (NullPointerException e)
+    	{
+    		System.out.println("Tried to close already closed room");
+    	}
+    }
+    
+    public void addToWaitlist(UserConnection c)
+    {
+    	if (waitingUsers.contains(c))
+    		return;
+    	
+    	waitingUsers.add(c);
+    	
+    	if (waitingUsers.size() >= 2)
+        	startGameRoom();
+    }
+    
+    public void removeFromWaitlist(UserConnection c)
+    {
+    	waitingUsers.remove(c);
+    }
+    
+    private void loggedIn (UserConnection c, User user) 
     {
     	c.user = user;
-    	
+    	c.sendTCP(user.privatePlayerInfo);
 //        System.out.println("Player " + user.name + userConnection.size() + " just joined.");
 //    	writeToLog(df.format(new Date()) + ": " + user.name + " joined.");
     	
-    	System.out.println("Player " + user.publicPlayerInfo.username + userConnection.size() + " just joined.");
-    	writeToLog(df.format(new Date()) + ": " + user.publicPlayerInfo.username + " joined.");
+    	/*System.out.println("Players " + userConnection.size());
+    	System.out.println("Player " + user.privatePlayerInfo.username + userConnection.size() + " just joined.");*/
+    	writeToLog(df.format(new Date()) + ": " + user.privatePlayerInfo.playerName + " joined.");
 
         /*try 
     	{
@@ -341,7 +484,7 @@ public class RainbowRageServer
         
 //        waitingUsers.add(user);
         userConnection.add(c);
-        waitingUsers.add(c);
+        /*waitingUsers.add(c);*/
         
 //        c.sendTCP(status);
         
@@ -371,9 +514,9 @@ public class RainbowRageServer
 //        }
         
         // Change to send array of players to accommodate different modes
-        if (waitingUsers.size() >= 2)
-        {
-        	startGameRoom();
+//        if (waitingUsers.size() >= 2)
+//        {
+//        	startGameRoom();
         	/*UserConnection p1 = null, p2 = null;
         	while (p1 == null)
         		p1 = waitingUsers.pop();
@@ -385,7 +528,7 @@ public class RainbowRageServer
         	
 //        	writeToLog(df.format(new Date()) + ": " + p1.user.name + " and " + p1.user.name + " started.");
         	writeToLog(df.format(new Date()) + ": " + p1.user.publicPlayerInfo.username + " and " + p1.user.publicPlayerInfo.username + " started.");*/
-        }
+//        }
     }
     
     private void startGameRoom()
@@ -400,7 +543,7 @@ public class RainbowRageServer
     	games.put(gameCount++, game);
     	
 //    	writeToLog(df.format(new Date()) + ": " + p1.user.name + " and " + p1.user.name + " started.");
-    	writeToLog(df.format(new Date()) + ": " + p1.user.publicPlayerInfo.username + " and " + p1.user.publicPlayerInfo.username + " started.");
+    	writeToLog(df.format(new Date()) + ": " + p1.user.privatePlayerInfo.playerName + " and " + p1.user.privatePlayerInfo.playerName + " started.");
     }
     
     // This holds per connection state.

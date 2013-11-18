@@ -41,7 +41,7 @@ public class GameUI extends BaseClass
 	MinionUI minionUI;
 	HeroControlUI heroControlUI;
 	SideUI sideUI;
-	boolean showingMenu = false;
+	boolean showingMenu = false, showingChatMenu = false;
 	float scale;
 	
 	PlayerMessage pMessage;
@@ -135,6 +135,12 @@ public class GameUI extends BaseClass
 		
 		if (showingMenu)
 			gameMenu.render(batch);
+	}
+	
+	public void toggleChatMenu()
+	{
+		showingChatMenu = !showingChatMenu;
+		sideUI.toggleChatOptions();
 	}
 	
 	public void setUpgradeMenu(boolean menu)

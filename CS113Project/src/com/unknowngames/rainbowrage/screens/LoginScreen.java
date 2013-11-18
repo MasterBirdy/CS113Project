@@ -48,6 +48,7 @@ public class LoginScreen extends BaseClass implements Screen
 	TextField nameText, passwordText;
 	Label messageLabel;
 	HeroSelectScreen selectScreen;
+	LobbyScreen lobbyScreen;
 	
 	public LoginScreen(RainbowRage game)
 	{
@@ -62,7 +63,8 @@ public class LoginScreen extends BaseClass implements Screen
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		
-		createSkin();
+		skin = everything.getSkin();
+//		createSkin();
 		addWidgets();
 		
 		clientNetwork.connect();
@@ -217,6 +219,9 @@ public class LoginScreen extends BaseClass implements Screen
 			case -3:
 				messageLabel.setText("Server down for maintenance");
 				break;
+			case -4:
+				messageLabel.setText("This name is already logged in");
+				break;
 			/*default:
 				messageLabel.setText("Something new happened: " + clientNetwork.failCode());
 				break;*/
@@ -229,8 +234,10 @@ public class LoginScreen extends BaseClass implements Screen
 	
 	public void joinRoom()
 	{
-		selectScreen = new HeroSelectScreen(game, true);
-		game.setScreen(selectScreen);
+		lobbyScreen = new LobbyScreen(game);
+		game.setScreen(lobbyScreen);
+		/*selectScreen = new HeroSelectScreen(game, true);
+		game.setScreen(selectScreen);*/
 	}
 	
 	public void goBack()
@@ -307,10 +314,10 @@ public class LoginScreen extends BaseClass implements Screen
 		table.setBackground(skin.getDrawable("background"));	
 		
 		table.add(nameLabel).left();
-		table.add(nameText).width(100);//.padLeft(5).padRight(5);
+		table.add(nameText).width(200);//.padLeft(5).padRight(5);
 		table.row().spaceTop(10);
 		table.add(passwordLabel).left();
-		table.add(passwordText).width(100);//.padLeft(20).padRight(20);;
+		table.add(passwordText).width(200);//.padLeft(20).padRight(20);;
 		table.row();
 		table.add(messageLabel).colspan(2);
 		table.row().spaceTop(15);

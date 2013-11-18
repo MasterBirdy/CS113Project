@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.unknowngames.rainbowrage.player.PrivatePlayerInfo;
 import com.unknowngames.rainbowrage.player.PublicPlayerInfo;
 
 public class User
@@ -12,7 +13,7 @@ public class User
 //	public String otherStuff;
 //	public int id, x, y, room;
 	public int room;
-	public PublicPlayerInfo publicPlayerInfo;
+	public PrivatePlayerInfo privatePlayerInfo;
 	
 	public User()
 	{

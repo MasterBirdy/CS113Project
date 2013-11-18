@@ -192,6 +192,9 @@
 		<pet>				wolf								</pet>
 		<description>		It's just a flesh wound				</description>
 		<startmessage>		Let my blade do the talking!		</startmessage>
+		<happymessage>		That was an excellent attack.		</happymessage>
+		<angrymessage>		Your mother smells of elderberries.	</angrymessage>
+		<ggmessage>			You are a worthy opponent!			</ggmessage>
 	</hero>
 	
 	<hero type = "arroweyes">
@@ -216,6 +219,9 @@
 		<pet>				eagle								</pet>
 		<description>		Fear my shaft						</description>
 		<startmessage>		They won't know what hit them!		</startmessage>
+		<happymessage>		Why must we must fight.				</happymessage>
+		<angrymessage>		Now you've gone and made me angry.	</angrymessage>
+		<ggmessage>			Well done, good sir!				</ggmessage>
 	</hero>
 	
 	<hero type = "mrwizard">
@@ -240,6 +246,9 @@
 		<pet>				elemental							</pet>
 		<description>		The grand wizard					</description>
 		<startmessage>		Let's burn them all!				</startmessage>
+		<happymessage>		What a wonder world we live in.		</happymessage>
+		<angrymessage>		Eat fire, dog.						</angrymessage>
+		<ggmessage>			We should do this again sometime!	</ggmessage>
 	</hero>
 	
 	<!-- BUILDINGS -->

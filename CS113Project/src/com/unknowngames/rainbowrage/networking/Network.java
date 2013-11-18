@@ -20,6 +20,8 @@ public class Network
 		Kryo kryo = endPoint.getKryo();
 		
 		kryo.register(String[].class);
+		kryo.register(int[].class);
+		kryo.register(PublicPlayerInfo[].class);
 		kryo.register(TeamColor.class);
 		
 		kryo.register(Login.class);
@@ -40,6 +42,9 @@ public class Network
         kryo.register(StartGameRoom.class);
         kryo.register(PublicPlayerInfo.class);
         kryo.register(PrivatePlayerInfo.class);
+        kryo.register(ClientToServerMessage.class);
+        kryo.register(FinishedGame.class);
+        kryo.register(LobbyChatMessage.class);
 	}
 	
 	// From client
@@ -65,6 +70,12 @@ public class Network
 //			this.type = type;
 //			this.team = team;
 //		}
+	}
+	
+	static public class FinishedGame
+	{
+		public int team;
+		public int winner;
 	}
 	
 	static public class ClientMessage
@@ -156,7 +167,7 @@ public class Network
 	
 	static public class GameStatus
 	{
-		byte status;
+		public byte status;
 	}
 	
 	static public class ServerMessage
@@ -172,8 +183,7 @@ public class Network
 	
 	static public class AccountInfo
 	{
-		byte field;
-		String parameter;
+		public PrivatePlayerInfo privatePlayerInfo;
 	}
 	
 	static public class UserMessage
@@ -181,6 +191,16 @@ public class Network
 		public String message;
 		public byte team;
 		public int turn;
+	}
+	
+	static public class ClientToServerMessage
+	{
+		public int msg;
+	}
+	
+	static public class LobbyChatMessage
+	{
+		public String message;
 	}
 	
 //	static public class 

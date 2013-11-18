@@ -49,23 +49,23 @@ public class GameInput extends BaseClass implements InputProcessor
 			EverythingHolder.toggleShowRange();
 		if (keycode == Keys.NUM_1)
 		{
-			everything.getSettings().togglePath();
+			EverythingHolder.getSettings().togglePath();
 //			everything
 //			EverythingHolder.setMusicVolume(0f);
 			//Entity.setVolume(0);
 		}
 		if (keycode == Keys.NUM_2)
 		{
-			everything.getSettings().toggleRange();
+			EverythingHolder.getSettings().toggleRange();
 //			game.sendMessage("Suck it, nub");
 //			game.toggleIsPaused();
 //			Entity.setVolume(0.1f);
 		}
 		if (keycode == Keys.NUM_3)
-			everything.getSettings().toggleRadius();
+			EverythingHolder.getSettings().toggleRadius();
 //			Entity.setVolume(0.2f);
 		if (keycode == Keys.NUM_4)
-			everything.getSettings().toggleTextEffect();
+			EverythingHolder.getSettings().toggleTextEffect();
 //			Entity.setVolume(0.3f);
 		if (keycode == Keys.NUM_5)
 			Entity.setVolume(0.4f);
@@ -208,12 +208,20 @@ public class GameInput extends BaseClass implements InputProcessor
 			game.setHeroStance(7 - h);
 		else if (h == 9)
 			game.castHeroActive();
-		else if (h == 10)
-			game.clearSend();
 		else if (h == 11)
 			game.toggleFollowing();
 		else if (h == 12)
 			gameUI.setUpgradeMenu(true);
+		else if (h == 13)
+			game.clearSend();
+		else if (h == 14)
+			gameUI.toggleChatMenu();
+		else if (h == 15)
+			game.sendMessage("happy");
+		else if (h == 16)
+			game.sendMessage("angry");
+		else if (h == 17)
+			game.sendMessage("gg");
 		else if (h == 20)		// Pause menu
 			gameUI.setGameMenu(false);
 		else if (h == 21)

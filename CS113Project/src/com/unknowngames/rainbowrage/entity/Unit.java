@@ -237,6 +237,7 @@ public abstract class Unit extends Actor
 			xSpeed = 0;
 			ySpeed = 0;
 			previousStance = 1;
+//			EverythingHolder.getUnitSounds(sounds).playAdvance(everything.getSoundLevel());
 		}
 		
 		if (invis < 0)
@@ -285,6 +286,8 @@ public abstract class Unit extends Actor
 		
 		if (previousStance != -1)
 		{
+//			EverythingHolder.getUnitSounds(sounds).playRetreat(everything.getSoundLevel());
+			
 			if (pathIter.hasPrevious())
 				destination = pathIter.previous();
 			if (pathIter.hasPrevious())

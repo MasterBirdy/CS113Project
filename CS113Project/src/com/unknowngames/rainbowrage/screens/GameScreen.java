@@ -103,17 +103,24 @@ public class GameScreen implements Screen
 	GL10 gl;
 	
 	int currentDisplayMode = 0;
+	
+	Screen previousScreen;
+	
+	ThreadedListener threadedListener;
 
-	public GameScreen(RainbowRage game, boolean multiplayer)
+	public GameScreen(RainbowRage game, boolean multiplayer, Screen previous)
 	{
 		System.out.println("Starting game screen");
 		long startTime = System.currentTimeMillis();
+		
+		everything.setMultiplayerGame(multiplayer);
 		
 		client = everything.getClient();
 
 		gl = Gdx.graphics.getGL10();
 		this.game = game;
 		this.multiplayer = multiplayer;
+		previousScreen = previous;
 		everything.reset();
 		EverythingHolder.registerGameScreen(this);
 		isPaused = false;
@@ -295,7 +302,7 @@ public class GameScreen implements Screen
 			batch.end();
 		}
 
-		if (scoreBoard == null && everything.getSettings().showPath())
+		if (scoreBoard == null && EverythingHolder.getSettings().showPath())
 			everything.map().drawPaths(batch, camera);
 
 		batch.setProjectionMatrix(uiCamera.combined);
@@ -325,11 +332,13 @@ public class GameScreen implements Screen
 		else
 			scoreBoard = new ScoreBoard(1, this);
 		everything.stopGameMusic();
+		if (multiplayer)
+			this.sendFinished(t);
 
 		startMusic = tempMusic.newMusic(Gdx.files
 				.internal("audio/526296_In-My-Final-Hours.mp3"));
 		startMusic.setLooping(true);
-		startMusic.setVolume(everything.getSettings().getMusicSound());
+		startMusic.setVolume(EverythingHolder.getSettings().getMusicSound());
 		startMusic.play();
 
 		isPaused = true;
@@ -343,7 +352,8 @@ public class GameScreen implements Screen
 		if (startMusic != null)
 			startMusic.stop();
 		game.mainMenuScreen.gameWon();
-		game.setScreen(game.mainMenuScreen);
+		game.setScreen(previousScreen);
+//		game.setScreen(game.mainMenuScreen);
 	}
 
 	public void pullCommand()
@@ -445,6 +455,27 @@ public class GameScreen implements Screen
 			cmd.team = (byte) everything.team();
 			cmd.turn = everything.turn() + 1;
 			commandQueue.add((CommandIn) cmd);
+		}
+	}
+	
+	public void sendFinished(int winner)
+	{
+		FinishedGame f = new FinishedGame();
+		f.team = team;
+		f.winner = winner;
+		client.sendTCP(f);
+		if (everything.getPlayer(0).getUsername().substring(0, 5).equals("Guest") &&
+			everything.getPlayer(1).getUsername().substring(0, 5).equals("Guest"))
+		{
+			everything.getPrivatePlayerInfo().wins++;
+			everything.getPrivatePlayerInfo().losses++;
+		}
+		else
+		{
+			if (winner == team)
+				everything.getPrivatePlayerInfo().wins++;
+			else
+				everything.getPrivatePlayerInfo().losses++;
 		}
 	}
 
@@ -769,8 +800,7 @@ public class GameScreen implements Screen
 		
 		Network.register(client);
 		
-		// ThreadedListener runs the listener methods on a different thread.
-		client.addListener(new ThreadedListener(new Listener()
+		threadedListener = new ThreadedListener(new Listener()
 		{
 			public void connected(Connection connection)
 			{
@@ -835,7 +865,8 @@ public class GameScreen implements Screen
 
 				if (object instanceof UserMessage)
 				{
-					gameUI.setMessage(((UserMessage) object).message);
+					receivedMessage((UserMessage) object);
+//					gameUI.setMessage(((UserMessage) object).message);
 				}
 			}
 
@@ -845,7 +876,88 @@ public class GameScreen implements Screen
 				// System.out.println("Disconnected");
 				// System.exit(0);
 			}
-		}));
+		});
+		
+		client.addListener(threadedListener);
+		
+		// ThreadedListener runs the listener methods on a different thread.
+		/*client.addListener(new ThreadedListener(new Listener()
+		{
+			public void connected(Connection connection)
+			{
+			}
+
+			public void received(Connection connection, Object object)
+			{
+				if (object instanceof LoginStatus)
+				{
+					LoginStatus status = (LoginStatus) object;
+					if (status.status >= 0)
+					{
+						System.out.println("Loginstatus");
+						team = (byte) status.status;
+						everything.setTeam(team);
+						gameUI.setup();
+						// System.out.println("Entering as player " + team);
+						connected = true;
+						return;
+					}
+					else if (status.status == -1)
+					{
+						// System.out.println("Server is full.");
+						System.exit(-1);
+					}
+					return;
+				}
+
+				if (object instanceof CommandIn)
+				{
+					System.out.println("CommandIn");
+					if (((CommandIn) object).command == -2)
+					{
+						// System.out.println("Highest now " +
+						// ((CommandIn)object).turn);
+						System.out.println("New highest " + ((CommandIn)object).turn);
+						everything.setHighestTurn(((CommandIn) object).turn);
+						if (!connected)
+							connected = true;
+					}
+					else
+						commandQueue.add((CommandIn) object);
+				}
+
+				if (object instanceof ServerMessage)
+				{
+					// ServerMessage msg = (ServerMessage)object;
+
+					if (((ServerMessage) object).message == 1)
+					{
+						// System.out.println("Game is starting!");
+						running = true;
+						timeAccumulator = 0;
+						everything.setRunning(true);
+					}
+					// else if (((ServerMessage)object).message > 10)
+					// {
+					// everything.highestTurn = ((ServerMessage)object).message;
+					// }
+					return;
+				}
+
+				if (object instanceof UserMessage)
+				{
+					receivedMessage((UserMessage) object);
+//					gameUI.setMessage(((UserMessage) object).message);
+				}
+			}
+
+			public void disconnected(Connection connection)
+			{
+				endGame();
+				// System.out.println("Disconnected");
+				// System.exit(0);
+			}
+		}));*/
 
 		// ui = new UI();
 		//
@@ -870,6 +982,11 @@ public class GameScreen implements Screen
 		login.name = "Player";
 		client.sendTCP(login);*/
 	}
+	
+	private void receivedMessage(UserMessage m)
+	{
+		gameUI.setMessage(everything.getHero(m.team).getPhrase(m.message));
+	}
 
 	@Override
 	public void resize(int width, int height)
@@ -888,6 +1005,8 @@ public class GameScreen implements Screen
 	public void resume()
 	{
 		Gdx.input.setInputProcessor(inputProcessor);
+		if (multiplayer)
+			client.addListener(threadedListener);
 		// startMusic.play();
 	}
 
@@ -907,12 +1026,14 @@ public class GameScreen implements Screen
 		System.out.println("Hiding");
 		// TODO Auto-generated method stub
 		Gdx.input.setInputProcessor(null);// setInputProcessor(inputProcessor);
+		if (multiplayer)
+			client.removeListener(threadedListener);
 		everything.end();
-		if (client != null)
+		/*if (client != null)
 		{
 			client.close();
 			client.stop();
-		}
+		}*/
 	}
 
 	public class MessageCompare implements Comparator<CommandIn>

@@ -17,6 +17,8 @@ import com.unknowngames.rainbowrage.AllEnums.TeamColor;
 import com.unknowngames.rainbowrage.BaseClass;
 import com.unknowngames.rainbowrage.EverythingHolder;
 import com.unknowngames.rainbowrage.RainbowRage;
+import com.unknowngames.rainbowrage.networking.Network.ClientToServerMessage;
+import com.unknowngames.rainbowrage.networking.Network.GameStatus;
 import com.unknowngames.rainbowrage.networking.Network.HeroSelectStatus;
 import com.unknowngames.rainbowrage.parser.ActorStructure;
 import com.unknowngames.rainbowrage.player.Player;
@@ -44,8 +46,8 @@ public class HeroSelectScreen extends BaseClass implements Screen
 	// TeamColors.blue};
 	// teamColors[0] = red;
 	TeamColor teamColors[] = new TeamColor[]
-	{ TeamColor.red, TeamColor.blue, TeamColor.green, TeamColor.orange,
-			TeamColor.purple, TeamColor.yellow };
+	                                       {TeamColor.red, TeamColor.blue, TeamColor.green, 
+											TeamColor.orange, TeamColor.purple, TeamColor.yellow};
 
 	GL10 gl = Gdx.graphics.getGL10();
 	Vector3 touchPoint = new Vector3();
@@ -58,8 +60,7 @@ public class HeroSelectScreen extends BaseClass implements Screen
 	float scale;
 	boolean multiplayer;
 	Player players[] = new Player[2];
-	boolean ready[] =
-	{ false, false };
+	boolean ready[] = {false, false};
 	int team = 0;
 
 	Client client;
@@ -69,12 +70,17 @@ public class HeroSelectScreen extends BaseClass implements Screen
 	boolean start = false;
 
 	HeroSelectFlag[] heroSelectFlags = new HeroSelectFlag[2];
+	
+	Screen previousScreen;
+	
+	ThreadedListener threadedListener;
 
-	public HeroSelectScreen(RainbowRage game, boolean multiplayer)
+	public HeroSelectScreen(RainbowRage game, boolean multiplayer, Screen previous)
 	{
 		this.game = game;
 		this.multiplayer = multiplayer;
-
+		previousScreen = previous;
+		
 		if (!multiplayer)
 		{
 			players[0] = new Player("Player");
@@ -91,8 +97,8 @@ public class HeroSelectScreen extends BaseClass implements Screen
 		team = everything.team();
 		allHeroes = everything.getAllHeroes();
 
-		System.out.println(players[0].userName() + " vs. "
-				+ players[1].userName());
+		System.out.println(players[0].getUsername() + " vs. "
+				+ players[1].getUsername());
 
 		HeroSelectFlag.setScale(everything.getScreenScale());
 		for (int i = 0; i < heroSelectFlags.length; i++)
@@ -103,15 +109,17 @@ public class HeroSelectScreen extends BaseClass implements Screen
 		if (multiplayer)
 		{
 			client = everything.getClient();
-
-			client.addListener(new ThreadedListener(new Listener()
+			
+			threadedListener = new ThreadedListener(new Listener()
 			{
 				public void received(Connection connection, Object object)
 				{
+					System.out.println("HeroSelect screen has received message");
+					
 					if (object instanceof HeroSelectStatus)
 					{
 						HeroSelectStatus status = (HeroSelectStatus) object;
-						System.out.println(players[status.team].userName()
+						System.out.println(players[status.team].getUsername()
 								+ " : " + status.heroname);
 						players[status.team].setColor(status.teamColor);
 						players[status.team].setHero(status.heroname);
@@ -121,12 +129,52 @@ public class HeroSelectScreen extends BaseClass implements Screen
 						receivedUpdate();
 						checkReady();
 					}
+					else if (object instanceof GameStatus)
+					{
+						System.out.println("Received gamestatus " + ((GameStatus)object).status);
+						if (((GameStatus)object).status == -1)
+							leaveRoom();
+					}
 				}
 
 				public void disconnected(Connection connection)
 				{
 				}
-			}));
+			});
+			
+			client.addListener(threadedListener);
+
+			/*client.addListener(new ThreadedListener(new Listener()
+			{
+				public void received(Connection connection, Object object)
+				{
+					System.out.println("HeroSelect screen has received message");
+					
+					if (object instanceof HeroSelectStatus)
+					{
+						HeroSelectStatus status = (HeroSelectStatus) object;
+						System.out.println(players[status.team].getUsername()
+								+ " : " + status.heroname);
+						players[status.team].setColor(status.teamColor);
+						players[status.team].setHero(status.heroname);
+						ready[status.team] = status.ready;
+						System.out.println("READY: " + ready[0] + " : "
+								+ ready[1]);
+						receivedUpdate();
+						checkReady();
+					}
+					else if (object instanceof GameStatus)
+					{
+						System.out.println("Received gamestatus " + ((GameStatus)object).status);
+						if (((GameStatus)object).status == -1)
+							leaveRoom();
+					}
+				}
+
+				public void disconnected(Connection connection)
+				{
+				}
+			}));*/
 		}
 		else
 		{
@@ -257,8 +305,17 @@ public class HeroSelectScreen extends BaseClass implements Screen
 
 		skillDisplay.render(batch);
 		
-		EverythingHolder.font[1].draw(batch, players[0].userName(), 610 * scale, 450 * scale);
-		EverythingHolder.font[1].draw(batch, players[1].userName(), 610 * scale, 420 * scale);
+		EverythingHolder.font[0].draw(batch, players[0].getUsername(), 600 * scale, 450 * scale);
+		EverythingHolder.font[0].draw(batch, "w:" + players[0].getWins(), 750 * scale, 450 * scale);
+		EverythingHolder.font[0].draw(batch, players[1].getUsername(), 600 * scale, 410 * scale);
+		EverythingHolder.font[0].draw(batch, "w:" + players[1].getWins(), 750 * scale, 410 * scale);
+		if (multiplayer)
+		{
+			for (int i = 0; i < players.length; i++)
+			{
+				batch.draw(EverythingHolder.getObjectTexture("profilepic" + players[i].getProfilePic()), 560 * scale, (420 - 40 * i) * scale, 35 * scale, 35 * scale); 
+			}
+		}
 
 		batch.end();
 
@@ -266,7 +323,7 @@ public class HeroSelectScreen extends BaseClass implements Screen
 		{
 			start = false;
 			everything.loadTeams();
-			game.gameScreen = new GameScreen(game, multiplayer);
+			game.gameScreen = new GameScreen(game, multiplayer, previousScreen);
 			game.setScreen(game.gameScreen);
 		}
 	}
@@ -357,14 +414,28 @@ public class HeroSelectScreen extends BaseClass implements Screen
 		else if (h >= 5 && h <= 10)
 			selectColor(h);
 	}
-
+	
+	// Called as leaving room
+	private void leaveRoom()
+	{
+		/*if (multiplayer)
+		{
+			everything.getClient().close();
+		}*/
+		game.setScreen(previousScreen);
+//		game.setScreen(game.mainMenuScreen);
+	}
+	
+	// Called when clicking back
 	private void goBack()
 	{
 		if (multiplayer)
 		{
-			everything.getClient().close();
+			ClientToServerMessage msg = new ClientToServerMessage();
+			msg.msg = 3;
+			client.sendTCP(msg);
 		}
-		game.setScreen(game.mainMenuScreen);
+		leaveRoom();
 	}
 
 	private void ready()
@@ -545,6 +616,11 @@ public class HeroSelectScreen extends BaseClass implements Screen
 	@Override
 	public void hide()
 	{
+		if (multiplayer)
+		{
+			if (client != null)
+				client.removeListener(threadedListener);
+		}
 	}
 
 	@Override
@@ -555,6 +631,11 @@ public class HeroSelectScreen extends BaseClass implements Screen
 	@Override
 	public void resume()
 	{
+		if (multiplayer)
+		{
+			if (client != null)
+				client.addListener(threadedListener);
+		}
 	}
 
 	@Override

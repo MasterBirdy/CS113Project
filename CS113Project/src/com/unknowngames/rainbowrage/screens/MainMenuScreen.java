@@ -55,11 +55,14 @@ public class MainMenuScreen implements Screen
 	LoginUI loginUI;
 	SettingsScreen settingsScreen;
 	LoginScreen loginScreen;
+	
+	int currentResolution = 1;
 
 	public MainMenuScreen(RainbowRage game, EverythingHolder everything)
 	{
 		this.game = game;
 		scale = everything.getScreenScale(); //getXRatio();
+		currentResolution = EverythingHolder.getSettings().getResolution();
 //		Settings.getInstance();
 		newGameStarted = false;
 //		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/523938_--MB---The-Black-Wi.mp3"));
@@ -108,7 +111,7 @@ public class MainMenuScreen implements Screen
 				EverythingHolder.getObjectTexture("quitbutton"));	// Quit
 		
 //		buttons[1].setClickable(false);
-		buttons[2].setClickable(false);
+//		buttons[2].setClickable(false);
 		
 		touchPoint = new Vector3();
 	
@@ -139,13 +142,16 @@ public class MainMenuScreen implements Screen
 		//Gdx.input.setCursorCatched(false);
 		
 		loginUI = new LoginUI();
+		
+//		currentResolution = EverythingHolder.getSettings().getResolution();
 //		loginUI.show();
 	}
 	
-	public void rescale()
+	public void refreshSize()
 	{
 //		this.game = game;
-		scale = everything.getXRatio();
+//		scale = everything.getXRatio();
+		scale = everything.getScreenScale();
 //		Settings.getInstance();
 		newGameStarted = false;
 //		startMusic = tempMusic.newMusic(Gdx.files.internal("audio/523938_--MB---The-Black-Wi.mp3"));
@@ -350,7 +356,7 @@ public class MainMenuScreen implements Screen
 //		Gdx.input.vibrate(50);
 		if (h == 0) // Single-player
 		{
-			selectScreen = new HeroSelectScreen(game, false);
+			selectScreen = new HeroSelectScreen(game, false, this);
 			game.setScreen(selectScreen);
 			newGameStarted = true;
 //			startMusic.stop();
@@ -377,8 +383,9 @@ public class MainMenuScreen implements Screen
 			/*loginScreen = new LoginScreen(game);
 			game.setScreen(loginScreen);*/
 			
-			settingsScreen = new SettingsScreen(game);
+			settingsScreen = new SettingsScreen(game, this);
 			game.setScreen(settingsScreen);
+//			game.setScreen(game.settingsScreen);
 			
 			
 //			settingsScreen.show();
@@ -417,8 +424,7 @@ public class MainMenuScreen implements Screen
 	@Override
 	public void resize(int width, int height) 
 	{
-		// TODO Auto-generated method stub
-	
+		refreshSize();
 	}
 	
 	@Override
@@ -427,7 +433,12 @@ public class MainMenuScreen implements Screen
 		
 		try
 		{
-			rescale();
+			System.out.println(currentResolution + " to " + EverythingHolder.getSettings().getResolution());
+			if (currentResolution != EverythingHolder.getSettings().getResolution())
+			{
+				refreshSize();
+				currentResolution = EverythingHolder.getSettings().getResolution();
+			}
 			startMusic.setVolume(everything.getMusicLevel());
 			startMusic.play();
 		}

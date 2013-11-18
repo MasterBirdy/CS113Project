@@ -60,9 +60,9 @@ public class Building extends Actor
 			int nearTeam = 0;
 			for (Actor a : everything.actorsInRange(this, captureRange))
 			{
-				if (a.team == 1)
+				if (a.team == 0)
 					--nearTeam;
-				else if (a.team == 2)
+				else if (a.team == 1)
 					++nearTeam;
 			}
 			shiftTeam(nearTeam);
@@ -98,18 +98,18 @@ public class Building extends Actor
 		if (capture < -captureCount)
 		{
 			capture = captureRange;
-			if (team == 2)
+			if (team == 1)
 			{
-				changeTeam(1);
+				changeTeam(0);
 				everything.shiftTowerCount(1);
 			}
 		}
 		else if (capture > captureCount)
 		{
 			capture = captureRange;
-			if (team == 1)
+			if (team == 0)
 			{
-				changeTeam(2);
+				changeTeam(1);
 				everything.shiftTowerCount(-1);
 			}
 		}
@@ -156,6 +156,8 @@ public class Building extends Actor
 		stateTime += delta;//Gdx.graphics.getDeltaTime();
 		current = buildingAnimation.getAnimation(0).getKeyFrame(stateTime * 0.5f, true);
 		Vector2 point = buildingAnimation.getFeet(0);
+		
+		batch.draw(EverythingHolder.getObjectTexture("entityshadow"), xCoord - radius * .8f, yCoord - radius * .8f * 38 / 51, radius * .8f * 2, 2 * radius * .8f * 38 / 51);
 		
 		batch.draw(current, xCoord - point.x * .5f, yCoord - point.y * .5f, current.getRegionWidth() * .5f, current.getRegionHeight() * .5f);
 //		batch.draw(current, xCoord - point.x, yCoord - point.y);

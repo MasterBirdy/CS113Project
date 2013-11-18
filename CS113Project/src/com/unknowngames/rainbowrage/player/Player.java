@@ -17,7 +17,7 @@ public class Player
 	{
 //		userName = name;
 		publicPlayerInfo = new PublicPlayerInfo();
-		publicPlayerInfo.username = name;
+		publicPlayerInfo.shownName = name;
 		publicPlayerInfo.exp = 0;
 		publicPlayerInfo.friend = false;
 		publicPlayerInfo.profilePic = 0;
@@ -107,16 +107,36 @@ public class Player
 		return true;
 	}
 	
-	public String userName()
+	public String getUsername()
 	{
 //		return userName;
-		return publicPlayerInfo.username;
+		return publicPlayerInfo.shownName;
+	}
+	
+	public int getWins()
+	{
+		return publicPlayerInfo.wins;
+	}
+	
+	public int getProfilePic()
+	{
+		return publicPlayerInfo.profilePic;
+	}
+	
+	public int getExp()
+	{
+		return publicPlayerInfo.exp;
+	}
+	
+	public boolean isFriend()
+	{
+		return publicPlayerInfo.friend;
 	}
 	
 	public int unitSkillLevel(int unit, int skill)
 	{
 //		System.out.println("Player: " + userName + " Unit: " + unit + " Skill: " + skill);
-		System.out.println("Player: " + userName() + " Unit: " + unit + " Skill: " + skill);
+		System.out.println("Player: " + getUsername() + " Unit: " + unit + " Skill: " + skill);
 		if (unit < 0 || unit > 6 || skill < 0)
 		{
 			System.out.println("Out of range");
