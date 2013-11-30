@@ -1,8 +1,7 @@
-package com.unknowngames.rainbowrage;
+package com.unknowngames.rainbowrage.entity;
 
 import java.util.Comparator;
 
-import com.unknowngames.rainbowrage.entity.Entity;
 
 public class EntityComparator implements Comparator<Entity>
 {

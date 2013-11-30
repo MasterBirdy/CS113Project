@@ -142,7 +142,7 @@ public class LoadingScreen implements Screen
 		// TODO Auto-generated method stub
 		start = false;
 		loaded = false;
-		everything = null;
+//		everything = null;
 		i = 200;
 	}
 

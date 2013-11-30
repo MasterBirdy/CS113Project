@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -404,7 +405,11 @@ public class LoginScreen extends BaseClass implements Screen
 	
 	public void update()
 	{
-		
+		if (Gdx.input.isKeyPressed(Input.Keys.ENTER))
+		{
+			if (stage.getKeyboardFocus() == nameText || stage.getKeyboardFocus() == passwordText)
+				login();
+		}
 	}
 
 	@Override

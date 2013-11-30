@@ -306,9 +306,9 @@ public class HeroSelectScreen extends BaseClass implements Screen
 		skillDisplay.render(batch);
 		
 		EverythingHolder.font[0].draw(batch, players[0].getUsername(), 600 * scale, 450 * scale);
-		EverythingHolder.font[0].draw(batch, "w:" + players[0].getWins(), 750 * scale, 450 * scale);
+		EverythingHolder.font[0].draw(batch, "w: " + players[0].getWins(), 750 * scale, 450 * scale);
 		EverythingHolder.font[0].draw(batch, players[1].getUsername(), 600 * scale, 410 * scale);
-		EverythingHolder.font[0].draw(batch, "w:" + players[1].getWins(), 750 * scale, 410 * scale);
+		EverythingHolder.font[0].draw(batch, "w: " + players[1].getWins(), 750 * scale, 410 * scale);
 		if (multiplayer)
 		{
 			for (int i = 0; i < players.length; i++)

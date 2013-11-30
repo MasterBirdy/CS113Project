@@ -1,9 +1,12 @@
 package com.unknowngames.rainbowrage.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.esotericsoftware.kryonet.Client;
 import com.unknowngames.rainbowrage.BaseClass;
 import com.unknowngames.rainbowrage.RainbowRage;
@@ -15,11 +18,24 @@ public class ProfileScreen extends BaseClass implements Screen
 	Image profilePic;
 	RainbowRage game;
 	Client client;
+	Skin skin;
 	
 	public ProfileScreen(RainbowRage game)
 	{
 		this.game = game;
+		stage = new Stage();
+		batch = new SpriteBatch();
+		Gdx.input.setInputProcessor(stage);
 		
+		addWidgets();
+	}
+	
+	private void addWidgets()
+	{
+		skin = everything.getSkin();
+		
+		final TextButton backButton = new TextButton("Back", skin);
+		final TextButton profileButton = new TextButton("Profile", skin);
 	}
 	
 	@Override

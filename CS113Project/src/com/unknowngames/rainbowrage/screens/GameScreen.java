@@ -47,8 +47,8 @@ public class GameScreen implements Screen
 {
 	private OrthographicCamera camera, uiCamera;
 	private SpriteBatch batch;
-	private Texture texture;
-	private Sprite sprite;
+//	private Texture texture;
+//	private Sprite sprite;
 	int counter1, counter2;
 	private boolean isPaused;
 	static boolean showRange;
@@ -248,7 +248,7 @@ public class GameScreen implements Screen
 	public void dispose()
 	{
 		batch.dispose();
-		texture.dispose();
+//		texture.dispose();
 	}
 
 	@Override

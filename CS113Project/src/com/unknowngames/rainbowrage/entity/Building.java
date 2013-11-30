@@ -40,7 +40,7 @@ public class Building extends Actor
 	public Building(int x, int y, int team, BuildingStructure struct, int[] skillLevels)
 	{
 		super(x, y, team, struct, skillLevels);
-		if (Gdx.app.getType() != ApplicationType.Android)
+		if (EverythingHolder.getSettings().getParticleEffects() > 0) //(Gdx.app.getType() != ApplicationType.Android)
 		{
 //			fire.load(Gdx.files.internal("data/fire.p"), Gdx.files.internal("images"));
 			fire = EverythingHolder.getEffect("fire");
@@ -70,17 +70,29 @@ public class Building extends Actor
 		}
 		
 		super.update();
+		
+		attackCooldown--;
+		targetSelector();
 		if (attacking && attackCooldown <= 0)
 		{
-//			System.out.println("Tower attacking");
 			attack();
 			attackCooldown = attackSpeed;
 		}
+		
+		/*attackCooldown--;
+		if (attacking)
+		{
+//			System.out.println("Tower attacking");
+			if (attackCooldown <= 0)
+			{
+				attack();
+				attackCooldown = attackSpeed;
+			}
+		}
 		else
 		{
-			attackCooldown--;
 			targetSelector();
-		}
+		}*/
 	}
 	
 	public void generateIncome()
@@ -145,7 +157,7 @@ public class Building extends Actor
 	{
 		super.draw(batch);
 		
-		if (this.isAlive() && currentHealth < maxHealth / 2 && Gdx.app.getType() != ApplicationType.Android)
+		if (this.isAlive() && currentHealth < maxHealth / 2 && EverythingHolder.getSettings().getParticleEffects() > 0) //Gdx.app.getType() != ApplicationType.Android)
 		{
 			fire.draw(batch, delta * 0.5f);
 			if  (fire.isComplete())
@@ -197,7 +209,7 @@ public class Building extends Actor
 	{
 		super.changeToLevel(level, buildingStructure);
 		this.level = level;
-		buildingAnimation = everything.getBuildingAnimation(buildingStructure.animation(level) + team);
+		buildingAnimation = EverythingHolder.getBuildingAnimation(buildingStructure.animation(level) + team);
 		currentHealth = maxHealth;
 		skillSpawners[3] = new BasicAttack(this);
 //		loadProjectile(buildingStructure);

@@ -27,13 +27,13 @@ public class SideUI extends BaseClass
 				EverythingHolder.getObjectTexture("chatbutton")); // Chat
 		buttons[3] = new RectangularButton(60 * scale, 350 * scale, 96 * .55f * scale,
 				95 * .55f * scale,
-				EverythingHolder.getObjectTexture("chatbutton")); // Happy
+				EverythingHolder.getObjectTexture("ecstaticface")); // Happy
 		buttons[4] = new RectangularButton(60 * scale, 290 * scale, 96 * .55f * scale,
 				95 * .55f * scale,
-				EverythingHolder.getObjectTexture("chatbutton")); // Angry
+				EverythingHolder.getObjectTexture("rageface")); // Angry
 		buttons[5] = new RectangularButton(60 * scale, 230 * scale, 96 * .55f * scale,
 				95 * .55f * scale,
-				EverythingHolder.getObjectTexture("chatbutton")); // GG
+				EverythingHolder.getObjectTexture("happyface")); // GG
 		
 		buttons[1].setClickable(false);
 		

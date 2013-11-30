@@ -33,7 +33,7 @@ public class Game
 	static RainbowRageServer mainServer;
 	
 	
-	public Game(UserConnection p1, UserConnection p2, Server s, int ID)//Server s, int ID)
+	public Game(UserConnection p1, UserConnection p2, Server s, int ID)
 	{
 		players[0] = p1;
 		players[1] = p2;

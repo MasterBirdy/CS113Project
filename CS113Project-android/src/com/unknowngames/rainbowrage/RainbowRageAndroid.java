@@ -1,6 +1,7 @@
 package com.unknowngames.rainbowrage;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -12,9 +13,10 @@ public class RainbowRageAndroid extends AndroidApplication
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
 		cfg.useGL20 = false;
+		cfg.useCompass = false;
 
 		initialize(new RainbowRage(), cfg);
 	}

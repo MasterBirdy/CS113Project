@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<stats version = "131109">
+<stats version = "231118">
 	<!-- MINIONS -->
 	<minion type = "swordsman">
 		<maxhealth>			220		31		311		3111		</maxhealth>
@@ -17,7 +17,7 @@
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionwarrior						</soundpack>
 		<firstskill>		selfarmor	empty					</firstskill>
-		<secondskill>		selfparry	tempberzerk				</secondskill>
+		<secondskill>		selfparry	berserker				</secondskill>
 		<thirdskill>		tempknockback	tempreducedamage	</thirdskill>
 		<description>		Professional meat shield			</description>
 	</minion>
@@ -37,7 +37,7 @@
 		<rangedresist>		0									</rangedresist>
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionarcher						</soundpack>
-		<firstskill>		temparrowdamage		empty			</firstskill>
+		<firstskill>		temparrowdamage	empty				</firstskill>
 		<secondskill>		temparrowslow	temparrowpoison		</secondskill>
 		<thirdskill>		temppoisonstack	temprapidarrow		</thirdskill>
 		<description>		I shoot arrows!						</description>
@@ -101,7 +101,7 @@
 		<magicresist>		0									</magicresist>
 		<soundpack>			minionninja							</soundpack>
 		<firstskill>		selfcloak	empty					</firstskill>
-		<secondskill>		empty		empty					</secondskill>
+		<secondskill>		poisondeath	empty					</secondskill>
 		<thirdskill>		empty		empty					</thirdskill>
 		<description>		...									</description>
 	</minion>
@@ -112,7 +112,7 @@
 		<attackspeed>		51		51		511		5111		</attackspeed>
 		<attackrange>		1		51		511		5111		</attackrange>
 		<speed>				2.3f	51f		511f	5111f		</speed>
-		<cost> 				50		51		511		5111		</cost>
+		<cost> 				100		51		511		5111		</cost>
 		<radius>			15									</radius>
 		<animation> 		wolf								</animation>
 		<ranged> 			false 								</ranged>
@@ -133,7 +133,7 @@
 		<attackspeed>		50		51		511		5111		</attackspeed>
 		<attackrange>		1		51		511		5111		</attackrange>
 		<speed>				2.3f	51f		511f	5111f		</speed>
-		<cost> 				50		51		511		5111		</cost>
+		<cost> 				100		51		511		5111		</cost>
 		<radius>			15									</radius>
 		<animation> 		eagle								</animation>
 		<ranged> 			false 								</ranged>
@@ -154,7 +154,7 @@
 		<attackspeed>		50		51		511		5111		</attackspeed>
 		<attackrange>		2		51		511		5111		</attackrange>
 		<speed>				2.3f	51f		511f	5111f		</speed>
-		<cost> 				50		51		511		5111		</cost>
+		<cost> 				100		51		511		5111		</cost>
 		<radius>			15									</radius>
 		<animation> 		elemental							</animation>
 		<ranged> 			false 								</ranged>
@@ -517,6 +517,42 @@
 		<icon>					shieldicon							</icon>
 	</skillcontainer>
 	
+	<skillcontainer type = "poisondeath">
+		<targettype>			1									</targettype>
+		<targetrange>			-1									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				500									</cooldown>
+		<trigger>				4									</trigger>
+		<skills>				poisondeath							</skills>
+		<cost>					100									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			smokebomb							</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Poison Death						</name>
+		<description>			Silent but deadly					</description>
+		<icon>					splashdeathicon						</icon>
+	</skillcontainer>
+	
+	<skillcontainer type = "burningarrows">
+		<targettype>			1									</targettype>
+		<targetrange>			-1									</targetrange>
+		<traveltime>			-1									</traveltime>
+		<cooldown>				-1									</cooldown>
+		<trigger>				0									</trigger>
+		<skills>				burningarrows						</skills>
+		<cost>					100									</cost>
+		<relativex>				0									</relativex>
+		<relativey>				10									</relativey>
+		<radius>				32									</radius>
+		<casteffect>			empty								</casteffect>
+		<castsound>				empty								</castsound>
+		<name>					Burning Arrows						</name>
+		<description>			Increased firepower					</description>
+		<icon>					herofirearrowsicon					</icon>
+	</skillcontainer>
+	
 	<!-- ACTIVE HERO SKILL CONTAINERS -->
 	<skillcontainer type = "herostun">
 		<targettype>			1									</targettype>
@@ -615,20 +651,20 @@
 	</skillcontainer>
 	
 	<!-- TEMP SKILLS -->
-	<skillcontainer type = "tempberzerk">
-		<targettype>			-1									</targettype>
-		<targetrange>			0									</targetrange>
+	<skillcontainer type = "berserker">
+		<targettype>			1									</targettype>
+		<targetrange>			-1									</targetrange>
 		<traveltime>			-1									</traveltime>
-		<cooldown>				0									</cooldown>
-		<trigger>				1									</trigger>
-		<skills>				empty								</skills>
-		<cost>					-1									</cost>
+		<cooldown>				-1									</cooldown>
+		<trigger>				0									</trigger>
+		<skills>				berserker							</skills>
+		<cost>					100									</cost>
 		<relativex>				0									</relativex>
 		<relativey>				10									</relativey>
 		<radius>				32									</radius>
 		<casteffect>			empty								</casteffect>
 		<castsound>				empty								</castsound>
-		<name>					Berzerk								</name>
+		<name>					Berserker							</name>
 		<description>			Lower health causes more damage		</description>
 		<icon>					berzerkicon							</icon>
 	</skillcontainer>
@@ -1315,6 +1351,46 @@
 		<affectedeffect>	empty								</affectedeffect>
 	</skill>
 	
+	<skill type = "poisondeath">
+		<aoe> 				60									</aoe>
+		<targeting> 		-1									</targeting>
+		<targetcount>		10									</targetcount>
+		<effect>			0									</effect>
+		<effectamount>		60									</effectamount>
+		<duration>			1									</duration>
+		<effecttick>		0									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			3									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	smokebomb							</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+	</skill>
+	
+	<skill type = "berserker">
+		<aoe> 				-1									</aoe>
+		<targeting> 		1									</targeting>
+		<targetcount>		1									</targetcount>
+		<effect>			12									</effect>
+		<effectamount>		5									</effectamount>
+		<duration>			-1									</duration>
+		<effecttick>		0									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			0									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	empty								</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+	</skill>
+	
 	<!-- SKILL INJECTORS -->
 	<skillinjector type = "explodeondeath">
 		<aoe> 				-1									</aoe>
@@ -1335,6 +1411,27 @@
 		<detonateeffect>	empty								</detonateeffect>
 		<affectedeffect>	empty								</affectedeffect>
 		<skills>			selfexplode							</skills>
+	</skillinjector>
+	
+	<skillinjector type = "burningarrows">
+		<aoe> 				-1									</aoe>
+		<targeting> 		1									</targeting>
+		<targetcount>		1									</targetcount>
+		<effect>			3									</effect>
+		<effectamount>		10									</effectamount>
+		<duration>			-1									</duration>
+		<effecttick>		0									</effecttick>
+		<buff>				0									</buff>
+		<trigger>			0									</trigger>
+		<priority>			0									</priority>
+		<damagesplit>		false								</damagesplit>
+		<additive>			true								</additive>
+		<continuous>		true								</continuous>
+		<casteffect>		empty								</casteffect>
+		<traveleffect>		empty								</traveleffect>
+		<detonateeffect>	empty								</detonateeffect>
+		<affectedeffect>	empty								</affectedeffect>
+		<skills>			fireball							</skills>
 	</skillinjector>
 	
 	<!-- ACTIVE SKILLZ -->

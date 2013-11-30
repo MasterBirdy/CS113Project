@@ -1,7 +1,7 @@
 particleEffects = 1
 graphics = 1
 resolution = 1
-musicVolume = 0.049999997
-gameVolume = 0.94
+musicVolume = 0.02
+gameVolume = 0.0
 textEffect = true
 shadows = true

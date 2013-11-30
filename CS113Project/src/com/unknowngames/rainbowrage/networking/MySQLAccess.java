@@ -912,7 +912,7 @@ public class MySQLAccess
 		}
 		catch (Exception e)
 		{
-
+			System.out.println(e.getMessage());
 		}
 	}
 

@@ -46,7 +46,7 @@ import com.unknowngames.rainbowrage.skill.TravelingSkillContainer;
 public class EverythingHolder 
 {
 	@SuppressWarnings("unchecked")
-	String xmlVersion = "", gameVersion = "0.11_17_13";
+	String xmlVersion = "", gameVersion = "0.11_23_13";
 	
 	EntityComparator eCompare = new EntityComparator();
 	static private SpriteBatch batch;
@@ -234,11 +234,19 @@ public class EverythingHolder
 		//skin.add("background", new TextureRegion(new Texture(Gdx.files.internal("images/mainmenubackground.jpg")), 0, 0, 800, 480));
 		skin.add("background", EverythingHolder.getObjectTexture("mainbackground"));
 		
-		TextButtonStyle textButtonStyle = new TextButtonStyle();
+		/*TextButtonStyle textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = skin.newDrawable("white", Color.WHITE);
 		textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
 		textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
 		textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+		textButtonStyle.font = skin.getFont("default");
+		textButtonStyle.fontColor = Color.BLACK;*/
+		
+		TextButtonStyle textButtonStyle = new TextButtonStyle();
+		textButtonStyle.up = skin.newDrawable("white", new Color(1.0f, 1.0f, 1.0f, 0.7f));
+		textButtonStyle.down = skin.newDrawable("white", new Color(0.7f, 0.7f, 0.7f, 0.7f));
+		textButtonStyle.checked = skin.newDrawable("white", new Color(1.0f, 1.0f, 1.0f, 0.7f));
+		textButtonStyle.over = skin.newDrawable("white", new Color(0.7f, 0.7f, 0.7f, 0.7f));
 		textButtonStyle.font = skin.getFont("default");
 		textButtonStyle.fontColor = Color.BLACK;
 		
@@ -695,7 +703,7 @@ public class EverythingHolder
 		team2Towers -= shift;
 	}
 	
-	public Stats Stats()
+	public Stats getStats()
 	{
 		return stats;
 	}
@@ -1264,7 +1272,7 @@ public class EverythingHolder
 								   "herofireballicon", "herofiredoticon", "herofireballpassicon", "heroreflecticon", "heroincspeedicon",// MrWizard
 		};
 		
-		TextureRegion[] skillIcons = spliteSpriteSheet("images/skillicons.png", 128, 128, 8, 8);
+		TextureRegion[] skillIcons = splitSpriteSheet("images/skillicons.png", 128, 128, 8, 8);
 		
 		for (int i = 0; i < skillIconNames.length; i++)
 		{
@@ -1290,11 +1298,18 @@ public class EverythingHolder
 		objectTextures.put("selectorangeflag", new TextureRegion(textures, 380, 0, 95, 146));
 		objectTextures.put("selectredflag", new TextureRegion(textures, 475, 0, 95, 146));
 		
-		
+//		textures = new Texture(Gdx.files.internal("images/emoticons.png"));
+		TextureRegion[] emoticons = splitSpriteSheet("images/emoticons.png", 334, 334, 3, 2);
+		objectTextures.put("neutralface", emoticons[0]); 	// neutral
+		objectTextures.put("happyface", emoticons[1]); 		// happy
+		objectTextures.put("ecstaticface", emoticons[2]); 	// ecstatic
+		objectTextures.put("sadface", emoticons[3]); 		// sad
+		objectTextures.put("rageface", emoticons[4]); 		// rage
+		objectTextures.put("poutface", emoticons[5]); 		// pout
 //		textures.dispose();
 	}
 	
-	public TextureRegion[] spliteSpriteSheet(String filename, int width, int height, int xCount, int yCount)
+	public TextureRegion[] splitSpriteSheet(String filename, int width, int height, int xCount, int yCount)
 	{
 		TextureRegion[] tempTexture = new TextureRegion[xCount * yCount];
 		Texture temp = new Texture(Gdx.files.internal(filename));
@@ -1744,18 +1759,18 @@ public class EverythingHolder
 			case 1:
 			case 2:
 				Actor.setCenterActor(center);
-				Collections.sort(temp, Actor.TargetedComparator);
+				Collections.sort(temp, Actor.targetedComparator);
 				break;
 			case 3:
 				Actor.setCenterActor(center);
-				Collections.sort(temp, Actor.TargetedComparator);
+				Collections.sort(temp, Actor.targetedComparator);
 				Collections.reverse(temp);
 				break;
 			case 4:
-				Collections.sort(temp, Actor.HealthComparator);
+				Collections.sort(temp, Actor.healthComparator);
 				break;
 			case 5:
-				Collections.sort(temp, Actor.HealthComparator);
+				Collections.sort(temp, Actor.healthComparator);
 				Collections.reverse(temp);
 				break;
 			}
@@ -1788,11 +1803,11 @@ public class EverythingHolder
 			{
 			case 1:
 				Actor.setCenterActor(s);
-				Collections.sort(temp, Actor.TargetedComparator);
+				Collections.sort(temp, Actor.targetedComparator);
 				break;
 			case 4:
 			case 5:
-				Collections.sort(temp, Actor.HealthComparator);
+				Collections.sort(temp, Actor.healthComparator);
 				break;
 			}
 		}
@@ -2004,7 +2019,7 @@ public class EverythingHolder
 		showRange = (showRange ? false : true);
 	}
 	
-	public void load(SpriteBatch b)
+	static public void load(SpriteBatch b)
 	{
 		batch = b;
 	}

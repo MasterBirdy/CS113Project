@@ -103,7 +103,7 @@ public class Skill extends Entity
 				{
 				case 4:
 				case 5:
-					Collections.sort(temp, Actor.HealthComparator);
+					Collections.sort(temp, Actor.healthComparator);
 					break;
 				}
 				return new ArrayList<Actor>(temp.subList(0, (temp.size() > targetCount - 1 ? targetCount - 1 : temp.size() - 1)));

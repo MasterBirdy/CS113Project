@@ -157,8 +157,11 @@ public class SkillEffect
 			case 10:									// Cloak
 				target.invis(effectAmount);
 				break;
-			case 11:
+			case 11:									// Fear
 				target.fear(effectAmount);
+				break;
+			case 12:									// Berserker
+				target.attackDamageBoost((int) (effectAmount / target.getHealthRatio()));
 				break;
 //			case 4:
 //				damageBoost += skill.effectAmount;
@@ -189,7 +192,7 @@ public class SkillEffect
 //		affected.dispose();
 	}
 	
-	public static Comparator<SkillEffect> PriorityComparator = new Comparator<SkillEffect>()
+	public static Comparator<SkillEffect> priorityComparator = new Comparator<SkillEffect>()
 	{
 		public int compare(SkillEffect a1, SkillEffect a2)
 		{

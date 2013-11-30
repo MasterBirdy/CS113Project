@@ -69,7 +69,10 @@ public class SkillSpawner extends BaseClass
 	}
 	
 	public void update()
-	{		
+	{
+//		for (SkillEffectInjected s : extraSkills)
+//			s.update();
+		
 		if (trigger == 0)
 			cast();
 		--count;
@@ -89,10 +92,15 @@ public class SkillSpawner extends BaseClass
 			{
 				ArrayList<Skill> allExtraSkills = new ArrayList<Skill>();
 
+				System.out.println("About to add injected skill to attack: " + extraSkills.size());
+				
 				for (SkillEffectInjected sei : extraSkills)
 				{
 					if (sei != null && sei.getSkill() != null)
+					{
+						System.out.println("Adding injected skill to attack");
 						allExtraSkills.add(sei.getSkill());
+					}
 //					for (Skill s : sei.getSkills())
 //					{
 //						allExtraSkills.add(s);
@@ -131,6 +139,7 @@ public class SkillSpawner extends BaseClass
 	
 	public void addExtraSkill(SkillEffectInjected s)
 	{
-		
+//		System.out.println("Adding injected skill to spawner: " + s.getSkill().name);
+		extraSkills.add(s);
 	}
 }

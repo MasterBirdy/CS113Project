@@ -445,7 +445,7 @@ public abstract class Actor extends Entity
 //		
 //		if(procSkill != null)
 //			procSkill.update();
-		Collections.sort(skillEffects, SkillEffect.PriorityComparator);
+		Collections.sort(skillEffects, SkillEffect.priorityComparator);
 		int size = skillEffects.size();
 		for (int i = 0; i < size; i++)
 			skillEffects.get(i).update();
@@ -679,6 +679,14 @@ public abstract class Actor extends Entity
 						skill.update();
 					skill.kill();
 				}
+				
+				for (int i = 0; i < 3; i++)
+				{
+					if (skillSpawners[i] != null && skillSpawners[i].getTrigger() == 4)
+						skillSpawners[i].cast();
+				}
+				
+				
 				this.particleOnSelf("blood");
 //				effects.add(this.blood());
 //				soundPack.playDie();
@@ -710,7 +718,7 @@ public abstract class Actor extends Entity
 	}
 	
 	// Sorts from lowest health ratio to highest	
-	public static Comparator<Actor> HealthComparator = new Comparator<Actor>()
+	public static Comparator<Actor> healthComparator = new Comparator<Actor>()
 	{
 		public int compare(Actor a1, Actor a2)
 		{
@@ -735,7 +743,7 @@ public abstract class Actor extends Entity
 	
 	// Sorts from lowest targeted unit to highest, then by distance
 	// Used by basic attack
-	public static Comparator<Actor> TargetedComparator = new Comparator<Actor>()
+	public static Comparator<Actor> targetedComparator = new Comparator<Actor>()
 	{
 		public int compare(Actor a1, Actor a2)
 		{
@@ -781,8 +789,8 @@ public abstract class Actor extends Entity
 //		float currentDistance;
 		if (target != null && target.isAlive() && target.invis < 0)
 		{
-			if (getDistanceSquared(target) <= (this.getAttackRange() + 
-				this.radius + target.radius) * (this.getAttackRange() + this.radius + target.radius))
+			if (getDistanceSquared(target) <= ((this.getAttackRange() + 
+				this.radius + target.radius) * (this.getAttackRange() + this.radius + target.radius)))
 				return;
 //			currentDistance = getDistanceSquared(target);
 ////			if (target instanceof Building)
@@ -799,7 +807,7 @@ public abstract class Actor extends Entity
 //		Actor newTarget = null;
 //		float newDistance = 1000000;
 		float newDistance = attackRange * attackRange + 1;
-		for (Actor a : everything.actorsInRange(this, (int)getAttackRange(), -1))
+		for (Actor a : everything.actorsInRange(this, (int)getAttackRange(), -2))
 		{
 			if (a.invis < 0)
 			{

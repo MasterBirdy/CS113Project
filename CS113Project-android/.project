@@ -3,6 +3,7 @@
 	<name>CS113Project-android</name>
 	<comment></comment>
 	<projects>
+		<project>CS113Project</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

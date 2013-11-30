@@ -216,7 +216,7 @@ public abstract class Unit extends Actor
 	{
 		super.heal(heal);
 		
-		if (Gdx.app.getType() == ApplicationType.Android)
+		if (EverythingHolder.getSettings().getParticleEffects() == 0)//(Gdx.app.getType() == ApplicationType.Android)
 			return;
 		
 		particleOnSelf("heal");

@@ -12,11 +12,12 @@ public class SkillEffectInjected extends SkillEffect
 	public SkillEffectInjected(SkillInjector skill, Actor a, int count)
 	{
 		super(skill, a, count);
-		System.out.println("Starting injection");
+//		System.out.println("Starting injection");
 		if (skill.getSkill() != null)
 		{
-			System.out.println("Creating injected skill now");
+//			System.out.println("Creating injected skill now");
 			this.skill = new Skill(skill.skill, skill.target, skill.caster, skill.target);
+//			System.out.println(this.skill.name);
 //			SkillStructure skillStruct = everything.getSkill(skill.gets)getSkill(skill.getSkill());
 			
 //			System.out.println("Skill: " + s);
@@ -37,7 +38,7 @@ public class SkillEffectInjected extends SkillEffect
 	{		
 		if (skill != null)
 		{
-			System.out.println("No skill =(");
+//			System.out.println("No skill =(");
 			skill.xCoord(target.xCoord());
 			skill.yCoord(target.yCoord());
 			skill.detonate();
@@ -64,6 +65,7 @@ public class SkillEffectInjected extends SkillEffect
 	
 	public Skill getSkill()
 	{
+		System.out.println("Checking for skill to inject");
 		return skill;
 	}
 }

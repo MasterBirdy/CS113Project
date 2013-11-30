@@ -15,7 +15,9 @@ import org.w3c.dom.NodeList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.esotericsoftware.minlog.Log;
+
+//import com.esotericsoftware.minlog.Log;
+//import com.esotericsoftware.minlog.Log;
 
 
 public class UnitParser 
@@ -41,10 +43,10 @@ public class UnitParser
 	
 	boolean external = false;
 	
-	public static void main(String args[]) 
+	/*public static void main(String args[]) 
 	{
 		UnitParser unitParser = new UnitParser();
-	}
+	}*/
 	
 	public UnitParser()
 	{
@@ -57,7 +59,7 @@ public class UnitParser
 		{			
 			// Prep the doc for parsing
 			File stats;
-			Log.info("Reading");
+//			Log.info("Reading");
 			
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
