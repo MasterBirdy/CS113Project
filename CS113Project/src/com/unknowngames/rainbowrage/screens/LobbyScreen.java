@@ -47,8 +47,8 @@ public class LobbyScreen extends BaseClass implements Screen
 	ThreadedListener threadedListener;
 	Label chatArea, friendArea, timeLabel, userWinLoss;
 	TextField chatMessage;
-	String chatAreaText = "";
-	ScrollPane chatAreaPane;
+	String chatAreaText = "", friendAreaText = "";
+	ScrollPane chatAreaPane, friendAreaPane;
 	Skin skin;
 	Calendar calendar;
 	float lastPaneY = 0;
@@ -84,12 +84,6 @@ public class LobbyScreen extends BaseClass implements Screen
 					{
 						ps[i] = new Player(info.publicPlayerInfos[i]);
 					}
-					/*Player[] ps = new Player[info.usernames.length];
-					for (int i = 0; i < info.usernames.length; i++)
-					{
-						ps[i] = new Player(info.usernames[i]);
-						//everything.getPlayer(i) = new Player(info.usernames[i]);
-					}*/
 					everything.setPlayers(ps);
 					joinRoom();
 				}
@@ -101,45 +95,13 @@ public class LobbyScreen extends BaseClass implements Screen
 		});
 		
 		client.addListener(threadedListener);
-		
-		/*client.addListener(new ThreadedListener(new Listener()
-		{
-			public void received(Connection connection, Object object)
-			{
-				System.out.println("Lobby recevied server message");
-				if (object instanceof StartGameRoom)
-				{
-					System.out.println("Lobby recevied start room");
-					StartGameRoom info = (StartGameRoom)object;
-					everything.setTeam((byte)(info.team));
-					Player[] ps = new Player[info.publicPlayerInfos.length];
-					for (int i = 0; i < info.publicPlayerInfos.length; i++)
-					{
-						ps[i] = new Player(info.publicPlayerInfos[i]);
-					}
-					Player[] ps = new Player[info.usernames.length];
-					for (int i = 0; i < info.usernames.length; i++)
-					{
-						ps[i] = new Player(info.usernames[i]);
-						//everything.getPlayer(i) = new Player(info.usernames[i]);
-					}
-					everything.setPlayers(ps);
-					joinRoom();
-				}
-			}
-		}));*/
 	}
 	
 	private void addLobbyChatMessage(LobbyChatMessage msg)
 	{
 		System.out.println("Received message: " + msg.message);
-		/*Label message = new Label(msg.message, skin, "chat");
-		chatTable.row();
-		chatTable.add(message);*/
 		chatAreaText += " " + msg.message + "\n";
 		chatArea.setText(chatAreaText);
-//		chatAreaPane.scrollTo(0, -50, 50, 50);
-//		chatAreaPane.setScrollY(chatAreaPane.getMaxY());
 //		System.out.println("Scroll Y: " + chatAreaPane.getScrollY() + " : " + chatAreaPane.getMaxY());
 	}
 	
@@ -154,27 +116,31 @@ public class LobbyScreen extends BaseClass implements Screen
 		skin = everything.getSkin();
 		final TextButton playButton = new TextButton("Play", skin);
 		final TextButton profileButton = new TextButton("Profile", skin);
-//		System.out.println("Profile pic: " + everything.getPrivatePlayerInfo().profilePic);
 		profilePic = new Image(EverythingHolder.getObjectTexture("profilepic" + everything.getPrivatePlayerInfo().profilePic));
 		final TextButton backButton = new TextButton("Main", skin);
 		final TextButton settingsButton = new TextButton("Settings", skin);
 		Label userName = new Label(everything.getPrivatePlayerInfo().shownName, skin, "small");
 		userWinLoss = new Label("W " + everything.getPrivatePlayerInfo().wins + " / " + everything.getPrivatePlayerInfo().losses + " L", skin, "small");
+		
+		// Chat area
 		chatArea = new Label("", skin, "chat");
 		chatArea.setAlignment(Align.left | Align.bottom);
 		chatArea.setWrap(true);
 		chatAreaPane = new ScrollPane(chatArea);
-		/*chatTable = new Table();
-		chatTable.setColor(Color.GRAY);
-		chatTable.setFillParent(true);
-		chatAreaPane = new ScrollPane(chatTable);*/
 		chatAreaPane.setOverscroll(false, false);
 		chatAreaPane.setScrollBarPositions(true, false);
 		chatAreaPane.setColor(Color.BLACK);
-//		chatAreaPane.setScrollBarPositions(true, true);
-//		chatAreaPane.setScrollbarsOnTop(true);
 		chatMessage = new TextField("", skin);
+		
+		// Friend area
 		friendArea = new Label("", skin, "chat");
+		friendArea.setAlignment(Align.left | Align.top);
+		friendArea.setWrap(false);
+		friendAreaPane = new ScrollPane(friendArea);
+		friendAreaPane.setOverscroll(false, false);
+		friendAreaPane.setScrollBarPositions(true, false);
+		friendAreaPane.setColor(Color.BLACK);		
+		
 		final TextButton sendButton = new TextButton("Send", skin);
 		timeLabel = new Label("7:02pm", skin);
 		
@@ -200,7 +166,7 @@ public class LobbyScreen extends BaseClass implements Screen
 		friendAreaBorder.setTransform(true);
 		friendAreaBorder.setBackground(skin.getDrawable("background"));
 		friendAreaBorder.setColor(new Color(Color.rgba8888(0.0f, 0.0f, 0.0f, 0.9f)));
-		friendAreaBorder.add(friendArea).expand().fill().pad(5);
+		friendAreaBorder.add(friendAreaPane).expand().fill().pad(5);
 		
 		bottomArea = new Table();
 		bottomArea.setTransform(true);
@@ -270,37 +236,15 @@ public class LobbyScreen extends BaseClass implements Screen
 		
 		table = new Table();
 		table.setTransform(true);
-//		table.setOrigin(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-//		table.setScale(everything.getScreenScale());
 		
 		table.setFillParent(true);
 		stage.addActor(table);
 		table.setBackground(skin.getDrawable("background"));
 		table.add(topArea).expandX().fillX();
-		/*table.add(playButton).pad(20);
-		table.add(settingsButton).padLeft(40);
-		table.add(backButton).padLeft(40);
-		table.add().expandX().fillX();
-		table.add(profileButton).padLeft(20);
-		table.add(userName).padLeft(20);
-		table.add(userWinLoss).padLeft(10);
-		table.add(profilePic).padLeft(20).size(70);*/
 		table.row().padTop(10);
 		table.add(chatAndFriendArea).expand().fill();
-//		table.add(chatAreaPane).colspan(6).expand().fill().padLeft(20);
-		/*table.add(chatAreaBorder).colspan(6).expand().fill();
-		table.add(friendAreaBorder).colspan(2).expand().fill().padLeft(10);*/
-		/*table.add(chatAreaBorder).colspan(6).expand().fill();
-		table.add(friendAreaBorder).colspan(2).expand().width(210).fillY().padLeft(10);*/
-//		table.add(friendArea).colspan(2).padLeft(20).fill();
 		table.row().padTop(10);
 		table.add(bottomArea).expandX().fillX();
-		/*table.add(chatMessage).colspan(5).expandX().fillX().padLeft(20);
-		table.add(sendButton);
-		table.add();
-		table.add(timeLabel).padLeft(20).padRight(20);*/
-		
-//		table.getCells().get(3).se
 	}
 	
 	public void sendMessage()
@@ -348,8 +292,6 @@ public class LobbyScreen extends BaseClass implements Screen
 	
 	private String currentTime()
 	{
-//		long temp = System.currentTimeMillis();
-//		return (temp / (1000 * 60 * 60)) + ":" + (temp / (1000 * 60));
 		calendar = Calendar.getInstance();
 		return calendar.get(Calendar.HOUR) + ":" + (calendar.get(Calendar.MINUTE) < 10 ? "0" : "") + calendar.get(Calendar.MINUTE);
 	}
@@ -400,23 +342,15 @@ public class LobbyScreen extends BaseClass implements Screen
 	public void resize(int width, int height)
 	{
 		stage.setViewport(width, height, false);
-//		table.setOrigin(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-//		table.setScale(everything.getScreenScale());
 		chatAndFriendArea.getCells().get(0).width(everything.getScreenSizeX() * 0.75f - 5).pad(5).expand().fill();
 		chatAndFriendArea.getCells().get(1).width(everything.getScreenSizeX() * 0.25f - 5).pad(5).expand().fill();
 		
 		bottomArea.getCells().get(0).expandX().fillX().padLeft(5).width(everything.getScreenSizeX() * 0.75f).left();
-		
-//		topArea.setOrigin(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-//		topArea.scale(everything.getScreenScale());
-//		refreshSize();
-//		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
 	public void show()
 	{
-		System.out.println("Lobby showing");
 		Gdx.input.setInputProcessor(stage);
 		client.addListener(threadedListener);
 		userWinLoss.setText("W " + everything.getPrivatePlayerInfo().wins + " / " + everything.getPrivatePlayerInfo().losses + " L");

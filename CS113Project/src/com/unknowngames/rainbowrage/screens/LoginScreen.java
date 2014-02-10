@@ -421,15 +421,14 @@ public class LoginScreen extends BaseClass implements Screen
 	@Override
 	public void show()
 	{
-		// TODO Auto-generated method stub
-		
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
 	public void hide()
 	{
-		// TODO Auto-generated method stub
-		
+		stage.dispose();
+		Gdx.input.setInputProcessor(null);
 	}
 
 	@Override

@@ -16,10 +16,8 @@ public class ActorSkillDisplay extends BaseClass
 	ActorStructure shownActor;
 	SpriteBatch batch;
 	int x, y;
-	
-//	TextureRegion[] skillIcons = new TextureRegion[4];
 	RectangularButton[] buttons = new RectangularButton[7];
-	TextureRegion chibi;
+	TextureRegion chibi, descriptionBackground;
 	String description = "", price = "", skillName = "";
 	BitmapFont largeFont = EverythingHolder.getFont(1),
 			   smallFont = EverythingHolder.getFont(0);
@@ -34,6 +32,7 @@ public class ActorSkillDisplay extends BaseClass
 		this.x = x;
 		this.y = y;
 		scale = everything.getScreenScale();
+		descriptionBackground = EverythingHolder.getObjectTexture("endstatsbox");
 	}
 	
 	public void setActor(ActorStructure actor)
@@ -64,7 +63,7 @@ public class ActorSkillDisplay extends BaseClass
 				buttons[6] = null;
 		}
 		
-		skillName = "Hero";
+		skillName = actor.name();//"Hero";
 		description = actor.description();
 		price = "";
 		chibi = getActorImage(shownActor.name());
@@ -138,7 +137,8 @@ public class ActorSkillDisplay extends BaseClass
 				b.draw(batch, 0);
 		}
 		
-		largeFont.draw(batch, skillName, x + 20 * scale, y - 10);
+		batch.draw(descriptionBackground, x - 15 * scale, y - 90 * scale, 390 * scale, 90 * scale);
+		largeFont.draw(batch, skillName, x + 20 * scale, y - 10 * scale);
 		smallFont.draw(batch, price, x + 230 * scale, y - 20 * scale);
 		smallFont.drawMultiLine(batch, description, x + 20 * scale, y - 50 * scale);
 	}

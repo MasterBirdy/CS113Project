@@ -46,7 +46,7 @@ import com.unknowngames.rainbowrage.skill.TravelingSkillContainer;
 public class EverythingHolder 
 {
 	@SuppressWarnings("unchecked")
-	String xmlVersion = "", gameVersion = "0.11_23_13";
+	String xmlVersion = "", gameVersion = "0.2_8_14";
 	
 	EntityComparator eCompare = new EntityComparator();
 	static private SpriteBatch batch;
@@ -345,20 +345,6 @@ public class EverythingHolder
 		default:
 			return Color.WHITE;
 		}
-		
-		/*if (color[team - 1].equals("red"))
-			return Color.RED;
-		else if (color[team - 1].equals("blue"))
-			return Color.BLUE;
-		else if (color[team - 1].equals("green"))
-			return Color.GREEN;
-		else if (color[team - 1].equals("orange"))
-			return Color.ORANGE;
-		else if (color[team - 1].equals("purple"))
-			return Color.MAGENTA;
-		else if (color[team - 1].equals("yellow"))
-			return Color.YELLOW;
-		return Color.WHITE;*/
 	}
 	
 	public static String serverIP()
